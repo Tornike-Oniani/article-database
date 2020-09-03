@@ -1,0 +1,99 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:local="clr-namespace:ArticleDatabase.Styles">
+
+    <!-- Navigation wrapper -->
+    <Style  x:Key="NavigationWrapper" TargetType="{x:Type StackPanel}">
+        <Setter Property="Width" Value="200" />
+        <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+    </Style>
+
+    <!-- RadioButton as TabItem -->
+    <!-- Removes button and leaves only TextBlock when clicked its Background is set to blue and Text to white -->
+    <Style x:Key="NavigationButton" TargetType="{x:Type RadioButton}">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Foreground" Value="{StaticResource ControlColorBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <!-- Body -->
+                    <Border x:Name="wrapper" Padding="10">
+                        <StackPanel x:Name="spMain" Orientation="Horizontal" Background="Transparent">
+                            <materialDesign:PackIcon x:Name="icon"
+                                                     Kind="{TemplateBinding Tag}"
+                                                     Height="30"
+                                                     Width="30"
+                                                     VerticalAlignment="Center" 
+                                                     Margin="0 0 5 0"/>
+                            <TextBlock x:Name="tbMain" 
+                                       Text="{TemplateBinding Content}" 
+                                       FontSize="18" 
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                    <!-- Triggers -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="wrapper" Property="Background" Value="{StaticResource SecondaryColorBrush}" />
+                            <Setter TargetName="tbMain" Property="Foreground" Value="#ffffff" />
+                            <Setter TargetName="icon" Property="Margin" Value="0 0 10 0" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="wrapper" Property="Background" Value="{StaticResource SecondaryColorBrush}" />
+                            <Setter TargetName="tbMain" Property="Foreground" Value="#ffffff" />
+                            <Setter TargetName="icon" Property="Margin" Value="0 0 10 0" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="tbMain" Property="Foreground" Value="LightGray" />
+                            <Setter TargetName="icon" Property="Foreground" Value="LightGray" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- RadioButton as TabItem Home -->
+    <!-- Home RadioButton replaces it with One picture and Textblock -->
+    <Style x:Key="RadioButtonHome" TargetType="{x:Type RadioButton}">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="0 0 0 50" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Border x:Name="wrapper" Padding="12 7 2 7" Background="Transparent">
+                        <!-- Body -->
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/ArticleDatabase.Styles;component/Images/Logo.png" 
+                                   RenderOptions.BitmapScalingMode="Fant" 
+                                   Width="45" 
+                                   Height="40" />
+                            <TextBlock x:Name="tbMain" 
+                                       Text="Home" 
+                                       FontSize="22" 
+                                       FontWeight="Bold" 
+                                       Foreground="#ffffff" 
+                                       VerticalAlignment="Center" 
+                                       Margin="10 0 0 0" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Triggers -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="wrapper" Property="Background" Value="#015e8d" />
+                            <Setter TargetName="tbMain" Property="Foreground" Value="#ffffff" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="wrapper" Property="Background" Value="#015e8d" />
+                            <Setter TargetName="tbMain" Property="Foreground" Value="#ffffff" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

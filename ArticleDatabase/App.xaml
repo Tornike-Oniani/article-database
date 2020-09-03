@@ -1,0 +1,73 @@
+﻿<Application x:Class="ArticleDatabase.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:ArticleDatabase"
+             xmlns:views="clr-namespace:ArticleDatabase.Views"
+             xmlns:viewModels="clr-namespace:ArticleDatabase.ViewModels"
+             StartupUri="LoginWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Colors resource dictionary -->
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Colors.xaml" />
+
+                <!--Material design essentials-->
+                <materialDesign:CustomColorTheme BaseTheme="Light" PrimaryColor="{StaticResource PrimaryColor}" SecondaryColor="{StaticResource SecondaryColor}" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+                <!-- Texts resource dictionary -->
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Texts.xaml" />
+
+                <!-- Buttons resource dictionary -->
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Buttons.xaml" />
+
+                <!-- Buttons resource dictionary -->
+                <ResourceDictionary Source="/ArticleDatabase;component/Styles/WindowButtons.xaml" />
+
+                <!-- Textboxes resource dictionary -->
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/TextBoxes.xaml" />
+                
+                <!-- Navigation resource dictionary -->
+                <ResourceDictionary Source="/ArticleDatabase;component/Styles/Navigation.xaml" />
+
+                <!-- Checkboxes resource dictionary-->
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Checkboxes.xaml" />
+
+                <!-- Windows resource dictionary-->
+                <ResourceDictionary Source="/ArticleDatabase;component/Styles/Windows.xaml" />
+
+                <!-- Datagrid resource dictionary-->
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Datagrid.xaml" />
+
+                <!-- Data template for views -->
+                <ResourceDictionary>
+                    <!-- Home -->
+                    <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
+                        <views:Home />
+                    </DataTemplate>
+
+                    <!-- Data Entry -->
+                    <DataTemplate DataType="{x:Type viewModels:DataEntryViewModel}">
+                        <views:DataEntry />
+                    </DataTemplate>
+
+                    <!-- Data View -->
+                    <DataTemplate DataType="{x:Type viewModels:DataViewViewModel}">
+                        <views:DataView />
+                    </DataTemplate>
+                    
+                    <!-- Bookmarks -->
+                    <DataTemplate DataType="{x:Type viewModels:BookmarksViewModel}">
+                        <views:Bookmarks />
+                    </DataTemplate>
+                    
+                    <!-- References -->
+                    <DataTemplate DataType="{x:Type viewModels:ReferencesViewModel}">
+                        <views:References />
+                    </DataTemplate>                    
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

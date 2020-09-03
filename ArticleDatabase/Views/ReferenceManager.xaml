@@ -1,0 +1,115 @@
+﻿<Window x:Class="ArticleDatabase.Views.ReferenceManager"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:ArticleDatabase.Views"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Style="{StaticResource BookmarkManagerWindowStyle}"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"        
+        Title="BookmarkManager" Height="400" Width="400">
+    <WindowChrome.WindowChrome>
+        <WindowChrome 
+            ResizeBorderThickness="0"
+            CaptionHeight="40"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            />
+    </WindowChrome.WindowChrome>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Filter box column -->
+            <RowDefinition Height="Auto" />
+            <!-- References list column -->
+            <RowDefinition Height="*" />
+            <!-- Add reference column -->
+            <RowDefinition Height="Auto" />
+            <!-- Ok button column -->
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Filter box column -->
+        <TextBox x:Name="searchBox" 
+                 Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" 
+                 materialDesign:HintAssist.Hint="Search"
+                 Padding="3"
+                 Margin="0 0 0 5" 
+                 Grid.Row="0" />
+        
+        <!-- References list -->
+        <ListView ItemsSource="{Binding ReferenceBoxesCollection}" 
+                  HorizontalContentAlignment="Stretch"
+                  Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding Reference.Name}" 
+                              Padding="8"
+                              IsChecked="{Binding IsChecked}"
+                              Command="{Binding CheckChangedCommand}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                    <Setter Property="Padding" Value="8 0 0 0" />
+                </Style>
+            </ListView.ItemContainerStyle>            
+        </ListView>
+
+        <!-- Add bookmark -->
+        <Button Style="{x:Null}"
+                Cursor="Hand"
+                Command="{Binding CreateNewReferenceCommand}"
+                Grid.Row="2">
+            <Button.Template>
+                <ControlTemplate>
+                    <Grid>
+                        <StackPanel Visibility="{Binding NewReferenceVisibility}">
+                            <Separator />
+                            <StackPanel Orientation="Horizontal" Margin="8">
+                                <materialDesign:PackIcon Kind="Plus" 
+                                             Margin="0 0 5 0"
+                                             Foreground="#909090"
+                                             VerticalAlignment="Center" 
+                                             Width="23"
+                                             Height="23"/>
+                                <TextBlock Text="Create new reference" 
+                               Foreground="#909090"
+                               FontSize="18"
+                               VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Separator />
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding CreateVisibility}">
+                            <StackPanel Margin="10">
+                                <TextBlock Text="Name:"
+                                           FontSize="17" />
+                                <TextBox x:Name="txbReferenceName"
+                                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="Enter reference name..." 
+                                         IsVisibleChanged="txbReferenceName_IsVisibleChanged"/>
+                                <Button Content="Create" 
+                                        HorizontalAlignment="Right"
+                                        Margin="0 10 0 0"
+                                        Command="{Binding CreateCommand}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <!-- Ok button -->
+        <Button Content="Ok"
+                Width="80"
+                HorizontalAlignment="Left" 
+                Margin="10 10 0 10" 
+                IsCancel="True"
+                Click="Button_Click"
+                Grid.Row="3" />
+    </Grid>
+</Window>
