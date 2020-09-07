@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="ArticleDatabase.Dialogs.DialogYesNo.DialogYesNoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:ArticleDatabase.Dialogs.DialogYesNo"
+             xmlns:converters="clr-namespace:ArticleDatabase.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:DialogTypeToIconConverter x:Key="DialogTypeToIcon" />
+    </UserControl.Resources>
+    <Grid Margin="14">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <!-- Icon -->
+        <materialDesign:PackIcon Kind="{Binding Type, Converter={StaticResource DialogTypeToIcon}}"
+                                 Foreground="{StaticResource PrimaryColorBrush}"
+                                 Height="30"
+                                 Width="30"
+                                 VerticalAlignment="Center"
+                                 Margin="0 0 15 0"
+                                 Grid.Column="0"
+                                 Grid.Row="0" />
+        <!-- Text -->
+        <TextBlock Text="{Binding Text,FallbackValue=SampleText}"
+                   VerticalAlignment="Center"
+                   TextWrapping="Wrap"
+                   Grid.Column="1"
+                   Grid.Row="0" />
+        <!-- Buttons -->
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0 10 0 0"
+                    Grid.Column="1"
+                    Grid.Row="1">
+            <Button Content="Yes"
+                    Width="80"
+                    Margin="0 0 8 0"
+                    Command="{Binding YesCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+            <Button Content="No"
+                    Width="80"
+                    Command="{Binding NoCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -2,6 +2,8 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogService;
+using ArticleDatabase.Dialogs.DialogYesNo;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -138,7 +140,7 @@ namespace ArticleDatabase.ViewModels.Pages
             Bookmark selected_bookmark = input as Bookmark;
 
             // 2. Ask user if they are sure
-            if (MessageBox.Show("Delete following bookmark?\n" + selected_bookmark.Name, "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (DialogService.OpenDialog(new DialogYesNoViewModel("Delete following bookmark?\n" + selected_bookmark.Name, "Warning", DialogType.Warning), MainWindow.CurrentMain))
             {
                 // 3. Delete bookmark record from database
                 (new BookmarkRepo()).DeleteBookmark(selected_bookmark);

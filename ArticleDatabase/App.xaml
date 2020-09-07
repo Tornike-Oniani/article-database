@@ -5,6 +5,8 @@
              xmlns:local="clr-namespace:ArticleDatabase"
              xmlns:views="clr-namespace:ArticleDatabase.Views"
              xmlns:viewModels="clr-namespace:ArticleDatabase.ViewModels"
+             xmlns:dialogYesNo="clr-namespace:ArticleDatabase.Dialogs.DialogYesNo"
+             xmlns:dialogOk="clr-namespace:ArticleDatabase.Dialogs.DialogOk"
              StartupUri="Views/LoginWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -65,7 +67,17 @@
                     <!-- References -->
                     <DataTemplate DataType="{x:Type viewModels:ReferencesViewModel}">
                         <views:References />
-                    </DataTemplate>                    
+                    </DataTemplate>
+                    
+                    <!-- YesNo dialog -->
+                    <DataTemplate DataType="{x:Type dialogYesNo:DialogYesNoViewModel}">
+                        <dialogYesNo:DialogYesNoView />
+                    </DataTemplate>
+                    
+                    <!-- Ok dialog -->
+                    <DataTemplate DataType="{x:Type dialogOk:DialogOkViewModel}">
+                        <dialogOk:DialogOkView />
+                    </DataTemplate>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

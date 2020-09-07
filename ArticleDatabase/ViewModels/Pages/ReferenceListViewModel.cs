@@ -2,6 +2,8 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogService;
+using ArticleDatabase.Dialogs.DialogYesNo;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -93,7 +95,8 @@ namespace ArticleDatabase.ViewModels.Pages
             Reference selected_reference = input as Reference;
 
             // 2. Ask user if they are sure
-            if (MessageBox.Show("Delete following bookmark?\n" + selected_reference.Name, "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            
+            if (DialogService.OpenDialog(new DialogYesNoViewModel("Delete following reference?\n" + selected_reference.Name, "Warning", DialogType.Warning), MainWindow.CurrentMain))
             {
                 // 3. Delete bookmark record from database
                 (new ReferenceRepo()).DeleteReference(selected_reference);

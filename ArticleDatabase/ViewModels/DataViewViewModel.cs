@@ -2,6 +2,9 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogOk;
+using ArticleDatabase.Dialogs.DialogService;
+using ArticleDatabase.Dialogs.DialogYesNo;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -177,7 +180,7 @@ namespace ArticleDatabase.ViewModels
             // 4. Catch if file doesn't exist physically
             catch
             {
-                MessageBox.Show("File was not found");
+                DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Warning", DialogType.Warning), MainWindow.CurrentMain);
             }
         }
         public void NextPage(object input = null)
@@ -285,7 +288,7 @@ namespace ArticleDatabase.ViewModels
                 foreach (Article article in Articles)
                     article.Checked = false;
 
-                MessageBox.Show("Done", "Message");
+                DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Information), MainWindow.CurrentMain);
             }
         }
         public bool CanExport(object input = null)
@@ -299,7 +302,10 @@ namespace ArticleDatabase.ViewModels
         public void DeleteArticle(object input = null)
         {
             // 1. Ask user if they are sure
-            if (MessageBox.Show("Delete following record?\n" + SelectedArticle.Title, "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if(DialogService.OpenDialog(new DialogYesNoViewModel("Delete following record?\n" + SelectedArticle.Title, 
+                                                                  "Warning", 
+                                                                   DialogType.Question), 
+                                            MainWindow.CurrentMain))
             {
                 // 2. Delete article record from database
                 (new ArticleRepo()).DeleteArticle(SelectedArticle);
@@ -312,7 +318,10 @@ namespace ArticleDatabase.ViewModels
 
                 catch
                 {
-                   MessageBox.Show("The file is missing, validate your database.");
+                    DialogService.OpenDialog(new DialogOkViewModel("The file is missing, validate your database.", 
+                                                                    "Warning",
+                                                                    DialogType.Warning), 
+                                                 MainWindow.CurrentMain);
                 }
 
                 // 4. Refresh the data grid

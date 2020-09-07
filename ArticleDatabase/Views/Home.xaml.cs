@@ -1,6 +1,8 @@
 ﻿using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogOk;
+using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -53,7 +55,7 @@ namespace ArticleDatabase.Views
             // 3. If the wrong folder was selected return with an error messagebox
             if ((!File.Exists(destination + "\\" + "NikasDB.sqlite3")) || (!Directory.Exists(destination + @"\Files")) || (!File.Exists(destination + "\\" + "user.sqlite3")))
             {
-                MessageBox.Show("Please select a correct folder.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                DialogService.OpenDialog(new DialogOkViewModel("Please select a correct folder.", "Error", DialogType.Error), MainWindow.CurrentMain);
                 return;
             }
 

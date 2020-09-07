@@ -2,6 +2,8 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogOk;
+using ArticleDatabase.Dialogs.DialogService;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -98,7 +100,7 @@ namespace ArticleDatabase.ViewModels.Pages
             // 4. Catch if file doesn't exist physically
             catch
             {
-                MessageBox.Show("File was not found");
+                DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error), MainWindow.CurrentMain);
             }
         }
         public void Export(object input = null)
@@ -149,7 +151,7 @@ namespace ArticleDatabase.ViewModels.Pages
                 foreach (Article article in Bookmark.Articles)
                     article.Checked = false;
 
-                MessageBox.Show("Done", "Message");
+                DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Information), MainWindow.CurrentMain);
             }
         }
         public bool CanExport(object input = null)
@@ -203,7 +205,7 @@ namespace ArticleDatabase.ViewModels.Pages
                     }
                 }
 
-                MessageBox.Show("Done", "Message");
+                DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Information), MainWindow.CurrentMain);
             }
         }
         public bool CanExportBookmark(object input = null)

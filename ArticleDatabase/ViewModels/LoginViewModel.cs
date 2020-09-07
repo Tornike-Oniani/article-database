@@ -2,6 +2,8 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogOk;
+using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -37,7 +39,7 @@ namespace ArticleDatabase.ViewModels
             }
             else
             {
-                MessageBox.Show("Invalid username or password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                DialogService.OpenDialog(new DialogOkViewModel("Invalid username or password", "Error", DialogType.Error), input as Window);
             }
         }
 
@@ -47,11 +49,11 @@ namespace ArticleDatabase.ViewModels
             CurrentUser.Username = CurrentUser.Username.Replace("_adminGfK", "");
             if ((new UserRepo()).Register(CurrentUser, admin))
             {
-                MessageBox.Show("New user created successfuly", "Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                DialogService.OpenDialog(new DialogOkViewModel("New user created successfuly", "Result", DialogType.Information), Input as Window);
             }
             else
             {
-                MessageBox.Show("Username is already taken", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                DialogService.OpenDialog(new DialogOkViewModel("Username is already taken", "Error", DialogType.Information), Input as Window);
             }
         }
     }

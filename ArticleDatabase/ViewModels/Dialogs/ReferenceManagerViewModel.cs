@@ -2,6 +2,8 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogOk;
+using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.UIStructs;
 using ArticleDatabase.ViewModels.Base;
 using System;
@@ -124,7 +126,7 @@ namespace ArticleDatabase.ViewModels
             NewReferenceVisibility = Visibility.Visible;
 
             if (!duplicate_check)
-                MessageBox.Show("This reference already exists.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                DialogService.OpenDialog(new DialogOkViewModel("This reference already exists.", "Warning", DialogType.Warning), MainWindow.CurrentMain);
         }
 
         public bool CanCreate(object input = null)

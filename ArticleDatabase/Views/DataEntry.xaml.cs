@@ -1,5 +1,8 @@
 ﻿using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogOk;
+using ArticleDatabase.Dialogs.DialogService;
+using ArticleDatabase.Dialogs.DialogYesNo;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -62,7 +65,8 @@ namespace ArticleDatabase.Views
 
             if ((new ArticleRepo()).Exists(title, out file))
             {
-                if (MessageBox.Show("An article with the given title already exists in Database, do you want to see the file?", "Duplicate", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                
+                if (DialogService.OpenDialog(new DialogYesNoViewModel("An article with the given title already exists in Database, do you want to see the file?", "Duplicate", DialogType.Question), MainWindow.CurrentMain))
                 {
                     // User clicked yes
                     // Set the file path with filename and FolderPath static attribute
@@ -76,7 +80,7 @@ namespace ArticleDatabase.Views
                     catch
                     {
                         // This is when user doubleclicks on article that has null file
-                        MessageBox.Show("File was not found.");
+                        DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error), MainWindow.CurrentMain);
                     }
                 }
                 else

@@ -2,6 +2,8 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogOk;
+using ArticleDatabase.Dialogs.DialogService;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -79,7 +81,7 @@ namespace ArticleDatabase.ViewModels.Pages
             // 4. Catch if file doesn't exist physically
             catch
             {
-                MessageBox.Show("File was not found");
+                DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error), MainWindow.CurrentMain);
             }
         }
         public void RemoveArticle(object input = null)

@@ -2,6 +2,8 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogOk;
+using ArticleDatabase.Dialogs.DialogService;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -98,12 +100,12 @@ namespace ArticleDatabase.ViewModels
                 // Message = "constraint failed\r\nUNIQUE constraint failed: tblArticle.Title"
                 if (error.Message.Contains("UNIQUE") && error.Message.Contains("Title"))
                 {
-                    MessageBox.Show("Article with that name already exists", "Duplicate warning");
+                    DialogService.OpenDialog(new DialogOkViewModel("Article with that name already exists", "Duplicate warning", DialogType.Error), MainWindow.CurrentMain);
                     
                 }
                 else
                 {
-                    MessageBox.Show(error.Message, "General Exception");
+                    DialogService.OpenDialog(new DialogOkViewModel(error.Message, "General Exception", DialogType.Error), MainWindow.CurrentMain);
                 }
 
                 

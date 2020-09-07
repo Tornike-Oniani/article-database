@@ -2,6 +2,8 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogOk;
+using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -40,7 +42,7 @@ namespace ArticleDatabase.ViewModels.Dialogs
                 if (!(new BookmarkRepo()).CheckArticleInBookmark(SelectedBookmark, article))
                     (new BookmarkRepo()).AddArticleToBookmark(SelectedBookmark, article);
 
-            MessageBox.Show("Done.");
+            DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Information), MainWindow.CurrentMain);
         }
         public bool CanAddArticlesToBookmark(object input = null)
         {

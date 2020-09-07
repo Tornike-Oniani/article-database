@@ -31,34 +31,6 @@
     </WindowChrome.WindowChrome>
 
     <Grid>
-        <!--<StackPanel HorizontalAlignment="Center" Width="300" Margin="0 30 0 0">
-            --><!-- Logo --><!--
-            <materialDesign:PackIcon Kind="Book" Foreground="{StaticResource PrimaryColorBrush}" HorizontalAlignment="Center" Width="70" Height="70"/>
-            
-            --><!-- Username --><!--
-            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                <materialDesign:PackIcon Kind="Account" Foreground="Gray" Width="25" Height="25" VerticalAlignment="Bottom" Margin="0 0 5 0"/>
-                <TextBox x:Name="txbUsername" Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Username" materialDesign:HintAssist.IsFloating="True" Width="270" />
-            </StackPanel>
-            
-            --><!-- Password --><!--
-            <StackPanel Orientation="Horizontal">
-                <materialDesign:PackIcon Kind="Key" Foreground="Gray" Width="25" Height="25" VerticalAlignment="Bottom" Margin="0 0 5 0"/>
-                <TextBox Text="{Binding CurrentUser.Password, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Password" materialDesign:HintAssist.IsFloating="True" Width="270" />
-            </StackPanel>
-
-            <Grid Margin="0 15 0  25">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Button Content="Log In" Margin="0 0 5 0" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}" Grid.Column="0">
-                </Button>
-                <Button Content="Register" Command="{Binding RegisterCommand}" Margin="5 0 0 0" Grid.Column="2" />
-            </Grid>
-        </StackPanel>-->
-
         <!-- Login fields -->
         <Border Padding="30 20 30 10" Grid.Column="0">
             <StackPanel>
@@ -120,7 +92,7 @@
 
                     <Button Content="Log In" Margin="0 0 5 0" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}" Grid.Column="0">
                     </Button>
-                    <Button Content="Register" Command="{Binding RegisterCommand}" Margin="5 0 0 0" Grid.Column="2" />
+                    <Button Content="Register" Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=loginWindow}" Margin="5 0 0 0" Grid.Column="2" />
                 </Grid>
             </StackPanel>
         </Border>

@@ -2,6 +2,8 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogOk;
+using ArticleDatabase.Dialogs.DialogService;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,17 +68,16 @@ namespace ArticleDatabase.ViewModels
                             sw.WriteLine(file);
                         sw.WriteLine("");
                     }
-
-                    MessageBox.Show("Some files are missing see Logs for more info...", "Result", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    DialogService.OpenDialog(new DialogOkViewModel("Some files are missing see Logs for more info...", "Result", DialogType.Warning), MainWindow.CurrentMain);
                 }
                 else
                 {
-                    MessageBox.Show("No missing files were found!", "Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                    DialogService.OpenDialog(new DialogOkViewModel("No missing files were found!", "Result", DialogType.Information), MainWindow.CurrentMain);
                 }
             }
             else
             {
-                MessageBox.Show("There are no records in database yet", "Result", MessageBoxButton.OK, MessageBoxImage.Information);
+                DialogService.OpenDialog(new DialogOkViewModel("There are no records in database yet", "Result", DialogType.Information), MainWindow.CurrentMain);
             }
         }
     }
