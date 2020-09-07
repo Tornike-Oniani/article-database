@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:ArticleDatabase"
              xmlns:views="clr-namespace:ArticleDatabase.Views"
              xmlns:viewModels="clr-namespace:ArticleDatabase.ViewModels"
-             StartupUri="LoginWindow.xaml">
+             StartupUri="Views/LoginWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
