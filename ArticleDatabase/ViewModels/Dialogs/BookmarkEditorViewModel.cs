@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.ViewModels.Base;
 using ArticleDatabase.ViewModels.Pages;
 using System;
@@ -57,7 +58,7 @@ namespace ArticleDatabase.ViewModels.Dialogs
          public void SaveBookmark(object input = null)
         {
             // 1. Update new values to database
-            SqliteDataAccess.UpdateBookmark(Bookmark);
+            (new BookmarkRepo()).UpdateBookmark(Bookmark);
 
             // 2. Refresh collections in parent;
             _parent.PopulateBookmarks();

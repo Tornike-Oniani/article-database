@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.UIStructs.Base;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace ArticleDatabase.UIStructs
         // Public methods
         public void HasArticle(Article article)
         {
-            this.IsChecked = SqliteDataAccess.CheckArticleInBookmark(Bookmark, article);
+            this.IsChecked = (new BookmarkRepo()).CheckArticleInBookmark(Bookmark, article);
         }
     }
 }

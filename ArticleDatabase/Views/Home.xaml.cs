@@ -1,5 +1,6 @@
 ﻿using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -84,7 +85,7 @@ namespace ArticleDatabase.Views
 
             // 6. Import recrods to database, return list of files to copy and duplicates to log
             List<ExistCheck> duplicates;
-            List<CompFile> files = SqliteDataAccess.ImportSection(full_query, files_query, duplicates_query, out duplicates);
+            List<CompFile> files = (new GlobalRepo()).ImportSection(full_query, files_query, duplicates_query, out duplicates);
 
             // 7. Create dictionary of files to copy
             Dictionary<string, string> files_to_copy = new Dictionary<string, string>();

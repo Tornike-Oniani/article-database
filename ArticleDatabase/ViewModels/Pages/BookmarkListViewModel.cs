@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -140,7 +141,7 @@ namespace ArticleDatabase.ViewModels.Pages
             if (MessageBox.Show("Delete following bookmark?\n" + selected_bookmark.Name, "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 // 3. Delete bookmark record from database
-                SqliteDataAccess.DeleteBookmark(selected_bookmark);
+                (new BookmarkRepo()).DeleteBookmark(selected_bookmark);
 
                 // 4. Refresh bookmark collections
                 PopulateBookmarks();
@@ -157,7 +158,7 @@ namespace ArticleDatabase.ViewModels.Pages
             GlobalBookmarks.Clear();
 
             // 2. Populate local bookmarks
-            foreach (Bookmark bookmark in SqliteDataAccess.LoadBookmarks(User))
+            foreach (Bookmark bookmark in (new BookmarkRepo()).LoadBookmarks(User))
             {
                 // Populate articles colletion for each bookmark
                 //bookmark.PopulateArticles(User);
@@ -166,7 +167,7 @@ namespace ArticleDatabase.ViewModels.Pages
             }
 
             // 3. Populate global bookmarks
-            foreach (Bookmark bookmark in SqliteDataAccess.LoadGlobalBookmarks())
+            foreach (Bookmark bookmark in (new BookmarkRepo()).LoadGlobalBookmarks())
             {
                 //bookmark.PopulateArticles(User);
                 bookmark.GetArticleCount(User);

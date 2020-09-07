@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -161,7 +162,7 @@ namespace ArticleDatabase.ViewModels
             Article.Title = regex.Replace(Article.Title, " ");
 
             // 2. Add article to database
-            SqliteDataAccess.SaveArticle(Article, User);
+            (new ArticleRepo()).SaveArticle(Article, User);
 
             // 3. Copy selected file to root folder with the new ID-based name
             File.Copy(SelectedFile, Path.Combine(Environment.CurrentDirectory, "Files\\") + Article.FileName + ".pdf");
@@ -224,7 +225,7 @@ namespace ArticleDatabase.ViewModels
             }
 
             foreach (Article article in random_articles)
-                SqliteDataAccess.SaveArticle(article, User);
+                (new ArticleRepo()).SaveArticle(article, User);
 
             Console.WriteLine("Done");
         }

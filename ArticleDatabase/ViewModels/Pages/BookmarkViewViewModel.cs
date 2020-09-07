@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -212,7 +213,7 @@ namespace ArticleDatabase.ViewModels.Pages
         public void RemoveArticle(object input = null)
         {
             // 1. Remove article from bookmark in database
-            SqliteDataAccess.RemoveArticleFromBookmark(Bookmark, SelectedArticle);
+            (new BookmarkRepo()).RemoveArticleFromBookmark(Bookmark, SelectedArticle);
 
             // 2. Refresh articles collection
             Bookmark.PopulateArticles(_user);

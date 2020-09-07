@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.UIStructs;
 using ArticleDatabase.ViewModels.Base;
 using System;
@@ -110,7 +111,7 @@ namespace ArticleDatabase.ViewModels
         {
             // 1. Add new bookmark to database
             string trimmedName = Name.Trim();
-            bool duplicate_check = SqliteDataAccess.AddReference(trimmedName);
+            bool duplicate_check = (new ReferenceRepo()).AddReference(trimmedName);
 
             // 2. Refresh Bookmarks collection
             ReferenceBoxes.Clear();
@@ -138,7 +139,7 @@ namespace ArticleDatabase.ViewModels
          */
         private void PopulateReferenceBoxes()
         {
-            foreach (Reference reference in SqliteDataAccess.LoadReferences())
+            foreach (Reference reference in (new ReferenceRepo()).LoadReferences())
                 ReferenceBoxes.Add(new ReferenceBox(reference, _article));
         }
     }

@@ -1,4 +1,5 @@
 ﻿using ArticleDatabase.DataAccessLayer;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -59,7 +60,7 @@ namespace ArticleDatabase.Views
             string title = ((TextBox)sender).Text;
             string file;
 
-            if (SqliteDataAccess.Exists(title, out file))
+            if ((new ArticleRepo()).Exists(title, out file))
             {
                 if (MessageBox.Show("An article with the given title already exists in Database, do you want to see the file?", "Duplicate", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {

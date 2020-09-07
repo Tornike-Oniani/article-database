@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -95,7 +96,7 @@ namespace ArticleDatabase.ViewModels.Pages
             if (MessageBox.Show("Delete following bookmark?\n" + selected_reference.Name, "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 // 3. Delete bookmark record from database
-                SqliteDataAccess.DeleteReference(selected_reference);
+                (new ReferenceRepo()).DeleteReference(selected_reference);
 
                 // 4. Refresh bookmark collections
                 PopulateReferences();
@@ -111,7 +112,7 @@ namespace ArticleDatabase.ViewModels.Pages
             References.Clear();
 
             // 2. Populate references
-            foreach (Reference reference in SqliteDataAccess.LoadReferences())
+            foreach (Reference reference in (new ReferenceRepo()).LoadReferences())
             {
                 reference.PopulateArticles();
                 reference.SetMainArticle();

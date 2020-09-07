@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -120,7 +121,7 @@ namespace ArticleDatabase.ViewModels
             };
 
             // 2. Initialize articles collection and paging
-            Users = new ObservableCollection<User>(SqliteDataAccess.GetUsers());
+            Users = new ObservableCollection<User>((new UserRepo()).GetUsers());
             Articles = new ObservableCollection<Article>();
             CurrentPage = 1;
             ItemsPerPage = 25;
@@ -192,7 +193,7 @@ namespace ArticleDatabase.ViewModels
             Articles.Clear();
 
             // 4. Fetch artilces from database
-            foreach (Article article in SqliteDataAccess.LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
+            foreach (Article article in (new ArticleRepo()).LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
             {
                 Articles.Add(article);
             }
@@ -210,7 +211,7 @@ namespace ArticleDatabase.ViewModels
             Articles.Clear();
 
             // 4. Fetch artilces from database
-            foreach (Article article in SqliteDataAccess.LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
+            foreach (Article article in (new ArticleRepo()).LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
             {
                 Articles.Add(article);
             }
@@ -219,7 +220,7 @@ namespace ArticleDatabase.ViewModels
         {
 
             // 1. Calculate total pages
-            int record_count = SqliteDataAccess.GetRecordCount(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList());
+            int record_count = (new ArticleRepo()).GetRecordCount(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList());
             if ((record_count % ItemsPerPage) == 0)
                 TotalPages = record_count / ItemsPerPage;
             else
@@ -231,7 +232,7 @@ namespace ArticleDatabase.ViewModels
             Articles.Clear();
 
             // 3. Fetch artilces from database
-            foreach (Article article in SqliteDataAccess.LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
+            foreach (Article article in (new ArticleRepo()).LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
             {
                 Articles.Add(article);
             }
@@ -301,7 +302,7 @@ namespace ArticleDatabase.ViewModels
             if (MessageBox.Show("Delete following record?\n" + SelectedArticle.Title, "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 // 2. Delete article record from database
-                SqliteDataAccess.DeleteArticle(SelectedArticle);
+                (new ArticleRepo()).DeleteArticle(SelectedArticle);
 
                 // 3. Delete physical .pdf file
                 try
@@ -370,7 +371,7 @@ namespace ArticleDatabase.ViewModels
         public void LoadArticles(object input = null)
         {
             // 1. Calculate total pages
-            int record_count = SqliteDataAccess.GetRecordCount(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList());
+            int record_count = (new ArticleRepo()).GetRecordCount(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList());
             if ((record_count % ItemsPerPage) == 0)
                 TotalPages = record_count / ItemsPerPage;
             else
@@ -382,7 +383,7 @@ namespace ArticleDatabase.ViewModels
             Articles.Clear();
 
             // 3. Fetch artilces from database
-            foreach (Article article in SqliteDataAccess.LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
+            foreach (Article article in (new ArticleRepo()).LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
             {
                 Articles.Add(article);
             }

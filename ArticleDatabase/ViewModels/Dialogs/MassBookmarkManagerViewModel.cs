@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -36,8 +37,8 @@ namespace ArticleDatabase.ViewModels.Dialogs
         public void AddArticlesToBookmark(object input = null)
         {
             foreach (Article article in _articles)
-                if (!SqliteDataAccess.CheckArticleInBookmark(SelectedBookmark, article))
-                    SqliteDataAccess.AddArticleToBookmark(SelectedBookmark, article);
+                if (!(new BookmarkRepo()).CheckArticleInBookmark(SelectedBookmark, article))
+                    (new BookmarkRepo()).AddArticleToBookmark(SelectedBookmark, article);
 
             MessageBox.Show("Done.");
         }
@@ -48,7 +49,7 @@ namespace ArticleDatabase.ViewModels.Dialogs
 
         private List<Bookmark> PopulateBookmarks()
         {
-            return SqliteDataAccess.LoadBookmarks(_user, true);
+            return (new BookmarkRepo()).LoadBookmarks(_user, true);
         }
     }
 }

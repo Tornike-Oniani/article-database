@@ -1,5 +1,6 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace ArticleDatabase.ViewModels
                 Parent.SelectedArticle.SIC = SIC;
 
                 // 2. Update record in database
-                SqliteDataAccess.UpdatePersonal(Parent.SelectedArticle, Parent.User);
+                (new ArticleRepo()).UpdatePersonal(Parent.SelectedArticle, Parent.User);
             }
         }
     }

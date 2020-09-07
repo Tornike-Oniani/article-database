@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace ArticleDatabase.ViewModels
 
         public void Login(object input)
         {
-            if (SqliteDataAccess.Login(CurrentUser))
+            if ((new UserRepo()).Login(CurrentUser))
             {
                 MainWindow wndMain = new MainWindow(CurrentUser);
                 wndMain.Show();
@@ -44,7 +45,7 @@ namespace ArticleDatabase.ViewModels
         {
             int admin = CurrentUser.Username.Contains("_adminGfK") ? 1 : 0;
             CurrentUser.Username = CurrentUser.Username.Replace("_adminGfK", "");
-            if (SqliteDataAccess.Register(CurrentUser, admin))
+            if ((new UserRepo()).Register(CurrentUser, admin))
             {
                 MessageBox.Show("New user created successfuly", "Result", MessageBoxButton.OK, MessageBoxImage.Information);
             }

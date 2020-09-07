@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArticleDatabase.DataAccessLayer.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -34,12 +35,12 @@ namespace ArticleDatabase.DataAccessLayer.Models
         public void PopulateArticles()
         {
             Articles.Clear();
-            foreach (Article article in SqliteDataAccess.LoadArticlesForReference(this))
+            foreach (Article article in (new ReferenceRepo()).LoadArticlesForReference(this))
                 Articles.Add(article);
         }
         public void SetMainArticle()
         {
-            this.Article = SqliteDataAccess.GetArticleWithId(ArticleID);
+            this.Article = (new ArticleRepo()).GetArticleWithId(ArticleID);
         }
         public void CopyByValue(Reference reference)
         {

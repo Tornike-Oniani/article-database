@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -80,7 +81,7 @@ namespace ArticleDatabase.ViewModels
             try
             {
                 // 1. Update article record in database
-                SqliteDataAccess.UpdateArticle(Article, Parent.User);
+                (new ArticleRepo()).UpdateArticle(Article, Parent.User);
 
                 // 2. If new file was selected overwrite it to older one
                 if (SelectedFile != null)

@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.ViewModels.Base;
 using ArticleDatabase.ViewModels.Pages;
 using System;
@@ -31,7 +32,7 @@ namespace ArticleDatabase.ViewModels.Dialogs
             this.Reference.CopyByValue(reference);
             this._parent = parent;
             if (Reference.ArticleID != 0 && Reference.ArticleID != null)
-                this.MainArticleTitle = SqliteDataAccess.GetArticleWithId(Reference.ArticleID).Title;
+                this.MainArticleTitle = (new ArticleRepo()).GetArticleWithId(Reference.ArticleID).Title;
 
             SaveReferenceCommand = new RelayCommand(SaveReference, CanSaveReference);
         }
@@ -39,15 +40,15 @@ namespace ArticleDatabase.ViewModels.Dialogs
         // Command actions
         public void SaveReference(object input = null)
         {
-            Reference.ArticleID = SqliteDataAccess.CheckArticleWithTitle(MainArticleTitle);
+            Reference.ArticleID = (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle);
 
-            SqliteDataAccess.UpdateReference(Reference);
+            (new ReferenceRepo()).UpdateReference(Reference);
 
             _parent.PopulateReferences();
         }
         public bool CanSaveReference(object input = null)
         {
-            return !String.IsNullOrWhiteSpace(Reference.Name) && SqliteDataAccess.CheckArticleWithTitle(MainArticleTitle) != 0;
+            return !String.IsNullOrWhiteSpace(Reference.Name) && (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle) != 0;
         }
     }
 }

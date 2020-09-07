@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +41,7 @@ namespace ArticleDatabase.ViewModels
             //string[] existingFiles = Directory.GetFiles(User.GetFilesFolder(), " *.pdf").Select(System.IO.Path.GetFileName).ToArray();
             string[] existingFiles = Directory.GetFiles(System.IO.Path.Combine(Environment.CurrentDirectory, "Files"), "*.pdf").Select(System.IO.Path.GetFileName).ToArray();
             // All file names in tblArticle database table
-            string[] databaseFiles = SqliteDataAccess.GetFileNames();
+            string[] databaseFiles = (new GlobalRepo()).GetFileNames();
 
             // Mismatch between physical pdf files and database names
             if (databaseFiles != null)

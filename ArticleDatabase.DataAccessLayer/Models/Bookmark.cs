@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArticleDatabase.DataAccessLayer.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -37,12 +38,12 @@ namespace ArticleDatabase.DataAccessLayer.Models
         public void PopulateArticles(User user)
         {
             Articles.Clear();
-            foreach (Article article in SqliteDataAccess.LoadArticlesForBookmark(user, this))
+            foreach (Article article in (new BookmarkRepo()).LoadArticlesForBookmark(user, this))
                 Articles.Add(article);
         }
         public void GetArticleCount(User user)
         {
-            this.ArticlesCount = SqliteDataAccess.CountArticlesInBookmark(this);
+            this.ArticlesCount = (new BookmarkRepo()).CountArticlesInBookmark(this);
         }
         public void CopyByValue(Bookmark bookmark)
         {

@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.UIStructs;
 using ArticleDatabase.ViewModels.Base;
 using System;
@@ -130,7 +131,7 @@ namespace ArticleDatabase.ViewModels
         {
             // 1. Add new bookmark to database
             string trimmedName = Name.Trim();
-            bool duplicate_check = SqliteDataAccess.AddBookmark(trimmedName, Global, _parent.User);
+            bool duplicate_check = (new BookmarkRepo()).AddBookmark(trimmedName, Global, _parent.User);
 
             // 2. Refresh Bookmarks collection
             BookmarkBoxes.Clear();
@@ -161,12 +162,12 @@ namespace ArticleDatabase.ViewModels
             // 1. If user checked add article to bookmark
             if (current_bookmark_box.IsChecked)
             {
-                SqliteDataAccess.AddArticleToBookmark(current_bookmark_box.Bookmark, _article);
+                (new BookmarkRepo()).AddArticleToBookmark(current_bookmark_box.Bookmark, _article);
             }
             // 2. If user unchecked remove article from bookmark
             else
             {
-                SqliteDataAccess.RemoveArticleFromBookmark(current_bookmark_box.Bookmark, _article);
+                (new BookmarkRepo()).RemoveArticleFromBookmark(current_bookmark_box.Bookmark, _article);
             }
         }
 
@@ -177,7 +178,7 @@ namespace ArticleDatabase.ViewModels
          */
         private void PopulateBookmarks()
         {
-            foreach (Bookmark bookmark in SqliteDataAccess.LoadBookmarks(_parent.User, true))
+            foreach (Bookmark bookmark in (new BookmarkRepo()).LoadBookmarks(_parent.User, true))
                 BookmarkBoxes.Add(new BookmarkBox(bookmark, _parent.SelectedArticle));
         }
         private void CheckBookmarkBoxes()

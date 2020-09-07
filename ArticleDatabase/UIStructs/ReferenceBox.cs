@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.UIStructs.Base;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace ArticleDatabase.UIStructs
         public bool HasArticle(Article article)
         {
             //return Bookmark.Articles.Contains(article);
-            return SqliteDataAccess.CheckArticleInReference(Reference, article);
+            return (new ReferenceRepo()).CheckArticleInReference(Reference, article);
         }
 
         public void CheckChanged(object input = null)
@@ -49,12 +50,12 @@ namespace ArticleDatabase.UIStructs
             // 1. If user checked add article to bookmark
             if (IsChecked)
             {
-                SqliteDataAccess.AddArticleToReference(Reference, _article);
+                (new ReferenceRepo()).AddArticleToReference(Reference, _article);
             }
             // 2. If user unchecked remove article from bookmark
             else
             {
-                SqliteDataAccess.RemoveArticleFromReference(Reference, _article);
+                (new ReferenceRepo()).RemoveArticleFromReference(Reference, _article);
             }
         }
     }
