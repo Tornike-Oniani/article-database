@@ -19,7 +19,6 @@ namespace ArticleDatabase.ViewModels
         public User CurrentUser { get; set; }
 
         public RelayCommand LoginCommand { get; set; }
-
         public RelayCommand RegisterCommand { get; set; }
 
         public LoginViewModel(Window window) : base(window)
