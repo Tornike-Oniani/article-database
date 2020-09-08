@@ -72,7 +72,7 @@ namespace ArticleDatabase.ViewModels
                 }
                 else
                 {
-                    DialogService.OpenDialog(new DialogOkViewModel("No missing files were found!", "Result", DialogType.Information), MainWindow.CurrentMain);
+                    DialogService.OpenDialog(new DialogOkViewModel("No missing files were found!", "Result", DialogType.Success), MainWindow.CurrentMain);
                 }
             }
             else

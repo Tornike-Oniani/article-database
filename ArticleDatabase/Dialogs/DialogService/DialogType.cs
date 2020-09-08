@@ -11,6 +11,7 @@ namespace ArticleDatabase.Dialogs.DialogService
         Warning,
         Question,
         Error,
-        Information
+        Information,
+        Success
     }
 }

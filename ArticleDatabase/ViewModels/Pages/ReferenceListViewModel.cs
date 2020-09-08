@@ -96,7 +96,7 @@ namespace ArticleDatabase.ViewModels.Pages
 
             // 2. Ask user if they are sure
             
-            if (DialogService.OpenDialog(new DialogYesNoViewModel("Delete following reference?\n" + selected_reference.Name, "Warning", DialogType.Warning), MainWindow.CurrentMain))
+            if (DialogService.OpenDialog(new DialogYesNoViewModel("Delete following reference?\n" + selected_reference.Name, "Check", DialogType.Question), MainWindow.CurrentMain))
             {
                 // 3. Delete bookmark record from database
                 (new ReferenceRepo()).DeleteReference(selected_reference);

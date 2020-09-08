@@ -42,7 +42,7 @@ namespace ArticleDatabase.ViewModels.Dialogs
                 if (!(new BookmarkRepo()).CheckArticleInBookmark(SelectedBookmark, article))
                     (new BookmarkRepo()).AddArticleToBookmark(SelectedBookmark, article);
 
-            DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Information), MainWindow.CurrentMain);
+            DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success), MainWindow.CurrentMain);
         }
         public bool CanAddArticlesToBookmark(object input = null)
         {

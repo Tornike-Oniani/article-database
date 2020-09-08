@@ -140,7 +140,7 @@ namespace ArticleDatabase.ViewModels.Pages
             Bookmark selected_bookmark = input as Bookmark;
 
             // 2. Ask user if they are sure
-            if (DialogService.OpenDialog(new DialogYesNoViewModel("Delete following bookmark?\n" + selected_bookmark.Name, "Warning", DialogType.Warning), MainWindow.CurrentMain))
+            if (DialogService.OpenDialog(new DialogYesNoViewModel("Delete following bookmark?\n" + selected_bookmark.Name, "Check", DialogType.Question), MainWindow.CurrentMain))
             {
                 // 3. Delete bookmark record from database
                 (new BookmarkRepo()).DeleteBookmark(selected_bookmark);

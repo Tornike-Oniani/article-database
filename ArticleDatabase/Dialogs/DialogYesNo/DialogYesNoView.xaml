@@ -27,7 +27,7 @@
                                  Height="30"
                                  Width="30"
                                  VerticalAlignment="Center"
-                                 Margin="0 0 15 0"
+                                 Margin="0 0 10 0"
                                  Grid.Column="0"
                                  Grid.Row="0" />
         <!-- Text -->

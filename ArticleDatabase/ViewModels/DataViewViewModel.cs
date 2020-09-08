@@ -180,7 +180,7 @@ namespace ArticleDatabase.ViewModels
             // 4. Catch if file doesn't exist physically
             catch
             {
-                DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Warning", DialogType.Warning), MainWindow.CurrentMain);
+                DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error), MainWindow.CurrentMain);
             }
         }
         public void NextPage(object input = null)
@@ -288,7 +288,7 @@ namespace ArticleDatabase.ViewModels
                 foreach (Article article in Articles)
                     article.Checked = false;
 
-                DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Information), MainWindow.CurrentMain);
+                DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success), MainWindow.CurrentMain);
             }
         }
         public bool CanExport(object input = null)
@@ -319,8 +319,8 @@ namespace ArticleDatabase.ViewModels
                 catch
                 {
                     DialogService.OpenDialog(new DialogOkViewModel("The file is missing, validate your database.", 
-                                                                    "Warning",
-                                                                    DialogType.Warning), 
+                                                                    "Error",
+                                                                    DialogType.Error), 
                                                  MainWindow.CurrentMain);
                 }
 

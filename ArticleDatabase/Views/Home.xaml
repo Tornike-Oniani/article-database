@@ -29,10 +29,6 @@
                              Background="#eac85d" 
                              Foreground="#ffffff" 
                              Command="{Binding ValidateCommand}"/>
-        <materialDesign:PackIcon Kind="Warning" />
-        <materialDesign:PackIcon Kind="CloseCircle" />
-        <materialDesign:PackIcon Kind="InfoCircle" />
-        <materialDesign:PackIcon Kind="QuestionMarkCircle" />
 
     </WrapPanel>
 </UserControl>

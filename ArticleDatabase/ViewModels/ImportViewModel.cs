@@ -72,7 +72,7 @@ namespace ArticleDatabase.ViewModels
             // Delete the temp query file
             File.Delete(Environment.CurrentDirectory + "\\" + "temp_query.txt");
 
-            DialogService.OpenDialog(new DialogOkViewModel("Imported successfully", "Result", DialogType.Error), MainWindow.CurrentMain);
+            DialogService.OpenDialog(new DialogOkViewModel("Imported successfully", "Result", DialogType.Success), MainWindow.CurrentMain);
 
             // Close progress window
             _progress.Close();

@@ -26,6 +26,8 @@ namespace ArticleDatabase.Converters
                     return PackIconKind.QuestionMarkCircle;
                 case DialogType.Information:
                     return PackIconKind.InfoCircle;
+                case DialogType.Success:
+                    return PackIconKind.CheckCircle;
                 default:
                     return PackIconKind.ErrorOutline;
             }

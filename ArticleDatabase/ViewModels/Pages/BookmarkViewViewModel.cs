@@ -151,7 +151,7 @@ namespace ArticleDatabase.ViewModels.Pages
                 foreach (Article article in Bookmark.Articles)
                     article.Checked = false;
 
-                DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Information), MainWindow.CurrentMain);
+                DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success), MainWindow.CurrentMain);
             }
         }
         public bool CanExport(object input = null)
@@ -205,7 +205,7 @@ namespace ArticleDatabase.ViewModels.Pages
                     }
                 }
 
-                DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Information), MainWindow.CurrentMain);
+                DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success), MainWindow.CurrentMain);
             }
         }
         public bool CanExportBookmark(object input = null)

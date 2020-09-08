@@ -100,7 +100,7 @@ namespace ArticleDatabase.ViewModels
                 // Message = "constraint failed\r\nUNIQUE constraint failed: tblArticle.Title"
                 if (error.Message.Contains("UNIQUE") && error.Message.Contains("Title"))
                 {
-                    DialogService.OpenDialog(new DialogOkViewModel("Article with that name already exists", "Duplicate warning", DialogType.Error), MainWindow.CurrentMain);
+                    DialogService.OpenDialog(new DialogOkViewModel("Article with that name already exists", "Duplicate", DialogType.Warning), MainWindow.CurrentMain);
                     
                 }
                 else

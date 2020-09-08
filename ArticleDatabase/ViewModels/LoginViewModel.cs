@@ -49,11 +49,11 @@ namespace ArticleDatabase.ViewModels
             CurrentUser.Username = CurrentUser.Username.Replace("_adminGfK", "");
             if ((new UserRepo()).Register(CurrentUser, admin))
             {
-                DialogService.OpenDialog(new DialogOkViewModel("New user created successfuly", "Result", DialogType.Information), Input as Window);
+                DialogService.OpenDialog(new DialogOkViewModel("New user created successfuly", "Result", DialogType.Success), Input as Window);
             }
             else
             {
-                DialogService.OpenDialog(new DialogOkViewModel("Username is already taken", "Error", DialogType.Information), Input as Window);
+                DialogService.OpenDialog(new DialogOkViewModel("Username is already taken", "Warning", DialogType.Warning), Input as Window);
             }
         }
     }
