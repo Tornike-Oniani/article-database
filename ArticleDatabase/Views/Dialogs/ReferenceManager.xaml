@@ -43,21 +43,8 @@
         
         <!-- References list -->
         <ListView ItemsSource="{Binding ReferenceBoxesCollection}" 
-                  HorizontalContentAlignment="Stretch"
+                  Style="{StaticResource ReferenceList}"
                   Grid.Row="1">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <CheckBox Content="{Binding Reference.Name}" 
-                              Padding="8"
-                              IsChecked="{Binding IsChecked}"
-                              Command="{Binding CheckChangedCommand}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignListBoxItem}">
-                    <Setter Property="Padding" Value="8 0 0 0" />
-                </Style>
-            </ListView.ItemContainerStyle>            
         </ListView>
 
         <!-- Add bookmark -->

@@ -68,8 +68,8 @@ namespace ArticleDatabase.Views
             this.Loaded += (s, e) =>
             {
                 // 1. If main window is too small make it bigger
-                if (MainWindow.CurrentMain.Width < 1200)
-                    MainWindow.CurrentMain.Width = 1200;
+                //if (MainWindow.CurrentMain.Width < 1200)
+                //    MainWindow.CurrentMain.Width = 1200;
 
                 /**
                  * 2. Set commands for follwoing menu items:

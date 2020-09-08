@@ -56,24 +56,8 @@
 
         <!-- Bookmarks list -->
         <ListView ItemsSource="{Binding BookmarkBoxesCollection}" 
-                  HorizontalContentAlignment="Stretch"
-                  Grid.Row="1">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <CheckBox Content="{Binding Bookmark.Name}"
-                              FontWeight="{Binding Bookmark.Global, Converter={StaticResource IntToFontWeight}}"
-                              Padding="8"
-                              IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                              Command="{Binding DataContext.CheckChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                              CommandParameter="{Binding}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignListBoxItem}">
-                    <Setter Property="Padding" Value="8 0 0 0" />
-                </Style>
-            </ListView.ItemContainerStyle>
-        </ListView>
+                  Style="{StaticResource BookmarkList}"
+                  Grid.Row="1" />
 
         <!-- Add bookmark -->
         <Button Style="{x:Null}"

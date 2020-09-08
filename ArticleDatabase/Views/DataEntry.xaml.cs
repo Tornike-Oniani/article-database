@@ -35,8 +35,8 @@ namespace ArticleDatabase.Views
         private void DataEntry_Loaded(object sender, RoutedEventArgs e)
         {
             // 1. If main window is too small make it bigger and center it on screen
-            if (MainWindow.CurrentMain.Width > 800)
-                MainWindow.CurrentMain.Width = 800;
+            //if (MainWindow.CurrentMain.Width > 800)
+            //    MainWindow.CurrentMain.Width = 800;
 
             // 2. Focus the title textbox
             txbTitle.Focus();

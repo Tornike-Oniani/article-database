@@ -41,6 +41,9 @@
 
                 <!-- Datagrid resource dictionary-->
                 <ResourceDictionary Source="/ArticleDatabase.Styles;component/Datagrid.xaml" />
+                
+                <!-- ListView resource dictionary -->
+                <ResourceDictionary Source="/ArticleDatabase;component/Styles/ListView.xaml" />
 
                 <!-- Data template for views -->
                 <ResourceDictionary>

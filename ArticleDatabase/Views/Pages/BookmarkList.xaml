@@ -48,13 +48,13 @@
             <StackPanel Orientation="Horizontal"
                         Grid.Column="0">
                 <materialDesign:PackIcon Kind="BookmarkMultiple"
-                                     VerticalAlignment="Center"
-                                     Foreground="{StaticResource SecondaryColorBrush}"
-                                     Height="25"
-                                     Width="25"
-                                     Margin="0 0 5 0"
-                                     Grid.Row="0"
-                                     Grid.Column="2"/>
+                                         VerticalAlignment="Center"
+                                         Foreground="{StaticResource SecondaryColorBrush}"
+                                         Height="25"
+                                         Width="25"
+                                         Margin="0 0 5 0"
+                                         Grid.Row="0"
+                                         Grid.Column="2" />
                 <TextBlock Text="My bookmarks:"
                            Style="{StaticResource Header}"
                            HorizontalAlignment="Left"
@@ -129,9 +129,9 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <!-- Bookmark name column -->
-                                <ColumnDefinition Width="Auto" />
-                                <!-- Space -->
                                 <ColumnDefinition Width="*" />
+                                <!-- Space -->
+                                <!--<ColumnDefinition Width="*" />-->
                                 <!-- Buttons column -->
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
@@ -150,7 +150,8 @@
                             </StackPanel>
                             <!-- Buttons -->
                             <StackPanel Orientation="Horizontal"
-                                        Grid.Column="2">
+                                        HorizontalAlignment="Right"
+                                        Grid.Column="1">
                                 <!-- Edit button-->
                                 <Button x:Name="EditButton"
                                         Style="{x:Null}"
