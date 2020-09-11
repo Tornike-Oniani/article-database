@@ -23,11 +23,11 @@
                     RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
                     CommandParameter="{Binding Columns}" />
         <KeyBinding Modifiers="Ctrl" Key="B" 
-                    Command="{Binding OpenBookmarkManagerCommand, 
+                    Command="{Binding DataContext.OpenBookmarkManagerCommand, 
                     RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
                     CommandParameter="{Binding SelectedArticle}" />
         <KeyBinding Modifiers="Ctrl" Key="R" 
-                    Command="{Binding OpenReferencekManagerCommand, 
+                    Command="{Binding DataContext.OpenReferenceManagerCommand, 
                     RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
                     CommandParameter="{Binding SelectedArticle}" />
     </UserControl.InputBindings>
@@ -80,7 +80,7 @@
                     <ComboBox ItemsSource="{Binding Users}" DisplayMemberPath="Username" SelectedIndex="{Binding UserIndex}" Width="120" Margin="10 0 0 0" />
                 </StackPanel>
 
-                <!-- Export/Print -->
+                <!-- Mass bookmark -->
                 <StackPanel Orientation="Horizontal" 
                             Visibility="{Binding User.IsAdmin, 
                                                  Converter={StaticResource BoolToVisibility}}"
@@ -95,9 +95,7 @@
                     <Button Content="Bookmark" 
                             Width="100" 
                             Margin="10 0 10 0" 
-                            Command="{Binding OpenMassBookmarkManagerCommand, 
-                                     RelativeSource={RelativeSource FindAncestor, 
-                                     AncestorType={x:Type UserControl}}}" />
+                            Command="{Binding OpenMassBookmarkManagerCommand}" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -153,10 +151,10 @@
             <DataGrid.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                     <!-- We set these items' commands from code behind-->
-                    <MenuItem x:Name="itemAddCommentSIC" Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" />
-                    <MenuItem x:Name="itemEdit" Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditDialogCommand}" />
+                    <MenuItem x:Name="itemAddCommentSIC" Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" Command="{Binding OpenAddPersonalCommand}" />
+                    <MenuItem x:Name="itemEdit" Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
                     <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding DeleteArticleCommand}" />
-                    <MenuItem x:Name="itemBookmark" CommandParameter="{Binding SelectedArticle}">
+                    <MenuItem x:Name="itemBookmark" Command="{Binding OpenBookmarkManagerCommand}" CommandParameter="{Binding SelectedArticle}">
                         <MenuItem.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -169,7 +167,7 @@
                             </Grid>
                         </MenuItem.Header>
                     </MenuItem>
-                    <MenuItem x:Name="itemReference" IsEnabled="{Binding User.IsAdmin}" CommandParameter="{Binding SelectedArticle}">
+                    <MenuItem x:Name="itemReference" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenReferenceManagerCommand}" CommandParameter="{Binding SelectedArticle}">
                         <MenuItem.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>

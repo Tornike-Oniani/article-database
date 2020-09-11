@@ -4,6 +4,7 @@ using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.Dialogs.DialogOk;
 using ArticleDatabase.Dialogs.DialogService;
+using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,7 +16,7 @@ using System.Windows.Controls;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class EditDialogViewModel : BaseViewModel
+    public class EditDialogViewModel : BaseWindow
     {
         private string _author;
         private string _keyword;
@@ -44,6 +45,8 @@ namespace ArticleDatabase.ViewModels
 
         public EditDialogViewModel(DataViewViewModel parent)
         {
+            this.Title = "Edit Article";
+
             // 1. Set parent view model
             Parent = parent;
 
@@ -110,6 +113,8 @@ namespace ArticleDatabase.ViewModels
 
                 
             }
+
+            this.Close();
         }
 
     }

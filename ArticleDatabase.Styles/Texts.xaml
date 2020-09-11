@@ -10,6 +10,11 @@
         <Setter Property="Margin" Value="5 0 0 0" />
     </Style>
     
+    <!-- Generic window title -->
+    <Style TargetType="{x:Type TextBlock}" x:Key="GenericWindowHeader" BasedOn="{StaticResource WindowHeader}">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
+    </Style>
+    
     <!-- Generic header -->
     <Style TargetType="{x:Type TextBlock}" x:Key="Header">
         <Setter Property="FontSize" Value="20" />

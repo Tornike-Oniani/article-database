@@ -4,6 +4,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:ArticleDatabase"
              xmlns:views="clr-namespace:ArticleDatabase.Views"
+             xmlns:popups="clr-namespace:ArticleDatabase.Views.Dialogs"
              xmlns:viewModels="clr-namespace:ArticleDatabase.ViewModels"
              xmlns:dialogYesNo="clr-namespace:ArticleDatabase.Dialogs.DialogYesNo"
              xmlns:dialogOk="clr-namespace:ArticleDatabase.Dialogs.DialogOk"
@@ -72,6 +73,41 @@
                         <views:References />
                     </DataTemplate>
                     
+                    <!-- AddPersonal -->
+                    <DataTemplate DataType="{x:Type viewModels:AddPersonalDialogViewModel}">
+                        <popups:AddPersonal />
+                    </DataTemplate>
+
+                    <!-- Edit article -->
+                    <DataTemplate DataType="{x:Type viewModels:EditDialogViewModel}">
+                        <popups:Edit />
+                    </DataTemplate>
+                    
+                    <!-- Bookmark manager -->
+                    <DataTemplate DataType="{x:Type viewModels:BookmarkManagerViewModel}">
+                        <popups:BookmarkManager />
+                    </DataTemplate>
+                    
+                    <!-- Mass bookmark manager-->
+                    <DataTemplate DataType="{x:Type viewModels:MassBookmarkManagerViewModel}">
+                        <popups:MassBookmarkManager />
+                    </DataTemplate>
+
+                    <!-- Bookmark editor -->
+                    <DataTemplate DataType="{x:Type viewModels:BookmarkEditorViewModel}">
+                        <popups:BookmarkEditor />
+                    </DataTemplate>
+                    
+                    <!-- Reference manager-->
+                    <DataTemplate DataType="{x:Type viewModels:ReferenceManagerViewModel}">
+                        <popups:ReferenceManager />
+                    </DataTemplate>
+
+                    <!-- Reference editor -->
+                    <DataTemplate DataType="{x:Type viewModels:ReferenceEditorViewModel}">
+                        <popups:ReferenceEditor />
+                    </DataTemplate>
+
                     <!-- YesNo dialog -->
                     <DataTemplate DataType="{x:Type dialogYesNo:DialogYesNoViewModel}">
                         <dialogYesNo:DialogYesNoView />

@@ -63,8 +63,10 @@ namespace ArticleDatabase.ViewModels
         public RelayCommand CreateCommand { get; set; }
 
         // Constructor
-        public ReferenceManagerViewModel(Window window, Article article) : base(window)
+        public ReferenceManagerViewModel(Article article)
         {
+            this.Title = "Save to...";
+
             // 1. Initialize starting state
             this._article = article;
             NewReferenceVisibility = Visibility.Visible;

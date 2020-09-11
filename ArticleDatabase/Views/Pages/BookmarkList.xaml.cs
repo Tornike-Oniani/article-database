@@ -40,13 +40,12 @@ namespace ArticleDatabase.Views.Pages
 
             // 1. Initialize commands
             vm.OpenBookmarkCommand = new RelayCommand(OpenBookmark);
-            EditBookmarkCommand = new RelayCommand(EditBookmark);
 
             this.Loaded += (s, e) =>
             {
                 // 1. If main window is too small make it bigger
-                if (MainWindow.CurrentMain.Width < 1200)
-                    MainWindow.CurrentMain.Width = 1200;
+                //if (MainWindow.CurrentMain.Width < 1200)
+                //    MainWindow.CurrentMain.Width = 1200;
             };
         }
 
@@ -67,14 +66,6 @@ namespace ArticleDatabase.Views.Pages
             Page _bookmarkView = new BookmarkView();
             _bookmarkView.DataContext = new BookmarkViewViewModel(sent_bookmark, vm.User, modify_rights);
             NavigationService.Navigate(_bookmarkView);
-        }
-        public void EditBookmark(object input)
-        {
-            BookmarkEditor bookmark_editor = new BookmarkEditor();
-            bookmark_editor.DataContext = new BookmarkEditorViewModel(input as Bookmark, (BookmarkListViewModel)this.DataContext, bookmark_editor);
-            bookmark_editor.Owner = MainWindow.CurrentMain;
-            bookmark_editor.ShowDialog();
-
         }
 
         private void ListView_LostFocus(object sender, RoutedEventArgs e)

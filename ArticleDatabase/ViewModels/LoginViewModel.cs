@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ArticleDatabase.Windows.WindowService;
 
 namespace ArticleDatabase.ViewModels
 {
@@ -32,8 +33,7 @@ namespace ArticleDatabase.ViewModels
         {
             if ((new UserRepo()).Login(CurrentUser))
             {
-                MainWindow wndMain = new MainWindow(CurrentUser);
-                wndMain.Show();
+                WindowService.OpenWindow(new MainViewModel(CurrentUser), WindowType.MainWindow, false);
                 ((LoginWindow)input).Close();
             }
             else

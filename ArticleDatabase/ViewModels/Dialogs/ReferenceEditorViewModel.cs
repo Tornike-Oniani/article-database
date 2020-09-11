@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace ArticleDatabase.ViewModels.Dialogs
+namespace ArticleDatabase.ViewModels
 {
     public class ReferenceEditorViewModel : BaseWindow
     {
@@ -26,8 +26,10 @@ namespace ArticleDatabase.ViewModels.Dialogs
         public RelayCommand SaveReferenceCommand { get; set; }
 
         // Constructor
-        public ReferenceEditorViewModel(Reference reference, ReferenceListViewModel parent, Window window) : base(window)
+        public ReferenceEditorViewModel(Reference reference, ReferenceListViewModel parent)
         {
+            this.Title = "Save as...";
+
             this.Reference = new Reference();
             this.Reference.CopyByValue(reference);
             this._parent = parent;
@@ -45,6 +47,8 @@ namespace ArticleDatabase.ViewModels.Dialogs
             (new ReferenceRepo()).UpdateReference(Reference);
 
             _parent.PopulateReferences();
+
+            this.Close();
         }
         public bool CanSaveReference(object input = null)
         {

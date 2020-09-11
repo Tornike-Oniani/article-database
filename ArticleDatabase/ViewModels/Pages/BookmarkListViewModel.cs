@@ -4,6 +4,8 @@ using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.Dialogs.DialogYesNo;
+using ArticleDatabase.ViewModels.Dialogs;
+using ArticleDatabase.Windows.WindowService;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -71,6 +73,7 @@ namespace ArticleDatabase.ViewModels.Pages
          *  - Delete bookmark
          */
         public RelayCommand OpenBookmarkCommand { get; set; }
+        public RelayCommand EditBookmarkCommand { get; set; }
         public RelayCommand DeleteBookmarkCommand { get; set; }
 
         // Constructor
@@ -88,6 +91,7 @@ namespace ArticleDatabase.ViewModels.Pages
             PopulateBookmarks();
 
             // Initialize commands
+            EditBookmarkCommand = new RelayCommand(EditBookmark);
             DeleteBookmarkCommand = new RelayCommand(DeleteBookmark);
         }
 
@@ -148,6 +152,14 @@ namespace ArticleDatabase.ViewModels.Pages
                 // 4. Refresh bookmark collections
                 PopulateBookmarks();
             }
+        }
+        public void EditBookmark(object input)
+        {
+            WindowService.OpenWindow(new BookmarkEditorViewModel(input as Bookmark, this));
+            //BookmarkEditor bookmark_editor = new BookmarkEditor();
+            //bookmark_editor.DataContext = new BookmarkEditorViewModel(input as Bookmark, (BookmarkListViewModel)this.DataContext, bookmark_editor);
+            //bookmark_editor.Owner = MainWindow.CurrentMain;
+            //bookmark_editor.ShowDialog();
         }
 
         /**

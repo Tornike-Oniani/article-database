@@ -70,7 +70,75 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <!-- Generic window -->
+    <Style  x:Key="GenericWindowStyle1" TargetType="{x:Type Window}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <!-- Outer border with a drop shadow margin -->
+                    <Border Padding="{Binding OuterMarginSizeThickness, FallbackValue=10}">
+
+                        <!-- Main window outline-->
+                        <Grid>
+
+                            <!-- Window with border and drop shadow -->
+                            <Border Background="White">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="0" Opacity="1" />
+                                </Border.Effect>
+                            </Border>
+
+                            <!-- Main window content -->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <!-- Title bar -->
+                                    <RowDefinition Height="30" />
+                                    <!-- Drop shadow-->
+                                    <RowDefinition Height="Auto" />
+                                    <!-- Window Content -->
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Title bar -->
+                                <Grid Grid.Row="0" Panel.ZIndex="1">
+                                    <Grid.ColumnDefinitions>
+                                        <!-- Title Text -->
+                                        <ColumnDefinition Width="200" />
+                                        <!-- Space -->
+                                        <ColumnDefinition Width="*" />
+                                        <!-- Window control buttons -->
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Title text -->
+                                    <Border Grid.Column="0" Padding="5">
+                                        <Viewbox HorizontalAlignment="Left">
+                                            <TextBlock Style="{StaticResource GenericWindowHeader}" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue=DummyText}" />
+                                        </Viewbox>
+                                    </Border>
+
+                                    <!-- Window control buttons -->
+                                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                                        <Button Style="{StaticResource WindowControlButton}" Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}"  Command="{Binding MinimizeCommand}" />
+                                        <Button Style="{StaticResource WindowControlButton}" Tag="{x:Static materialDesign:PackIconKind.WindowMaximize}"  Command="{Binding MaximizeCommand}" />
+                                        <Button Style="{StaticResource WindowCloseButton}" Tag="{x:Static materialDesign:PackIconKind.WindowClose}"  Command="{Binding CloseCommand}" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <Border Grid.Row="2">
+                                    <ContentPresenter Content="{TemplateBinding Content}" />
+                                </Border>
+
+                            </Grid>
+
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Login window -->
     <Style x:Key="LoginWindowStyle" TargetType="{x:Type Window}">
         <Setter Property="Template">
@@ -131,7 +199,7 @@
     </Style>
 
     <!-- BookmarkManager window -->
-    <Style x:Key="BookmarkManagerWindowStyle" TargetType="{x:Type Window}">
+    <Style x:Key="GenericWindowStyle" TargetType="{x:Type Window}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
@@ -171,7 +239,7 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Text="Save to..."
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue=DummyText}"
                                                    FontSize="18"
                                                    Foreground="#909090"
                                                    Padding="10 10 10 10"

@@ -1,5 +1,4 @@
-﻿using ArticleDatabase.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,36 +12,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace ArticleDatabase.Views
+namespace ArticleDatabase.Windows
 {
     /// <summary>
-    /// Interaction logic for AddPersonalDialog.xaml
+    /// Interaction logic for GenericWindow.xaml
     /// </summary>
-    public partial class AddPersonalDialog : Window
+    public partial class GenericWindow : Window
     {
-
-        public RelayCommand CancelCommand { get; set; }
-
-        public AddPersonalDialog()
+        public GenericWindow()
         {
             InitializeComponent();
-
-            CancelCommand = new RelayCommand(Cancel);
 
             this.Loaded += (s, e) =>
             {
                 this.MinHeight = this.ActualHeight;
             };
-        }
-
-        public void Cancel(object input = null)
-        {
-            this.Close();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
     }
 }

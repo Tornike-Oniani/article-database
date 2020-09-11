@@ -1,44 +1,30 @@
-﻿<Window x:Class="ArticleDatabase.Views.Dialogs.BookmarkEditor"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ArticleDatabase.Views.Dialogs"
-        xmlns:converters="clr-namespace:ArticleDatabase.Converters"
-        mc:Ignorable="d"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        Style="{StaticResource BookmarkEditorWindowStyle}"
-        WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize"                
-        Title="BookmarkEditor" Height="Auto" Width="300" SizeToContent="Height">
-
-    <Window.Resources>
+﻿<UserControl x:Class="ArticleDatabase.Views.Dialogs.BookmarkEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ArticleDatabase.Views.Dialogs"
+             xmlns:converters="clr-namespace:ArticleDatabase.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
-    </Window.Resources>
-
-    <WindowChrome.WindowChrome>
-        <WindowChrome 
-            ResizeBorderThickness="0"
-            CaptionHeight="40"
-            CornerRadius="0"
-            GlassFrameThickness="0"
-            />
-    </WindowChrome.WindowChrome>
+    </UserControl.Resources>
 
     <Border Padding="10">
         <StackPanel>
             <!-- Name textbox -->
             <TextBox Text="{Binding Bookmark.Name, UpdateSourceTrigger=PropertyChanged}" 
                      Margin="0 0 0 10"/>
-        
+
             <!-- Global checkbox -->
             <CheckBox Content="Global"
                       Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
                       IsChecked="{Binding Bookmark.Global}"
                       HorizontalAlignment="Left"
                       Margin="0 5 0 10" />
-        
+
             <!-- Buttons wrapper -->
             <StackPanel Orientation="Horizontal"
                         VerticalAlignment="Bottom"
@@ -47,13 +33,12 @@
                 <Button Content="Save" 
                         Width="80"
                         Margin="0 0 10 0" 
-                        Command="{Binding SaveBookmarkCommand}"
-                        Click="Button_Click" />
+                        Command="{Binding SaveBookmarkCommand}" />
                 <!-- Cancel button -->
                 <Button Content="Cancel" 
                         Width="80" 
-                        Click="Button_Click_1" />
+                        Command="{Binding CloseCommand}" />
             </StackPanel>
         </StackPanel>
     </Border>
-</Window>
+</UserControl>

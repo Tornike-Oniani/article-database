@@ -10,21 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ArticleDatabase.Views
+namespace ArticleDatabase.Views.Dialogs
 {
     /// <summary>
     /// Interaction logic for ReferenceManager.xaml
     /// </summary>
-    public partial class ReferenceManager : Window
+    public partial class ReferenceManager : UserControl
     {
         public ReferenceManager()
         {
             InitializeComponent();
-
-            this.Height = MainWindow.CurrentMain.Height * 80 / 100;
-            this.Width = MainWindow.CurrentMain.Width * 40 / 100;
 
             this.Loaded += (object sender, RoutedEventArgs e) =>
             {
@@ -40,11 +38,6 @@ namespace ArticleDatabase.Views
             {
                 textbox.Focus();
             }
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
     }
 }

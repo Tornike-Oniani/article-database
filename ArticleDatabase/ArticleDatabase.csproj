@@ -99,6 +99,27 @@
     <Compile Include="Dialogs\DialogYesNo\DialogYesNoViewModel.cs" />
     <Compile Include="UserControls\ArticleGrid.cs" />
     <Compile Include="ViewModels\Dialogs\SearchDialogViewModel.cs" />
+    <Compile Include="Views\Dialogs\AddPersonal.xaml.cs">
+      <DependentUpon>AddPersonal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\BookmarkEditor.xaml.cs">
+      <DependentUpon>BookmarkEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\BookmarkManager.xaml.cs">
+      <DependentUpon>BookmarkManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\Edit.xaml.cs">
+      <DependentUpon>Edit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\MassBookmarkManager.xaml.cs">
+      <DependentUpon>MassBookmarkManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\ReferenceEditor.xaml.cs">
+      <DependentUpon>ReferenceEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\ReferenceManager.xaml.cs">
+      <DependentUpon>ReferenceManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
@@ -132,12 +153,6 @@
     <Compile Include="ViewModels\Pages\ReferenceViewViewModel.cs" />
     <Compile Include="ViewModels\ReferencesViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\ReferenceManagerViewModel.cs" />
-    <Compile Include="Views\Dialogs\AddPersonalDialog.xaml.cs">
-      <DependentUpon>AddPersonalDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\BookmarkManager.xaml.cs">
-      <DependentUpon>BookmarkManager.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Bookmarks.xaml.cs">
       <DependentUpon>Bookmarks.xaml</DependentUpon>
     </Compile>
@@ -147,20 +162,8 @@
     <Compile Include="Views\DataView.xaml.cs">
       <DependentUpon>DataView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Dialogs\BookmarkEditor.xaml.cs">
-      <DependentUpon>BookmarkEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\ReferenceEditor.xaml.cs">
-      <DependentUpon>ReferenceEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\EditDialog.xaml.cs">
-      <DependentUpon>EditDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\MassBookmarkManager.xaml.cs">
-      <DependentUpon>MassBookmarkManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\BookmarkList.xaml.cs">
       <DependentUpon>BookmarkList.xaml</DependentUpon>
@@ -177,9 +180,6 @@
     <Compile Include="Views\Dialogs\Progress.xaml.cs">
       <DependentUpon>Progress.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Dialogs\ReferenceManager.xaml.cs">
-      <DependentUpon>ReferenceManager.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\References.xaml.cs">
       <DependentUpon>References.xaml</DependentUpon>
     </Compile>
@@ -188,6 +188,11 @@
     </Compile>
     <Compile Include="Views\View.cs" />
     <Compile Include="WindowResizer.cs" />
+    <Compile Include="Windows\GenericWindow.xaml.cs">
+      <DependentUpon>GenericWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WindowService\WindowService.cs" />
+    <Compile Include="Windows\WindowService\WindowType.cs" />
     <Page Include="Dialogs\DialogOk\DialogOkView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -201,6 +206,34 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\ListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\AddPersonal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\BookmarkEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\BookmarkManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\Edit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\MassBookmarkManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\ReferenceEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\ReferenceManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -240,14 +273,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Dialogs\AddPersonalDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\BookmarkManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Bookmarks.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -260,23 +285,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Dialogs\BookmarkEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\ReferenceEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\EditDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Home.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\MassBookmarkManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -300,15 +309,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Dialogs\ReferenceManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\References.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\SearchDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\GenericWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

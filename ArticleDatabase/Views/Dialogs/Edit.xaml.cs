@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ArticleDatabase.Views.Dialogs
 {
     /// <summary>
-    /// Interaction logic for BookmarkEditor.xaml
+    /// Interaction logic for Edit.xaml
     /// </summary>
-    public partial class BookmarkEditor : UserControl
+    public partial class Edit : UserControl
     {
-        public BookmarkEditor()
+        public Edit()
         {
             InitializeComponent();
         }

@@ -4,6 +4,7 @@ using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.Dialogs.DialogYesNo;
+using ArticleDatabase.Windows.WindowService;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -50,6 +51,7 @@ namespace ArticleDatabase.ViewModels.Pages
          *  - Delete bookmark
          */
         public RelayCommand OpenReferenceCommand { get; internal set; }
+        public RelayCommand EditReferenceCommand { get; set; }
         public RelayCommand DeleteReferenceCommand { get; set; }
 
         // Constructor
@@ -63,6 +65,7 @@ namespace ArticleDatabase.ViewModels.Pages
             PopulateReferences();
 
             // Initialize commands
+            EditReferenceCommand = new RelayCommand(EditReference);
             DeleteReferenceCommand = new RelayCommand(DeleteReference);
         }
 
@@ -89,6 +92,10 @@ namespace ArticleDatabase.ViewModels.Pages
         /**
          * Command actions
          */
+        public void EditReference(object input)
+        {
+            WindowService.OpenWindow(new ReferenceEditorViewModel(input as Reference, this));
+        }
         public void DeleteReference(object input)
         {
             // 1. Retrieve sent bookmark

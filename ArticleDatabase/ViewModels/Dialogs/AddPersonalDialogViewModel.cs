@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class AddPersonalDialogViewModel : BaseViewModel
+    public class AddPersonalDialogViewModel : BaseWindow
     {
         public DataViewViewModel Parent { get; set; }
 
@@ -20,6 +21,8 @@ namespace ArticleDatabase.ViewModels
 
         public AddPersonalDialogViewModel(DataViewViewModel parent)
         {
+            this.Title = "Add comment & SIC";
+
             // 1. Set attributes from parent
             Parent = parent;
             PersonalComment = parent.SelectedArticle.PersonalComment;
@@ -40,6 +43,9 @@ namespace ArticleDatabase.ViewModels
 
                 // 2. Update record in database
                 (new ArticleRepo()).UpdatePersonal(Parent.SelectedArticle, Parent.User);
+
+                // 3. Close window
+                Close();
             }
         }
     }

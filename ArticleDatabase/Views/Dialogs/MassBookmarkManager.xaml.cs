@@ -10,23 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ArticleDatabase.Views
+namespace ArticleDatabase.Views.Dialogs
 {
     /// <summary>
     /// Interaction logic for MassBookmarkManager.xaml
     /// </summary>
-    public partial class MassBookmarkManager : Window
+    public partial class MassBookmarkManager : UserControl
     {
         public MassBookmarkManager()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
     }
 }

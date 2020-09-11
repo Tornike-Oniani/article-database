@@ -1,0 +1,27 @@
+﻿<Window x:Class="ArticleDatabase.Windows.GenericWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ArticleDatabase.Windows"
+        mc:Ignorable="d"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Style="{StaticResource GenericWindowStyle}"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="{Binding Title, FallbackValue=DummyTitle}" 
+        SizeToContent="Height"
+        Height="Auto" Width="500">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome 
+            ResizeBorderThickness="{Binding ResizeBorderThickness}"
+            CaptionHeight="{Binding TitleHeight}"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            />
+    </WindowChrome.WindowChrome>
+
+    <ContentPresenter x:Name="ContentPresenter" Content="{Binding}" />
+</Window>

@@ -78,8 +78,10 @@ namespace ArticleDatabase.ViewModels
         public RelayCommand CheckChangedCommand { get; set; }
 
         // Constructor
-        public BookmarkManagerViewModel(Window window, DataViewViewModel parent, Article article = null) : base(window)
+        public BookmarkManagerViewModel(DataViewViewModel parent, Article article = null)
         {
+            this.Title = "Save to...";
+
             // 1. Initialize starting state
             NewBookmarkVisibility = Visibility.Visible;
             CreateVisibility = Visibility.Collapsed;

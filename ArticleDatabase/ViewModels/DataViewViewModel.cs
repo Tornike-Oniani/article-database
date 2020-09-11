@@ -5,6 +5,8 @@ using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.Dialogs.DialogOk;
 using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.Dialogs.DialogYesNo;
+using ArticleDatabase.ViewModels.Dialogs;
+using ArticleDatabase.Windows.WindowService;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -106,8 +108,11 @@ namespace ArticleDatabase.ViewModels
         public RelayCommand DeleteArticleCommand { get; set; }
         public RelayCommand MassBookmarkCommand { get; set; }
 
-        // TEST
-        public RelayCommand OpenEditDialogCommand { get; set; }
+        public RelayCommand OpenAddPersonalCommand { get; set; }
+        public RelayCommand OpenEditCommand { get; set; }
+        public RelayCommand OpenBookmarkManagerCommand { get; set; }
+        public RelayCommand OpenMassBookmarkManagerCommand { get; set; }
+        public RelayCommand OpenReferenceManagerCommand { get; set; }
         #endregion
 
         // Constructor
@@ -149,6 +154,12 @@ namespace ArticleDatabase.ViewModels
             DeleteArticleCommand = new RelayCommand(DeleteArticle, CanDeleteArticle);
             MassBookmarkCommand = new RelayCommand(MassBookmark);
 
+
+            OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
+            OpenEditCommand = new RelayCommand(OpenEditDialog, IsArticleSelected);
+            OpenBookmarkManagerCommand = new RelayCommand(OpenBookmarkManager, IsArticleSelected);
+            OpenMassBookmarkManagerCommand = new RelayCommand(OpenMassBookmarkManager, CanOpenMassBookmarkManager);
+            OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager, IsArticleSelected);
 
             // Set up filter dialog window
 
@@ -339,6 +350,43 @@ namespace ArticleDatabase.ViewModels
         {
             foreach (Article article in Articles)
                 article.BMChecked = (bool)input;
+        }
+
+        public void OpenAddPersonal(object input)
+        {
+            WindowService.OpenWindow(new AddPersonalDialogViewModel(this));
+        }
+        public void OpenBookmarkManager(object input = null)
+        {
+            WindowService.OpenWindow(new BookmarkManagerViewModel(this, input as Article));
+        }
+        public void OpenEditDialog(object input = null)
+        {
+            WindowService.OpenWindow(new EditDialogViewModel(this));
+        }
+        public void OpenMassBookmarkManager(object input = null)
+        {
+            WindowService.OpenWindow(new MassBookmarkManagerViewModel(User, BMCheckedArticles));
+        }
+        public void OpenReferenceManager(object input)
+        {
+            WindowService.OpenWindow(new ReferenceManagerViewModel(input as Article));
+        }
+        public bool IsArticleSelected(object input = null)
+        {
+            if (this == null)
+                return false;
+
+            if (SelectedArticle != null)
+                return true;
+
+            return false;
+        }
+        public bool CanOpenMassBookmarkManager(object input = null)
+        {
+            if (this == null) return false;
+
+            return BMCheckedArticles.Count > 0;
         }
         #endregion
 

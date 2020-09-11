@@ -29,14 +29,12 @@ namespace ArticleDatabase.Views.Pages
          * Commands:
          *  - Edit bookmark
          */
-        public RelayCommand EditReferenceCommand { get; set; }
 
         public ReferenceList(ReferenceListViewModel vm)
         {
             InitializeComponent();
             // 1. Initialize commands
             vm.OpenReferenceCommand = new RelayCommand(OpenReference);
-            EditReferenceCommand = new RelayCommand(EditReference);
         }
 
         /**
@@ -49,14 +47,6 @@ namespace ArticleDatabase.Views.Pages
             Page _referenceView = new ReferenceView();
             _referenceView.DataContext = new ReferenceViewViewModel(input as Reference, ((ReferenceListViewModel)this.DataContext).User);
             NavigationService.Navigate(_referenceView);
-        }
-        public void EditReference(object input)
-        {
-            ReferenceEditor reference_editor = new ReferenceEditor();
-            reference_editor.DataContext = new ReferenceEditorViewModel(input as Reference, (ReferenceListViewModel)this.DataContext, reference_editor);
-            reference_editor.Owner = MainWindow.CurrentMain;
-            reference_editor.ShowDialog();
-
         }
     }
 }

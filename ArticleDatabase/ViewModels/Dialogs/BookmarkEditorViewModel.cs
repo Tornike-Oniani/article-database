@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace ArticleDatabase.ViewModels.Dialogs
+namespace ArticleDatabase.ViewModels
 {
     public class BookmarkEditorViewModel : BaseWindow
     {
@@ -40,8 +40,10 @@ namespace ArticleDatabase.ViewModels.Dialogs
         public RelayCommand SaveBookmarkCommand { get; set; }
 
         // Constructor
-        public BookmarkEditorViewModel(Bookmark bookmark, BookmarkListViewModel parent, Window window) : base(window)
+        public BookmarkEditorViewModel(Bookmark bookmark, BookmarkListViewModel parent)
         {
+            this.Title = "Save as...";
+
             // 1. Copy sent bookmark values and set the parent
             Bookmark = new Bookmark();
             Bookmark.CopyByValue(bookmark);
@@ -62,6 +64,9 @@ namespace ArticleDatabase.ViewModels.Dialogs
 
             // 2. Refresh collections in parent;
             _parent.PopulateBookmarks();
+
+            // 3. Close window
+            this.Close();
         }
         public bool CanSaveBookmark(object input = null)
         {

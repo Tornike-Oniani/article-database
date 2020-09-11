@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace ArticleDatabase.ViewModels.Dialogs
+namespace ArticleDatabase.ViewModels
 {
     class MassBookmarkManagerViewModel : BaseWindow
     {
@@ -25,8 +25,10 @@ namespace ArticleDatabase.ViewModels.Dialogs
 
         public RelayCommand AddArticlesToBookmarkCommand { get; set; }
 
-        public MassBookmarkManagerViewModel(Window window, User user, List<Article> articles) : base(window)
+        public MassBookmarkManagerViewModel(User user, List<Article> articles)
         {
+            this.Title = "Save to...";
+
             // 1. Set starting state
             this._user = user;
             this._articles = articles;
@@ -43,6 +45,7 @@ namespace ArticleDatabase.ViewModels.Dialogs
                     (new BookmarkRepo()).AddArticleToBookmark(SelectedBookmark, article);
 
             DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success), MainWindow.CurrentMain);
+            this.Close();
         }
         public bool CanAddArticlesToBookmark(object input = null)
         {

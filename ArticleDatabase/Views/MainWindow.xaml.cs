@@ -25,26 +25,18 @@ namespace ArticleDatabase
     {
         public static MainWindow CurrentMain;
 
-        private User _user;
-
-        public MainWindow(User user)
+        public MainWindow()
         {
             InitializeComponent();
-            _user = user;
-            this.DataContext = new MainViewModel(_user, this);
 
-            this.Loaded += MainWindow_Loaded;
-            this.Closing += MainWindow_Closing;
-        }
-
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            CurrentMain = this;
+            this.Loaded += (s, e) =>
+            {
+                CurrentMain = this;
+            };
+            this.Closing += (s, e) =>
+            {
+                Application.Current.Shutdown();
+            };
         }
 
         // Keyobard focus so that keybindings will work
