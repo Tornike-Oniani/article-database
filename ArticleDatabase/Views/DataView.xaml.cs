@@ -109,7 +109,7 @@ namespace ArticleDatabase.Views
             if (!SearchDialog.Open)
             {
                 _searchDialog = new SearchDialog();
-                _searchDialog.DataContext = this.DataContext;
+                _searchDialog.DataContext = new SearchDialogViewModel(this.DataContext as DataViewViewModel);
                 _searchDialog.Owner = MainWindow.CurrentMain;
                 _searchDialog.Show();
             }

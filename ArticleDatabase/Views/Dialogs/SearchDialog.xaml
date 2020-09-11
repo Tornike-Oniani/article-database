@@ -17,7 +17,7 @@
     </Window.Resources>
 
     <Border Padding="10">
-        <Grid>
+        <Grid DataContext="{Binding Parent}">
             <Grid.RowDefinitions>
                 <!-- Checkboxes column -->
                 <RowDefinition Height="Auto" />

@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="Dialogs\DialogYesNo\DialogYesNoViewModel.cs" />
     <Compile Include="UserControls\ArticleGrid.cs" />
+    <Compile Include="ViewModels\Dialogs\SearchDialogViewModel.cs" />
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
