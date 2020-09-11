@@ -73,6 +73,11 @@
                         <views:References />
                     </DataTemplate>
                     
+                    <!-- Search dialog -->
+                    <DataTemplate DataType="{x:Type viewModels:SearchDialogViewModel}">
+                        <popups:SearchDialog />
+                    </DataTemplate>
+                    
                     <!-- AddPersonal -->
                     <DataTemplate DataType="{x:Type viewModels:AddPersonalDialogViewModel}">
                         <popups:AddPersonal />

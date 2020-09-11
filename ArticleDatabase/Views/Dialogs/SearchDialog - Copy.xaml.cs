@@ -10,24 +10,29 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ArticleDatabase.Views.Dialogs
+namespace ArticleDatabase.Views
 {
     /// <summary>
     /// Interaction logic for SearchDialog.xaml
     /// </summary>
-    public partial class SearchDialog : UserControl
+    public partial class SearchDialog : Window
     {
+        public static bool Open;
+
         public SearchDialog()
         {
             InitializeComponent();
 
             this.Loaded += (s, e) =>
             {
+                Open = true;
+                this.MinHeight = this.ActualHeight;
                 Keyboard.Focus(this);
             };
+
+            this.Closed += (s, e) => Open = false;
         }
     }
 }

@@ -5,7 +5,6 @@ using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.Dialogs.DialogOk;
 using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.Dialogs.DialogYesNo;
-using ArticleDatabase.ViewModels.Dialogs;
 using ArticleDatabase.Windows.WindowService;
 using System;
 using System.Collections.Generic;
@@ -108,6 +107,7 @@ namespace ArticleDatabase.ViewModels
         public RelayCommand DeleteArticleCommand { get; set; }
         public RelayCommand MassBookmarkCommand { get; set; }
 
+        public RelayCommand OpenSearchDialogCommand { get; set; }
         public RelayCommand OpenAddPersonalCommand { get; set; }
         public RelayCommand OpenEditCommand { get; set; }
         public RelayCommand OpenBookmarkManagerCommand { get; set; }
@@ -154,7 +154,7 @@ namespace ArticleDatabase.ViewModels
             DeleteArticleCommand = new RelayCommand(DeleteArticle, CanDeleteArticle);
             MassBookmarkCommand = new RelayCommand(MassBookmark);
 
-
+            OpenSearchDialogCommand = new RelayCommand(OpenSearchDialog);
             OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
             OpenEditCommand = new RelayCommand(OpenEditDialog, IsArticleSelected);
             OpenBookmarkManagerCommand = new RelayCommand(OpenBookmarkManager, IsArticleSelected);
@@ -352,6 +352,10 @@ namespace ArticleDatabase.ViewModels
                 article.BMChecked = (bool)input;
         }
 
+        public void OpenSearchDialog(object input = null)
+        {
+            WindowService.OpenWindow(new SearchDialogViewModel(this));
+        }
         public void OpenAddPersonal(object input)
         {
             WindowService.OpenWindow(new AddPersonalDialogViewModel(this));

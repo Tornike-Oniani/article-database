@@ -120,6 +120,12 @@
     <Compile Include="Views\Dialogs\ReferenceManager.xaml.cs">
       <DependentUpon>ReferenceManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\SearchDialog - Copy.xaml.cs">
+      <DependentUpon>SearchDialog - Copy.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\SearchDialog.xaml.cs">
+      <DependentUpon>SearchDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
@@ -183,9 +189,6 @@
     <Compile Include="Views\References.xaml.cs">
       <DependentUpon>References.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Dialogs\SearchDialog.xaml.cs">
-      <DependentUpon>SearchDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\View.cs" />
     <Compile Include="WindowResizer.cs" />
     <Compile Include="Windows\GenericWindow.xaml.cs">
@@ -234,6 +237,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\ReferenceManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\SearchDialog - Copy.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\SearchDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -310,10 +321,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\References.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\SearchDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

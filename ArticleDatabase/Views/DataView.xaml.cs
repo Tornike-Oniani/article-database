@@ -1,7 +1,6 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.ViewModels;
-using ArticleDatabase.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,21 +25,6 @@ namespace ArticleDatabase.Views
     /// </summary>
     public partial class DataView : UserControl
     {
-        /**
-         * Private members
-         */
-        private SearchDialog _searchDialog;
-
-        /**
-         * Commands:
-         *  - Open search filter
-         *  - Open edit dialog
-         *  - Open dialog which edits/adds personal comment and sic
-         *  - Open bookmark manager
-         */
-        public RelayCommand OpenSearchDialogCommand { get; set; }       
-        
-
         public static DataView CurrentView;
 
         // Construcotr
@@ -48,54 +32,23 @@ namespace ArticleDatabase.Views
         {
             InitializeComponent();
 
-            // Initialize commands
-            OpenSearchDialogCommand = new RelayCommand(OpenSearchDialog);
-            
-            
-            
-            
-
             this.Loaded += (s, e) =>
             {
-                // 3. Open search dialog
-                OpenSearchDialogCommand.Execute(null);
-
-                // 4. Focus keyobard on this view (We need this so that Usercontrol.Inputbindings work)
+                // 1. Focus keyobard on this view (We need this so that Usercontrol.Inputbindings work)
                 Keyboard.Focus(this);
 
-                // 5. Get the view to static
+                // 2. Get the view to static
                 CurrentView = this;
             };
 
-            // Close search dialog and bookmark manager when view gets changed
+            // Close all windows that were left open when view gets changed
             this.Unloaded += (s, e) =>
             {
-                _searchDialog.Close();
+                foreach(Window win in MainWindow.CurrentMain.OwnedWindows)
+                {
+                    win.Close();
+                }
             };
-        }
-
-        /**
-         * Command actions
-         */
-        public void OpenSearchDialog(object input = null)
-        {
-            if (!SearchDialog.Open)
-            {
-                _searchDialog = new SearchDialog();
-                _searchDialog.DataContext = new SearchDialogViewModel(this.DataContext as DataViewViewModel);
-                _searchDialog.Owner = MainWindow.CurrentMain;
-                _searchDialog.Show();
-            }
-        }
-        public bool CanOpenBookmarkManager(object input = null)
-        {
-            if (this.DataContext == null)
-                return false;
-
-            if (((DataViewViewModel)this.DataContext).SelectedArticle != null)
-                return true;
-
-            return false;
         }
     }
 }

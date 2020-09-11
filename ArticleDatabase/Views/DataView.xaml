@@ -19,7 +19,7 @@
 
     <UserControl.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="F" 
-                    Command="{Binding OpenSearchDialogCommand, 
+                    Command="{Binding DataContext.OpenSearchDialogCommand, 
                     RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
                     CommandParameter="{Binding Columns}" />
         <KeyBinding Modifiers="Ctrl" Key="B" 
@@ -302,7 +302,7 @@
                 <Button Content="Filter" 
                         Width="100" 
                         HorizontalAlignment="Right" 
-                        Command="{Binding OpenSearchDialogCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
+                        Command="{Binding OpenSearchDialogCommand}" 
                         CommandParameter="{Binding Columns}"
                         Grid.Column="2"/>
             </Grid>

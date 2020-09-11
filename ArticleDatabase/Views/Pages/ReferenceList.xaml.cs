@@ -1,6 +1,5 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.ViewModels.Dialogs;
 using ArticleDatabase.ViewModels.Pages;
 using ArticleDatabase.Views.Dialogs;
 using System;
