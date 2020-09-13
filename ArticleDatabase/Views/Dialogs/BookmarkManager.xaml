@@ -6,8 +6,9 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:ArticleDatabase.Views.Dialogs"
              xmlns:converters="clr-namespace:ArticleDatabase.Converters"
+             xmlns:usercontrols="clr-namespace:ArticleDatabase.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="700" d:DesignWidth="500">
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:IntToFontWeightConverter x:Key="IntToFontWeight" />

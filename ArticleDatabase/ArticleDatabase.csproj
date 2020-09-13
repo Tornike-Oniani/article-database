@@ -98,6 +98,9 @@
     </Compile>
     <Compile Include="Dialogs\DialogYesNo\DialogYesNoViewModel.cs" />
     <Compile Include="UserControls\ArticleGrid.cs" />
+    <Compile Include="UserControls\FilterBox.xaml.cs">
+      <DependentUpon>FilterBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\Dialogs\SearchDialogViewModel.cs" />
     <Compile Include="Views\Dialogs\AddPersonal.xaml.cs">
       <DependentUpon>AddPersonal.xaml</DependentUpon>
@@ -206,6 +209,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\ListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\FilterBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

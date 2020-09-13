@@ -26,7 +26,7 @@ namespace ArticleDatabase.Views.Dialogs
 
             this.Loaded += (object sender, RoutedEventArgs e) =>
             {
-                searchBox.Focus();
+                //searchBox.Focus();
             };
         }
 

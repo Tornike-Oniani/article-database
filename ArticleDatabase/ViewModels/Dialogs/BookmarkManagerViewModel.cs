@@ -20,6 +20,7 @@ namespace ArticleDatabase.ViewModels
 {
     public class BookmarkManagerViewModel : BaseWindow
     {
+        // Private members
         private Visibility _newBookmarkVisibility;
         private Visibility _createVisibility;
         private string _name;
@@ -27,11 +28,11 @@ namespace ArticleDatabase.ViewModels
         private DataViewViewModel _parent;
         private User _user;
         private Article _article;
-        private List<Article> _articles;
         private double _initialHeight;
         private CollectionViewSource _bookmarkBoxesCollection;
         private string _filterText;
 
+        // Public properties
         public Visibility NewBookmarkVisibility
         {
             get { return _newBookmarkVisibility; }
@@ -73,6 +74,7 @@ namespace ArticleDatabase.ViewModels
             set { _user = value; OnPropertyChanged("User"); }
         }
 
+        // Commands
         public RelayCommand CreateNewBookmarkCommand { get; set; }
         public RelayCommand CreateCommand { get; set; }
         public RelayCommand CheckChangedCommand { get; set; }
@@ -125,6 +127,7 @@ namespace ArticleDatabase.ViewModels
             }
         }
 
+        // Command actions
         public void CreateNewBookmark(object input = null)
         {
             Win.Height = _initialHeight + 40;
