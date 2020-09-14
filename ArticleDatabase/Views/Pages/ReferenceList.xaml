@@ -6,6 +6,7 @@
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:ArticleDatabase.Views.Pages"
       xmlns:converters="clr-namespace:ArticleDatabase.Converters"
+      xmlns:usercontrols="clr-namespace:ArticleDatabase.UserControls"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="ReferenceList">
@@ -42,11 +43,9 @@
                        Grid.Column="0"/>
 
             <!-- Filter box -->
-            <TextBox Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" 
-                     materialDesign:HintAssist.Hint="Search"
-                     Padding="3"
-                     Margin="0 0 0 5" 
-                     Grid.Column="2" />
+            <usercontrols:FilterBox ItemsSource="{Binding _referencesCollection}"
+                                    Margin="0 0 0 5"
+                                    Grid.Column="2" />
         </Grid>
 
         <Separator Margin="0 5 0 5"

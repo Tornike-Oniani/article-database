@@ -20,23 +20,14 @@ namespace ArticleDatabase.ViewModels.Pages
 {
     public class BookmarkListViewModel : BaseViewModel
     {
-        private CollectionViewSource _bookmarksCollection;
-        private CollectionViewSource _globalBookmarksCollection;
         private string _filterText;
         private string _filterTextGlobal;
-
-        private string _bookmarkTitle;
-
-        public string BookmarkTitle
-        {
-            get { return _bookmarkTitle; }
-            set { _bookmarkTitle = value; OnPropertyChanged("BookmarkTitle"); }
-        }
-
 
         /**
          * Public properties
          */
+        public CollectionViewSource _bookmarksCollection { get; set; }
+        public CollectionViewSource _globalBookmarksCollection { get; set; }
         public User User { get; set; }
         // Container of local bookmarks
         public ObservableCollection<Bookmark> Bookmarks { get; set; }
@@ -82,56 +73,14 @@ namespace ArticleDatabase.ViewModels.Pages
             Bookmarks = new ObservableCollection<Bookmark>();
             _bookmarksCollection = new CollectionViewSource();
             _bookmarksCollection.Source = Bookmarks;
-            _bookmarksCollection.Filter += _bookmarksCollection_Filter;
             GlobalBookmarks = new ObservableCollection<Bookmark>();
             _globalBookmarksCollection = new CollectionViewSource();
             _globalBookmarksCollection.Source = GlobalBookmarks;
-            _globalBookmarksCollection.Filter += _globalBookmarksCollection_Filter;
             PopulateBookmarks();
 
             // Initialize commands
             EditBookmarkCommand = new RelayCommand(EditBookmark);
             DeleteBookmarkCommand = new RelayCommand(DeleteBookmark);
-        }
-
-        private void _bookmarksCollection_Filter(object sender, FilterEventArgs e)
-        {
-            // Edge case: filter text is empty
-            if (String.IsNullOrWhiteSpace(FilterText))
-            {
-                e.Accepted = true;
-                return;
-            }
-
-            Bookmark current = e.Item as Bookmark;
-            if (current.Name.ToUpper().Contains(FilterText.ToUpper()))
-            {
-                e.Accepted = true;
-            }
-            else
-            {
-                e.Accepted = false;
-            }
-        }
-
-        private void _globalBookmarksCollection_Filter(object sender, FilterEventArgs e)
-        {
-            // Edge case: filter text is empty
-            if (String.IsNullOrWhiteSpace(FilterTextGlobal))
-            {
-                e.Accepted = true;
-                return;
-            }
-
-            Bookmark current = e.Item as Bookmark;
-            if (current.Name.ToUpper().Contains(FilterTextGlobal.ToUpper()))
-            {
-                e.Accepted = true;
-            }
-            else
-            {
-                e.Accepted = false;
-            }
         }
 
         /**
@@ -155,10 +104,6 @@ namespace ArticleDatabase.ViewModels.Pages
         public void EditBookmark(object input)
         {
             WindowService.OpenWindow(new BookmarkEditorViewModel(input as Bookmark, this));
-            //BookmarkEditor bookmark_editor = new BookmarkEditor();
-            //bookmark_editor.DataContext = new BookmarkEditorViewModel(input as Bookmark, (BookmarkListViewModel)this.DataContext, bookmark_editor);
-            //bookmark_editor.Owner = MainWindow.CurrentMain;
-            //bookmark_editor.ShowDialog();
         }
 
         /**

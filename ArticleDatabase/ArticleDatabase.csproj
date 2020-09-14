@@ -97,7 +97,6 @@
       <DependentUpon>DialogYesNoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\DialogYesNo\DialogYesNoViewModel.cs" />
-    <Compile Include="UserControls\ArticleGrid.cs" />
     <Compile Include="UserControls\FilterBox.xaml.cs">
       <DependentUpon>FilterBox.xaml</DependentUpon>
     </Compile>

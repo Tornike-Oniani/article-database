@@ -20,21 +20,8 @@ namespace ArticleDatabase.ViewModels.Pages
     public class ReferenceListViewModel : BaseViewModel
     {
         private User _user;
-        private CollectionViewSource _referencesCollection;
-        private string _filterText;
 
-        public string FilterText
-        {
-            get { return _filterText; }
-            set
-            {
-                _filterText = value;
-                _referencesCollection.View.Refresh();
-                OnPropertyChanged("FilterText");
-            }
-        }
-
-
+        public CollectionViewSource _referencesCollection { get; set; }
         public ObservableCollection<Reference> References { get; set; } 
         public ICollectionView ReferencesCollection { get { return _referencesCollection.View; } }
         public User User
@@ -61,32 +48,11 @@ namespace ArticleDatabase.ViewModels.Pages
             References = new ObservableCollection<Reference>();
             _referencesCollection = new CollectionViewSource();
             _referencesCollection.Source = References;
-            _referencesCollection.Filter += _referencesCollection_Filter;
             PopulateReferences();
 
             // Initialize commands
             EditReferenceCommand = new RelayCommand(EditReference);
             DeleteReferenceCommand = new RelayCommand(DeleteReference);
-        }
-
-        private void _referencesCollection_Filter(object sender, FilterEventArgs e)
-        {
-            // Edge case: filter text is empty
-            if (String.IsNullOrWhiteSpace(FilterText))
-            {
-                e.Accepted = true;
-                return;
-            }
-
-            Reference current = e.Item as Reference;
-            if (current.Name.ToUpper().Contains(FilterText.ToUpper()))
-            {
-                e.Accepted = true;
-            }
-            else
-            {
-                e.Accepted = false;
-            }
         }
 
         /**

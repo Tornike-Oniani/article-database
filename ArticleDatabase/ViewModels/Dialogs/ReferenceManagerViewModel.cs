@@ -25,8 +25,6 @@ namespace ArticleDatabase.ViewModels
         private Article _article;
         private string _name;
         private double _initialHeight;
-        private CollectionViewSource _referenceBoxesCollection;
-        private string _filterText;
 
         public Visibility NewReferenceVisibility
         {
@@ -39,19 +37,10 @@ namespace ArticleDatabase.ViewModels
             set { _createVisibility = value; OnPropertyChanged("CreateVisibility"); }
         }
         public ObservableCollection<ReferenceBox> ReferenceBoxes { get; set; }
+        public CollectionViewSource _referenceBoxesCollection { get; set; }
         public ICollectionView ReferenceBoxesCollection
         {
             get { return _referenceBoxesCollection.View; }
-        }
-        public string FilterText
-        {
-            get { return _filterText; }
-            set
-            {
-                _filterText = value;
-                _referenceBoxesCollection.View.Refresh();
-                OnPropertyChanged("FilterText");
-            }
         }
         public string Name
         {
@@ -74,7 +63,6 @@ namespace ArticleDatabase.ViewModels
             ReferenceBoxes = new ObservableCollection<ReferenceBox>();
             _referenceBoxesCollection = new CollectionViewSource();
             _referenceBoxesCollection.Source = ReferenceBoxes;
-            _referenceBoxesCollection.Filter += _referenceBoxesCollection_Filter;
             PopulateReferenceBoxes();
             this._initialHeight = MainWindow.CurrentMain.Height * 80 / 100;
 
@@ -82,26 +70,6 @@ namespace ArticleDatabase.ViewModels
             CreateNewReferenceCommand = new RelayCommand(CreateNewReference);
             CreateCommand = new RelayCommand(Create, CanCreate);
 
-        }
-
-        private void _referenceBoxesCollection_Filter(object sender, FilterEventArgs e)
-        {
-            // Edge case: filter text is empty
-            if (String.IsNullOrWhiteSpace(FilterText))
-            {
-                e.Accepted = true;
-                return;
-            }
-
-            ReferenceBox current = e.Item as ReferenceBox;
-            if (current.Reference.Name.ToUpper().Contains(FilterText.ToUpper()))
-            {
-                e.Accepted = true;
-            }
-            else
-            {
-                e.Accepted = false;
-            }
         }
 
         public void CreateNewReference(object input = null)

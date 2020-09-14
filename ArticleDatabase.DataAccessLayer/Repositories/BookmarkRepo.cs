@@ -73,6 +73,25 @@ namespace ArticleDatabase.DataAccessLayer.Repositories
                 }
             }
         }
+        // Get bookmark by name
+        public Bookmark GetBookmark(string name, User user)
+        {
+            Bookmark result;
+
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString("User")))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    result = conn.QuerySingleOrDefault<Bookmark>($"SELECT ID, Name, Global FROM tblBookmark WHERE UserID = @UserID AND Name = @Name;",
+                        new { UserID = user.ID, Name = name }, transaction: transaction);
+
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
         // Fetch bookmarks of the user
         public List<Bookmark> LoadBookmarks(User user, bool global = false)
         {
@@ -141,21 +160,6 @@ namespace ArticleDatabase.DataAccessLayer.Repositories
                 {
                     conn.Execute("DELETE FROM tblBookmarkArticles WHERE BookmarkID = @BookmarkID AND ArticleID = @ArticleID;",
                         new { BookmarkID = bookmark.ID, ArticleID = article.ID });
-
-                    transaction.Commit();
-                }
-            }
-        }
-        // Fetch bookmark articles from database
-        public void LoadBookmarkArticles(Bookmark bookmark)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString("User")))
-            {
-                conn.Open();
-                using (SQLiteTransaction transaction = conn.BeginTransaction())
-                {
-
-                    // !!! We have to load all articles as default (Joined with personal comments, SIC etc. and then we have to inner join it with bookmark table)
 
                     transaction.Commit();
                 }

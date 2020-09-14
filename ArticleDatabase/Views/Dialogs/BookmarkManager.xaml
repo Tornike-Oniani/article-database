@@ -27,12 +27,8 @@
         </Grid.RowDefinitions>
 
         <!-- Filter box -->
-        <TextBox x:Name="searchBox" 
-                 Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
-                 materialDesign:HintAssist.Hint="Search" 
-                 Padding="3"
-                 Margin="0 0 0 5"
-                 Grid.Row="0" />
+        <usercontrols:FilterBox ItemsSource="{Binding _bookmarkBoxesCollection}"
+                                Margin="0 0 0 5" />
 
         <!-- Bookmarks list -->
         <ListView ItemsSource="{Binding BookmarkBoxesCollection}" 

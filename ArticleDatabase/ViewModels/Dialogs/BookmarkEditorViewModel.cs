@@ -2,6 +2,8 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.Dialogs.DialogService;
+using ArticleDatabase.Dialogs.DialogYesNo;
 using ArticleDatabase.ViewModels.Base;
 using ArticleDatabase.ViewModels.Pages;
 using System;
@@ -59,11 +61,27 @@ namespace ArticleDatabase.ViewModels
          */
          public void SaveBookmark(object input = null)
         {
-            // 1. Update new values to database
-            (new BookmarkRepo()).UpdateBookmark(Bookmark);
+            try
+            {
+                // 1. Update new values to database
+                (new BookmarkRepo()).UpdateBookmark(Bookmark);
 
-            // 2. Refresh collections in parent;
-            _parent.PopulateBookmarks();
+                // 2. Refresh collections in parent;
+                _parent.PopulateBookmarks();
+            }
+            catch
+            {
+                if (DialogService.OpenDialog(new DialogYesNoViewModel("Bookmark with that name already exists, do you want to merge bookmarks?",
+                    "Duplicate", DialogType.Question), MainWindow.CurrentMain))
+                {
+                    Console.WriteLine("Yes was clicked");
+
+                    // 1. Get duplicate bookmark
+
+                    // 2. Merge bookmarks
+
+                }
+            }
 
             // 3. Close window
             this.Close();

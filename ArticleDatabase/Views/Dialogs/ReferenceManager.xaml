@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:ArticleDatabase.Views.Dialogs"
+             xmlns:usercontrols="clr-namespace:ArticleDatabase.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -20,12 +21,8 @@
         </Grid.RowDefinitions>
 
         <!-- Filter box column -->
-        <TextBox x:Name="searchBox" 
-                 Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" 
-                 materialDesign:HintAssist.Hint="Search"
-                 Padding="3"
-                 Margin="0 0 0 5" 
-                 Grid.Row="0" />
+        <usercontrols:FilterBox ItemsSource="{Binding _referenceBoxesCollection}"
+                                Margin="0 0 0 5" />
 
         <!-- References list -->
         <ListView ItemsSource="{Binding ReferenceBoxesCollection}" 

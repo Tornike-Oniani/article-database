@@ -23,11 +23,6 @@ namespace ArticleDatabase.Views.Dialogs
         public ReferenceManager()
         {
             InitializeComponent();
-
-            this.Loaded += (object sender, RoutedEventArgs e) =>
-            {
-                searchBox.Focus();
-            };
         }
 
         private void txbReferenceName_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

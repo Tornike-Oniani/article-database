@@ -29,8 +29,6 @@ namespace ArticleDatabase.ViewModels
         private User _user;
         private Article _article;
         private double _initialHeight;
-        private CollectionViewSource _bookmarkBoxesCollection;
-        private string _filterText;
 
         // Public properties
         public Visibility NewBookmarkVisibility
@@ -44,19 +42,10 @@ namespace ArticleDatabase.ViewModels
             set { _createVisibility = value; OnPropertyChanged("CreateVisibility"); }
         }
         public ObservableCollection<BookmarkBox> BookmarkBoxes { get; set; }
+        public CollectionViewSource _bookmarkBoxesCollection { get; set; }
         public ICollectionView BookmarkBoxesCollection
         {
             get { return _bookmarkBoxesCollection.View; }
-        }
-        public string FilterText
-        {
-            get { return _filterText; }
-            set
-            {
-                _filterText = value;
-                _bookmarkBoxesCollection.View.Refresh();
-                OnPropertyChanged("FilterText");
-            }
         }
         public string Name
         {
@@ -93,7 +82,6 @@ namespace ArticleDatabase.ViewModels
             BookmarkBoxes = new ObservableCollection<BookmarkBox>();
             _bookmarkBoxesCollection = new CollectionViewSource();
             _bookmarkBoxesCollection.Source = BookmarkBoxes;
-            _bookmarkBoxesCollection.Filter += _bookmarkBoxesCollection_Filter;
             PopulateBookmarks();
             this._initialHeight = MainWindow.CurrentMain.Height * 80 / 100;
 
@@ -105,26 +93,6 @@ namespace ArticleDatabase.ViewModels
             // 3. Check bookmark boxes
             CheckBookmarkBoxes();
 
-        }
-
-        private void _bookmarkBoxesCollection_Filter(object sender, FilterEventArgs e)
-        {
-            // Edge case: filter text is empty
-            if (String.IsNullOrWhiteSpace(FilterText))
-            {
-                e.Accepted = true;
-                return;
-            }
-
-            BookmarkBox current = e.Item as BookmarkBox;
-            if (current.Bookmark.Name.ToUpper().Contains(FilterText.ToUpper()))
-            {
-                e.Accepted = true;
-            }
-            else
-            {
-                e.Accepted = false;
-            }
         }
 
         // Command actions
