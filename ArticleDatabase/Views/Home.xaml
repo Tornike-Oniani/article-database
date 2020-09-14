@@ -29,6 +29,5 @@
                              Background="#eac85d" 
                              Foreground="#ffffff" 
                              Command="{Binding ValidateCommand}"/>
-
     </WrapPanel>
 </UserControl>

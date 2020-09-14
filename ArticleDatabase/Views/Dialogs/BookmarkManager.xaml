@@ -32,7 +32,7 @@
 
         <!-- Bookmarks list -->
         <ListView ItemsSource="{Binding BookmarkBoxesCollection}" 
-                  Style="{StaticResource BookmarkList}"
+                  Style="{StaticResource BookmarkManagerList}"
                   Grid.Row="1" />
 
         <!-- Add bookmark -->

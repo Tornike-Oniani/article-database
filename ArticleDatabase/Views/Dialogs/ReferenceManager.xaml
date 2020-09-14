@@ -26,7 +26,7 @@
 
         <!-- References list -->
         <ListView ItemsSource="{Binding ReferenceBoxesCollection}" 
-                  Style="{StaticResource ReferenceList}"
+                  Style="{StaticResource ReferenceManagerList}"
                   Grid.Row="1">
         </ListView>
 

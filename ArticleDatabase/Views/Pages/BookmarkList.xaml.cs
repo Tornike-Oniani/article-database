@@ -25,27 +25,20 @@ namespace ArticleDatabase.Views.Pages
     /// </summary>
     public partial class BookmarkList : Page
     {
-
-        /**
-         * Commands:
-         *  - Edit bookmark
-         */
-        public RelayCommand EditBookmarkCommand { get; set; }
-
         // Constructor
         public BookmarkList(BookmarkListViewModel vm)
         {
-            InitializeComponent();
-
-            // 1. Initialize commands
-            vm.OpenBookmarkCommand = new RelayCommand(OpenBookmark);
-
-            this.Loaded += (s, e) =>
+            try
             {
-                // 1. If main window is too small make it bigger
-                //if (MainWindow.CurrentMain.Width < 1200)
-                //    MainWindow.CurrentMain.Width = 1200;
-            };
+                InitializeComponent();
+
+                // 1. Initialize commands
+                vm.OpenBookmarkCommand = new RelayCommand(OpenBookmark);
+            }
+            catch
+            {
+
+            }
         }
 
         /**

@@ -53,40 +53,10 @@
 
         <!-- Bookmarks list view -->
         <ListView ItemsSource="{Binding ReferencesCollection}"
+                  ItemContainerStyle="{StaticResource CleanItem}"
                   HorizontalContentAlignment="Stretch"
                   AlternationCount="2"
                   Grid.Row="2">
-            <!-- Removes padding and margin from items (So that mouse double click will be caught without clicking exactly on text) -->
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="Margin" Value="0" />
-                    <Setter Property="Padding" Value="0" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <Border Background="{TemplateBinding Background}">
-                                    <ContentPresenter />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
-                            <Setter Property="Background" Value="#ffffff" />
-                        </Trigger>
-                        <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
-                            <Setter Property="Background" Value="#f7f7f7" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource LightHighlightColorBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource LightSelectionColorBrush}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.ItemContainerStyle>
             <!-- Item template on how to show bound data-->
             <ListView.ItemTemplate>
                 <DataTemplate>
