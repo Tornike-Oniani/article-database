@@ -8,22 +8,18 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace ArticleDatabase.ViewModels.Base
+namespace ArticleDatabase.Views
 {
-    public class BaseWindow : Window, INotifyPropertyChanged
+    public class WindowBase : Window, INotifyPropertyChanged
     {
         #region Private members
         /// <summary>
         /// The margin around the window to allow a drop shadow
         /// </summary>
         private int mOuterMarginSize = 10;
-
-        private Window _window;
         #endregion
 
         #region Public properties
-        public string Title { get; set; }
-
         /// <summary>
         /// The size of the resize border around the window
         /// </summary>
@@ -42,7 +38,7 @@ namespace ArticleDatabase.ViewModels.Base
         {
             get
             {
-                return _window.WindowState == WindowState.Maximized ? 0 : mOuterMarginSize;
+                return this.WindowState == WindowState.Maximized ? 0 : mOuterMarginSize;
             }
             set
             {
@@ -64,12 +60,6 @@ namespace ArticleDatabase.ViewModels.Base
         /// The height of the tite bar / caption of the window
         /// </summary>
         public GridLength TitleHeightGridLength { get { return new GridLength(TitleHeight + ResizeBorder); } }
-
-        /**
-         * We use this in BookmarkManager to change height of the window.
-         * When I used Height binding method it messed up center startup location.
-         */
-        public Window Win { get { return _window; } }
         #endregion
 
         #region Commands
@@ -87,30 +77,18 @@ namespace ArticleDatabase.ViewModels.Base
         #endregion
 
         // Constructor
-        public BaseWindow()
+        public WindowBase()
         {
             // Create commands
             MinimizeCommand = new RelayCommand(Minimize);
             // WidnowState.Maximized is 2 and normal is 2 we want to switch between Normal and maximized each time this button is pressed
             // ^= (XOR) sets the WindowState to 0 if it is already maximized and if not it sets to Maximized
             MaximizeCommand = new RelayCommand(Maximize);
-            CloseCommand = new RelayCommand(Close);
-            MenuCommand = new RelayCommand(ShowMenu);
-        }
-        public BaseWindow(Window window)
-        {
-            _window = window;
-
-            // Create commands
-            MinimizeCommand = new RelayCommand(Minimize);
-            // WidnowState.Maximized is 2 and normal is 2 we want to switch between Normal and maximized each time this button is pressed
-            // ^= (XOR) sets the WindowState to 0 if it is already maximized and if not it sets to Maximized
-            MaximizeCommand = new RelayCommand(Maximize);
-            CloseCommand = new RelayCommand(Close);
+            CloseCommand = new RelayCommand(CloseAction);
             MenuCommand = new RelayCommand(ShowMenu);
 
             // Listen for the window resizing
-            _window.StateChanged += (sender, e) =>
+            this.StateChanged += (sender, e) =>
             {
                 // Fire off events for all properties that are affected by window resize
                 OnPropertyChanged(nameof(ResizeBorderThickness));
@@ -119,51 +97,35 @@ namespace ArticleDatabase.ViewModels.Base
             };
 
             // Fix window resize issue
-            var resizer = new WindowResizer(_window);
+            var resizer = new WindowResizer(this);
         }
 
         // Public methods / command actions
-        public void SetWindow(Window window)
-        {
-            _window = window;
-
-            // Listen for the window resizing
-            _window.StateChanged += (sender, e) =>
-            {
-                // Fire off events for all properties that are affected by window resize
-                OnPropertyChanged(nameof(ResizeBorderThickness));
-                OnPropertyChanged(nameof(OuterMarginSize));
-                OnPropertyChanged(nameof(OuterMarginSizeThickness));
-            };
-
-            // Fix window resize issue
-            var resizer = new WindowResizer(_window);
-        }
         public void Minimize(object input = null)
         {
-            _window.WindowState = WindowState.Minimized;
+            this.WindowState = WindowState.Minimized;
         }
         public void Maximize(object input = null)
         {
-            _window.WindowState ^= WindowState.Maximized;
+            this.WindowState ^= WindowState.Maximized;
         }
-        public void Close(object input = null)
+        public void CloseAction(object input = null)
         {
-            _window.Close();
+            this.Close();
         }
         public void ShowMenu(object input = null)
         {
-            SystemCommands.ShowSystemMenu(_window, GetMousePosition());
+            SystemCommands.ShowSystemMenu(this, GetMousePosition());
         }
 
         // Private helpers
         private Point GetMousePosition()
         {
             // Position of the mouse relative to the window
-            var position = Mouse.GetPosition(_window);
+            var position = Mouse.GetPosition(this);
 
             // Add the window position so its a "ToScreen"
-            return new Point(position.X + _window.Left, position.Y + _window.Top);
+            return new Point(position.X + this.Left, position.Y + this.Top);
         }
 
         // INotifyPropertyChanged implementation

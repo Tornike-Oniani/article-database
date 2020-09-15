@@ -13,26 +13,30 @@ using System.Windows.Input;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class MainViewModel : BaseWindow
+    public class MainViewModel : BaseViewModel
     {
 
+        private string _title;
         private BaseViewModel _selectedViewModel;
         private User _user;
 
+        public string Title
+        {
+            get { return _title; }
+            set { _title = value; OnPropertyChanged("Title"); }
+        }
         public BaseViewModel SelectedViewModel
         {
             get { return _selectedViewModel; }
             set { _selectedViewModel = value; OnPropertyChanged("SelectedViewModel"); }
         }
-
-        public ICommand UpdateViewCommand { get; set; }
-
         public User User
         {
             get { return _user; }
             set { _user = value; OnPropertyChanged("User"); }
         }
 
+        public ICommand UpdateViewCommand { get; set; }
 
         public MainViewModel(User user)
         {

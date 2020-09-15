@@ -18,7 +18,7 @@ using System.Windows.Data;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class ReferenceManagerViewModel : BaseWindow
+    public class ReferenceManagerViewModel : BaseViewModel
     {
         private Visibility _newReferenceVisibility;
         private Visibility _createVisibility;
@@ -74,7 +74,7 @@ namespace ArticleDatabase.ViewModels
 
         public void CreateNewReference(object input = null)
         {
-            Win.Height = _initialHeight + 40;
+            //Win.Height = _initialHeight + 40;
             NewReferenceVisibility = Visibility.Collapsed;
             CreateVisibility = Visibility.Visible;
         }
@@ -91,7 +91,7 @@ namespace ArticleDatabase.ViewModels
             Name = "";
 
             // 3. Hide detailed view
-            Win.Height = _initialHeight;
+            //Win.Height = _initialHeight;
             CreateVisibility = Visibility.Collapsed;
             NewReferenceVisibility = Visibility.Visible;
 

@@ -18,7 +18,7 @@ using System.Windows.Data;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class BookmarkManagerViewModel : BaseWindow
+    public class BookmarkManagerViewModel : BaseViewModel
     {
         // Private members
         private Visibility _newBookmarkVisibility;
@@ -98,7 +98,7 @@ namespace ArticleDatabase.ViewModels
         // Command actions
         public void CreateNewBookmark(object input = null)
         {
-            Win.Height = _initialHeight + 40;
+            //Win.Height = _initialHeight + 40;
             NewBookmarkVisibility = Visibility.Collapsed;
             CreateVisibility = Visibility.Visible;
         }
@@ -114,7 +114,7 @@ namespace ArticleDatabase.ViewModels
             Name = "";
 
             // 3. Hide detailed view
-            Win.Height = _initialHeight;
+            //Win.Height = _initialHeight;
             CreateVisibility = Visibility.Collapsed;
             NewBookmarkVisibility = Visibility.Visible;
 

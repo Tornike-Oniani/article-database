@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ArticleDatabase.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace ArticleDatabase.Windows
     /// <summary>
     /// Interaction logic for GenericWindow.xaml
     /// </summary>
-    public partial class GenericWindow : Window
+    public partial class GenericWindow : WindowBase
     {
         public GenericWindow()
         {

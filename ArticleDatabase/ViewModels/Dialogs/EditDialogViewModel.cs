@@ -16,7 +16,7 @@ using System.Windows.Controls;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class EditDialogViewModel : BaseWindow
+    public class EditDialogViewModel : BaseViewModel
     {
         private string _author;
         private string _keyword;
@@ -114,7 +114,7 @@ namespace ArticleDatabase.ViewModels
                 
             }
 
-            this.Close();
+            //this.Close();
         }
 
     }

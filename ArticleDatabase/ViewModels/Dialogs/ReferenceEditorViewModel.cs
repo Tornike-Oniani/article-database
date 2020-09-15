@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class ReferenceEditorViewModel : BaseWindow
+    public class ReferenceEditorViewModel : BaseViewModel
     {
         // Private members
         private ReferenceListViewModel _parent;
@@ -48,7 +48,7 @@ namespace ArticleDatabase.ViewModels
 
             _parent.PopulateReferences();
 
-            this.Close();
+            //this.Close();
         }
         public bool CanSaveReference(object input = null)
         {

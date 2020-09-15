@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class SearchDialogViewModel : BaseWindow
+    public class SearchDialogViewModel : BaseViewModel
     {
         public DataViewViewModel Parent { get; set; }
 

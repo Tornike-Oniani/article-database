@@ -10,10 +10,9 @@ using System.Threading.Tasks;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class AddPersonalDialogViewModel : BaseWindow
+    public class AddPersonalDialogViewModel : BaseViewModel
     {
         public DataViewViewModel Parent { get; set; }
-
         public string PersonalComment { get; set; }
         public int SIC { get; set; }
 
@@ -45,7 +44,7 @@ namespace ArticleDatabase.ViewModels
                 (new ArticleRepo()).UpdatePersonal(Parent.SelectedArticle, Parent.User);
 
                 // 3. Close window
-                Close();
+                //Close();
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using ArticleDatabase.ViewModels.Base;
+﻿using ArticleDatabase.ViewModels;
+using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,9 @@ namespace ArticleDatabase.Windows.WindowService
 {
     public static class WindowService
     {
-        public static void OpenWindow(BaseWindow vm, WindowType type = WindowType.Generic, bool dialog = true)
+        public static void OpenWindow(BaseViewModel vm, WindowType type = WindowType.Generic, bool dialog = true)
         {
             Window win = GetWindow(type);
-            vm.SetWindow(win);
             win.DataContext = vm;
             if (MainWindow.CurrentMain != null)
                 win.Owner = MainWindow.CurrentMain;

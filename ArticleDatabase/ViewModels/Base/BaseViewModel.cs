@@ -9,6 +9,8 @@ namespace ArticleDatabase.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        public string Title { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string propertyName)

@@ -185,6 +185,7 @@
       <DependentUpon>Progress.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\View.cs" />
+    <Compile Include="Views\WindowBase.cs" />
     <Compile Include="WindowResizer.cs" />
     <Compile Include="Windows\GenericWindow.xaml.cs">
       <DependentUpon>GenericWindow.xaml</DependentUpon>

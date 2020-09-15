@@ -8,7 +8,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
                     <!-- Outer border with a drop shadow margin -->
-                    <Border Padding="{Binding OuterMarginSizeThickness, FallbackValue=10}">
+                    <Border Padding="{Binding OuterMarginSizeThickness, FallbackValue=10, 
+                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
 
                         <!-- Main window outline-->
                         <Grid>
@@ -24,7 +25,8 @@
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <!-- Title bar -->
-                                    <RowDefinition Height="{Binding TitleHeightGridLength, FallbackValue=30}" />
+                                    <RowDefinition Height="{Binding TitleHeightGridLength, FallbackValue=30, 
+                                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
                                     <!-- Drop shadow-->
                                     <RowDefinition Height="Auto" />
                                     <!-- Window Content -->
@@ -51,9 +53,15 @@
 
                                     <!-- Window control buttons -->
                                     <StackPanel Orientation="Horizontal" Grid.Column="2">
-                                        <Button Style="{StaticResource WindowControlButton}" Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}"  Command="{Binding MinimizeCommand}" />
-                                        <Button Style="{StaticResource WindowControlButton}" Tag="{x:Static materialDesign:PackIconKind.WindowMaximize}"  Command="{Binding MaximizeCommand}" />
-                                        <Button Style="{StaticResource WindowCloseButton}" Tag="{x:Static materialDesign:PackIconKind.WindowClose}"  Command="{Binding CloseCommand}" />
+                                        <Button Style="{StaticResource WindowControlButton}" 
+                                                Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}" 
+                                                Command="{Binding MinimizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                                        <Button Style="{StaticResource WindowControlButton}" 
+                                                Tag="{x:Static materialDesign:PackIconKind.WindowMaximize}" 
+                                                Command="{Binding MaximizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                                        <Button Style="{StaticResource WindowCloseButton}" 
+                                                Tag="{x:Static materialDesign:PackIconKind.WindowClose}" 
+                                                Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
                                     </StackPanel>
                                 </Grid>
 
@@ -181,7 +189,9 @@
                                         <StackPanel Orientation="Horizontal" Grid.Column="2">
                                             <!--<Button Style="{StaticResource WindowControlButton}" Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}"  Command="{Binding MinimizeCommand}" />
                                             <Button Style="{StaticResource WindowControlButton}" Tag="{x:Static materialDesign:PackIconKind.WindowMaximize}"  Command="{Binding MaximizeCommand}" IsEnabled="False" />-->
-                                            <Button Style="{StaticResource WindowCloseButton}" Tag="{x:Static materialDesign:PackIconKind.WindowClose}"  Command="{Binding CloseCommand}" />
+                                            <Button Style="{StaticResource WindowCloseButton}" 
+                                                    Tag="{x:Static materialDesign:PackIconKind.WindowClose}" 
+                                                    Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
                                         </StackPanel>
                                     </Grid>
                                 </Border>

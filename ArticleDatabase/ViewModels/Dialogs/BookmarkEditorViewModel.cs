@@ -15,7 +15,7 @@ using System.Windows;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class BookmarkEditorViewModel : BaseWindow
+    public class BookmarkEditorViewModel : BaseViewModel
     {
         /**
          * Private memebers
@@ -84,7 +84,7 @@ namespace ArticleDatabase.ViewModels
             }
 
             // 3. Close window
-            this.Close();
+            //this.Close();
         }
         public bool CanSaveBookmark(object input = null)
         {

@@ -15,7 +15,7 @@ using System.Windows;
 
 namespace ArticleDatabase.ViewModels
 {
-    class MassBookmarkManagerViewModel : BaseWindow
+    class MassBookmarkManagerViewModel : BaseViewModel
     {
         private User _user;
         private List<Article> _articles;
@@ -45,7 +45,7 @@ namespace ArticleDatabase.ViewModels
                     (new BookmarkRepo()).AddArticleToBookmark(SelectedBookmark, article);
 
             DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success), MainWindow.CurrentMain);
-            this.Close();
+            //this.Close();
         }
         public bool CanAddArticlesToBookmark(object input = null)
         {

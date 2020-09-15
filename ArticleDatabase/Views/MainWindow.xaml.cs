@@ -1,5 +1,6 @@
 ﻿using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.ViewModels;
+using ArticleDatabase.ViewModels.Base;
 using ArticleDatabase.Views;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace ArticleDatabase
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : WindowBase
     {
         public static MainWindow CurrentMain;
 
