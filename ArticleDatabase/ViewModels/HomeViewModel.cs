@@ -4,6 +4,7 @@ using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.Dialogs.DialogOk;
 using ArticleDatabase.Dialogs.DialogService;
+using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.IO;

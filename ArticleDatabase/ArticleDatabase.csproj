@@ -138,7 +138,6 @@
     </Compile>
     <Compile Include="ViewModels\Dialogs\AddPersonalDialogViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
-    <Compile Include="ViewModels\Base\BaseWindow.cs" />
     <Compile Include="ViewModels\Dialogs\BookmarkManagerViewModel.cs" />
     <Compile Include="ViewModels\BookmarksViewModel.cs" />
     <Compile Include="ViewModels\DataEntryViewModel.cs" />

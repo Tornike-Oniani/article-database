@@ -2,6 +2,7 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

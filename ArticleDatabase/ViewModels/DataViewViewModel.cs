@@ -5,6 +5,7 @@ using ArticleDatabase.DataAccessLayer.Repositories;
 using ArticleDatabase.Dialogs.DialogOk;
 using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.Dialogs.DialogYesNo;
+using ArticleDatabase.ViewModels.Base;
 using ArticleDatabase.Windows.WindowService;
 using System;
 using System.Collections.Generic;

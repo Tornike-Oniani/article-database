@@ -1,6 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.Dialogs.DialogOk;
 using ArticleDatabase.Dialogs.DialogService;
+using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

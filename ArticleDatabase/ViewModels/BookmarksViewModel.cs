@@ -1,4 +1,5 @@
 ﻿using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.ViewModels.Base;
 using ArticleDatabase.Views;
 using System;
 using System.Collections.Generic;
