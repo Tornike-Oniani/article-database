@@ -118,9 +118,15 @@
 
                                     <!-- Window control buttons -->
                                     <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                        <Button Style="{StaticResource WindowControlButton}" Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}"  Command="{Binding MinimizeCommand}" />
-                                        <Button Style="{StaticResource WindowControlButton}" Tag="{x:Static materialDesign:PackIconKind.WindowMaximize}"  Command="{Binding MaximizeCommand}" IsEnabled="False" />
-                                        <Button Style="{StaticResource WindowCloseButton}" Tag="{x:Static materialDesign:PackIconKind.WindowClose}"  Command="{Binding CloseCommand}" />
+                                        <Button Style="{StaticResource WindowControlButton}"
+                                                Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}"
+                                                Command="{Binding MinimizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                                        <Button Style="{StaticResource WindowControlButton}"
+                                                Tag="{x:Static materialDesign:PackIconKind.WindowMaximize}"
+                                                Command="{Binding MaximizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" IsEnabled="False" />
+                                        <Button Style="{StaticResource WindowCloseButton}"
+                                                Tag="{x:Static materialDesign:PackIconKind.WindowClose}"
+                                                Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
                                     </StackPanel>
                                 </Grid>
 

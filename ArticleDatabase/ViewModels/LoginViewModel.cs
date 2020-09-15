@@ -12,17 +12,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using ArticleDatabase.Windows.WindowService;
+using System.Windows.Input;
 
 namespace ArticleDatabase.ViewModels
 {
-    public class LoginViewModel : BaseWindow
+    public class LoginViewModel : BaseViewModel
     {
         public User CurrentUser { get; set; }
 
         public RelayCommand LoginCommand { get; set; }
         public RelayCommand RegisterCommand { get; set; }
 
-        public LoginViewModel(Window window) : base(window)
+        public LoginViewModel()
         {
             CurrentUser = new User();
             LoginCommand = new RelayCommand(Login);
@@ -34,7 +35,7 @@ namespace ArticleDatabase.ViewModels
             if ((new UserRepo()).Login(CurrentUser))
             {
                 WindowService.OpenWindow(new MainViewModel(CurrentUser), WindowType.MainWindow, false);
-                ((LoginWindow)input).Close();
+                (input as ICommand).Execute(null);
             }
             else
             {

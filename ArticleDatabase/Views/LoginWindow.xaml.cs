@@ -1,5 +1,6 @@
 ﻿using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.ViewModels;
+using ArticleDatabase.Views;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -20,7 +21,7 @@ namespace ArticleDatabase
     /// <summary>
     /// Interaction logic for LoginWindow.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class LoginWindow : WindowBase
     {
         LoginViewModel _viewModel;
 
@@ -33,7 +34,7 @@ namespace ArticleDatabase
 
         private void LoginWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _viewModel = new LoginViewModel(this);
+            _viewModel = new LoginViewModel();
             this.DataContext = _viewModel;
             txbUsername.Focus();
 
