@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ArticleDatabase.ViewModels
 {
@@ -59,7 +60,7 @@ namespace ArticleDatabase.ViewModels
         /**
          * Command actions
          */
-         public void SaveBookmark(object input = null)
+         public void SaveBookmark(object input)
         {
             try
             {
@@ -84,6 +85,7 @@ namespace ArticleDatabase.ViewModels
             }
 
             // 3. Close window
+            (input as ICommand).Execute(null);
             //this.Close();
         }
         public bool CanSaveBookmark(object input = null)

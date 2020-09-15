@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ArticleDatabase.ViewModels
 {
@@ -32,7 +33,7 @@ namespace ArticleDatabase.ViewModels
 
         }
 
-        public void AddPersonal(object input = null)
+        public void AddPersonal(object input)
         {
             if (PersonalComment != Parent.SelectedArticle.PersonalComment || SIC != Parent.SelectedArticle.SIC)
             {
@@ -44,7 +45,7 @@ namespace ArticleDatabase.ViewModels
                 (new ArticleRepo()).UpdatePersonal(Parent.SelectedArticle, Parent.User);
 
                 // 3. Close window
-                //Close();
+                (input as ICommand).Execute(null);
             }
         }
     }

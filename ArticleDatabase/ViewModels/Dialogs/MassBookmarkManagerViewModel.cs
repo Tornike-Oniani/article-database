@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ArticleDatabase.ViewModels
 {
@@ -38,14 +39,16 @@ namespace ArticleDatabase.ViewModels
             AddArticlesToBookmarkCommand = new RelayCommand(AddArticlesToBookmark, CanAddArticlesToBookmark);
         }
 
-        public void AddArticlesToBookmark(object input = null)
+        public void AddArticlesToBookmark(object input)
         {
             foreach (Article article in _articles)
                 if (!(new BookmarkRepo()).CheckArticleInBookmark(SelectedBookmark, article))
                     (new BookmarkRepo()).AddArticleToBookmark(SelectedBookmark, article);
 
             DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success), MainWindow.CurrentMain);
-            //this.Close();
+
+            // Close window
+            (input as ICommand).Execute(null);
         }
         public bool CanAddArticlesToBookmark(object input = null)
         {

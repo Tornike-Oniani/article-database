@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ArticleDatabase.ViewModels
 {
@@ -40,7 +41,7 @@ namespace ArticleDatabase.ViewModels
         }
 
         // Command actions
-        public void SaveReference(object input = null)
+        public void SaveReference(object input)
         {
             Reference.ArticleID = (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle);
 
@@ -48,7 +49,8 @@ namespace ArticleDatabase.ViewModels
 
             _parent.PopulateReferences();
 
-            //this.Close();
+            // Close window
+            (input as ICommand).Execute(null);
         }
         public bool CanSaveReference(object input = null)
         {

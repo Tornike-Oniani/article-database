@@ -27,9 +27,17 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Save Button -->
-                <Button Content="Save" Command="{Binding AddPersonalCommand}" Margin="0 0 5 0" Grid.Column="0" />
+                <Button Content="Save" 
+                        Command="{Binding AddPersonalCommand}" 
+                        CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                        Margin="0 0 5 0" 
+                        Grid.Column="0" />
                 <!-- Cancel Button -->
-                <Button Content="Cancel" Command="{Binding CloseCommand}" Margin="5 0 0 0" Grid.Column="1" />
+                <Button Content="Cancel" 
+                        IsCancel="True"
+                        Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                        Margin="5 0 0 0" 
+                        Grid.Column="1" />
             </Grid>
         </StackPanel>
     </Border>

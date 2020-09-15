@@ -90,8 +90,16 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Content="Update" Command="{Binding UpdateArticleCommand}" Margin="0 0 5 0" Grid.Column="1" />
-                <Button Content="Cancel" Margin="6 0 0 0" Command="{Binding CloseCommand}" Grid.Column="2" />
+                <Button Content="Update" 
+                        Command="{Binding UpdateArticleCommand}"
+                        CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                        Margin="0 0 5 0" 
+                        Grid.Column="1" />
+                <Button Content="Cancel" 
+                        IsCancel="True"
+                        Margin="6 0 0 0" 
+                        Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                        Grid.Column="2" />
             </Grid>
 
         </StackPanel>

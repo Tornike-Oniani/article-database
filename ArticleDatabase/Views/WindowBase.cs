@@ -21,6 +21,16 @@ namespace ArticleDatabase.Views
 
         #region Public properties
         /// <summary>
+        /// The smallest width the window can go to
+        /// </summary>
+        public double WindowMinimumWidth { get; set; } = 700;
+
+        /// <summary>
+        /// The smallest height the window can go to
+        /// </summary>
+        public double WindowMinimumHeight { get; set; } = 650;
+
+        /// <summary>
         /// The size of the resize border around the window
         /// </summary>
         public int ResizeBorder { get; set; } = 6;

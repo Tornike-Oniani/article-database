@@ -77,9 +77,9 @@
         <Button Content="Ok"
                 Width="80"
                 HorizontalAlignment="Left" 
-                Margin="10 10 0 10" 
                 IsCancel="True"
-                Command="{Binding CloseCommand}"
+                Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                Margin="10 10 0 10" 
                 Grid.Row="3" />
     </Grid>
 </UserControl>

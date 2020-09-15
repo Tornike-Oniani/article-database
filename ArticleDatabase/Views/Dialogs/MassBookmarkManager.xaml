@@ -41,13 +41,14 @@
             <Button Content="Add"
                 Width="80" 
                 Margin="0 0 10 0"
-                Command="{Binding AddArticlesToBookmarkCommand}" />
+                Command="{Binding AddArticlesToBookmarkCommand}" 
+                CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
 
             <!-- Close button -->
             <Button Content="Close"
                 Width="80" 
                 IsCancel="True"
-                Command="{Binding CloseCommand}" />
+                Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
         </StackPanel>
     </Grid>
 </UserControl>

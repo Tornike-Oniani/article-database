@@ -33,11 +33,13 @@
                 <Button Content="Save" 
                         Width="80"
                         Margin="0 0 10 0" 
-                        Command="{Binding SaveBookmarkCommand}" />
+                        Command="{Binding SaveBookmarkCommand}" 
+                        CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
                 <!-- Cancel button -->
                 <Button Content="Cancel" 
                         Width="80" 
-                        Command="{Binding CloseCommand}" />
+                        IsCancel="True"
+                        Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
             </StackPanel>
         </StackPanel>
     </Border>

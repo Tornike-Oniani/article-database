@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ArticleDatabase.ViewModels
 {
@@ -81,7 +82,7 @@ namespace ArticleDatabase.ViewModels
                 SelectedFile = dlg.FileName;
             }
         }
-        public void UpdateArticle(object input = null)
+        public void UpdateArticle(object input)
         {
             try
             {
@@ -114,7 +115,8 @@ namespace ArticleDatabase.ViewModels
                 
             }
 
-            //this.Close();
+            // Close window
+            (input as ICommand).Execute(null);
         }
 
     }
