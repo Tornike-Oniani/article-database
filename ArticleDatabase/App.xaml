@@ -20,31 +20,28 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 
                 <!-- Texts resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Texts.xaml" />
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Texts.xaml" />
 
                 <!-- Buttons resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Buttons.xaml" />
-
-                <!-- Buttons resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase;component/Styles/WindowButtons.xaml" />
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Buttons.xaml" />
 
                 <!-- Textboxes resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/TextBoxes.xaml" />
-                
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/TextBoxes.xaml" />
+
                 <!-- Navigation resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase;component/Styles/Navigation.xaml" />
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Navigation.xaml" />
 
                 <!-- Checkboxes resource dictionary-->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Checkboxes.xaml" />
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Checkboxes.xaml" />
 
                 <!-- Windows resource dictionary-->
-                <ResourceDictionary Source="/ArticleDatabase;component/Styles/Windows.xaml" />
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Windows.xaml" />
 
                 <!-- Datagrid resource dictionary-->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Datagrid.xaml" />
-                
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Datagrid.xaml" />
+
                 <!-- ListView resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase;component/Styles/ListView.xaml" />
+                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/ListView.xaml" />
 
                 <!-- Data template for views -->
                 <ResourceDictionary>
@@ -70,7 +67,7 @@
                     
                     <!-- References -->
                     <DataTemplate DataType="{x:Type viewModels:ReferencesViewModel}">
-                        <views:References />
+                        <views:Bookmarks />
                     </DataTemplate>
                     
                     <!-- Search dialog -->

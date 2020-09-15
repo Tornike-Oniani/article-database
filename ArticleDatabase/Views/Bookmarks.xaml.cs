@@ -30,10 +30,21 @@ namespace ArticleDatabase.Views
 
             this.Loaded += (object sender, RoutedEventArgs e) =>
             {
-                BookmarkListViewModel view_model = new BookmarkListViewModel(((BookmarksViewModel)this.DataContext).User);
-                Page _mainPage = new BookmarkList(view_model);
-                _mainPage.DataContext = view_model;
-                _mainFrame.Navigate(_mainPage);
+                if (this.DataContext is BookmarksViewModel)
+                {
+                    
+                    BookmarkListViewModel view_model = new BookmarkListViewModel(((BookmarksViewModel)this.DataContext).User);
+                    Page _mainPage = new BookmarkList(view_model);
+                    _mainPage.DataContext = view_model;
+                    _mainFrame.Navigate(_mainPage);
+                }
+                else if (this.DataContext is ReferencesViewModel)
+                {
+                    ReferenceListViewModel view_model = new ReferenceListViewModel(((ReferencesViewModel)this.DataContext).User);
+                    Page _mainPage = new ReferenceList(view_model);
+                    _mainPage.DataContext = view_model;
+                    _mainFrame.Navigate(_mainPage);
+                }
             };
         }
     }
