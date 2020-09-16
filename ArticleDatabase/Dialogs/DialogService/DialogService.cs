@@ -14,6 +14,9 @@ namespace ArticleDatabase.Dialogs.DialogService
             DialogWindow win = new DialogWindow();
             if (owner != null)
                 win.Owner = owner;
+            else
+                win.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
             win.DataContext = vm;
             win.ShowDialog();
             return (win.DataContext as DialogViewModelBase).UserDialogResult;
