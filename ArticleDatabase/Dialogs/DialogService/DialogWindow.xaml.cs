@@ -11,13 +11,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ViewModels.Services;
 
 namespace ArticleDatabase.Dialogs.DialogService
 {
     /// <summary>
     /// Interaction logic for DialogWindow.xaml
     /// </summary>
-    public partial class DialogWindow : Window
+    public partial class DialogWindow : Window, IWindow
     {
         public DialogWindow()
         {

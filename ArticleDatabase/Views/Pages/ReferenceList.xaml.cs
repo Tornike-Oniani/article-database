@@ -1,6 +1,6 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.ViewModels.Pages;
+using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.Views.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ViewModels.Commands;
+using ViewModels.Pages;
 
 namespace ArticleDatabase.Views.Pages
 {
@@ -44,7 +46,7 @@ namespace ArticleDatabase.Views.Pages
         public void OpenReference(object input)
         {
             Page _referenceView = new ReferenceView();
-            _referenceView.DataContext = new ReferenceViewViewModel(input as Reference, ((ReferenceListViewModel)this.DataContext).User);
+            _referenceView.DataContext = new ReferenceViewViewModel(input as Reference, ((ReferenceListViewModel)this.DataContext).User, new DialogService());
             NavigationService.Navigate(_referenceView);
         }
     }

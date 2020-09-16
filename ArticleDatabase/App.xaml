@@ -5,7 +5,11 @@
              xmlns:local="clr-namespace:ArticleDatabase"
              xmlns:views="clr-namespace:ArticleDatabase.Views"
              xmlns:popups="clr-namespace:ArticleDatabase.Views.Dialogs"
-             xmlns:viewModels="clr-namespace:ArticleDatabase.ViewModels"
+             
+             xmlns:mainVM="clr-namespace:ViewModels.Main;assembly=ViewModels"
+             xmlns:popupVM="clr-namespace:ViewModels.Popups;assembly=ViewModels"
+             xmlns:dialogVM="clr-namespace:ViewModels.Services.Dialogs;assembly=ViewModels"
+             
              xmlns:dialogYesNo="clr-namespace:ArticleDatabase.Dialogs.DialogYesNo"
              xmlns:dialogOk="clr-namespace:ArticleDatabase.Dialogs.DialogOk"
              StartupUri="Views/LoginWindow.xaml">
@@ -46,77 +50,77 @@
                 <!-- Data template for views -->
                 <ResourceDictionary>
                     <!-- Home -->
-                    <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
+                    <DataTemplate DataType="{x:Type mainVM:HomeViewModel}">
                         <views:Home />
                     </DataTemplate>
 
                     <!-- Data Entry -->
-                    <DataTemplate DataType="{x:Type viewModels:DataEntryViewModel}">
+                    <DataTemplate DataType="{x:Type mainVM:DataEntryViewModel}">
                         <views:DataEntry />
                     </DataTemplate>
 
                     <!-- Data View -->
-                    <DataTemplate DataType="{x:Type viewModels:DataViewViewModel}">
+                    <DataTemplate DataType="{x:Type mainVM:DataViewViewModel}">
                         <views:DataView />
                     </DataTemplate>
                     
                     <!-- Bookmarks -->
-                    <DataTemplate DataType="{x:Type viewModels:BookmarksViewModel}">
+                    <DataTemplate DataType="{x:Type mainVM:BookmarksViewModel}">
                         <views:Bookmarks />
                     </DataTemplate>
                     
                     <!-- References -->
-                    <DataTemplate DataType="{x:Type viewModels:ReferencesViewModel}">
+                    <DataTemplate DataType="{x:Type mainVM:ReferencesViewModel}">
                         <views:Bookmarks />
                     </DataTemplate>
                     
                     <!-- Search dialog -->
-                    <DataTemplate DataType="{x:Type viewModels:SearchDialogViewModel}">
+                    <DataTemplate DataType="{x:Type popupVM:SearchDialogViewModel}">
                         <popups:SearchDialog />
                     </DataTemplate>
                     
                     <!-- AddPersonal -->
-                    <DataTemplate DataType="{x:Type viewModels:AddPersonalDialogViewModel}">
+                    <DataTemplate DataType="{x:Type popupVM:AddPersonalDialogViewModel}">
                         <popups:AddPersonal />
                     </DataTemplate>
 
                     <!-- Edit article -->
-                    <DataTemplate DataType="{x:Type viewModels:EditDialogViewModel}">
+                    <DataTemplate DataType="{x:Type popupVM:ArticleEditorViewModel}">
                         <popups:Edit />
                     </DataTemplate>
                     
                     <!-- Bookmark manager -->
-                    <DataTemplate DataType="{x:Type viewModels:BookmarkManagerViewModel}">
+                    <DataTemplate DataType="{x:Type popupVM:BookmarkManagerViewModel}">
                         <popups:BookmarkManager />
                     </DataTemplate>
                     
                     <!-- Mass bookmark manager-->
-                    <DataTemplate DataType="{x:Type viewModels:MassBookmarkManagerViewModel}">
+                    <DataTemplate DataType="{x:Type popupVM:MassBookmarkManagerViewModel}">
                         <popups:MassBookmarkManager />
                     </DataTemplate>
 
                     <!-- Bookmark editor -->
-                    <DataTemplate DataType="{x:Type viewModels:BookmarkEditorViewModel}">
+                    <DataTemplate DataType="{x:Type popupVM:BookmarkEditorViewModel}">
                         <popups:BookmarkEditor />
                     </DataTemplate>
                     
                     <!-- Reference manager-->
-                    <DataTemplate DataType="{x:Type viewModels:ReferenceManagerViewModel}">
+                    <DataTemplate DataType="{x:Type popupVM:ReferenceManagerViewModel}">
                         <popups:ReferenceManager />
                     </DataTemplate>
 
                     <!-- Reference editor -->
-                    <DataTemplate DataType="{x:Type viewModels:ReferenceEditorViewModel}">
+                    <DataTemplate DataType="{x:Type popupVM:ReferenceEditorViewModel}">
                         <popups:ReferenceEditor />
                     </DataTemplate>
 
                     <!-- YesNo dialog -->
-                    <DataTemplate DataType="{x:Type dialogYesNo:DialogYesNoViewModel}">
+                    <DataTemplate DataType="{x:Type dialogVM:DialogYesNoViewModel}">
                         <dialogYesNo:DialogYesNoView />
                     </DataTemplate>
                     
                     <!-- Ok dialog -->
-                    <DataTemplate DataType="{x:Type dialogOk:DialogOkViewModel}">
+                    <DataTemplate DataType="{x:Type dialogVM:DialogOkViewModel}">
                         <dialogOk:DialogOkView />
                     </DataTemplate>
                 </ResourceDictionary>

@@ -1,17 +1,18 @@
 ﻿using ArticleDatabase.ViewModels;
-using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ViewModels.Base;
+using ViewModels.Services.Windows;
 
 namespace ArticleDatabase.Windows.WindowService
 {
-    public static class WindowService
+    public class WindowService : IWindowService
     {
-        public static void OpenWindow(BaseViewModel vm, WindowType type = WindowType.Generic, bool dialog = true)
+        public void OpenWindow(BaseViewModel vm, WindowType type = WindowType.Generic, bool dialog = true)
         {
             Window win = GetWindow(type);
             win.DataContext = vm;
@@ -24,7 +25,7 @@ namespace ArticleDatabase.Windows.WindowService
 
         }
 
-        private static Window GetWindow(WindowType type)
+        private Window GetWindow(WindowType type)
         {
             switch (type)
             {

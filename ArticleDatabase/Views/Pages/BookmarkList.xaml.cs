@@ -1,7 +1,7 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.ViewModels.Pages;
+using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.Views.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ViewModels.Commands;
+using ViewModels.Pages;
 
 namespace ArticleDatabase.Views.Pages
 {
@@ -56,7 +58,7 @@ namespace ArticleDatabase.Views.Pages
                 modify_rights = false;
 
             Page _bookmarkView = new BookmarkView();
-            _bookmarkView.DataContext = new BookmarkViewViewModel(sent_bookmark, vm.User, modify_rights);
+            _bookmarkView.DataContext = new BookmarkViewViewModel(sent_bookmark, vm.User, new DialogService(),modify_rights);
             NavigationService.Navigate(_bookmarkView);
         }
 

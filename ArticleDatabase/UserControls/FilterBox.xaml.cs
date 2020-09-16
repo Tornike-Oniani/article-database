@@ -1,10 +1,10 @@
 ﻿using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.UIStructs;
 using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using ViewModels.UIStructs;
 
 namespace ArticleDatabase.UserControls
 {

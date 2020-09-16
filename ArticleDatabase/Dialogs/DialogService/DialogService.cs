@@ -4,16 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ViewModels.Services;
+using ViewModels.Services.Dialogs;
 
 namespace ArticleDatabase.Dialogs.DialogService
 {
-    public static class DialogService
+    public class DialogService : IDialogService
     {
-        public static bool OpenDialog(DialogViewModelBase vm, Window owner)
+        public bool OpenDialog(DialogViewModelBase vm)
         {
             DialogWindow win = new DialogWindow();
-            if (owner != null)
-                win.Owner = owner;
+            if (Application.Current.MainWindow != null)
+                win.Owner = Application.Current.MainWindow;
             else
                 win.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 

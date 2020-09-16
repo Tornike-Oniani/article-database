@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using ViewModels.Services.Dialogs;
 
 namespace ArticleDatabase.Converters
 {

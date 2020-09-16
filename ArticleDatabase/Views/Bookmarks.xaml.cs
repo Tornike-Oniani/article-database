@@ -1,7 +1,8 @@
 ﻿using ArticleDatabase.DataAccessLayer.Models;
+using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.ViewModels;
-using ArticleDatabase.ViewModels.Pages;
 using ArticleDatabase.Views.Pages;
+using ArticleDatabase.Windows.WindowService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ViewModels.Main;
+using ViewModels.Pages;
 
 namespace ArticleDatabase.Views
 {
@@ -33,14 +36,14 @@ namespace ArticleDatabase.Views
                 if (this.DataContext is BookmarksViewModel)
                 {
                     
-                    BookmarkListViewModel view_model = new BookmarkListViewModel(((BookmarksViewModel)this.DataContext).User);
+                    BookmarkListViewModel view_model = new BookmarkListViewModel(((BookmarksViewModel)this.DataContext).User, new DialogService(), new WindowService());
                     Page _mainPage = new BookmarkList(view_model);
                     _mainPage.DataContext = view_model;
                     _mainFrame.Navigate(_mainPage);
                 }
                 else if (this.DataContext is ReferencesViewModel)
                 {
-                    ReferenceListViewModel view_model = new ReferenceListViewModel(((ReferencesViewModel)this.DataContext).User);
+                    ReferenceListViewModel view_model = new ReferenceListViewModel(((ReferencesViewModel)this.DataContext).User, new DialogService(), new WindowService());
                     Page _mainPage = new ReferenceList(view_model);
                     _mainPage.DataContext = view_model;
                     _mainFrame.Navigate(_mainPage);

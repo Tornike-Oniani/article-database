@@ -2,7 +2,7 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
-using ArticleDatabase.ViewModels.Base;
+using ArticleDatabase.Dialogs.DialogService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ViewModels.Base;
+using ViewModels.Main;
 
 namespace ArticleDatabase.ViewModels
 {
@@ -20,11 +22,6 @@ namespace ArticleDatabase.ViewModels
         private BaseViewModel _selectedViewModel;
         private User _user;
 
-        public string Title
-        {
-            get { return _title; }
-            set { _title = value; OnPropertyChanged("Title"); }
-        }
         public BaseViewModel SelectedViewModel
         {
             get { return _selectedViewModel; }
@@ -41,7 +38,7 @@ namespace ArticleDatabase.ViewModels
         public MainViewModel(User user)
         {
             UpdateViewCommand = new UpdateViewCommand(this, user);
-            this.SelectedViewModel = new HomeViewModel(user);
+            this.SelectedViewModel = new HomeViewModel(user, new DialogService());
             this.Title = user.Username;
             // Set admin/user status
             user.Admin = (new UserRepo()).IsAdmin(user);

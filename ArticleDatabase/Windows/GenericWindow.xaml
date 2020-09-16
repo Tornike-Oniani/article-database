@@ -17,8 +17,8 @@
 
     <WindowChrome.WindowChrome>
         <WindowChrome 
-            ResizeBorderThickness="{Binding ResizeBorderThickness}"
-            CaptionHeight="{Binding TitleHeight}"
+            ResizeBorderThickness="{Binding ResizeBorderThickness, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+            CaptionHeight="{Binding TitleHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
             CornerRadius="0"
             GlassFrameThickness="0"
             />

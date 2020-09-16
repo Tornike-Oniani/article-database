@@ -1,7 +1,6 @@
 ﻿using ArticleDatabase.Commands;
 using ArticleDatabase.Dialogs.DialogOk;
 using ArticleDatabase.Dialogs.DialogService;
-using ArticleDatabase.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +10,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ViewModels.Base;
+using ViewModels.Services.Dialogs;
 
 namespace ArticleDatabase.ViewModels
 {
@@ -22,7 +23,6 @@ namespace ArticleDatabase.ViewModels
 
         private ArticleDatabase.Views.Progress _progress;
 
-        public string Title { get; set; }
         public int ProgressPercent
         {
             get { return _progressPercent; }
@@ -73,7 +73,7 @@ namespace ArticleDatabase.ViewModels
             // Delete the temp query file
             File.Delete(Environment.CurrentDirectory + "\\" + "temp_query.txt");
 
-            DialogService.OpenDialog(new DialogOkViewModel("Imported successfully", "Result", DialogType.Success), MainWindow.CurrentMain);
+            new DialogService().OpenDialog(new DialogOkViewModel("Imported successfully", "Result", DialogType.Success));
 
             // Close progress window
             _progress.Close();

@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ViewModels.Services.Dialogs;
 
 namespace ArticleDatabase.Views
 {
@@ -55,7 +56,7 @@ namespace ArticleDatabase.Views
             // 3. If the wrong folder was selected return with an error messagebox
             if ((!File.Exists(destination + "\\" + "NikasDB.sqlite3")) || (!Directory.Exists(destination + @"\Files")) || (!File.Exists(destination + "\\" + "user.sqlite3")))
             {
-                DialogService.OpenDialog(new DialogOkViewModel("Please select a correct folder.", "Error", DialogType.Error), MainWindow.CurrentMain);
+                new DialogService().OpenDialog(new DialogOkViewModel("Please select a correct folder.", "Error", DialogType.Error));
                 return;
             }
 

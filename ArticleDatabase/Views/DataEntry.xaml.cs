@@ -18,6 +18,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using ViewModels.Services.Dialogs;
 
 namespace ArticleDatabase.Views
 {
@@ -66,7 +67,7 @@ namespace ArticleDatabase.Views
             if ((new ArticleRepo()).Exists(title, out file))
             {
                 
-                if (DialogService.OpenDialog(new DialogYesNoViewModel("An article with the given title already exists in Database, do you want to see the file?", "Duplicate", DialogType.Question), MainWindow.CurrentMain))
+                if (new DialogService().OpenDialog(new DialogYesNoViewModel("An article with the given title already exists in Database, do you want to see the file?", "Duplicate", DialogType.Question)))
                 {
                     // User clicked yes
                     // Set the file path with filename and FolderPath static attribute
@@ -80,7 +81,7 @@ namespace ArticleDatabase.Views
                     catch
                     {
                         // This is when user doubleclicks on article that has null file
-                        DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error), MainWindow.CurrentMain);
+                        new DialogService().OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
                     }
                 }
                 else

@@ -8,13 +8,14 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>ArticleDatabase</RootNamespace>
     <AssemblyName>ArticleDatabase</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -73,7 +74,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\UpdateViewCommand.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CheckToListConverter.cs" />
@@ -82,24 +82,20 @@
     <Compile Include="Converters\ListToVisibilityConverter.cs" />
     <Compile Include="Converters\NumberToSICConverter.cs" />
     <Compile Include="Converters\PathToNameConverter.cs" />
+    <Compile Include="Dialogs\Browser\BrowserService.cs" />
     <Compile Include="Dialogs\DialogOk\DialogOkView.xaml.cs">
       <DependentUpon>DialogOkView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\DialogOk\DialogOkViewModel.cs" />
     <Compile Include="Dialogs\DialogService\DialogService.cs" />
-    <Compile Include="Dialogs\DialogService\DialogType.cs" />
-    <Compile Include="Dialogs\DialogService\DialogViewModelBase.cs" />
     <Compile Include="Dialogs\DialogService\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\DialogYesNo\DialogYesNoView.xaml.cs">
       <DependentUpon>DialogYesNoView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\DialogYesNo\DialogYesNoViewModel.cs" />
     <Compile Include="UserControls\FilterBox.xaml.cs">
       <DependentUpon>FilterBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Dialogs\SearchDialogViewModel.cs" />
     <Compile Include="Views\Dialogs\AddPersonal.xaml.cs">
       <DependentUpon>AddPersonal.xaml</DependentUpon>
     </Compile>
@@ -127,35 +123,15 @@
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UIStructs\Base\BaseStruct.cs" />
-    <Compile Include="UIStructs\BookmarkBox.cs" />
-    <Compile Include="UIStructs\ReferenceBox.cs" />
     <Compile Include="UserControls\CollectionBox.xaml.cs">
       <DependentUpon>CollectionBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Widget.xaml.cs">
       <DependentUpon>Widget.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Dialogs\AddPersonalDialogViewModel.cs" />
-    <Compile Include="ViewModels\Base\BaseViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\BookmarkManagerViewModel.cs" />
-    <Compile Include="ViewModels\BookmarksViewModel.cs" />
-    <Compile Include="ViewModels\DataEntryViewModel.cs" />
-    <Compile Include="ViewModels\DataViewViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\BookmarkEditorViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\MassBookmarkManagerViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\ReferenceEditorViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\EditDialogViewModel.cs" />
-    <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\Pages\BookmarkListViewModel.cs" />
-    <Compile Include="ViewModels\Pages\BookmarkViewViewModel.cs" />
-    <Compile Include="ViewModels\Pages\ReferenceListViewModel.cs" />
-    <Compile Include="ViewModels\Pages\ReferenceViewViewModel.cs" />
-    <Compile Include="ViewModels\ReferencesViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\ReferenceManagerViewModel.cs" />
     <Compile Include="Views\Bookmarks.xaml.cs">
       <DependentUpon>Bookmarks.xaml</DependentUpon>
     </Compile>
@@ -190,7 +166,6 @@
       <DependentUpon>GenericWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\WindowService\WindowService.cs" />
-    <Compile Include="Windows\WindowService\WindowType.cs" />
     <Page Include="Dialogs\DialogOk\DialogOkView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -349,6 +324,10 @@
     <ProjectReference Include="..\ArticleDatabase.Styles\ArticleDatabase.Styles.csproj">
       <Project>{57dda4cd-7e62-43a4-8a67-9c9a16154e69}</Project>
       <Name>ArticleDatabase.Styles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ViewModels\ViewModels.csproj">
+      <Project>{4414eb2f-7ab3-46f4-92c3-c4ecbcbe7b35}</Project>
+      <Name>ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

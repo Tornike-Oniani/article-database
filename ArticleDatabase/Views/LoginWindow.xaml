@@ -14,7 +14,7 @@
         ResizeMode="CanMinimize"
         Title="LoginWindow"  SizeToContent="Height" Height="Auto" Width="500">
     <Window.InputBindings>
-        <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}" Key="Enter" />
+        <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Key="Enter" />
     </Window.InputBindings>
 
     <Window.Resources>
