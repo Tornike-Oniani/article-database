@@ -2,20 +2,19 @@
 using ArticleDatabase.DataAccessLayer;
 using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
-using ArticleDatabase.Dialogs.DialogOk;
-using ArticleDatabase.Dialogs.DialogService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using ArticleDatabase.Windows.WindowService;
 using System.Windows.Input;
 using ViewModels.Base;
 using ViewModels.Commands;
 using ViewModels.Services.Windows;
 using ViewModels.Services.Dialogs;
+using Views.Services.Windows;
+using Views.Services.Dialogs;
 
 namespace ArticleDatabase.ViewModels
 {
@@ -37,7 +36,10 @@ namespace ArticleDatabase.ViewModels
         {
             if ((new UserRepo()).Login(CurrentUser))
             {
-                new WindowService().OpenWindow(new MainViewModel(CurrentUser), WindowType.MainWindow, false);
+                new WindowService().OpenWindow(new MainViewModel(CurrentUser), WindowType.MainWindow, false, false);
+                //MainWindow win = new MainWindow();
+                //win.DataContext = new MainViewModel(CurrentUser);
+                //win.Show();
                 (input as ICommand).Execute(null);
             }
             else

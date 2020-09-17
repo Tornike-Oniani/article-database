@@ -1,0 +1,132 @@
+﻿<Page x:Class="Views.Pages.BookmarkList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local="clr-namespace:Views.Pages"
+      xmlns:converters="clr-namespace:Views.Converters"
+      xmlns:usercontrols="clr-namespace:Views.UserControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="BookmarkList">
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <!-- My bookmarks column -->
+            <ColumnDefinition Width="*" />
+            <!-- Gap -->
+            <ColumnDefinition Width="15" />
+            <!-- Global bookmarks column -->
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <!-- Title column -->
+            <RowDefinition Height="Auto" />
+            <!-- Separator column -->
+            <RowDefinition Height="Auto" />
+            <!-- Listview column -->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- MY BOOKMARKS -->
+        <!-- Title -->
+        <Grid Grid.Row="0"
+              Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <!-- Title column -->
+                <ColumnDefinition Width="Auto" />
+                <!-- Gap -->
+                <ColumnDefinition Width=".3*" />
+                <!-- Search column -->
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="0">
+                <materialDesign:PackIcon Kind="BookmarkMultiple"
+                                         VerticalAlignment="Center"
+                                         Foreground="{StaticResource SecondaryColorBrush}"
+                                         Height="25"
+                                         Width="25"
+                                         Margin="0 0 5 0"
+                                         Grid.Row="0"
+                                         Grid.Column="2" />
+                <TextBlock Text="My bookmarks:"
+                           Style="{StaticResource Header}"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Foreground="{StaticResource SecondaryColorBrush}"/>
+            </StackPanel>
+
+            <!-- Filter box column -->
+            <usercontrols:FilterBox ItemsSource="{Binding _bookmarksCollection}"
+                                    Margin="0 0 0 5"
+                                    Grid.Column="2" />
+        </Grid>
+
+        <Separator Margin="0 5 0 5"
+                   Grid.Row="1" 
+                   Grid.Column="0" />
+
+        <!-- Bookmarks list view -->
+        <ListView ItemsSource="{Binding BookmarksCollection}"
+                  Style="{StaticResource BookmarkList}"
+                  LostFocus="ListView_LostFocus"
+                  Grid.Row="2"
+                  Grid.Column="0" />
+
+
+        <!-- GLOBAL BOOKMARKS -->
+
+        <!-- Title -->
+        <Grid Grid.Row="0"
+              Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <!-- Title column -->
+                <ColumnDefinition Width="Auto" />
+                <!-- Gap -->
+                <ColumnDefinition Width=".3*" />
+                <!-- Search column -->
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="0">
+                <materialDesign:PackIcon Kind="Globe"
+                                     VerticalAlignment="Center"
+                                     Foreground="{StaticResource SecondaryColorBrush}"
+                                     Height="25"
+                                     Width="25"
+                                     Margin="0 0 5 0"
+                                     Grid.Row="0"
+                                     Grid.Column="2"/>
+                <TextBlock Text="Global bookmarks:"
+                       Style="{StaticResource Header}"
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource SecondaryColorBrush}" />
+            </StackPanel>
+
+            <!-- Filter box column -->
+
+            <usercontrols:FilterBox ItemsSource="{Binding _globalBookmarksCollection}"
+                                    Margin="0 0 0 5"
+                                    Grid.Column="2" />
+        </Grid>
+
+        <Separator Margin="0 5 0 5"
+                   Grid.Row="1" 
+                   Grid.Column="2" />
+
+        <!-- Bookmarks list view -->
+        <ListView ItemsSource="{Binding GlobalBookmarksCollection}"
+                  Style="{StaticResource BookmarkList}"
+                  LostFocus="ListView_LostFocus"
+                  Grid.Row="2"
+                  Grid.Column="2" />
+    </Grid>
+</Page>

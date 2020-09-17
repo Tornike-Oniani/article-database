@@ -1,9 +1,6 @@
 ﻿using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.Dialogs.Browser;
-using ArticleDatabase.Dialogs.DialogService;
 using ArticleDatabase.ViewModels;
 using ArticleDatabase.Views;
-using ArticleDatabase.Windows.WindowService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ViewModels.Main;
+using Views.Services.Browser;
+using Views.Services.Dialogs;
+using Views.Services.Windows;
 
 namespace ArticleDatabase.Commands
 {

@@ -4,12 +4,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Services;
 
 namespace ViewModels.Base
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
         public string Title { get; set; }
+        public IWindow Window { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

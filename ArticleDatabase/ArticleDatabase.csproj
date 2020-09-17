@@ -75,209 +75,28 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\UpdateViewCommand.cs" />
-    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\CheckToListConverter.cs" />
-    <Compile Include="Converters\DialogTypeToIconConverter.cs" />
-    <Compile Include="Converters\IntToFontWeightConverter.cs" />
-    <Compile Include="Converters\ListToVisibilityConverter.cs" />
-    <Compile Include="Converters\NumberToSICConverter.cs" />
-    <Compile Include="Converters\PathToNameConverter.cs" />
-    <Compile Include="Dialogs\Browser\BrowserService.cs" />
-    <Compile Include="Dialogs\DialogOk\DialogOkView.xaml.cs">
-      <DependentUpon>DialogOkView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\DialogService\DialogService.cs" />
-    <Compile Include="Dialogs\DialogService\DialogWindow.xaml.cs">
-      <DependentUpon>DialogWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\DialogYesNo\DialogYesNoView.xaml.cs">
-      <DependentUpon>DialogYesNoView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\FilterBox.xaml.cs">
-      <DependentUpon>FilterBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\AddPersonal.xaml.cs">
-      <DependentUpon>AddPersonal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\BookmarkEditor.xaml.cs">
-      <DependentUpon>BookmarkEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\BookmarkManager.xaml.cs">
-      <DependentUpon>BookmarkManager.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\Edit.xaml.cs">
-      <DependentUpon>Edit.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\MassBookmarkManager.xaml.cs">
-      <DependentUpon>MassBookmarkManager.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\ReferenceEditor.xaml.cs">
-      <DependentUpon>ReferenceEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\ReferenceManager.xaml.cs">
-      <DependentUpon>ReferenceManager.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\SearchDialog.xaml.cs">
-      <DependentUpon>SearchDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\CollectionBox.xaml.cs">
-      <DependentUpon>CollectionBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\Widget.xaml.cs">
-      <DependentUpon>Widget.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Views\Bookmarks.xaml.cs">
-      <DependentUpon>Bookmarks.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DataEntry.xaml.cs">
-      <DependentUpon>DataEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DataView.xaml.cs">
-      <DependentUpon>DataView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Home.xaml.cs">
-      <DependentUpon>Home.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Pages\BookmarkList.xaml.cs">
-      <DependentUpon>BookmarkList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Pages\BookmarkView.xaml.cs">
-      <DependentUpon>BookmarkView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Pages\ReferenceList.xaml.cs">
-      <DependentUpon>ReferenceList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Pages\ReferenceView.xaml.cs">
-      <DependentUpon>ReferenceView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\Progress.xaml.cs">
-      <DependentUpon>Progress.xaml</DependentUpon>
+    <Compile Include="Views\Main.xaml.cs">
+      <DependentUpon>Main.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\View.cs" />
     <Compile Include="Views\WindowBase.cs" />
-    <Compile Include="WindowResizer.cs" />
-    <Compile Include="Windows\GenericWindow.xaml.cs">
-      <DependentUpon>GenericWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\WindowService\WindowService.cs" />
-    <Page Include="Dialogs\DialogOk\DialogOkView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\DialogService\DialogWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\DialogYesNo\DialogYesNoView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\FilterBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\AddPersonal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\BookmarkEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\BookmarkManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\Edit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\MassBookmarkManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\ReferenceEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\ReferenceManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\SearchDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Views\Main.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="UserControls\CollectionBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\Widget.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Bookmarks.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DataEntry.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DataView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Home.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Pages\BookmarkList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Pages\BookmarkView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Pages\ReferenceList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Pages\ReferenceView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Dialogs\Progress.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\GenericWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -298,6 +117,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Logo.ico" />
+    <Content Include="Files\init.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Logs\init.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="NikasDB.sqlite3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -328,6 +153,10 @@
     <ProjectReference Include="..\ViewModels\ViewModels.csproj">
       <Project>{4414eb2f-7ab3-46f4-92c3-c4ecbcbe7b35}</Project>
       <Name>ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Views\Views.csproj">
+      <Project>{0dbd00cb-125d-47dd-8d51-dac63c5d65ab}</Project>
+      <Name>Views</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

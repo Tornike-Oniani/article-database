@@ -9,6 +9,10 @@ namespace ViewModels.Services.Windows
 {
     public interface IWindowService
     {
-        void OpenWindow(BaseViewModel vm, WindowType type = WindowType.Generic, bool dialog = true);
+        void OpenWindow(BaseViewModel vm, 
+                        WindowType type = WindowType.Generic, 
+                        bool mainExists = true, 
+                        bool dialog = true, 
+                        bool passWindow = false);
     }
 }
