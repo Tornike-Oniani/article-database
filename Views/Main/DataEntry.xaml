@@ -41,6 +41,7 @@
                     Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                     LostFocus="txbTitle_LostFocus" />
 
+
                     <!-- Authors and keywords wrapper -->
                     <Grid Margin="0 15 0 0">
                         <Grid.ColumnDefinitions>

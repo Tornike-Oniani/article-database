@@ -21,13 +21,13 @@
                              Description="Imports data from selected section" 
                              Background="#55bc75" 
                              Foreground="#ffffff"
-                             Click="Import_Click" />
+                             Command="{Binding ImportCommand}" />
         <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.TableSearch}" 
                              IsEnabled="{Binding User.IsAdmin}"
                              Title="Validate" 
                              Description="Checks if all records have valid .pdf file" 
                              Background="#eac85d" 
                              Foreground="#ffffff" 
-                             Command="{Binding ValidateCommand}"/>
+                             Command="{Binding ValidateCommand}" />
     </WrapPanel>
 </UserControl>

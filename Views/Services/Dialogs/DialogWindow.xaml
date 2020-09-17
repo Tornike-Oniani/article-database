@@ -5,6 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Views.Services.Dialogs"
         mc:Ignorable="d"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Style="{StaticResource DialogWindowStyle}"
         Title="{Binding Title, FallbackValue=SampleTitle}" 
         MinHeight="150" 
         MinWidth="300"
@@ -12,6 +15,16 @@
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome 
+            ResizeBorderThickness="{Binding ResizeBorderThickness, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+            CaptionHeight="{Binding TitleHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            />
+    </WindowChrome.WindowChrome>
+
     <ContentPresenter x:Name="ContentPresenter" 
                           Content="{Binding}" />
 </Window>

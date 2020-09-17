@@ -43,7 +43,7 @@ namespace ArticleDatabase.Commands
             switch ((View)parameter)
             {
                 case View.Home:
-                    this._mainViewModel.SelectedViewModel = new HomeViewModel(_user, _dialogService);
+                    this._mainViewModel.SelectedViewModel = new HomeViewModel(_user, _dialogService, _windowService, _browserService);
                     break;
                 case View.DataEntry:
                     this._mainViewModel.SelectedViewModel = new DataEntryViewModel(_user, _browserService);

@@ -24,7 +24,6 @@ namespace Views.Popups
         {
             InitializeComponent();
 
-
             this.Loaded += (s, e) =>
             {
                 Keyboard.Focus(this);

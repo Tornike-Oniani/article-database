@@ -11,7 +11,9 @@ using System.Windows;
 using System.Windows.Input;
 using ViewModels.Base;
 using ViewModels.Main;
+using Views.Services.Browser;
 using Views.Services.Dialogs;
+using Views.Services.Windows;
 
 namespace ArticleDatabase.ViewModels
 {
@@ -38,7 +40,7 @@ namespace ArticleDatabase.ViewModels
         public MainViewModel(User user)
         {
             UpdateViewCommand = new UpdateViewCommand(this, user);
-            this.SelectedViewModel = new HomeViewModel(user, new DialogService());
+            this.SelectedViewModel = new HomeViewModel(user, new DialogService(), new WindowService(), new BrowserService());
             this.Title = user.Username;
             // Set admin/user status
             user.Admin = (new UserRepo()).IsAdmin(user);
