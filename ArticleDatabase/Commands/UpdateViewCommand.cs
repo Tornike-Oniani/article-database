@@ -40,21 +40,21 @@ namespace ArticleDatabase.Commands
 
         public void Execute(object parameter)
         {
-            switch ((View)parameter)
+            switch ((ViewType)parameter)
             {
-                case View.Home:
+                case ViewType.Home:
                     this._mainViewModel.SelectedViewModel = new HomeViewModel(_user, _dialogService, _windowService, _browserService);
                     break;
-                case View.DataEntry:
+                case ViewType.DataEntry:
                     this._mainViewModel.SelectedViewModel = new DataEntryViewModel(_user, _browserService);
                     break;
-                case View.DataView:
+                case ViewType.DataView:
                     this._mainViewModel.SelectedViewModel = new DataViewViewModel(_user, _dialogService, _windowService, _browserService);
                     break;
-                case View.Bookmarks:
+                case ViewType.Bookmarks:
                     this._mainViewModel.SelectedViewModel = new BookmarksViewModel(_user);
                     break;
-                case View.References:
+                case ViewType.References:
                     this._mainViewModel.SelectedViewModel = new ReferencesViewModel(_user);
                     break;
             }

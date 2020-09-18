@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ArticleDatabase.Views
 {
-    public enum View
+    public enum ViewType
     {
         Home,
         DataEntry,

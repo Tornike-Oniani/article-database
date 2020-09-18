@@ -38,7 +38,8 @@
 
             <TextBlock Text="References:"
                        Style="{StaticResource Header}"
-                       HorizontalAlignment="Left" 
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
                        Foreground="{StaticResource SecondaryColorBrush}" 
                        Grid.Column="0"/>
 

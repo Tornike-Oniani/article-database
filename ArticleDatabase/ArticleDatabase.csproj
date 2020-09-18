@@ -83,8 +83,7 @@
     <Compile Include="Views\Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\View.cs" />
-    <Compile Include="Views\WindowBase.cs" />
+    <Compile Include="Views\ViewType.cs" />
     <Page Include="Views\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

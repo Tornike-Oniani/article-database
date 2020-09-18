@@ -23,7 +23,7 @@
                          GroupName="Navigation" 
                          IsChecked="True" 
                          Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static local:View.Home}" />
+                         CommandParameter="{x:Static local:ViewType.Home}" />
             <!-- Data entry -->
             <RadioButton Style="{StaticResource NavigationButton}" 
                          IsEnabled="{Binding User.IsAdmin}"
@@ -31,14 +31,14 @@
                          Tag="{x:Static materialDesign:PackIconKind.FilePlus}" 
                          GroupName="Navigation" 
                          Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static local:View.DataEntry}" />
+                         CommandParameter="{x:Static local:ViewType.DataEntry}" />
             <!-- Data search -->
             <RadioButton Style="{StaticResource NavigationButton}" 
                          Content="Data Search" 
                          Tag="{x:Static materialDesign:PackIconKind.Search}" 
                          GroupName="Navigation" 
                          Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static local:View.DataView}" 
+                         CommandParameter="{x:Static local:ViewType.DataView}" 
                          Click="RadioButton_Click" />
             <!-- Bookmark manager -->
             <RadioButton Style="{StaticResource NavigationButton}"
@@ -46,14 +46,14 @@
                          Tag="{x:Static materialDesign:PackIconKind.Bookmark}"
                          GroupName="Navigation"
                          Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static local:View.Bookmarks}" />
+                         CommandParameter="{x:Static local:ViewType.Bookmarks}" />
             <!-- Reference manager -->
             <RadioButton Style="{StaticResource NavigationButton}"
                          Content="References"
                          Tag="{x:Static materialDesign:PackIconKind.ArrowCollapse}"
                          GroupName="Navigation"
                          Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static local:View.References}" />
+                         CommandParameter="{x:Static local:ViewType.References}" />
 
         </StackPanel>
 

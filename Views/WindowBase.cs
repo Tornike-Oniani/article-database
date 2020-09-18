@@ -8,8 +8,9 @@ using System.Windows;
 using System.Windows.Input;
 using ViewModels.Commands;
 using ViewModels.Services;
+using Views;
 
-namespace Views
+namespace ViewsLib
 {
     public class WindowBase : Window, INotifyPropertyChanged, IWindow
     {

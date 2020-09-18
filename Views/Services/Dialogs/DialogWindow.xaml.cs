@@ -12,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ViewModels.Services;
+using ViewsLib;
 
 namespace Views.Services.Dialogs
 {
     /// <summary>
     /// Interaction logic for DialogWindow.xaml
     /// </summary>
-    public partial class DialogWindow : Window, IWindow
+    public partial class DialogWindow : WindowBase
     {
         public DialogWindow()
         {

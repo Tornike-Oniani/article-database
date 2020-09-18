@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ArticleDatabase"
-        xmlns:base="clr-namespace:Views;assembly=Views"
+        xmlns:base="clr-namespace:ViewsLib;assembly=Views"
         xmlns:views1="clr-namespace:ArticleDatabase.Views"
         mc:Ignorable="d"
         WindowStyle="None"
