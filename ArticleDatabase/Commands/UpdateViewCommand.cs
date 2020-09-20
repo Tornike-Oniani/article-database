@@ -1,18 +1,18 @@
 ﻿using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.ViewModels;
-using ArticleDatabase.Views;
+using Main.ViewModels;
+using Main.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using ViewModels.Main;
+using MainLib.ViewModels.Main;
 using Views.Services.Browser;
 using Views.Services.Dialogs;
 using Views.Services.Windows;
 
-namespace ArticleDatabase.Commands
+namespace Main.Commands
 {
     public class UpdateViewCommand : ICommand
     {

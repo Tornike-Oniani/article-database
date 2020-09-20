@@ -1,8 +1,5 @@
-﻿using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.ViewModels;
-using ArticleDatabase.Views;
+﻿using Main.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -17,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ViewsLib;
 
-namespace ArticleDatabase
+namespace Main
 {
     /// <summary>
     /// Interaction logic for LoginWindow.xaml

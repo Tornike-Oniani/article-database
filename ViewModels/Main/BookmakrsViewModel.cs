@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ViewModels.Base;
+using Lib.ViewModels.Base;
 
-namespace ViewModels.Main
+namespace MainLib.ViewModels.Main
 {
     public class BookmarksViewModel : BaseViewModel
     {

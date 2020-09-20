@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Dialogs;
 using MaterialDesignThemes.Wpf;
 
 namespace Views.Converters

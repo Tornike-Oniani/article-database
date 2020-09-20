@@ -14,7 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Dialogs;
 using Views.Services.Dialogs;
 
 namespace Views.Main

@@ -9,11 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ViewModels.Base;
-using ViewModels.Commands;
-using ViewModels.Services.Browser;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Browser;
 
-namespace ViewModels.Main
+namespace MainLib.ViewModels.Main
 {
     public class DataEntryViewModel : BaseViewModel, IDataErrorInfo
     {

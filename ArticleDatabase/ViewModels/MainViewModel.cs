@@ -1,7 +1,6 @@
-﻿using ArticleDatabase.Commands;
-using ArticleDatabase.DataAccessLayer;
-using ArticleDatabase.DataAccessLayer.Models;
+﻿using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
+using Main.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ViewModels.Base;
-using ViewModels.Main;
+using Lib.ViewModels.Base;
+using MainLib.ViewModels.Main;
 using Views.Services.Browser;
 using Views.Services.Dialogs;
 using Views.Services.Windows;
 
-namespace ArticleDatabase.ViewModels
+namespace Main.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {

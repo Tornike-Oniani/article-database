@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ViewModels.Commands;
-using ViewModels.Services;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Windows;
 using Views;
 
 namespace ViewsLib

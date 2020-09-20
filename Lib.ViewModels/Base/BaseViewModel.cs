@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Lib.ViewModels.Services.Windows;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ViewModels.Services;
+using Lib.ViewModels.Services;
 
-namespace ViewModels.Base
+namespace Lib.ViewModels.Base
 {
     public class BaseViewModel : INotifyPropertyChanged
     {

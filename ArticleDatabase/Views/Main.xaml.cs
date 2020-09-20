@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Views.Main;
 
-namespace ArticleDatabase.Views
+namespace Main.Views
 {
     /// <summary>
     /// Interaction logic for Main.xaml

@@ -5,11 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ViewModels.Base;
-using ViewModels.Services;
-using ViewModels.Services.Dialogs;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Services.Dialogs;
 
-namespace ViewModels.Popups
+namespace MainLib.ViewModels.Popups
 {
     public class ImportViewModel : BaseViewModel
     {

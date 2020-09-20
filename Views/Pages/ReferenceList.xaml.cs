@@ -13,8 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ViewModels.Commands;
-using ViewModels.Pages;
+using Lib.ViewModels.Commands;
+using MainLib.ViewModels.Pages;
 using Views.Services.Dialogs;
 
 namespace Views.Pages

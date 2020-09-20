@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using ViewModels.Base;
-using ViewModels.Services;
-using ViewModels.Services.Windows;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Services;
+using Lib.ViewModels.Services.Windows;
 
 namespace Views.Services.Windows
 {

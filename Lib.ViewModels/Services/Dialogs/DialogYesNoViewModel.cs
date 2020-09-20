@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using ViewModels.Commands;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Windows;
 
-namespace ViewModels.Services.Dialogs
+namespace Lib.ViewModels.Services.Dialogs
 {
     public class DialogYesNoViewModel : DialogViewModelBase
     {

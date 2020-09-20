@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Dialogs;
 
-namespace ViewModels.Services
+namespace Lib.ViewModels.Services.Dialogs
 {
     public interface IDialogService
     {

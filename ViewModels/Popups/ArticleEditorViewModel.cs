@@ -7,13 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using ViewModels.Base;
-using ViewModels.Commands;
-using ViewModels.Main;
-using ViewModels.Services;
-using ViewModels.Services.Dialogs;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using MainLib.ViewModels.Main;
+using Lib.ViewModels.Services.Dialogs;
 
-namespace ViewModels.Popups
+namespace MainLib.ViewModels.Popups
 {
     public class ArticleEditorViewModel : BaseViewModel
     {

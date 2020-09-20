@@ -1,6 +1,4 @@
-﻿using ArticleDatabase.Commands;
-using ArticleDatabase.DataAccessLayer;
-using ArticleDatabase.DataAccessLayer.Models;
+﻿using ArticleDatabase.DataAccessLayer.Models;
 using ArticleDatabase.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
@@ -9,14 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ViewModels.Base;
-using ViewModels.Commands;
-using ViewModels.Services.Windows;
-using ViewModels.Services.Dialogs;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Windows;
+using Lib.ViewModels.Services.Dialogs;
 using Views.Services.Windows;
 using Views.Services.Dialogs;
 
-namespace ArticleDatabase.ViewModels
+namespace Main.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {

@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8C3D3395-23A4-4BA4-96C5-FC3F80E9F4DE}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ArticleDatabase</RootNamespace>
-    <AssemblyName>ArticleDatabase</AssemblyName>
+    <RootNamespace>Main</RootNamespace>
+    <AssemblyName>Main</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -149,9 +149,13 @@
       <Project>{57dda4cd-7e62-43a4-8a67-9c9a16154e69}</Project>
       <Name>ArticleDatabase.Styles</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ViewModels\ViewModels.csproj">
+    <ProjectReference Include="..\Lib.ViewModels\Lib.ViewModels.csproj">
+      <Project>{22197010-2cc9-4f4b-b22c-c39ed33f91b7}</Project>
+      <Name>Lib.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ViewModels\MainLib.ViewModels.csproj">
       <Project>{4414eb2f-7ab3-46f4-92c3-c4ecbcbe7b35}</Project>
-      <Name>ViewModels</Name>
+      <Name>MainLib.ViewModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\Views\Views.csproj">
       <Project>{0dbd00cb-125d-47dd-8d51-dac63c5d65ab}</Project>

@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using ViewModels.Base;
-using ViewModels.Commands;
-using ViewModels.Services;
-using ViewModels.Services.Dialogs;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services;
+using Lib.ViewModels.Services.Dialogs;
 
-namespace ViewModels.Pages
+namespace MainLib.ViewModels.Pages
 {
     public class ReferenceViewViewModel : BaseViewModel
     {

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4414EB2F-7AB3-46F4-92C3-C4ECBCBE7B35}</ProjectGuid>
+    <ProjectGuid>{22197010-2CC9-4F4B-B22C-C39ED33F91B7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ViewModels</RootNamespace>
-    <AssemblyName>ViewModels</AssemblyName>
+    <RootNamespace>Lib.ViewModels</RootNamespace>
+    <AssemblyName>Lib.ViewModels</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,29 +40,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\BaseViewModel.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Main\BookmakrsViewModel.cs" />
-    <Compile Include="Main\DataEntryViewModel.cs" />
-    <Compile Include="Main\DataViewViewModel.cs" />
-    <Compile Include="Main\HomeViewModel.cs" />
-    <Compile Include="Main\ReferencesViewModel.cs" />
-    <Compile Include="Pages\BookmarkListViewModel.cs" />
-    <Compile Include="Pages\BookmarkViewViewModel.cs" />
-    <Compile Include="Pages\ReferenceListViewModel.cs" />
-    <Compile Include="Pages\ReferenceViewViewModel.cs" />
-    <Compile Include="Popups\AddPersonalViewModel.cs" />
-    <Compile Include="Popups\ArticleEditorViewModel.cs" />
-    <Compile Include="Popups\BookmarkEditorViewModel.cs" />
-    <Compile Include="Popups\BookmarkManagerViewModel.cs" />
-    <Compile Include="Popups\ImportViewModel.cs" />
-    <Compile Include="Popups\MassBookmarkManagerViewModel.cs" />
-    <Compile Include="Popups\ReferenceEditorViewModel.cs" />
-    <Compile Include="Popups\ReferenceManagerViewModel.cs" />
-    <Compile Include="Popups\SearchDialogViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Browser\IBrowserService.cs" />
     <Compile Include="Services\Dialogs\DialogOkViewModel.cs" />
@@ -71,18 +51,9 @@
     <Compile Include="Services\Dialogs\DialogViewModelBase.cs" />
     <Compile Include="Services\Dialogs\DialogYesNoViewModel.cs" />
     <Compile Include="Services\Dialogs\IDialogService.cs" />
-    <Compile Include="Services\IWindow.cs" />
+    <Compile Include="Services\Windows\IWindow.cs" />
     <Compile Include="Services\Windows\IWindowService.cs" />
     <Compile Include="Services\Windows\WindowType.cs" />
-    <Compile Include="UIStructs\BookmarkBox.cs" />
-    <Compile Include="UIStructs\ReferenceBox.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\ArticleDatabase.DataAccessLayer\ArticleDatabase.DataAccessLayer.csproj">
-      <Project>{cd799177-be5a-495a-94e0-11fb3156b755}</Project>
-      <Name>ArticleDatabase.DataAccessLayer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

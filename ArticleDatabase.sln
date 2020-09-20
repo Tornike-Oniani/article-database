@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticleDatabase", "ArticleDatabase\ArticleDatabase.csproj", "{8C3D3395-23A4-4BA4-96C5-FC3F80E9F4DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "ArticleDatabase\Main.csproj", "{8C3D3395-23A4-4BA4-96C5-FC3F80E9F4DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticleDatabase.Styles", "ArticleDatabase.Styles\ArticleDatabase.Styles.csproj", "{57DDA4CD-7E62-43A4-8A67-9C9A16154E69}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticleDatabase.DataAccessLayer", "ArticleDatabase.DataAccessLayer\ArticleDatabase.DataAccessLayer.csproj", "{CD799177-BE5A-495A-94E0-11FB3156B755}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels", "ViewModels\ViewModels.csproj", "{4414EB2F-7AB3-46F4-92C3-C4ECBCBE7B35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainLib.ViewModels", "ViewModels\MainLib.ViewModels.csproj", "{4414EB2F-7AB3-46F4-92C3-C4ECBCBE7B35}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Views", "Views\Views.csproj", "{0DBD00CB-125D-47DD-8D51-DAC63C5D65AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.ViewModels", "Lib.ViewModels\Lib.ViewModels.csproj", "{22197010-2CC9-4F4B-B22C-C39ED33F91B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{0DBD00CB-125D-47DD-8D51-DAC63C5D65AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DBD00CB-125D-47DD-8D51-DAC63C5D65AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DBD00CB-125D-47DD-8D51-DAC63C5D65AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22197010-2CC9-4F4B-B22C-C39ED33F91B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22197010-2CC9-4F4B-B22C-C39ED33F91B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22197010-2CC9-4F4B-B22C-C39ED33F91B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22197010-2CC9-4F4B-B22C-C39ED33F91B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

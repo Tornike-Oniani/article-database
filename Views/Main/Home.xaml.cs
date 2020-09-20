@@ -1,6 +1,4 @@
-﻿using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.DataAccessLayer.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,11 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ViewModels.Popups;
-using ViewModels.Services.Dialogs;
-using ViewModels.Services.Windows;
-using Views.Services.Dialogs;
-using Views.Services.Windows;
 
 namespace Views.Main
 {

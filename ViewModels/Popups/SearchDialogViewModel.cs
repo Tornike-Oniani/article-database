@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ViewModels.Base;
-using ViewModels.Main;
+using Lib.ViewModels.Base;
+using MainLib.ViewModels.Main;
 
-namespace ViewModels.Popups
+namespace MainLib.ViewModels.Popups
 {
     public class SearchDialogViewModel : BaseViewModel
     {
@@ -14,7 +14,7 @@ namespace ViewModels.Popups
 
         public SearchDialogViewModel(DataViewViewModel parent)
         {
-            this.Title = "Set filter";
+            this.Title = "Set filter...";
 
             this.Parent = parent;
         }

@@ -6,15 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ViewModels.Base;
-using ViewModels.Commands;
-using ViewModels.Popups;
-using ViewModels.Services;
-using ViewModels.Services.Browser;
-using ViewModels.Services.Dialogs;
-using ViewModels.Services.Windows;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using MainLib.ViewModels.Popups;
+using Lib.ViewModels.Services.Browser;
+using Lib.ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Windows;
 
-namespace ViewModels.Main
+namespace MainLib.ViewModels.Main
 {
     public class HomeViewModel : BaseViewModel
     {

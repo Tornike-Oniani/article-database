@@ -9,13 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using ViewModels.Base;
-using ViewModels.Commands;
-using ViewModels.Services;
-using ViewModels.Services.Dialogs;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Dialogs;
 using ViewModels.UIStructs;
 
-namespace ViewModels.Popups
+namespace MainLib.ViewModels.Popups
 {
     public class ReferenceManagerViewModel : BaseViewModel
     {

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.Services.Windows
+namespace Lib.ViewModels.Services.Windows
 {
-    public enum WindowType
+    public interface IWindow
     {
-        MainWindow,
-        Generic
+        void Close();
+        bool? DialogResult { get; set; }
     }
 }

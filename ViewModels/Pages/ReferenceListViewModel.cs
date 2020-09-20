@@ -8,14 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using ViewModels.Base;
-using ViewModels.Commands;
-using ViewModels.Popups;
-using ViewModels.Services;
-using ViewModels.Services.Dialogs;
-using ViewModels.Services.Windows;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Base;
+using MainLib.ViewModels.Popups;
+using Lib.ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Windows;
 
-namespace ViewModels.Pages
+namespace MainLib.ViewModels.Pages
 {
     public class ReferenceListViewModel : BaseViewModel
     {

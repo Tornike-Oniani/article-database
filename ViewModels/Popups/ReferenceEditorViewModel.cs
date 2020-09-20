@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using ViewModels.Base;
-using ViewModels.Commands;
-using ViewModels.Pages;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using MainLib.ViewModels.Pages;
 
-namespace ViewModels.Popups
+namespace MainLib.ViewModels.Popups
 {
     public class ReferenceEditorViewModel : BaseViewModel
     {
