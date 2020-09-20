@@ -1,4 +1,4 @@
-﻿using ArticleDatabase.DataAccessLayer.Models;
+﻿using Lib.DataAccessLayer.Models;
 using Main.ViewModels;
 using Main.Views;
 using System;
@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MainLib.ViewModels.Main;
-using Views.Services.Browser;
-using Views.Services.Dialogs;
-using Views.Services.Windows;
+using Lib.Views.Services.Browser;
+using Lib.Views.Services.Dialogs;
+using Lib.Views.Services.Windows;
 
 namespace Main.Commands
 {

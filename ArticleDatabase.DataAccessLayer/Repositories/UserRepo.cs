@@ -1,5 +1,5 @@
-﻿using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.DataAccessLayer.Repositories.Base;
+﻿using Lib.DataAccessLayer.Models;
+using Lib.DataAccessLayer.Repositories.Base;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArticleDatabase.DataAccessLayer.Repositories
+namespace Lib.DataAccessLayer.Repositories
 {
     public class UserRepo : BaseRepo
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArticleDatabase.DataAccessLayer.Repositories.Base
+namespace Lib.DataAccessLayer.Repositories.Base
 {
     public abstract class BaseRepo
     {

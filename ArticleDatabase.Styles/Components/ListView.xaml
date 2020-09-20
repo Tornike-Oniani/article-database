@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                    xmlns:local="clr-namespace:ArticleDatabase.Styles"
-                    xmlns:converters="clr-namespace:ArticleDatabase.Styles.Converters">
+                    xmlns:local="clr-namespace:Lib.Styles"
+                    xmlns:converters="clr-namespace:Lib.Styles.Converters">
     
     <converters:IntToFontWeightConverter x:Key="IntToFontWeight" />
 

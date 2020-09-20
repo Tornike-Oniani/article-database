@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace Views.Converters
+namespace MainLib.Views.Converters
 {
     public class CheckToListConverter : IValueConverter
     {

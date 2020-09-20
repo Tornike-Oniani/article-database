@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Views.Pages
+namespace MainLib.Views.Pages
 {
     /// <summary>
     /// Interaction logic for BookmarkView.xaml

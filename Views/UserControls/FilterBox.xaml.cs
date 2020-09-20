@@ -1,4 +1,4 @@
-﻿using ArticleDatabase.DataAccessLayer.Models;
+﻿using Lib.DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,7 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ViewModels.UIStructs;
 
-namespace Views.UserControls
+namespace MainLib.Views.UserControls
 {
     /// <summary>
     /// Interaction logic for FilterBox.xaml

@@ -141,25 +141,29 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ArticleDatabase.DataAccessLayer\ArticleDatabase.DataAccessLayer.csproj">
+    <ProjectReference Include="..\ArticleDatabase.DataAccessLayer\Lib.DataAccessLayer.csproj">
       <Project>{cd799177-be5a-495a-94e0-11fb3156b755}</Project>
-      <Name>ArticleDatabase.DataAccessLayer</Name>
+      <Name>Lib.DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ArticleDatabase.Styles\ArticleDatabase.Styles.csproj">
+    <ProjectReference Include="..\ArticleDatabase.Styles\Lib.Styles.csproj">
       <Project>{57dda4cd-7e62-43a4-8a67-9c9a16154e69}</Project>
-      <Name>ArticleDatabase.Styles</Name>
+      <Name>Lib.Styles</Name>
     </ProjectReference>
     <ProjectReference Include="..\Lib.ViewModels\Lib.ViewModels.csproj">
       <Project>{22197010-2cc9-4f4b-b22c-c39ed33f91b7}</Project>
       <Name>Lib.ViewModels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Lib.Views\Lib.Views.csproj">
+      <Project>{6293c9d0-2fed-45b5-b143-ced8f086371a}</Project>
+      <Name>Lib.Views</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ViewModels\MainLib.ViewModels.csproj">
       <Project>{4414eb2f-7ab3-46f4-92c3-c4ecbcbe7b35}</Project>
       <Name>MainLib.ViewModels</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Views\Views.csproj">
+    <ProjectReference Include="..\Views\MainLib.Views.csproj">
       <Project>{0dbd00cb-125d-47dd-8d51-dac63c5d65ab}</Project>
-      <Name>Views</Name>
+      <Name>MainLib.Views</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

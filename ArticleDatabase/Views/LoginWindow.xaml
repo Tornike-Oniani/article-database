@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:Main"
-        xmlns:base="clr-namespace:ViewsLib;assembly=Views"
+        xmlns:base="clr-namespace:Lib.Views;assembly=Lib.Views"
         xmlns:views1="clr-namespace:Main.Views"
         mc:Ignorable="d"
         WindowStyle="None"
@@ -17,10 +17,6 @@
     <Window.InputBindings>
         <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Key="Enter" />
     </Window.InputBindings>
-
-    <Window.Resources>
-        <ImageBrush x:Key="MyResource" ImageSource="/ArticleDatabase.Styles;component/Images/Splash.jpg" />
-    </Window.Resources>
 
     <WindowChrome.WindowChrome>
         <WindowChrome 
@@ -35,7 +31,7 @@
         <!-- Login fields -->
         <Border Padding="30 20 30 10" Grid.Column="0">
             <StackPanel>
-                <Image Source="/ArticleDatabase.Styles;component/Images/logo.png" 
+                <Image Source="/Lib.Styles;component/Images/logo.png" 
                        Width="70"
                        RenderOptions.BitmapScalingMode="Fant"
                        HorizontalAlignment="Left"/>

@@ -1,5 +1,5 @@
-﻿using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.DataAccessLayer.Repositories;
+﻿using Lib.DataAccessLayer.Models;
+using Lib.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +11,8 @@ using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Windows;
 using Lib.ViewModels.Services.Dialogs;
-using Views.Services.Windows;
-using Views.Services.Dialogs;
+using Lib.Views.Services.Windows;
+using Lib.Views.Services.Dialogs;
 
 namespace Main.ViewModels
 {

@@ -1,4 +1,4 @@
-﻿using ArticleDatabase.DataAccessLayer.Repositories;
+﻿using Lib.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,9 +15,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Lib.ViewModels.Services.Dialogs;
-using Views.Services.Dialogs;
+using Lib.Views.Services.Dialogs;
 
-namespace Views.Main
+namespace MainLib.Views.Main
 {
     /// <summary>
     /// Interaction logic for DataEntry.xaml

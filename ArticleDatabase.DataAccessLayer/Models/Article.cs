@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArticleDatabase.DataAccessLayer.Models
+namespace Lib.DataAccessLayer.Models
 {
     public class Article : BaseModel, IDataErrorInfo
     {

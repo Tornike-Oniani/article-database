@@ -14,11 +14,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MainLib.ViewModels.Main;
 using MainLib.ViewModels.Pages;
-using Views.Pages;
-using Views.Services.Dialogs;
-using Views.Services.Windows;
+using MainLib.Views.Pages;
+using Lib.Views.Services.Dialogs;
+using Lib.Views.Services.Windows;
 
-namespace Views.Main
+namespace MainLib.Views.Main
 {
     /// <summary>
     /// Interaction logic for Bookmarks.xaml

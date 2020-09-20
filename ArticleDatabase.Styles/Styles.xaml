@@ -3,14 +3,14 @@
 
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Texts.xaml" />
-        <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Buttons.xaml" />
-        <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/TextBoxes.xaml" />
-        <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Navigation.xaml" />
-        <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Checkboxes.xaml" />
-        <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Windows.xaml" />
-        <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Datagrid.xaml" />
-        <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/ListView.xaml" />
+        <ResourceDictionary Source="/Lib.Styles;component/Components/Texts.xaml" />
+        <ResourceDictionary Source="/Lib.Styles;component/Components/Buttons.xaml" />
+        <ResourceDictionary Source="/Lib.Styles;component/Components/TextBoxes.xaml" />
+        <ResourceDictionary Source="/Lib.Styles;component/Components/Navigation.xaml" />
+        <ResourceDictionary Source="/Lib.Styles;component/Components/Checkboxes.xaml" />
+        <ResourceDictionary Source="/Lib.Styles;component/Components/Windows.xaml" />
+        <ResourceDictionary Source="/Lib.Styles;component/Components/Datagrid.xaml" />
+        <ResourceDictionary Source="/Lib.Styles;component/Components/ListView.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
 </ResourceDictionary>

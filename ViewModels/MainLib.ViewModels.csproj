@@ -68,9 +68,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\ArticleDatabase.DataAccessLayer\ArticleDatabase.DataAccessLayer.csproj">
+    <ProjectReference Include="..\ArticleDatabase.DataAccessLayer\Lib.DataAccessLayer.csproj">
       <Project>{cd799177-be5a-495a-94e0-11fb3156b755}</Project>
-      <Name>ArticleDatabase.DataAccessLayer</Name>
+      <Name>Lib.DataAccessLayer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Lib.ViewModels\Lib.ViewModels.csproj">
       <Project>{22197010-2cc9-4f4b-b22c-c39ed33f91b7}</Project>

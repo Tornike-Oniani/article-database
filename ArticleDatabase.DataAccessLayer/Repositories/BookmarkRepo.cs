@@ -1,4 +1,4 @@
-﻿using ArticleDatabase.DataAccessLayer.Repositories.Base;
+﻿using Lib.DataAccessLayer.Repositories.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using Dapper;
-using ArticleDatabase.DataAccessLayer.Models;
+using Lib.DataAccessLayer.Models;
 
-namespace ArticleDatabase.DataAccessLayer.Repositories
+namespace Lib.DataAccessLayer.Repositories
 {
     public class BookmarkRepo : BaseRepo
     {

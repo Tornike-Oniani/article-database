@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace ArticleDatabase.Styles.Converters
+namespace Lib.Styles.Converters
 {
     public class IntToFontWeightConverter : IValueConverter
     {

@@ -6,9 +6,9 @@
              xmlns:vm="clr-namespace:Main.ViewModels"
              xmlns:views="clr-namespace:Main.Views"
              
-             xmlns:popupV="clr-namespace:Views.Popups;assembly=Views"
-             xmlns:dialog="clr-namespace:Views.Services.Dialogs;assembly=Views"
-             xmlns:main="clr-namespace:Views.Main;assembly=Views"
+             xmlns:popupV="clr-namespace:MainLib.Views.Popups;assembly=MainLib.Views"
+             xmlns:dialog="clr-namespace:Lib.Views.Services.Dialogs;assembly=Lib.Views"
+             xmlns:main="clr-namespace:MainLib.Views.Main;assembly=MainLib.Views"
              
              xmlns:mainVM="clr-namespace:MainLib.ViewModels.Main;assembly=MainLib.ViewModels"
              xmlns:popupVM="clr-namespace:MainLib.ViewModels.Popups;assembly=MainLib.ViewModels"
@@ -19,35 +19,35 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!-- Colors resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Colors.xaml" />
+                <ResourceDictionary Source="/Lib.Styles;component/Colors.xaml" />
 
                 <!--Material design essentials-->
                 <materialDesign:CustomColorTheme BaseTheme="Light" PrimaryColor="{StaticResource PrimaryColor}" SecondaryColor="{StaticResource SecondaryColor}" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 
                 <!-- Texts resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Texts.xaml" />
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Texts.xaml" />
 
                 <!-- Buttons resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Buttons.xaml" />
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Buttons.xaml" />
 
                 <!-- Textboxes resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/TextBoxes.xaml" />
+                <ResourceDictionary Source="/Lib.Styles;component/Components/TextBoxes.xaml" />
 
                 <!-- Navigation resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Navigation.xaml" />
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Navigation.xaml" />
 
                 <!-- Checkboxes resource dictionary-->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Checkboxes.xaml" />
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Checkboxes.xaml" />
 
                 <!-- Windows resource dictionary-->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Windows.xaml" />
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Windows.xaml" />
 
                 <!-- Datagrid resource dictionary-->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/Datagrid.xaml" />
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Datagrid.xaml" />
 
                 <!-- ListView resource dictionary -->
-                <ResourceDictionary Source="/ArticleDatabase.Styles;component/Components/ListView.xaml" />
+                <ResourceDictionary Source="/Lib.Styles;component/Components/ListView.xaml" />
 
                 <!-- Data template for views -->
                 <ResourceDictionary>

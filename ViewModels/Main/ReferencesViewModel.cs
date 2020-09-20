@@ -1,4 +1,4 @@
-﻿using ArticleDatabase.DataAccessLayer.Models;
+﻿using Lib.DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

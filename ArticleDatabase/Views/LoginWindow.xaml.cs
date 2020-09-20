@@ -1,4 +1,5 @@
-﻿using Main.ViewModels;
+﻿using Lib.Views;
+using Main.ViewModels;
 using System;
 using System.Configuration;
 using System.Linq;
@@ -12,7 +13,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using ViewsLib;
 
 namespace Main
 {

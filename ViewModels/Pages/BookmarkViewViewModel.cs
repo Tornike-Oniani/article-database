@@ -1,5 +1,5 @@
-﻿using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.DataAccessLayer.Repositories;
+﻿using Lib.DataAccessLayer.Models;
+using Lib.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

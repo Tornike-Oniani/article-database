@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Views.Popups
+namespace MainLib.Views.Popups
 {
     /// <summary>
     /// Interaction logic for SearchDialog.xaml

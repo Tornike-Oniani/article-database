@@ -1,5 +1,5 @@
-﻿using ArticleDatabase.DataAccessLayer.Models;
-using ArticleDatabase.DataAccessLayer.Repositories;
+﻿using Lib.DataAccessLayer.Models;
+using Lib.DataAccessLayer.Repositories;
 using Main.Commands;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,9 @@ using System.Windows;
 using System.Windows.Input;
 using Lib.ViewModels.Base;
 using MainLib.ViewModels.Main;
-using Views.Services.Browser;
-using Views.Services.Dialogs;
-using Views.Services.Windows;
+using Lib.Views.Services.Browser;
+using Lib.Views.Services.Dialogs;
+using Lib.Views.Services.Windows;
 
 namespace Main.ViewModels
 {

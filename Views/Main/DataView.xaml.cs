@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Views.Main
+namespace MainLib.Views.Main
 {
     /// <summary>
     /// Interaction logic for DataView.xaml
