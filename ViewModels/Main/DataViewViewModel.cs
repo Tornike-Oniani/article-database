@@ -356,7 +356,7 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenBookmarkManager(object input = null)
         {
-            _windowService.OpenWindow(new BookmarkManagerViewModel(this, _dialogService,input as Article));
+            _windowService.OpenWindow(new BookmarkManagerViewModel(User, ViewType.DataView, _dialogService,input as Article));
         }
         public void OpenEditDialog(object input = null)
         {
@@ -368,7 +368,7 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenReferenceManager(object input)
         {
-            _windowService.OpenWindow(new ReferenceManagerViewModel(input as Article, _dialogService));
+            _windowService.OpenWindow(new ReferenceManagerViewModel(ViewType.DataView, _dialogService, input as Article));
         }
 
         public bool IsArticleSelected(object input = null)

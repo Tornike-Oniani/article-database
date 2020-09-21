@@ -14,20 +14,22 @@ using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Main;
 using Lib.ViewModels.Services.Dialogs;
 using ViewModels.UIStructs;
+using Lib.ViewModels.Services.Windows;
 
 namespace MainLib.ViewModels.Popups
 {
     public class BookmarkManagerViewModel : BaseViewModel
     {
         // Private members
+        private ViewType _parent;
         private Visibility _newBookmarkVisibility;
         private Visibility _createVisibility;
         private string _name;
         private int _global;
-        private DataViewViewModel _parent;
         private User _user;
         private Article _article;
         private double _initialHeight;
+        private List<Bookmark> _bookmarks;
         private IDialogService _dialogService;
 
         // Public properties
@@ -69,17 +71,23 @@ namespace MainLib.ViewModels.Popups
         public RelayCommand CheckChangedCommand { get; set; }
 
         // Constructor
-        public BookmarkManagerViewModel(DataViewViewModel parent, IDialogService dialogService, Article article = null)
+        public BookmarkManagerViewModel(
+            User user, 
+            ViewType parent, 
+            IDialogService dialogService, 
+            Article article = null, 
+            List<Bookmark> bookmarks = null)
         {
             this.Title = "Save to...";
+            this._parent = parent;
             this._dialogService = dialogService;
 
             // 1. Initialize starting state
             NewBookmarkVisibility = Visibility.Visible;
             CreateVisibility = Visibility.Collapsed;
-            this._parent = parent;
-            this.User = _parent.User;
+            this.User = user;
             this._article = article;
+            this._bookmarks = bookmarks;
             BookmarkBoxes = new ObservableCollection<BookmarkBox>();
             _bookmarkBoxesCollection = new CollectionViewSource();
             _bookmarkBoxesCollection.Source = BookmarkBoxes;
@@ -89,7 +97,13 @@ namespace MainLib.ViewModels.Popups
             // 2. Set up actions
             CreateNewBookmarkCommand = new RelayCommand(CreateNewBookmark);
             CreateCommand = new RelayCommand(Create, CanCreate);
-            CheckChangedCommand = new RelayCommand(CheckChanged);
+
+            // Case 1: Bookmark manager was opened by DataEntry
+            if (_parent == ViewType.DataEntry)
+                CheckChangedCommand = new RelayCommand(CheckChangedDataEntry);
+            // Case 2: Reference manager was opened by DataView
+            else if (_parent == ViewType.DataView)
+                CheckChangedCommand = new RelayCommand(CheckChangedDataView);
 
             // 3. Check bookmark boxes
             CheckBookmarkBoxes();
@@ -106,7 +120,7 @@ namespace MainLib.ViewModels.Popups
         {
             // 1. Add new bookmark to database
             string trimmedName = Name.Trim();
-            bool duplicate_check = (new BookmarkRepo()).AddBookmark(trimmedName, Global, _parent.User);
+            bool duplicate_check = (new BookmarkRepo()).AddBookmark(trimmedName, Global, User);
 
             // 2. Refresh Bookmarks collection
             BookmarkBoxes.Clear();
@@ -130,7 +144,7 @@ namespace MainLib.ViewModels.Popups
         {
             return !String.IsNullOrWhiteSpace(Name);
         }
-        public void CheckChanged(object input)
+        public void CheckChangedDataView(object input)
         {
             BookmarkBox current_bookmark_box = input as BookmarkBox;
 
@@ -145,6 +159,22 @@ namespace MainLib.ViewModels.Popups
                 (new BookmarkRepo()).RemoveArticleFromBookmark(current_bookmark_box.Bookmark, _article);
             }
         }
+        public void CheckChangedDataEntry(object input)
+        {
+            BookmarkBox current_bookmark_box = input as BookmarkBox;
+
+            // If Bookmarks contains the input remove it
+            if (_bookmarks.Exists(el => el.Name == current_bookmark_box.Bookmark.Name))
+            {
+                int index = _bookmarks.FindIndex(el => el.Name == current_bookmark_box.Bookmark.Name);
+                _bookmarks.RemoveAt(index);
+            }
+            // If Bookmarks doesn't contain the input add it
+            else
+            {
+                _bookmarks.Add(current_bookmark_box.Bookmark);
+            }
+        }
 
         /**
          * Private helpers:
@@ -153,13 +183,28 @@ namespace MainLib.ViewModels.Popups
          */
         private void PopulateBookmarks()
         {
-            foreach (Bookmark bookmark in (new BookmarkRepo()).LoadBookmarks(_parent.User, true))
+            foreach (Bookmark bookmark in (new BookmarkRepo()).LoadBookmarks(User, true))
                 BookmarkBoxes.Add(new BookmarkBox(bookmark));
         }
         private void CheckBookmarkBoxes()
         {
-            foreach (BookmarkBox bookmarkBox in BookmarkBoxes)
-                bookmarkBox.HasArticle(_article);
+
+            if (_parent == ViewType.DataEntry)
+            {
+                if (_bookmarks.Count != 0)
+                    foreach (BookmarkBox bookmarkBox in BookmarkBoxes)
+                    {
+                        if (_bookmarks.Exists(el => el.Name == bookmarkBox.Bookmark.Name))
+                            bookmarkBox.IsChecked = true;
+                        else
+                            bookmarkBox.IsChecked = false;
+                    }
+            }
+            else if (_parent == ViewType.DataView)
+            {
+                foreach (BookmarkBox bookmarkBox in BookmarkBoxes)
+                    bookmarkBox.HasArticle(_article);
+            }
         }
     }
 }

@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Browser;
+using Lib.ViewModels.Services.Windows;
+using MainLib.ViewModels.Popups;
+using Lib.ViewModels.Services.Dialogs;
 
 namespace MainLib.ViewModels.Main
 {
@@ -71,67 +74,73 @@ namespace MainLib.ViewModels.Main
         }
         #endregion
 
-        #region Private memebers
+        // Private memebers
         private string _author;
         private string _keyword;
         private string _selectedFile;
+        private IDialogService _dialogService;
+        private IWindowService _windowService;
         private IBrowserService _browserService;
 
         // TEST
         private Random rnd = new Random();
-        #endregion
 
-        #region Public properties
+        // Public properties
         public User User { get; set; }
         public Article Article { get; set; }
-
         public string Author
         {
             get { return _author; }
             set { _author = value; OnPropertyChanged("Author"); }
         }
-
         public string Keyword
         {
             get { return _keyword; }
             set { _keyword = value; OnPropertyChanged("Keyword"); }
         }
-
         public string SelectedFile
         {
             get { return _selectedFile; }
             set { _selectedFile = value; OnPropertyChanged("SelectedFile"); }
         }
-        #endregion
+        public List<Bookmark> Bookmarks { get; set; }
+        public List<Reference> References { get; set; }
 
-        #region Commands
+        // Commands
         public RelayCommand SelectFileCommand { get; set; }
         public RelayCommand SaveArticleCommand { get; set; }
         public RelayCommand ClearArticleAttributesCommand { get; set; }
-        #endregion
+        public RelayCommand OpenBookmarkManagerCommand { get; set; }
+        public RelayCommand OpenReferenceManagerCommand { get; set; }
 
         // TEST
         public ObservableCollection<string> ItemsCollection { get; set; }
 
         // Constructor
-        public DataEntryViewModel(User user, IBrowserService browserService)
+        public DataEntryViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
             // 1. Initialize article and User
             Article = new Article();
             User = user;
+            this.Bookmarks = new List<Bookmark>();
+            this.References = new List<Reference>();
+            this._dialogService = dialogService;
+            this._windowService = windowService;
             this._browserService = browserService;
 
             // 2. Initialize commands
             SelectFileCommand = new RelayCommand(SelectFile);
             SaveArticleCommand = new RelayCommand(SaveArticle, CanSaveArticle);
             ClearArticleAttributesCommand = new RelayCommand(ClearArticleAttributes);
+            OpenBookmarkManagerCommand = new RelayCommand(OpenBookmarkManager);
+            OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager);
 
             // TEST
             GenerateRandomArticlesCommand = new RelayCommand(GenerateRandomArticles);
             ItemsCollection = new ObservableCollection<string>();
         }
 
-        #region Command actions
+        // Command actions
         public void SelectFile(object input = null)
         {
             string result = _browserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
@@ -141,6 +150,8 @@ namespace MainLib.ViewModels.Main
         }
         public void SaveArticle(object input = null)
         {
+            ArticleRepo articleRepo = new ArticleRepo();
+
             // Regex to switch multiple spaces into one (Restricts user to enter more than one space in Title textboxes)
             RegexOptions options = RegexOptions.None;
             Regex regex = new Regex("[ ]{2,}", options);
@@ -150,7 +161,7 @@ namespace MainLib.ViewModels.Main
             Article.Title = regex.Replace(Article.Title, " ");
 
             // 2. Add article to database
-            (new ArticleRepo()).SaveArticle(Article, User);
+            articleRepo.SaveArticle(Article, User);
 
             // 3. Copy selected file to root folder with the new ID-based name
             File.Copy(SelectedFile, Path.Combine(Environment.CurrentDirectory, "Files\\") + Article.FileName + ".pdf");
@@ -160,6 +171,17 @@ namespace MainLib.ViewModels.Main
             Directory.CreateDirectory(Path.GetDirectoryName(SelectedFile) + "\\Done");
             File.Move(SelectedFile, done_path + System.IO.Path.GetFileName(SelectedFile));
 
+            // 4.1 Retrieve id (in reality we retrieve whole article) of newly added article
+            Article currently_added_article = articleRepo.GetArticleWithTitle(Article.Title);
+
+            // 4.2 Add bookmarks
+            foreach (Bookmark bookmark in Bookmarks)
+                new BookmarkRepo().AddArticleToBookmark(bookmark, currently_added_article);
+
+            // 4.3 Add references
+            foreach (Reference reference in References)
+                new ReferenceRepo().AddArticleToReference(reference, currently_added_article);
+
             // 5. Clear article attributes
             ClearArticleAttributesCommand.Execute(null);
         }
@@ -168,12 +190,27 @@ namespace MainLib.ViewModels.Main
             Article.Clear();
             SelectedFile = null;
         }
-
+        public void OpenBookmarkManager(object input = null)
+        {
+            _windowService.OpenWindow(new BookmarkManagerViewModel(
+                User,
+                ViewType.DataEntry,
+                _dialogService,
+                bookmarks: Bookmarks
+                ));
+        }
+        public void OpenReferenceManager(object input = null)
+        {
+            _windowService.OpenWindow(new ReferenceManagerViewModel(
+                ViewType.DataEntry,
+                _dialogService,
+                references: References
+                ));
+        }
         public bool CanSaveArticle(object input = null)
         {
             return CanAdd && Article.CanAdd;
         }
-        #endregion
 
         #region Test
         public RelayCommand GenerateRandomArticlesCommand { get; set; }

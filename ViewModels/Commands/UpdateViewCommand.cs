@@ -45,7 +45,7 @@ namespace MainLib.ViewModels.Commands
                     this._mainViewModel.SelectedViewModel = new HomeViewModel(_user, _dialogService, _windowService, _browserService);
                     break;
                 case ViewType.DataEntry:
-                    this._mainViewModel.SelectedViewModel = new DataEntryViewModel(_user, _browserService);
+                    this._mainViewModel.SelectedViewModel = new DataEntryViewModel(_user, _dialogService, _windowService, _browserService);
                     break;
                 case ViewType.DataView:
                     this._mainViewModel.SelectedViewModel = new DataViewViewModel(_user, _dialogService, _windowService, _browserService);

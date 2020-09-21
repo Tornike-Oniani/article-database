@@ -13,15 +13,18 @@ using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
 using ViewModels.UIStructs;
+using MainLib.ViewModels.Main;
 
 namespace MainLib.ViewModels.Popups
 {
     public class ReferenceManagerViewModel : BaseViewModel
     {
+        private ViewType _parent;
         private Visibility _newReferenceVisibility;
         private Visibility _createVisibility;
         private Article _article;
         private string _name;
+        private List<Reference> _references;
         private double _initialHeight;
         private IDialogService _dialogService;
 
@@ -52,9 +55,11 @@ namespace MainLib.ViewModels.Popups
         public RelayCommand CheckChangedCommand { get; set; }
 
         // Constructor
-        public ReferenceManagerViewModel(Article article, IDialogService dialogService)
+        public ReferenceManagerViewModel(ViewType parent, IDialogService dialogService, Article article = null, List<Reference> references = null)
         {
+            this._parent = parent;
             this.Title = "Save to...";
+            this._references = references;
             this._dialogService = dialogService;
 
             // 1. Initialize starting state
@@ -70,7 +75,13 @@ namespace MainLib.ViewModels.Popups
             // 2. Set up actions
             CreateNewReferenceCommand = new RelayCommand(CreateNewReference);
             CreateCommand = new RelayCommand(Create, CanCreate);
-            CheckChangedCommand = new RelayCommand(CheckChanged);
+
+            // Case 1: Reference manager was opened by DataEntry
+            if (_parent == ViewType.DataEntry)
+                CheckChangedCommand = new RelayCommand(CheckChangedDataEntry);
+            // Case 2: Reference manager was opened by DataView
+            else if (_parent == ViewType.DataView)
+                CheckChangedCommand = new RelayCommand(CheckChangedDataView);
 
             // 3. Check reference boxes
             CheckReferenceBoxes();
@@ -109,7 +120,7 @@ namespace MainLib.ViewModels.Popups
         {
             return !String.IsNullOrWhiteSpace(Name);
         }
-        public void CheckChanged(object input)
+        public void CheckChangedDataView(object input)
         {
             ReferenceBox current_reference_box = input as ReferenceBox;
 
@@ -122,6 +133,22 @@ namespace MainLib.ViewModels.Popups
             else
             {
                 (new ReferenceRepo()).RemoveArticleFromReference(current_reference_box.Reference, _article);
+            }
+        }
+        public void CheckChangedDataEntry(object input)
+        {
+            ReferenceBox current_reference_box = input as ReferenceBox;
+
+            // If Bookmarks contains the input remove it
+            if (_references.Exists(el => el.Name == current_reference_box.Reference.Name))
+            {
+                int index = _references.FindIndex(el => el.Name == current_reference_box.Reference.Name);
+                _references.RemoveAt(index);
+            }
+            // If Bookmarks doesn't contain the input add it
+            else
+            {
+                _references.Add(current_reference_box.Reference);
             }
         }
 
@@ -137,8 +164,23 @@ namespace MainLib.ViewModels.Popups
         }
         private void CheckReferenceBoxes()
         {
-            foreach (ReferenceBox referenceBox in ReferenceBoxes)
-                referenceBox.HasArticle(_article);
+            if (_parent == ViewType.DataEntry)
+            {
+
+                if (_references.Count != 0)
+                    foreach (ReferenceBox referenceBox in ReferenceBoxes)
+                    {
+                        if (_references.Exists(el => el.Name == referenceBox.Reference.Name))
+                            referenceBox.IsChecked = true;
+                        else
+                            referenceBox.IsChecked = false;
+                    }
+            }
+            else if (_parent == ViewType.DataView)
+            {
+                foreach (ReferenceBox referenceBox in ReferenceBoxes)
+                    referenceBox.HasArticle(_article);
+            }
         }
     }
 }

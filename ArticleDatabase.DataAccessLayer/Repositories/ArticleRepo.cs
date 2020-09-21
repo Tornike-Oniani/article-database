@@ -396,7 +396,26 @@ WHERE cmp.ID = @ID;
 
             return result;
         }
+        public Article GetArticleWithTitle(string title)
+        {
+            Article result;
 
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    conn.Query(AttachUser(), transaction);
+
+                    result = conn.QuerySingleOrDefault<Article>("SELECT ID FROM tblArticle WHERE Title=@Title",
+                        new { Title = title }, transaction: transaction);
+
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
 
         private void AddAuthors(SQLiteConnection conn, SQLiteTransaction transaction, Article article)
         {

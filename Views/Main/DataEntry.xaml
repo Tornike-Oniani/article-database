@@ -8,7 +8,7 @@
              xmlns:converters="clr-namespace:MainLib.Views.Converters"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="800" d:DesignWidth="700">
     <UserControl.Resources>
         <converters:PathToNameConverter x:Key="PathToName" />
     </UserControl.Resources>
@@ -85,6 +85,20 @@
                             <TextBox Text="{Binding SelectedFile, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource PathToName}}" materialDesign:HintAssist.Hint="file.pdf" Width="200" IsReadOnly="True" IsTabStop="False" />
                         </AdornerDecorator>
                         <Button Content="Select File" Width="150" Margin="10 0 0 0" Command="{Binding SelectFileCommand}" />
+                    </StackPanel>
+
+                    <!-- Bookmark and reference buttons -->
+                    <StackPanel Orientation="Horizontal"
+                            Margin="0 25 0 0">
+                        <!-- Bookmark -->
+                        <Button Content="Bookmarks"
+                            Width="120"
+                            Margin="0 0 10 0"
+                            Command="{Binding OpenBookmarkManagerCommand}" />
+                        <!-- Reference -->
+                        <Button Content="References"
+                            Width="120"
+                            Command="{Binding OpenReferenceManagerCommand}" />
                     </StackPanel>
 
                     <!-- Buttons wrapper -->
