@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\UpdateViewCommand.cs" />
+    <Compile Include="LoginViewModel.cs" />
     <Compile Include="NavigationViewModel.cs" />
     <Compile Include="Main\BookmakrsViewModel.cs" />
     <Compile Include="Main\DataEntryViewModel.cs" />

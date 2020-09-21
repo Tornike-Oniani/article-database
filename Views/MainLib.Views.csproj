@@ -44,6 +44,7 @@
       <HintPath>..\packages\Microsoft.Windows.Shell.3.0.1.0\lib\net40\Microsoft.Windows.Shell.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -66,6 +67,9 @@
     <Compile Include="Converters\ListToVisibilityConverter.cs" />
     <Compile Include="Converters\NumberToSICConverter.cs" />
     <Compile Include="Converters\PathToNameConverter.cs" />
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Navigation.xaml.cs">
       <DependentUpon>Navigation.xaml</DependentUpon>
     </Compile>
@@ -169,6 +173,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="LoginWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Navigation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

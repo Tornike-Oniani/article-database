@@ -1,6 +1,4 @@
-﻿using Lib.Views;
-using Main.ViewModels;
-using System;
+﻿using System;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -13,6 +11,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Lib.Views;
+using Lib.Views.Services.Dialogs;
+using Lib.Views.Services.Windows;
+using Lib.Views.Services.Browser;
+using MainLib.ViewModels;
 
 namespace Main
 {
@@ -32,7 +35,7 @@ namespace Main
 
         private void LoginWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _viewModel = new LoginViewModel();
+            _viewModel = new LoginViewModel(new DialogService(), new WindowService(), new BrowserService());
             this.DataContext = _viewModel;
             txbUsername.Focus();
 

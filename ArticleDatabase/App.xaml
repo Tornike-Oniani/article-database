@@ -14,7 +14,7 @@
              xmlns:popupVM="clr-namespace:MainLib.ViewModels.Popups;assembly=MainLib.ViewModels"
              xmlns:dialogVM="clr-namespace:Lib.ViewModels.Services.Dialogs;assembly=Lib.ViewModels"
              
-             StartupUri="Views/LoginWindow.xaml">
+             StartupUri="pack://application:,,,/MainLib.Views;component/LoginWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
