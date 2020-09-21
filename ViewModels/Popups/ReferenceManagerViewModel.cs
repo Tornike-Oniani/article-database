@@ -49,6 +49,7 @@ namespace MainLib.ViewModels.Popups
 
         public RelayCommand CreateNewReferenceCommand { get; set; }
         public RelayCommand CreateCommand { get; set; }
+        public RelayCommand CheckChangedCommand { get; set; }
 
         // Constructor
         public ReferenceManagerViewModel(Article article, IDialogService dialogService)
@@ -69,7 +70,10 @@ namespace MainLib.ViewModels.Popups
             // 2. Set up actions
             CreateNewReferenceCommand = new RelayCommand(CreateNewReference);
             CreateCommand = new RelayCommand(Create, CanCreate);
+            CheckChangedCommand = new RelayCommand(CheckChanged);
 
+            // 3. Check reference boxes
+            CheckReferenceBoxes();
         }
 
         public void CreateNewReference(object input = null)
@@ -95,13 +99,30 @@ namespace MainLib.ViewModels.Popups
             CreateVisibility = Visibility.Collapsed;
             NewReferenceVisibility = Visibility.Visible;
 
+            // 4. Check bookmark boxes
+            CheckReferenceBoxes();
+
             if (!duplicate_check)
                 _dialogService.OpenDialog(new DialogOkViewModel("This reference already exists.", "Warning", DialogType.Warning));
         }
-
         public bool CanCreate(object input = null)
         {
             return !String.IsNullOrWhiteSpace(Name);
+        }
+        public void CheckChanged(object input)
+        {
+            ReferenceBox current_reference_box = input as ReferenceBox;
+
+            // 1. If user checked add article to reference
+            if (current_reference_box.IsChecked)
+            {
+                (new ReferenceRepo()).AddArticleToReference(current_reference_box.Reference, _article);
+            }
+            // 2. If user unchecked remove article from bookmark
+            else
+            {
+                (new ReferenceRepo()).RemoveArticleFromReference(current_reference_box.Reference, _article);
+            }
         }
 
         /**
@@ -112,7 +133,12 @@ namespace MainLib.ViewModels.Popups
         private void PopulateReferenceBoxes()
         {
             foreach (Reference reference in (new ReferenceRepo()).LoadReferences())
-                ReferenceBoxes.Add(new ReferenceBox(reference, _article));
+                ReferenceBoxes.Add(new ReferenceBox(reference));
+        }
+        private void CheckReferenceBoxes()
+        {
+            foreach (ReferenceBox referenceBox in ReferenceBoxes)
+                referenceBox.HasArticle(_article);
         }
     }
 }

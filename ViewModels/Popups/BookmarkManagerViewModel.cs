@@ -93,7 +93,6 @@ namespace MainLib.ViewModels.Popups
 
             // 3. Check bookmark boxes
             CheckBookmarkBoxes();
-
         }
 
         // Command actions
@@ -155,7 +154,7 @@ namespace MainLib.ViewModels.Popups
         private void PopulateBookmarks()
         {
             foreach (Bookmark bookmark in (new BookmarkRepo()).LoadBookmarks(_parent.User, true))
-                BookmarkBoxes.Add(new BookmarkBox(bookmark, _parent.SelectedArticle));
+                BookmarkBoxes.Add(new BookmarkBox(bookmark));
         }
         private void CheckBookmarkBoxes()
         {

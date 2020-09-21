@@ -17,7 +17,7 @@
                               FontWeight="{Binding Bookmark.Global, Converter={StaticResource IntToFontWeight}}"
                               Padding="8"
                               IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                              Command="{Binding DataContext.CheckChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                              Command="{Binding DataContext.CheckChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
                               CommandParameter="{Binding}">
                         <TextBlock Text="{Binding Bookmark.Name}" TextWrapping="Wrap" />
                     </CheckBox>
@@ -41,7 +41,8 @@
                     <CheckBox 
                               Padding="8"
                               IsChecked="{Binding IsChecked}"
-                              Command="{Binding CheckChangedCommand}">
+                              Command="{Binding DataContext.CheckChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+                              CommandParameter="{Binding}">
                         <TextBlock Text="{Binding Reference.Name}" TextWrapping="Wrap" />
                     </CheckBox>
                 </DataTemplate>

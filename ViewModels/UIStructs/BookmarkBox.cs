@@ -22,7 +22,7 @@ namespace ViewModels.UIStructs
         }
 
         // Constructor
-        public BookmarkBox(Bookmark bookmark, Article article)
+        public BookmarkBox(Bookmark bookmark)
         {
             this.Bookmark = bookmark;
         }
