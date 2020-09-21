@@ -1,5 +1,9 @@
 ﻿using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Browser;
+using SectionLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,11 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Lib.ViewModels.Base;
-using Lib.ViewModels.Commands;
-using Lib.ViewModels.Services.Browser;
 
-namespace MainLib.ViewModels.Main
+namespace SectionLib.ViewModels.Main
 {
     public class DataEntryViewModel : BaseViewModel, IDataErrorInfo
     {
@@ -71,7 +72,7 @@ namespace MainLib.ViewModels.Main
         }
         #endregion
 
-        #region Private memebers
+        // Private members
         private string _author;
         private string _keyword;
         private string _selectedFile;
@@ -79,47 +80,42 @@ namespace MainLib.ViewModels.Main
 
         // TEST
         private Random rnd = new Random();
-        #endregion
 
-        #region Public properties
+        // Public properties
         public User User { get; set; }
         public Article Article { get; set; }
-
         public string Author
         {
             get { return _author; }
             set { _author = value; OnPropertyChanged("Author"); }
         }
-
         public string Keyword
         {
             get { return _keyword; }
             set { _keyword = value; OnPropertyChanged("Keyword"); }
         }
-
         public string SelectedFile
         {
             get { return _selectedFile; }
             set { _selectedFile = value; OnPropertyChanged("SelectedFile"); }
         }
-        #endregion
 
-        #region Commands
+        // Commands
         public RelayCommand SelectFileCommand { get; set; }
         public RelayCommand SaveArticleCommand { get; set; }
         public RelayCommand ClearArticleAttributesCommand { get; set; }
-        #endregion
-
+        
         // TEST
         public ObservableCollection<string> ItemsCollection { get; set; }
 
         // Constructor
         public DataEntryViewModel(User user, IBrowserService browserService)
         {
+            this._browserService = browserService;
+
             // 1. Initialize article and User
             Article = new Article();
             User = user;
-            this._browserService = browserService;
 
             // 2. Initialize commands
             SelectFileCommand = new RelayCommand(SelectFile);
@@ -131,7 +127,7 @@ namespace MainLib.ViewModels.Main
             ItemsCollection = new ObservableCollection<string>();
         }
 
-        #region Command actions
+        // Command actions
         public void SelectFile(object input = null)
         {
             string result = _browserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
@@ -150,17 +146,17 @@ namespace MainLib.ViewModels.Main
             Article.Title = regex.Replace(Article.Title, " ");
 
             // 2. Add article to database
-            (new ArticleRepo()).SaveArticle(Article, User);
+            new ArticleRepo().SaveArticle(Article, User);
 
             // 3. Copy selected file to root folder with the new ID-based name
-            File.Copy(SelectedFile, Path.Combine(Environment.CurrentDirectory, "Files\\") + Article.FileName + ".pdf");
+            File.Copy(SelectedFile, Program.GetSectionFilesPath() + Article.FileName + ".pdf");
 
             // 4. Move the selected file into "Done" subfolder
             string done_path = Path.GetDirectoryName(SelectedFile) + "\\Done\\";
             Directory.CreateDirectory(Path.GetDirectoryName(SelectedFile) + "\\Done");
             File.Move(SelectedFile, done_path + System.IO.Path.GetFileName(SelectedFile));
 
-            // 5. Clear article attributes
+            // 5. Clear article attributes and Bookmark list
             ClearArticleAttributesCommand.Execute(null);
         }
         public void ClearArticleAttributes(object input = null)
@@ -168,12 +164,10 @@ namespace MainLib.ViewModels.Main
             Article.Clear();
             SelectedFile = null;
         }
-
         public bool CanSaveArticle(object input = null)
         {
             return CanAdd && Article.CanAdd;
         }
-        #endregion
 
         #region Test
         public RelayCommand GenerateRandomArticlesCommand { get; set; }
@@ -213,7 +207,7 @@ namespace MainLib.ViewModels.Main
             }
 
             foreach (Article article in random_articles)
-                (new ArticleRepo()).SaveArticle(article, User);
+                new ArticleRepo().SaveArticle(article, User);
 
             Console.WriteLine("Done");
         }
@@ -349,6 +343,5 @@ namespace MainLib.ViewModels.Main
             return letters[rnd.Next(0, letters.Length - 1)];
         }
         #endregion
-
     }
 }

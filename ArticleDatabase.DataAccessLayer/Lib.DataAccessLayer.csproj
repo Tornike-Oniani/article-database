@@ -62,6 +62,7 @@
     <Compile Include="Repositories\BookmarkRepo.cs" />
     <Compile Include="Repositories\GlobalRepo.cs" />
     <Compile Include="Repositories\ReferenceRepo.cs" />
+    <Compile Include="Repositories\SectionRepo.cs" />
     <Compile Include="Repositories\UserRepo.cs" />
   </ItemGroup>
   <ItemGroup>
