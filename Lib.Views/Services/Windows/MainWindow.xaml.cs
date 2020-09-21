@@ -23,6 +23,11 @@ namespace Lib.Views.Services.Windows
         {
             InitializeComponent();
 
+            this.Loaded += (s, e) =>
+            {
+                Application.Current.MainWindow = this;
+            };
+
             this.Closing += (s, e) =>
             {
                 Application.Current.Shutdown();
