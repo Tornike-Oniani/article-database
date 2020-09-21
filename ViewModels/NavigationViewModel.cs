@@ -1,6 +1,5 @@
 ﻿using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
-using Main.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +9,15 @@ using System.Windows;
 using System.Windows.Input;
 using Lib.ViewModels.Base;
 using MainLib.ViewModels.Main;
-using Lib.Views.Services.Browser;
-using Lib.Views.Services.Dialogs;
-using Lib.Views.Services.Windows;
+using MainLib.ViewModels.Commands;
+using Lib.ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Windows;
+using Lib.ViewModels.Services.Browser;
 
-namespace Main.ViewModels
+namespace MainLib.ViewModels
 {
-    public class MainViewModel : BaseViewModel
+    public class NavigationViewModel : BaseViewModel
     {
-
         private string _title;
         private BaseViewModel _selectedViewModel;
         private User _user;
@@ -36,10 +35,11 @@ namespace Main.ViewModels
 
         public ICommand UpdateViewCommand { get; set; }
 
-        public MainViewModel(User user)
+        public NavigationViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
-            UpdateViewCommand = new UpdateViewCommand(this, user);
-            this.SelectedViewModel = new HomeViewModel(user, new DialogService(), new WindowService(), new BrowserService());
+            UpdateViewCommand = new UpdateViewCommand(this, user, dialogService, windowService, browserService);
+            //this.SelectedViewModel = new HomeViewModel(user, new DialogService(), new WindowService(), new BrowserService());
+            UpdateViewCommand.Execute(ViewType.Home);
             this.Title = user.Username;
             // Set admin/user status
             user.Admin = (new UserRepo()).IsAdmin(user);

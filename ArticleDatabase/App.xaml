@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:Main"
-             xmlns:vm="clr-namespace:Main.ViewModels"
-             xmlns:views="clr-namespace:Main.Views"
+             xmlns:vm="clr-namespace:MainLib.ViewModels;assembly=MainLib.ViewModels"
+             xmlns:views="clr-namespace:MainLib.Views;assembly=MainLib.Views"
              
              xmlns:popupV="clr-namespace:MainLib.Views.Popups;assembly=MainLib.Views"
              xmlns:dialog="clr-namespace:Lib.Views.Services.Dialogs;assembly=Lib.Views"
@@ -52,8 +52,8 @@
                 <!-- Data template for views -->
                 <ResourceDictionary>
                     <!-- Main -->
-                    <DataTemplate DataType="{x:Type vm:MainViewModel}">
-                        <views:Main />
+                    <DataTemplate DataType="{x:Type vm:NavigationViewModel}">
+                        <views:Navigation />
                     </DataTemplate>
 
                     <!-- Home -->

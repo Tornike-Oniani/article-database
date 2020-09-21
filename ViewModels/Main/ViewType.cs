@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Main.Views
+namespace MainLib.ViewModels.Main
 {
     public enum ViewType
     {

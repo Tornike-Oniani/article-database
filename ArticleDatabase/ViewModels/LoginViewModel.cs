@@ -13,6 +13,8 @@ using Lib.ViewModels.Services.Windows;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.Views.Services.Windows;
 using Lib.Views.Services.Dialogs;
+using MainLib.ViewModels;
+using Lib.Views.Services.Browser;
 
 namespace Main.ViewModels
 {
@@ -34,7 +36,7 @@ namespace Main.ViewModels
         {
             if ((new UserRepo()).Login(CurrentUser))
             {
-                new WindowService().OpenWindow(new MainViewModel(CurrentUser), WindowType.MainWindow, false, false);
+                new WindowService().OpenWindow(new NavigationViewModel(CurrentUser, new DialogService(), new WindowService(), new BrowserService()), WindowType.MainWindow, false, false);
                 //MainWindow win = new MainWindow();
                 //win.DataContext = new MainViewModel(CurrentUser);
                 //win.Show();

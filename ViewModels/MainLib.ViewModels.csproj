@@ -44,11 +44,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\UpdateViewCommand.cs" />
+    <Compile Include="NavigationViewModel.cs" />
     <Compile Include="Main\BookmakrsViewModel.cs" />
     <Compile Include="Main\DataEntryViewModel.cs" />
     <Compile Include="Main\DataViewViewModel.cs" />
     <Compile Include="Main\HomeViewModel.cs" />
     <Compile Include="Main\ReferencesViewModel.cs" />
+    <Compile Include="Main\ViewType.cs" />
     <Compile Include="Pages\BookmarkListViewModel.cs" />
     <Compile Include="Pages\BookmarkViewViewModel.cs" />
     <Compile Include="Pages\ReferenceListViewModel.cs" />

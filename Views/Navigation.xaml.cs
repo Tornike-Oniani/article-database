@@ -14,14 +14,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Main.Views
+namespace MainLib.Views
 {
     /// <summary>
     /// Interaction logic for Main.xaml
     /// </summary>
-    public partial class Main : UserControl
+    public partial class Navigation : UserControl
     {
-        public Main()
+        public Navigation()
         {
             InitializeComponent();
         }

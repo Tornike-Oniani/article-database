@@ -1,6 +1,4 @@
 ﻿using Lib.DataAccessLayer.Models;
-using Main.ViewModels;
-using Main.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,27 +6,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MainLib.ViewModels.Main;
-using Lib.Views.Services.Browser;
-using Lib.Views.Services.Dialogs;
-using Lib.Views.Services.Windows;
+using MainLib.ViewModels;
+using Lib.ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Windows;
+using Lib.ViewModels.Services.Browser;
 
-namespace Main.Commands
+namespace MainLib.ViewModels.Commands
 {
     public class UpdateViewCommand : ICommand
     {
-        private MainViewModel _mainViewModel;
+        private NavigationViewModel _mainViewModel;
         private User _user;
-        private DialogService _dialogService;
-        private WindowService _windowService;
-        private BrowserService _browserService;
+        private IDialogService _dialogService;
+        private IWindowService _windowService;
+        private IBrowserService _browserService;
 
-        public UpdateViewCommand(MainViewModel mainViewModel, User user)
+        public UpdateViewCommand(NavigationViewModel mainViewModel, User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
             _mainViewModel = mainViewModel;
             _user = user;
-            this._dialogService = new DialogService();
-            this._windowService = new WindowService();
-            this._browserService = new BrowserService();
+            this._dialogService = dialogService;
+            this._windowService = windowService;
+            this._browserService = browserService;
         }
 
         public event EventHandler CanExecuteChanged;
