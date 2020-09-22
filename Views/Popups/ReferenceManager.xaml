@@ -13,7 +13,7 @@
             <!-- Filter box column -->
             <RowDefinition Height="Auto" />
             <!-- References list column -->
-            <RowDefinition MinHeight="400" Height="*" />
+            <RowDefinition Height="400" />
             <!-- Add reference column -->
             <RowDefinition Height="Auto" />
             <!-- Ok button column -->

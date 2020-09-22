@@ -49,42 +49,13 @@
                            HorizontalAlignment="Right"
                            FontSize="18" />
             </Border>
-            <!--<Button Content="Export bookmark"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right"
-                    Command="{Binding ExportBookmarkCommand}"/>-->
         </Grid>
 
         <!-- Data grid -->
-        <DataGrid IsReadOnly="True"
-                  AutoGenerateColumns="False"
-                  RowHeaderWidth="0"
-                  AlternationCount="2"
+        <DataGrid Style="{StaticResource ArticleGrid}"
                   ItemsSource="{Binding Reference.Articles}"
                   SelectedItem="{Binding SelectedArticle}"
-                  SelectionUnit="FullRow"
-                  SelectionMode="Single"
-                  CanUserReorderColumns="False"
-                  CanUserResizeColumns="False"
                   Grid.Row="1">
-
-            <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Style.Triggers>
-                        <Trigger Property="AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="White" />
-                        </Trigger>
-                        <Trigger Property="AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="#c8e3f1" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#34495E" />
-                            <Setter Property="Foreground" Value="White" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.RowStyle>
 
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
@@ -99,6 +70,11 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </DataGrid.CellStyle>
 
@@ -171,7 +147,7 @@
                 </DataGridTemplateColumn>
 
                 <!-- Year column -->
-                <DataGridTemplateColumn Header="Year" SortMemberPath="Year" MinWidth="50" Width="Auto">
+                <DataGridTemplateColumn Header="Year" SortMemberPath="Year" MinWidth="80" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Year}" TextWrapping="Wrap" />

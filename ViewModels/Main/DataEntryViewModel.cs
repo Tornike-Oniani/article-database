@@ -184,11 +184,15 @@ namespace MainLib.ViewModels.Main
 
             // 5. Clear article attributes
             ClearArticleAttributesCommand.Execute(null);
+            Bookmarks.Clear();
+            References.Clear();
         }
         public void ClearArticleAttributes(object input = null)
         {
             Article.Clear();
             SelectedFile = null;
+            Bookmarks.Clear();
+            References.Clear();
         }
         public void OpenBookmarkManager(object input = null)
         {

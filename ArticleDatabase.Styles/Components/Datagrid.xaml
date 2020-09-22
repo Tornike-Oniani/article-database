@@ -43,12 +43,12 @@
                             <Setter Property="Background" Value="White" />
                         </Trigger>
                         <Trigger Property="AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="#f9f9f9" />
+                            <Setter Property="Background" Value="#FFF1F1F1" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <!--<Setter Property="Background" Value="#34495E" />
                             <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />-->
-                            <Setter Property="BorderThickness" Value="0 0 0 3" />
+                            <Setter Property="BorderThickness" Value="0 3 0 3" />
                             <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
                         </Trigger>
                     </Style.Triggers>

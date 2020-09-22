@@ -24,14 +24,15 @@
         <!-- Icon -->
         <materialDesign:PackIcon Kind="{Binding Type, Converter={StaticResource DialogTypeToIcon}}"
                                  Foreground="{StaticResource PrimaryColorBrush}"
-                                 Height="30"
-                                 Width="30"
+                                 Height="35"
+                                 Width="35"
                                  VerticalAlignment="Center"
                                  Margin="0 0 10 0"
                                  Grid.Column="0"
                                  Grid.Row="0" />
         <!-- Text -->
         <TextBlock Text="{Binding Text,FallbackValue=SampleText}"
+                   FontSize="14"
                    VerticalAlignment="Center"
                    TextWrapping="Wrap"
                    Grid.Column="1"
