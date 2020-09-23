@@ -2,6 +2,8 @@
 using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
+using Lib.ViewModels.Popups;
+using Lib.ViewModels.Services.Browser;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
 using SectionLib.ViewModels.Utils;
@@ -23,6 +25,7 @@ namespace SectionLib.ViewModels.Main
         private string _filterTitle;
         private IDialogService _dialogService;
         private IWindowService _windowService;
+        private IBrowserService _browserService;
         #endregion
 
         public User User { get; set; }
@@ -54,11 +57,12 @@ namespace SectionLib.ViewModels.Main
         #endregion
 
         // Constructor
-        public DataViewViewModel(User user, IDialogService dialogService, IWindowService windowService)
+        public DataViewViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
             this.User = user;
             this._dialogService = dialogService;
             this._windowService = windowService;
+            this._browserService = browserService;
 
             // 1. Set neccessary columns to show on datagrid
             Columns = new List<string>()
@@ -78,9 +82,6 @@ namespace SectionLib.ViewModels.Main
 
             OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
             OpenEditCommand = new RelayCommand(OpenEditDialog, IsArticleSelected);
-
-            // 4. Load articles
-            LoadArticlesCommand.Execute(null);
         }
 
         #region Command Actions
@@ -134,20 +135,22 @@ namespace SectionLib.ViewModels.Main
 
                 catch
                 {
-                    Console.WriteLine("The file is missing, validate your database.");
+                    _dialogService.OpenDialog(
+                        new DialogOkViewModel("The file is missing, validate your database.", "Error", DialogType.Error));
                 }
 
                 // 4. Refresh the data grid
+                LoadArticlesCommand.Execute(null);
             }
         }
 
         public void OpenAddPersonal(object input)
         {
-           // _windowService.OpenWindow(new AddPersonalDialogViewModel(this));
+           _windowService.OpenWindow(new AddPersonalDialogViewModel(SelectedArticle, User));
         }
         public void OpenEditDialog(object input = null)
         {
-           // _windowService.OpenWindow(new ArticleEditorViewModel(this, _dialogService));
+           _windowService.OpenWindow(new ArticleEditorViewModel(SelectedArticle, User, _dialogService, _browserService));
         }
         public bool IsArticleSelected(object input = null)
         {

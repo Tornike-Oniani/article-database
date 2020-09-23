@@ -38,8 +38,23 @@
         <!-- Top menu -->
         <Border Padding="10" Grid.Row="1">
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!-- Search -->
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <TextBox Text="{Binding FilterTitle}" 
+                             materialDesign:HintAssist.Hint="Title" 
+                             materialDesign:HintAssist.IsFloating="True"
+                             Width="300"/>
+                    <Button Content="Search"
+                            Margin="10 0 0 0"
+                            Command="{Binding LoadArticlesCommand}" />
+                </StackPanel>
                 <!-- Comment/SIC -->
-                <StackPanel Orientation="Horizontal" Grid.Column="1" >
+                <StackPanel Orientation="Horizontal" Grid.Column="2" >
+                    <Rectangle Width="2" Fill="{StaticResource PrimaryColorBrush}" Margin="15 0 15 0" />
                     <CheckBox Content="Comment" FontSize="16" Margin="0 0 5 0" IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='PersonalComment'}" />
                     <CheckBox Content="SIC" FontSize="16" IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='SIC'}" />
                 </StackPanel>
@@ -77,7 +92,7 @@
                 <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                     <!-- We set these items' commands from code behind-->
                     <MenuItem x:Name="itemAddCommentSIC" Header="Add comment/SIC" Command="{Binding OpenAddPersonalCommand}" />
-                    <MenuItem x:Name="itemEdit" Header="Edit record" Command="{Binding OpenEditDialogCommand}" />
+                    <MenuItem x:Name="itemEdit" Header="Edit record" Command="{Binding OpenEditCommand}" />
                     <MenuItem Header="Delete record" Command="{Binding DeleteArticleCommand}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>

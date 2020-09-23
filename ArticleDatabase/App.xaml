@@ -125,7 +125,7 @@
 
                     <!-- Progress -->
                     <DataTemplate DataType="{x:Type popupVM:ImportViewModel}">
-                        <popupV:Progress />
+                        <popupVG:Progress />
                     </DataTemplate>
 
                     <!-- YesNo dialog -->

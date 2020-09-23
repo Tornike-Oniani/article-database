@@ -13,6 +13,11 @@
              xmlns:dialogVM="clr-namespace:Lib.ViewModels.Services.Dialogs;assembly=Lib.ViewModels"
              xmlns:dialog="clr-namespace:Lib.Views.Services.Dialogs;assembly=Lib.Views"
              
+             xmlns:popupVMG="clr-namespace:Lib.ViewModels.Popups;assembly=Lib.ViewModels"
+             xmlns:popupVG="clr-namespace:Lib.Views.Popups;assembly=Lib.Views"
+             
+             xmlns:utilsVM="clr-namespace:SectionLib.ViewModels.Utils;assembly=SectionLib.ViewModels"
+             
              Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
@@ -23,7 +28,6 @@
                 <!--Material design essentials-->
                 <materialDesign:CustomColorTheme BaseTheme="Light" PrimaryColor="{StaticResource PrimaryColor}" SecondaryColor="{StaticResource SecondaryColor}" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-
 
                 <!-- Texts resource dictionary -->
                 <ResourceDictionary Source="/Lib.Styles;component/Components/Texts.xaml" />
@@ -49,6 +53,9 @@
                 <!-- ListView resource dictionary -->
                 <ResourceDictionary Source="/Lib.Styles;component/Components/ListView.xaml" />
 
+                <!-- Local resource dictionary -->
+                <ResourceDictionary Source="/Section;component/Styles/Local.xaml" />
+
                 <ResourceDictionary>
                     <!-- Main -->
                     <DataTemplate DataType="{x:Type vm:NavigationViewModel}">
@@ -68,6 +75,21 @@
                     <!-- Data view -->
                     <DataTemplate DataType="{x:Type mainVM:DataViewViewModel}">
                         <mainV:DataView />
+                    </DataTemplate>
+
+                    <!-- AddPersonal -->
+                    <DataTemplate DataType="{x:Type popupVMG:AddPersonalDialogViewModel}">
+                        <popupVG:AddPersonal />
+                    </DataTemplate>
+
+                    <!-- Edit article -->
+                    <DataTemplate DataType="{x:Type popupVMG:ArticleEditorViewModel}">
+                        <popupVG:ArticleEditor />
+                    </DataTemplate>
+
+                    <!-- Progress -->
+                    <DataTemplate DataType="{x:Type utilsVM:ExportViewModel}">
+                        <popupVG:Progress />
                     </DataTemplate>
 
                     <!-- YesNo dialog -->

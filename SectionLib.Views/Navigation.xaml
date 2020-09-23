@@ -19,7 +19,7 @@
         <!-- Navigation -->
         <StackPanel Style="{StaticResource NavigationWrapper}">
             <!-- Home -->
-            <RadioButton Style="{StaticResource RadioButtonHome}" 
+            <RadioButton Style="{StaticResource LocalHome}" 
                          Content="Home"
                          Tag="{x:Static materialDesign:PackIconKind.Book}"
                          GroupName="Navigation" 
@@ -30,7 +30,7 @@
             <!-- Sections -->
             <Border Padding="15" 
                     Margin="0 0 0 50" 
-                    Background="{StaticResource ControlColorBrush}">
+                    Background="{StaticResource ComplementaryColorBrush}">
                 <ComboBox ItemsSource="{Binding Sections}" 
                           SelectedItem="{Binding SelectedSection}"
                           Background="White" 

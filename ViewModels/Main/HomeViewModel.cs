@@ -98,16 +98,6 @@ namespace MainLib.ViewModels.Main
 
             // 1. Using winforms dialog box select a folder
             destination = _browserService.OpenFolderDialog();
-            //using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
-            //{
-            //    System.Windows.Forms.DialogResult result = fbd.ShowDialog();
-
-            //    if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-            //    {
-            //        // Set selected folder path
-            //        destination = fbd.SelectedPath;
-            //    }
-            //}
 
             // 2. If nothing was selected return
             if (destination == null)
@@ -180,7 +170,6 @@ namespace MainLib.ViewModels.Main
             }
 
             // 9. Create progress bar and copy physical .pdf files
-            //Progress _progress = new Progress();
             _windowService.OpenWindow(
                 new ImportViewModel(files_to_copy, destination, _dialogService),
                 WindowType.Generic,

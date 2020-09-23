@@ -47,7 +47,7 @@ namespace SectionLib.ViewModels.Commands
                     this._mainViewModel.SelectedViewModel = new DataEntryViewModel(_user, _browserService);
                     break;
                 case ViewType.DataView:
-                    this._mainViewModel.SelectedViewModel = new DataViewViewModel(_user, _dialogService, _windowService);
+                    this._mainViewModel.SelectedViewModel = new DataViewViewModel(_user, _dialogService, _windowService, _browserService);
                     break;
             }
         }

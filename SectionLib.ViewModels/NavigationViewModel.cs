@@ -56,8 +56,8 @@ namespace SectionLib.ViewModels
                 ConfigurationManager.AppSettings["Attach"] = "ATTACH DATABASE \'" + Environment.CurrentDirectory + "\\" + "Sections\\" + SelectedSection + "\\" + "User.sqlite3\'" + "AS user;";
 
                 // 2. If section was changed and the user is in data search, clear the search so that user will not see previous section's data
-                //if (SelectedViewModel is DataViewViewModel)
-                //    ((DataViewViewModel)SelectedViewModel).Articles.Clear();
+                if (SelectedViewModel is DataViewViewModel)
+                    ((DataViewViewModel)SelectedViewModel).Articles.Clear();
 
                 // 3. Update static selected section for copy paths
                 Program.SelectedSection = value;

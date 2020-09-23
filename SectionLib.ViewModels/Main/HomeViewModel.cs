@@ -144,7 +144,7 @@ namespace SectionLib.ViewModels.Main
                 return;
             }
 
-            string folder_name = _mainViewModel.User + " - " + Program.SelectedSection;
+            string folder_name = _mainViewModel.User.Username + " - " + Program.SelectedSection;
 
             string destination = null;
 
@@ -186,12 +186,13 @@ namespace SectionLib.ViewModels.Main
             File.Copy(Program.GetSectionPath() + @"\user.sqlite3", destination + folder_name + "\\" + "user.sqlite3");
 
             // 9. Create progress bar and copy physical .pdf files
-            //Progress _progress = new Progress();
-            //_progress.Owner = MainWindow.CurrentMain;
-            //ExportViewModel progress_view_model = new ExportViewModel(Program.GetSectionFilesPath(), destination, folder_name, _progress);
-            //_progress.DataContext = progress_view_model;
-            //_progress.Show();
-            //progress_view_model.Export();
+            _windowService.OpenWindow(
+                new ExportViewModel(Program.GetSectionFilesPath(), destination, folder_name, _dialogService),
+                WindowType.Generic,
+                true,
+                true,
+                true
+                );
         }
 
         public bool CanDeleteSection(object input = null)

@@ -102,9 +102,6 @@
     <Compile Include="Popups\MassBookmarkManager.xaml.cs">
       <DependentUpon>MassBookmarkManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Popups\Progress.xaml.cs">
-      <DependentUpon>Progress.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Popups\ReferenceEditor.xaml.cs">
       <DependentUpon>ReferenceEditor.xaml</DependentUpon>
     </Compile>
@@ -212,10 +209,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Popups\MassBookmarkManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Popups\Progress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

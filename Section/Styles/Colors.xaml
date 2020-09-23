@@ -3,16 +3,24 @@
                     xmlns:local="clr-namespace:Section.Styles">
 
     <!-- Primary color -->
-    <Color x:Key="PrimaryColor">#306060</Color>
+    <Color x:Key="PrimaryColor">#3a5f6b</Color>
     <SolidColorBrush x:Key="PrimaryColorBrush" Color="{StaticResource PrimaryColor}" />
 
     <!-- Secondary color -->
-    <Color x:Key="SecondaryColor">#A07450</Color>
+    <Color x:Key="SecondaryColor">#47a79f</Color>
     <SolidColorBrush x:Key="SecondaryColorBrush" Color="{StaticResource SecondaryColor}" />
 
+    <!-- Complementary color -->
+    <Color x:Key="ComplementaryColor">#ffb87b</Color>
+    <SolidColorBrush x:Key="ComplementaryColorBrush" Color="{StaticResource ComplementaryColor}" />
+    
     <!-- Control text color -->
-    <Color x:Key="ControlColor">#82afb0</Color>
+    <Color x:Key="ControlColor">#ffffff</Color>
     <SolidColorBrush x:Key="ControlColorBrush" Color="{StaticResource ControlColor}" />
+    
+    <!-- Control text color -->
+    <!--<Color x:Key="ControlColor">#82afb0</Color>
+    <SolidColorBrush x:Key="ControlColorBrush" Color="{StaticResource ControlColor}" />-->
 
     <!-- Control highlighted text color -->
     <Color x:Key="ControlHighlightColor">#ffffff</Color>
