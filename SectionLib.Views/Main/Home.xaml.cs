@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Section.Views
+namespace SectionLib.Views.Main
 {
     /// <summary>
-    /// Interaction logic for Navigation.xaml
+    /// Interaction logic for Home.xaml
     /// </summary>
-    public partial class Navigation : UserControl
+    public partial class Home : UserControl
     {
-        public Navigation()
+        public Home()
         {
             InitializeComponent();
         }

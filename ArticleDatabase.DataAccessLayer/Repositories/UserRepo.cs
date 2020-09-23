@@ -36,6 +36,21 @@ namespace Lib.DataAccessLayer.Repositories
                 }
             }
         }
+        // Login with the first user (Used in sections as we have only one user per each section application)
+        public User LoginFirst()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString("User")))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    // Check if Username and password match
+                    User result = conn.QuerySingleOrDefault<User>("SELECT Id, Username, Password FROM tblUser WHERE ID = 1", transaction);
+
+                    return result;
+                }
+            }
+        }
         // Register
         public bool Register(User user, int admin = 0)
         {

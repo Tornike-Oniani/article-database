@@ -62,11 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\CheckToListConverter.cs" />
     <Compile Include="Converters\IntToFontWeightConverter.cs" />
-    <Compile Include="Converters\ListToVisibilityConverter.cs" />
-    <Compile Include="Converters\NumberToSICConverter.cs" />
-    <Compile Include="Converters\PathToNameConverter.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>

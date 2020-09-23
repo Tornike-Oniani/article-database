@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:SectionLib.Views"
-             xmlns:type="clr-namespace:SectionLib.ViewModels.Main;assembly=SectionLib.ViewModels"
+             xmlns:viewType="clr-namespace:SectionLib.ViewModels.Main;assembly=SectionLib.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -25,7 +25,7 @@
                          GroupName="Navigation" 
                          IsChecked="True" 
                          Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.Home}" />
+                         CommandParameter="{x:Static viewType:ViewType.Home}" />
 
             <!-- Sections -->
             <Border Padding="15" 
@@ -45,7 +45,7 @@
                          GroupName="Navigation" 
                          IsEnabled="{Binding CanNavigate}"
                          Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.DataEntry}" />
+                         CommandParameter="{x:Static viewType:ViewType.DataEntry}" />
             <!-- Data search -->
             <RadioButton Style="{StaticResource NavigationButton}" 
                          Content="Data Search" 
@@ -53,7 +53,7 @@
                          GroupName="Navigation" 
                          IsEnabled="{Binding CanNavigate}"
                          Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.DataView}" 
+                         CommandParameter="{x:Static viewType:ViewType.DataView}" 
                          Click="RadioButton_Click" />
         </StackPanel>
 

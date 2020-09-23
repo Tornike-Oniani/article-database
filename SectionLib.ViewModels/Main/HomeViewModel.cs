@@ -3,6 +3,7 @@ using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Browser;
 using Lib.ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Windows;
 using SectionLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
@@ -15,41 +16,42 @@ namespace SectionLib.ViewModels.Main
 {
     public class HomeViewModel : BaseViewModel
     {
-        // Private members
-        private NavigationViewModel _navigationViewModel;
+        private NavigationViewModel _mainViewModel;
         private IDialogService _dialogService;
+        private IWindowService _windowService;
         private IBrowserService _browserService;
 
-        // Commands
         public RelayCommand AddSectionCommand { get; set; }
         public RelayCommand DeleteSectionCommand { get; set; }
         public RelayCommand ValidateCommand { get; set; }
+        public RelayCommand ExportCommand { get; set; }
 
-        // Constructor
-        public HomeViewModel(NavigationViewModel navigationViewModel, IDialogService dialogService, IBrowserService browserService)
+        public HomeViewModel(NavigationViewModel mainViewModel, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
-            _navigationViewModel = navigationViewModel;
+            this._mainViewModel = mainViewModel;
             this._dialogService = dialogService;
+            this._windowService = windowService;
             this._browserService = browserService;
 
             // 1. Initialize commands
             ValidateCommand = new RelayCommand(Validate, CanValidate);
             AddSectionCommand = new RelayCommand(AddSection);
             DeleteSectionCommand = new RelayCommand(DeleteSection, CanDeleteSection);
+            ExportCommand = new RelayCommand(Export, CanExport);
         }
 
-        // Command actions
+
         public void AddSection(object input = null)
         {
             // 1. Add section to database
             new SectionRepo().AddSection();
 
             // 2. Repopulate the Sections list and set the selected section to last (The last will be the section we just created)
-            _navigationViewModel.GetSections();
+            _mainViewModel.GetSections();
 
             // 3. Check if 'Sections' folder exists
             string sections_path = Path.Combine(Environment.CurrentDirectory, "Sections");
-            string section_folder_path = Path.Combine(sections_path, _navigationViewModel.SelectedSection);
+            string section_folder_path = Path.Combine(sections_path, _mainViewModel.SelectedSection);
             if (!Directory.Exists(sections_path))
                 Directory.CreateDirectory(sections_path);
 
@@ -66,19 +68,20 @@ namespace SectionLib.ViewModels.Main
         {
             // 1. Ask user if he wants to delete the selected section
             if (_dialogService.OpenDialog(new DialogYesNoViewModel(
-                "Do you want to delete " + _navigationViewModel.SelectedSection + " and all its files?", 
-                "Delete section", 
-                DialogType.Warning)))
+                "Do you want to delete " + _mainViewModel.SelectedSection + " and all its files?",
+                "Delete section",
+                DialogType.Warning
+                )))
             {
                 // 2. Delte the section from database
-                new SectionRepo().DeleteSection(_navigationViewModel.SelectedSection);
+                new SectionRepo().DeleteSection(_mainViewModel.SelectedSection);
 
                 // 3. Remove folders and file of the selected section
-                string section_folder_path = Path.Combine(Environment.CurrentDirectory, "Sections", _navigationViewModel.SelectedSection);
+                string section_folder_path = Path.Combine(Environment.CurrentDirectory, "Sections", _mainViewModel.SelectedSection);
                 Directory.Delete(section_folder_path, true);
 
                 // 4. Repopulate the Sections list and set the selected section to last (The last will be the section we just created)
-                _navigationViewModel.GetSections();
+                _mainViewModel.GetSections();
             }
             else
             {
@@ -121,11 +124,11 @@ namespace SectionLib.ViewModels.Main
                         sw.WriteLine("");
                     }
 
-                    _dialogService.OpenDialog(new DialogOkViewModel("Some files are missing see Logs for more info...", "Validation", DialogType.Warning));
+                    _dialogService.OpenDialog(new DialogOkViewModel("Some files are missing see Logs for more info...", "Validation", DialogType.Error));
                 }
                 else
                 {
-                    _dialogService.OpenDialog(new DialogOkViewModel("No missing files were found", "Validation", DialogType.Success));
+                    _dialogService.OpenDialog(new DialogOkViewModel("No missing files were found!", "Validation", DialogType.Success));
                 }
             }
             else
@@ -133,17 +136,81 @@ namespace SectionLib.ViewModels.Main
                 _dialogService.OpenDialog(new DialogOkViewModel("There are no records in database yet", "Validation", DialogType.Information));
             }
         }
+        public void Export(object input = null)
+        {
+            if (Program.SelectedSection == null)
+            {
+                _dialogService.OpenDialog(new DialogViewModelBase("Please select a section", "Export", DialogType.Error));
+                return;
+            }
+
+            string folder_name = _mainViewModel.User + " - " + Program.SelectedSection;
+
+            string destination = null;
+
+            // 1. Using winforms dialog box select a folder
+            destination = _browserService.OpenFolderDialog();
+
+            // 2. If nothing was selected return
+            if (destination == null)
+                return;
+
+            destination += "\\";
+
+            // 3. If directory already exists ask the user if he wants to overwrite the files
+            if (Directory.Exists(destination + folder_name))
+            {
+                // If clicked yes
+                if (_dialogService.OpenDialog(new DialogYesNoViewModel(
+                    "Export folder already exists, do you wish to overwrite?",
+                    "Export",
+                    DialogType.Warning
+                    )))
+                {
+                    // Delete the folder
+                    DirectoryInfo delete_folder = new DirectoryInfo(destination + folder_name);
+                    delete_folder.Delete(true);
+                }
+                else
+                {
+                    // If clicked no terminate the function
+                    _dialogService.OpenDialog(new DialogOkViewModel("Export terminated. Please select a different path...", "Export", DialogType.Error));
+                    return;
+                }
+            }
+
+            // 4. Create folders in destination and copy database files
+            Directory.CreateDirectory(destination + folder_name);
+            Directory.CreateDirectory(destination + folder_name + @"\Files");
+            File.Copy(Program.GetSectionPath() + @"\NikasDB.sqlite3", destination + folder_name + "\\" + "NikasDB.sqlite3");
+            File.Copy(Program.GetSectionPath() + @"\user.sqlite3", destination + folder_name + "\\" + "user.sqlite3");
+
+            // 9. Create progress bar and copy physical .pdf files
+            //Progress _progress = new Progress();
+            //_progress.Owner = MainWindow.CurrentMain;
+            //ExportViewModel progress_view_model = new ExportViewModel(Program.GetSectionFilesPath(), destination, folder_name, _progress);
+            //_progress.DataContext = progress_view_model;
+            //_progress.Show();
+            //progress_view_model.Export();
+        }
 
         public bool CanDeleteSection(object input = null)
         {
-            if (_navigationViewModel.SelectedSection != null)
+            if (_mainViewModel.SelectedSection != null)
                 return true;
 
             return false;
         }
         public bool CanValidate(object input = null)
         {
-            if (_navigationViewModel.SelectedSection != null)
+            if (_mainViewModel.SelectedSection != null)
+                return true;
+
+            return false;
+        }
+        public bool CanExport(object input = null)
+        {
+            if (Program.SelectedSection != null)
                 return true;
 
             return false;

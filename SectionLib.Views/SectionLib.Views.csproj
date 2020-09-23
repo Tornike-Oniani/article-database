@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B78ED5D1-63F7-4899-B82C-C45E80459409}</ProjectGuid>
+    <ProjectGuid>{574E563E-A3FD-49F0-87E5-62CCBB19D36E}</ProjectGuid>
     <OutputType>library</OutputType>
     <RootNamespace>SectionLib.Views</RootNamespace>
     <AssemblyName>SectionLib.Views</AssemblyName>
@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MaterialDesignColors, Version=1.2.7.1979, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialDesignColors.1.2.7\lib\net45\MaterialDesignColors.dll</HintPath>
+    <Reference Include="MaterialDesignColors, Version=1.2.6.1513, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.2.6\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignThemes.Wpf, Version=3.1.3.1513, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.3.1.3\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
@@ -56,6 +56,15 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Main\DataEntry.xaml.cs">
+      <DependentUpon>DataEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main\DataView.xaml.cs">
+      <DependentUpon>DataView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Home.xaml.cs">
+      <DependentUpon>Home.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Navigation.xaml.cs">
       <DependentUpon>Navigation.xaml</DependentUpon>
     </Compile>
@@ -83,20 +92,40 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ArticleDatabase.DataAccessLayer\Lib.DataAccessLayer.csproj">
+      <Project>{cd799177-be5a-495a-94e0-11fb3156b755}</Project>
+      <Name>Lib.DataAccessLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ArticleDatabase.Styles\Lib.Styles.csproj">
       <Project>{57dda4cd-7e62-43a4-8a67-9c9a16154e69}</Project>
       <Name>Lib.Styles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lib.ViewModels\Lib.ViewModels.csproj">
+      <Project>{22197010-2cc9-4f4b-b22c-c39ed33f91b7}</Project>
+      <Name>Lib.ViewModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\Lib.Views\Lib.Views.csproj">
       <Project>{6293c9d0-2fed-45b5-b143-ced8f086371a}</Project>
       <Name>Lib.Views</Name>
     </ProjectReference>
     <ProjectReference Include="..\SectionLib.ViewModels\SectionLib.ViewModels.csproj">
-      <Project>{f8ce9bf7-e7d8-4618-8051-913a8e35cc60}</Project>
+      <Project>{509c0937-f245-4448-918b-9f589a338592}</Project>
       <Name>SectionLib.ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Main\DataEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main\DataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main\Home.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Navigation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

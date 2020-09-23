@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SectionLib.ViewModels.Utils
 {
-    public static class Program
+    public class Program
     {
         public static string SelectedSection { get; set; }
         public static string GetSectionPath()

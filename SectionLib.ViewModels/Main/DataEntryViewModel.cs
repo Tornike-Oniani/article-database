@@ -72,7 +72,7 @@ namespace SectionLib.ViewModels.Main
         }
         #endregion
 
-        // Private members
+        #region Private memebers
         private string _author;
         private string _keyword;
         private string _selectedFile;
@@ -80,10 +80,14 @@ namespace SectionLib.ViewModels.Main
 
         // TEST
         private Random rnd = new Random();
+        #endregion
 
-        // Public properties
+        #region Public properties
         public User User { get; set; }
         public Article Article { get; set; }
+        // List containting all bookmarks and references that was checked in manager
+        public List<Bookmark> Bookmarks { get; set; }
+        public List<Reference> References { get; set; }
         public string Author
         {
             get { return _author; }
@@ -99,23 +103,24 @@ namespace SectionLib.ViewModels.Main
             get { return _selectedFile; }
             set { _selectedFile = value; OnPropertyChanged("SelectedFile"); }
         }
+        #endregion
 
-        // Commands
+        #region Commands
         public RelayCommand SelectFileCommand { get; set; }
         public RelayCommand SaveArticleCommand { get; set; }
         public RelayCommand ClearArticleAttributesCommand { get; set; }
-        
+        #endregion
+
         // TEST
         public ObservableCollection<string> ItemsCollection { get; set; }
 
         // Constructor
         public DataEntryViewModel(User user, IBrowserService browserService)
         {
-            this._browserService = browserService;
-
             // 1. Initialize article and User
-            Article = new Article();
-            User = user;
+            this.Article = new Article();
+            this.User = user;
+            this._browserService = browserService;
 
             // 2. Initialize commands
             SelectFileCommand = new RelayCommand(SelectFile);
@@ -127,7 +132,7 @@ namespace SectionLib.ViewModels.Main
             ItemsCollection = new ObservableCollection<string>();
         }
 
-        // Command actions
+        #region Command actions
         public void SelectFile(object input = null)
         {
             string result = _browserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
@@ -168,6 +173,7 @@ namespace SectionLib.ViewModels.Main
         {
             return CanAdd && Article.CanAdd;
         }
+        #endregion
 
         #region Test
         public RelayCommand GenerateRandomArticlesCommand { get; set; }

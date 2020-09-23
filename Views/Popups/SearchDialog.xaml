@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MainLib.Views.Popups"
-             xmlns:converters="clr-namespace:MainLib.Views.Converters"
+             xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">

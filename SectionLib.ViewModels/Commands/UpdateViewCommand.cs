@@ -1,28 +1,28 @@
 ﻿using Lib.DataAccessLayer.Models;
+using Lib.ViewModels.Services.Browser;
+using Lib.ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Windows;
+using SectionLib.ViewModels.Main;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Lib.ViewModels.Services.Dialogs;
-using Lib.ViewModels.Services.Windows;
-using Lib.ViewModels.Services.Browser;
-using SectionLib.ViewModels.Main;
 
 namespace SectionLib.ViewModels.Commands
 {
     public class UpdateViewCommand : ICommand
     {
-        private NavigationViewModel _navigationViewModel;
+        private NavigationViewModel _mainViewModel;
         private User _user;
         private IDialogService _dialogService;
         private IWindowService _windowService;
         private IBrowserService _browserService;
 
-        public UpdateViewCommand(NavigationViewModel navigationViewModel, User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public UpdateViewCommand(NavigationViewModel mainViewModel, User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
-            _navigationViewModel = navigationViewModel;
+            _mainViewModel = mainViewModel;
             _user = user;
             this._dialogService = dialogService;
             this._windowService = windowService;
@@ -41,13 +41,13 @@ namespace SectionLib.ViewModels.Commands
             switch ((ViewType)parameter)
             {
                 case ViewType.Home:
-                    this._navigationViewModel.SelectedViewModel = new HomeViewModel(_navigationViewModel, _dialogService, _browserService);
+                    this._mainViewModel.SelectedViewModel = new HomeViewModel(_mainViewModel, _dialogService, _windowService, _browserService);
                     break;
                 case ViewType.DataEntry:
-                    this._navigationViewModel.SelectedViewModel = new DataEntryViewModel(_user, _browserService);
+                    this._mainViewModel.SelectedViewModel = new DataEntryViewModel(_user, _browserService);
                     break;
                 case ViewType.DataView:
-                    this._navigationViewModel.SelectedViewModel = new DataViewViewModel(_user, _dialogService, _windowService, _browserService);
+                    this._mainViewModel.SelectedViewModel = new DataViewViewModel(_user, _dialogService, _windowService);
                     break;
             }
         }

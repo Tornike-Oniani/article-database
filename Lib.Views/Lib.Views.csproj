@@ -60,7 +60,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\CheckToListConverter.cs" />
     <Compile Include="Converters\DialogTypeToIconConverter.cs" />
+    <Compile Include="Converters\ListToVisibilityConverter.cs" />
+    <Compile Include="Converters\NumberToSICConverter.cs" />
+    <Compile Include="Converters\PathToNameConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

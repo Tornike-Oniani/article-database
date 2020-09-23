@@ -1,0 +1,131 @@
+/* FULL QUERY WITH RETURNING FILE NAMES AND MERGING USERS */
+
+/* Dumping users */
+INSERT INTO tblUser(Username, Password)
+SELECT u.Username, u.Password FROM db2user.tblUser AS u
+EXCEPT
+SELECT u.Username, u.Password FROM db2user.tblUser AS u, tblUser AS n
+WHERE u.Username = n.Username;
+
+/* Temporary table to store the duplicates */
+CREATE TEMPORARY TABLE temp_tblDuplicates AS
+SELECT s.Title, s.File FROM db2main.tblArticle AS s, tblArticle AS n
+WHERE s.Title LIKE n.Title;
+
+/* Temporary table to store articles to be added */
+CREATE TEMPORARY TABLE temp_tblArticle AS
+SELECT s.Title FROM db2main.tblArticle AS s
+EXCEPT
+SELECT s.Title FROM db2main.tblArticle AS s, tblArticle AS n
+WHERE s.Title LIKE n.Title;
+
+/* Create full temporary table which will be copied into native tblArticle */
+/* First insert below is already integrated in creation of this table */
+CREATE TEMPORARY TABLE temp_tblArticleFull AS
+SELECT s.Title, s.Year, s.File
+FROM db2main.tblArticle AS s, temp_tblArticle AS t
+WHERE s.Title LIKE t.Title;
+
+/* Temp table to store file names to be copied from Files folder */
+CREATE TEMPORARY TABLE temp_Files AS
+SELECT Title, File FROM  temp_tblArticleFull WHERE File IS NOT NULL;
+
+/* Change File Names to TBC + RowID to be later changed to correct file names with new ID numerator */
+UPDATE temp_tblArticleFull SET File = ('TBC' || CAST(ROWID AS TEXT)) WHERE File IS NOT NULL;
+
+/* Copy full temp table into native table */
+INSERT INTO tblArticle (Title, Year, File)
+SELECT * FROM temp_tblArticleFull;
+
+/* Add which user added which article (igonres duplicates) */
+INSERT INTO user.tblUserArticles(UserID, ArticleID)
+SELECT nu.ID AS UserID, nart.ID AS ArticleID
+FROM user.tblUser AS nu, tblArticle AS nart,
+(SELECT us.Username, art.Title
+FROM db2user.tblUser AS us, db2main.tblArticle AS art
+JOIN db2user.tblUserArticles AS ua ON us.ID = ua.UserID AND ua.ArticleID = art.ID) AS ut
+WHERE nu.Username = ut.Username AND nart.Title = ut.Title
+EXCEPT
+SELECT fin.UserID, fin.ArticleID
+FROM user.tblUserArticles AS ua,
+(SELECT nu.ID AS UserID, nart.ID AS ArticleID
+FROM user.tblUser AS nu, tblArticle AS nart,
+(SELECT us.Username, art.Title
+FROM db2user.tblUser AS us, db2main.tblArticle AS art
+JOIN db2user.tblUserArticles AS ua ON us.ID = ua.UserID AND ua.ArticleID = art.ID) AS ut
+WHERE nu.Username = ut.Username AND nart.Title = ut.Title) AS fin
+WHERE ua.ArticleID = fin.ArticleID;
+
+/* Which PersonalComment records to copy, because we want to avoid duplicates */
+/* We take the records from db2 and EXCEPT the duplicates from db1 (So we minus what is already in db1, 
+first we select which are the same records in this 2 dbs and then EXCEPT) */
+CREATE TEMPORARY TABLE temp_tblUserPersonal AS
+SELECT nu.ID AS UserID, nart.ID AS ArticleID
+FROM user.tblUser AS nu, tblArticle AS nart,
+(SELECT ju.Username, ja.Title
+FROM db2main.tblArticle AS ja, db2user.tblUser AS ju
+JOIN db2user.tblUserPersonal AS jup ON ju.ID = jup.UserID AND ja.ID = jup.ArticleID) AS ut
+WHERE nu.Username = ut.Username AND nart.Title = ut.Title
+EXCEPT
+SELECT nu.UserID, nu.ArticleID 
+FROM user.tblUserPersonal AS nu,
+(SELECT nu.ID AS UserID, nart.ID AS ArticleID
+FROM user.tblUser AS nu, tblArticle AS nart,
+(SELECT ju.Username, ja.Title
+FROM db2main.tblArticle AS ja, db2user.tblUser AS ju
+JOIN db2user.tblUserPersonal AS jup ON ju.ID = jup.UserID AND ja.ID = jup.ArticleID) AS ut
+WHERE nu.Username = ut.Username AND nart.Title = ut.Title) AS fu
+WHERE nu.UserID = fu.UserID AND nu.ArticleID = fu.ArticleID;
+
+
+/* PersonalComment and SIC with correct ID's */
+INSERT INTO user.tblUserPersonal (UserID, ArticleID, PersonalComment, SIC)
+SELECT nu.ID, nart.ID, utps.PersonalComment, utps.SIC
+FROM user.tblUser AS nu, tblArticle AS nart, temp_tblUserPersonal AS tup,
+(SELECT ju.Username, ja.Title, jup.PersonalComment, jup.SIC
+FROM db2main.tblArticle AS ja, db2user.tblUser AS ju
+JOIN db2user.tblUserPersonal AS jup ON ju.ID = jup.UserID AND ja.ID = jup.ArticleID) AS utps
+WHERE nu.Username = utps.Username AND nart.Title = utps.Title AND nu.ID = tup.UserID AND nart.ID = tup.ArticleID;
+
+
+
+/* dumping authors */
+INSERT INTO tblAuthor(Name)
+SELECT Name FROM db2main.tblAuthor
+EXCEPT
+SELECT Name FROM tblAuthor;
+
+/* dumping article_author relationship */
+INSERT INTO jntArticleAuthor(Article_ID, Author_ID)
+SELECT nart.ID, nath.ID
+FROM tblArticle AS nart, tblAuthor AS nath,
+(SELECT art.Title, ath.Name
+FROM db2main.tblArticle AS art, temp_tblArticle AS nda
+JOIN db2main.jntArticleAuthor AS aa ON art.ID = aa.Article_ID
+JOIN db2main.tblAuthor AS ath ON aa.Author_ID = ath.ID
+WHERE art.Title = nda.Title) as q
+WHERE nart.Title = q.Title AND nath.Name = q.Name;
+
+/* dumping keywords */
+INSERT INTO tblKeyword(Keyword)
+SELECT Keyword FROM db2main.tblKeyword
+EXCEPT
+SELECT Keyword FROM tblKeyword;
+
+/* dumping article_keyword relationship */
+INSERT INTO jntArticleKeyword(Article_ID, Keyword_ID)
+SELECT nart.ID, nkwd.ID
+FROM tblArticle AS nart, tblKeyword AS nkwd,
+(SELECT art.Title, kwd.Keyword
+FROM db2main.tblArticle AS art, temp_tblArticle AS nda
+JOIN db2main.jntArticleKeyword AS ak ON art.ID = ak.Article_ID
+JOIN db2main.tblKeyword AS kwd ON ak.Keyword_ID = kwd.ID
+WHERE art.Title = nda.Title) as q
+WHERE nart.Title = q.Title AND nkwd.Keyword = q.Keyword;
+
+/* Change File Names */
+UPDATE tblArticle SET File = (substr((substr('000000', 1, (Length('000000') - (Length(CAST(ID AS TEXT))))) || CAST(ID AS TEXT)), 1, 3) || '-' || substr((substr('000000', 1, (Length('000000') - (Length(CAST(ID AS TEXT))))) || CAST(ID AS TEXT)), 4, 6)) WHERE File LIKE '%TBC%';
+
+/* Temp table for storing article with new file names */
+CREATE TEMPORARY TABLE temp_NewFiles AS
+SELECT Title, File FROM tblArticle WHERE File IS NOT NULL;

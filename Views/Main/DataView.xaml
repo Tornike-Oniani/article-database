@@ -6,13 +6,14 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MainLib.Views.Main"
              xmlns:converters="clr-namespace:MainLib.Views.Converters"
+             xmlns:commonConverters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              mc:Ignorable="d" 
              Focusable="True"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <converters:CheckToListConverter x:Key="CheckToList" />
-        <converters:ListToVisibilityConverter x:Key="ListToVisibility" />
-        <converters:NumberToSICConverter x:Key="NumberToSIC" />
+        <commonConverters:CheckToListConverter x:Key="CheckToList" />
+        <commonConverters:ListToVisibilityConverter x:Key="ListToVisibility" />
+        <commonConverters:NumberToSICConverter x:Key="NumberToSIC" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
     </UserControl.Resources>
 

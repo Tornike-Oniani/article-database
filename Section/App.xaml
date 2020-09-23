@@ -1,9 +1,86 @@
 ﻿<Application x:Class="Section.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:Section"
-             StartupUri="MainWindow.xaml">
+             
+             xmlns:vm="clr-namespace:SectionLib.ViewModels;assembly=SectionLib.ViewModels"
+             xmlns:views="clr-namespace:SectionLib.Views;assembly=SectionLib.Views"
+             
+             xmlns:mainVM="clr-namespace:SectionLib.ViewModels.Main;assembly=SectionLib.ViewModels"
+             xmlns:mainV="clr-namespace:SectionLib.Views.Main;assembly=SectionLib.Views"
+             
+             xmlns:dialogVM="clr-namespace:Lib.ViewModels.Services.Dialogs;assembly=Lib.ViewModels"
+             xmlns:dialog="clr-namespace:Lib.Views.Services.Dialogs;assembly=Lib.Views"
+             
+             Startup="Application_Startup">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Colors resource dictionary -->
+                <ResourceDictionary Source="/Section;component/Styles/Colors.xaml" />
+
+                <!--Material design essentials-->
+                <materialDesign:CustomColorTheme BaseTheme="Light" PrimaryColor="{StaticResource PrimaryColor}" SecondaryColor="{StaticResource SecondaryColor}" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+
+                <!-- Texts resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Texts.xaml" />
+
+                <!-- Buttons resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Buttons.xaml" />
+
+                <!-- Textboxes resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/TextBoxes.xaml" />
+
+                <!-- Navigation resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Navigation.xaml" />
+
+                <!-- Checkboxes resource dictionary-->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Checkboxes.xaml" />
+
+                <!-- Windows resource dictionary-->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Windows.xaml" />
+
+                <!-- Datagrid resource dictionary-->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Datagrid.xaml" />
+
+                <!-- ListView resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/ListView.xaml" />
+
+                <ResourceDictionary>
+                    <!-- Main -->
+                    <DataTemplate DataType="{x:Type vm:NavigationViewModel}">
+                        <views:Navigation />
+                    </DataTemplate>
+                    
+                    <!-- Home -->
+                    <DataTemplate DataType="{x:Type mainVM:HomeViewModel}">
+                        <mainV:Home />
+                    </DataTemplate>
+
+                    <!-- Data entry -->
+                    <DataTemplate DataType="{x:Type mainVM:DataEntryViewModel}">
+                        <mainV:DataEntry />
+                    </DataTemplate>
+
+                    <!-- Data view -->
+                    <DataTemplate DataType="{x:Type mainVM:DataViewViewModel}">
+                        <mainV:DataView />
+                    </DataTemplate>
+
+                    <!-- YesNo dialog -->
+                    <DataTemplate DataType="{x:Type dialogVM:DialogYesNoViewModel}">
+                        <dialog:DialogYesNoView />
+                    </DataTemplate>
+
+                    <!-- Ok dialog -->
+                    <DataTemplate DataType="{x:Type dialogVM:DialogOkViewModel}">
+                        <dialog:DialogOkView />
+                    </DataTemplate>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

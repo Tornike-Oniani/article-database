@@ -24,16 +24,14 @@ namespace SectionLib.ViewModels
     {
         private BaseViewModel _selectedViewModel;
         private string _selectedSection;
-        private User _user;
 
         public BaseViewModel SelectedViewModel
         {
             get { return _selectedViewModel; }
             set { _selectedViewModel = value; OnPropertyChanged("SelectedViewModel"); }
         }
-
+        public User User { get; set; }
         public ObservableCollection<string> Sections { get; set; }
-
         public string SelectedSection
         {
             get { return _selectedSection; }
@@ -58,8 +56,8 @@ namespace SectionLib.ViewModels
                 ConfigurationManager.AppSettings["Attach"] = "ATTACH DATABASE \'" + Environment.CurrentDirectory + "\\" + "Sections\\" + SelectedSection + "\\" + "User.sqlite3\'" + "AS user;";
 
                 // 2. If section was changed and the user is in data search, clear the search so that user will not see previous section's data
-                if (SelectedViewModel is DataViewViewModel)
-                    ((DataViewViewModel)SelectedViewModel).Articles.Clear();
+                //if (SelectedViewModel is DataViewViewModel)
+                //    ((DataViewViewModel)SelectedViewModel).Articles.Clear();
 
                 // 3. Update static selected section for copy paths
                 Program.SelectedSection = value;
@@ -79,13 +77,12 @@ namespace SectionLib.ViewModels
         public ICommand UpdateViewCommand { get; set; }
         public RelayCommand GetSectionsCommand { get; set; }
 
-        public NavigationViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public NavigationViewModel(IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
-            UpdateViewCommand = new UpdateViewCommand(this, user, dialogService, windowService, browserService);
-            //this.SelectedViewModel = new HomeViewModel(this);
+            this.User = new UserRepo().LoginFirst();
+            UpdateViewCommand = new UpdateViewCommand(this, User, dialogService, windowService, browserService);
             UpdateViewCommand.Execute(ViewType.Home);
-            this.Title = user.Username;
-            this._user = user;
+            this.Title = User.Username;
             Sections = new ObservableCollection<string>();
 
             // Initialize commands

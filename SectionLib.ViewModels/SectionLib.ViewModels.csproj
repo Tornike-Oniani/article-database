@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F8CE9BF7-E7D8-4618-8051-913A8E35CC60}</ProjectGuid>
+    <ProjectGuid>{509C0937-F245-4448-918B-9F589A338592}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SectionLib.ViewModels</RootNamespace>
@@ -61,6 +61,5 @@
       <Name>Lib.ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
