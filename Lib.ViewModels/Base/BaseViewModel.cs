@@ -12,6 +12,7 @@ namespace Lib.ViewModels.Base
     public class BaseViewModel : INotifyPropertyChanged
     {
         public string Title { get; set; }
+        // We use to pass it to progress so then we can use "Close" after task is finished
         public IWindow Window { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
