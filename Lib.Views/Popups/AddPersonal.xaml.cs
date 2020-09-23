@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MainLib.Views.Popups
+namespace Lib.Views.Popups
 {
     /// <summary>
     /// Interaction logic for AddPersonal.xaml

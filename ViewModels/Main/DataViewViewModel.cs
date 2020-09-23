@@ -15,6 +15,7 @@ using MainLib.ViewModels.Popups;
 using Lib.ViewModels.Services.Browser;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
+using Lib.ViewModels.Popups;
 
 namespace MainLib.ViewModels.Main
 {
@@ -352,7 +353,7 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenAddPersonal(object input)
         {
-            _windowService.OpenWindow(new AddPersonalDialogViewModel(this));
+            _windowService.OpenWindow(new AddPersonalDialogViewModel(SelectedArticle, User));
         }
         public void OpenBookmarkManager(object input = null)
         {
@@ -360,7 +361,7 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenEditDialog(object input = null)
         {
-            _windowService.OpenWindow(new ArticleEditorViewModel(this, _dialogService));
+            _windowService.OpenWindow(new ArticleEditorViewModel(SelectedArticle, User, _dialogService, _browserService));
         }
         public void OpenMassBookmarkManager(object input = null)
         {

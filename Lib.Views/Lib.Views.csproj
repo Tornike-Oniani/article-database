@@ -65,6 +65,12 @@
     <Compile Include="Converters\ListToVisibilityConverter.cs" />
     <Compile Include="Converters\NumberToSICConverter.cs" />
     <Compile Include="Converters\PathToNameConverter.cs" />
+    <Compile Include="Popups\AddPersonal.xaml.cs">
+      <DependentUpon>AddPersonal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Popups\ArticleEditor.xaml.cs">
+      <DependentUpon>ArticleEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -115,6 +121,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Popups\AddPersonal.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Popups\ArticleEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Services\Dialogs\DialogOkView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

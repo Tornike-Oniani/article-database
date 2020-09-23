@@ -93,12 +93,6 @@
     <Compile Include="Pages\ReferenceView.xaml.cs">
       <DependentUpon>ReferenceView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Popups\AddPersonal.xaml.cs">
-      <DependentUpon>AddPersonal.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Popups\ArticleEditor.xaml.cs">
-      <DependentUpon>ArticleEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Popups\BookmarkEditor.xaml.cs">
       <DependentUpon>BookmarkEditor.xaml</DependentUpon>
     </Compile>
@@ -206,14 +200,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ReferenceView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Popups\AddPersonal.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Popups\ArticleEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

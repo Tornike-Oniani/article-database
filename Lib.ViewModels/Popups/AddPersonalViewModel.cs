@@ -7,26 +7,28 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
-using MainLib.ViewModels.Main;
+using Lib.DataAccessLayer.Models;
 
-namespace MainLib.ViewModels.Popups
+namespace Lib.ViewModels.Popups
 {
     public class AddPersonalDialogViewModel : BaseViewModel
     {
-        public DataViewViewModel Parent { get; set; }
+        public Article SelectedArticle { get; set; }
+        public User User { get; set; }
         public string PersonalComment { get; set; }
         public int SIC { get; set; }
 
         public RelayCommand AddPersonalCommand { get; set; }
 
-        public AddPersonalDialogViewModel(DataViewViewModel parent)
+        public AddPersonalDialogViewModel(Article selectedArticle, User user)
         {
             this.Title = "Add comment & SIC";
 
             // 1. Set attributes from parent
-            Parent = parent;
-            PersonalComment = parent.SelectedArticle.PersonalComment;
-            SIC = parent.SelectedArticle.SIC;
+            this.SelectedArticle = selectedArticle;
+            this.User = user;
+            PersonalComment = selectedArticle.PersonalComment;
+            SIC = selectedArticle.SIC;
 
             // 2. Initialize commands
             AddPersonalCommand = new RelayCommand(AddPersonal);
@@ -35,14 +37,15 @@ namespace MainLib.ViewModels.Popups
 
         public void AddPersonal(object input)
         {
-            if (PersonalComment != Parent.SelectedArticle.PersonalComment || SIC != Parent.SelectedArticle.SIC)
+            if (PersonalComment != SelectedArticle.PersonalComment || SIC != SelectedArticle.SIC)
             {
                 // 1. Send new comment and SIC values to parent
-                Parent.SelectedArticle.PersonalComment = PersonalComment;
-                Parent.SelectedArticle.SIC = SIC;
+                SelectedArticle.PersonalComment = PersonalComment;
+                SelectedArticle.SIC = SIC;
+                OnPropertyChanged("SelectedArticle");
 
                 // 2. Update record in database
-                (new ArticleRepo()).UpdatePersonal(Parent.SelectedArticle, Parent.User);
+                (new ArticleRepo()).UpdatePersonal(SelectedArticle, User);
 
                 // 3. Close window
                 (input as ICommand).Execute(null);

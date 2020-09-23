@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="Base\BaseViewModel.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Popups\AddPersonalViewModel.cs" />
+    <Compile Include="Popups\ArticleEditorViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Browser\IBrowserService.cs" />
     <Compile Include="Services\Dialogs\DialogOkViewModel.cs" />
@@ -54,6 +56,12 @@
     <Compile Include="Services\Windows\IWindow.cs" />
     <Compile Include="Services\Windows\IWindowService.cs" />
     <Compile Include="Services\Windows\WindowType.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ArticleDatabase.DataAccessLayer\Lib.DataAccessLayer.csproj">
+      <Project>{cd799177-be5a-495a-94e0-11fb3156b755}</Project>
+      <Name>Lib.DataAccessLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

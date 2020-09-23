@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
-using MainLib.ViewModels.Main;
 using Lib.ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Browser;
 
-namespace MainLib.ViewModels.Popups
+namespace Lib.ViewModels.Popups
 {
     public class ArticleEditorViewModel : BaseViewModel
     {
@@ -20,8 +20,10 @@ namespace MainLib.ViewModels.Popups
         private string _keyword;
         private string _selectedFile;
         private IDialogService _dialogService;
+        private IBrowserService _browserService;
 
-        public DataViewViewModel Parent { get; set; }
+        public Article SelectedArticle { get; set; }
+        public User User { get; set; }
         public Article Article { get; set; }
         public string Author
         {
@@ -42,19 +44,21 @@ namespace MainLib.ViewModels.Popups
         public RelayCommand SelectFileCommand { get; set; }
         public RelayCommand UpdateArticleCommand { get; set; }
 
-        public ArticleEditorViewModel(DataViewViewModel parent, IDialogService dialogService)
+        public ArticleEditorViewModel(Article selectedArticle, User user, IDialogService dialogService, IBrowserService browserService)
         {
             this.Title = "Edit Article";
             this._dialogService = dialogService;
+            this._browserService = browserService;
 
             // 1. Set parent view model
-            Parent = parent;
+            this.SelectedArticle = selectedArticle;
+            this.User = user;
 
             // 2. Create article instance
             Article = new Article();
 
             // 3. Copy article properties from parent's selected article
-            Article.CopyByValue(Parent.SelectedArticle, true, false);
+            Article.CopyByValue(SelectedArticle, true, false);
 
             // 4. Initialize commands
             SelectFileCommand = new RelayCommand(SelectFile);
@@ -63,30 +67,17 @@ namespace MainLib.ViewModels.Popups
 
         public void SelectFile(object input = null)
         {
-            // 1. Create new dialog window
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            string result = _browserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
 
-            // 2. Set filter for file extension and default file extension 
-            dlg.DefaultExt = ".pdf";
-            dlg.Filter = "PDF files (*.pdf)|*.pdf";
-
-
-            // 3. Display the dialog window
-            Nullable<bool> result = dlg.ShowDialog();
-
-
-            // 4. Get the selected file
-            if (result == true)
-            {
-                SelectedFile = dlg.FileName;
-            }
+            // Get the selected file
+            SelectedFile = result;
         }
         public void UpdateArticle(object input)
         {
             try
             {
                 // 1. Update article record in database
-                (new ArticleRepo()).UpdateArticle(Article, Parent.User);
+                (new ArticleRepo()).UpdateArticle(Article, User);
 
                 // 2. If new file was selected overwrite it to older one
                 if (SelectedFile != null)
@@ -95,7 +86,8 @@ namespace MainLib.ViewModels.Popups
                 }
 
                 // 3. Copy new article properties to parent's selected article (so that the values will be updated on data grid)
-                Parent.SelectedArticle.CopyByValue(Article, false, true);
+                SelectedArticle.CopyByValue(Article, false, true);
+                OnPropertyChanged("SelectedArticle");
             }
 
             catch (Exception error)
