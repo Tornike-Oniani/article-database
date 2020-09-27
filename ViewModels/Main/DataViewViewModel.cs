@@ -507,11 +507,13 @@ namespace MainLib.ViewModels.Main
             FilterTitle = null;
             FilterAuthors.Clear();
             FilterKeywords.Clear();
+            FilterYear = null;
+            FilterPersonalComment = null;
             Articles.Clear();
         }
         public bool CanClear(object input = null)
         {
-            if (FilterTitle == null && FilterAuthors.Count == 0 && FilterKeywords.Count == 0)
+            if (string.IsNullOrEmpty(FilterTitle) && FilterAuthors.Count == 0 && FilterKeywords.Count == 0 && string.IsNullOrEmpty(FilterYear) && string.IsNullOrEmpty(FilterPersonalComment))
                 return false;
 
             return true;

@@ -48,7 +48,7 @@
             </StackPanel>
 
             <!-- Title -->
-            <TextBox Text="{Binding FilterTitle}" 
+            <TextBox Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}" 
                      materialDesign:HintAssist.Hint="Title" 
                      materialDesign:HintAssist.IsFloating="True" 
                      AcceptsReturn="True" 
@@ -82,14 +82,14 @@
             </Grid>
 
             <!-- Year -->
-            <TextBox Text="{Binding FilterYear}" 
+            <TextBox Text="{Binding FilterYear, UpdateSourceTrigger=PropertyChanged}" 
                      materialDesign:HintAssist.Hint="Year ex. 2000-2020"
                      materialDesign:HintAssist.IsFloating="True"
                      Grid.Row="3"
                      />
             
             <!-- Personal comment -->
-            <TextBox Text="{Binding FilterPersonalComment}" 
+            <TextBox Text="{Binding FilterPersonalComment, UpdateSourceTrigger=PropertyChanged}" 
                      materialDesign:HintAssist.Hint="Personal comment"
                      materialDesign:HintAssist.IsFloating="True"
                      Grid.Row="4"

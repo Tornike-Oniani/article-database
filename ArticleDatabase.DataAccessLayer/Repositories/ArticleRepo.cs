@@ -546,12 +546,12 @@ WHERE cmp.ID = @ID;
             result.Replace("#UserID", user.ID.ToString());
 
             // 2. Append title filter
-            if (title != null)
+            if (!string.IsNullOrWhiteSpace(title))
                 result.Append(" WHERE final.Title LIKE " + ToWildCard(title));
 
 
             // 3. Add WHERE clause if title was null but authors or keywords aren't
-            if ((authors.Count > 0 || keywords.Count > 0 || year != null || personalCommnet != null) && title == null)
+            if ((authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(year) || !string.IsNullOrEmpty(personalCommnet)) && string.IsNullOrEmpty(title))
                 result.Append(" WHERE ");
 
             // 4. Add authors filter
@@ -575,8 +575,8 @@ WHERE cmp.ID = @ID;
             // 5. Add keywords filter
             if (keywords.Count > 0)
             {
-                // 1. Determine if we need to add "AND"
-                if (authors.Count > 0 || title != null)
+                // 1. Determine if we need to add "AND" or "WHERE"
+                if (authors.Count > 0 || !string.IsNullOrEmpty(title))
                     result.Append(" AND ");
 
                 // 2. Add filter clause for each author
@@ -591,10 +591,10 @@ WHERE cmp.ID = @ID;
             }
 
             // 6. Year filter
-            if (year != null)
+            if (!string.IsNullOrWhiteSpace(year))
             {
                 // Determine if we need to add "AND"
-                if (authors.Count > 0 || keywords.Count > 0 || year != null || personalCommnet != null || title != null)
+                if (authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(title))
                     queryBuilder.Append(" AND ");
 
                 if (year.Contains("-"))
@@ -612,14 +612,17 @@ WHERE cmp.ID = @ID;
             }
 
             // 7. Personal comment filter
-            if (personalCommnet != null)
+            if (!string.IsNullOrWhiteSpace(personalCommnet))
             {
                 // Determine if we need to add "AND"
-                if (authors.Count > 0 || keywords.Count > 0 || year != null || personalCommnet != null || title != null || year != null)
+                if (authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(year) || !string.IsNullOrEmpty(title) )
                     queryBuilder.Append(" AND ");
 
                 queryBuilder.Append($" final.PersonalComment LIKE {ToWildCard(personalCommnet)}");
             }
+
+
+            Console.WriteLine(result.ToString());
 
             // 8. Return the result
             return result.ToString();
