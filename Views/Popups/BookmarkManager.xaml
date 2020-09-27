@@ -17,19 +17,20 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <!-- Filter box column -->
+            <!-- Filter box row -->
             <RowDefinition Height="Auto" />
-            <!-- Bookmarks list column -->
+            <!-- Bookmarks list row -->
             <RowDefinition Height="400" />
-            <!-- Add bookmark column -->
+            <!-- Add bookmark row -->
             <RowDefinition Height="Auto" />
-            <!-- Ok button column -->
+            <!-- Ok button row -->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Filter box -->
         <usercontrols:FilterBox ItemsSource="{Binding _bookmarkBoxesCollection}"
-                                Margin="0 0 0 5" />
+                                Margin="0 0 0 5"
+                                Grid.Row="0" />
 
         <!-- Bookmarks list -->
         <ListView ItemsSource="{Binding BookmarkBoxesCollection}" 

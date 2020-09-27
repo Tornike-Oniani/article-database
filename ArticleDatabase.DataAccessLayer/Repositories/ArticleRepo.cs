@@ -268,7 +268,7 @@ LEFT JOIN
 FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
 ");
             // 1. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, new List<string>(), new List<string>());
+            string query = AddFilter(queryBuilder, user, title, new List<string>(), new List<string>(), null, null);
 
             // 3.Fetch articles
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
@@ -287,7 +287,7 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             return results;
         }
         // Fetch list of articles from database
-        public List<Article> LoadArticles(User user, string title, List<string> authors, List<string> keywords, int offset, int itemsPerPage)
+        public List<Article> LoadArticles(User user, string title, List<string> authors, List<string> keywords, string year, string personalComment, int offset, int itemsPerPage)
         {
             // Results
             List<Article> results;
@@ -317,7 +317,7 @@ LEFT JOIN
 FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
 ");
             // 1. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, keywords);
+            string query = AddFilter(queryBuilder, user, title, authors, keywords, year, personalComment);
 
             // 2. Add Pagination
             query += " LIMIT " + itemsPerPage.ToString() + " OFFSET " + offset.ToString() + ";";
@@ -340,7 +340,7 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
 
         }
         // Get count of fetched articles
-        public int GetRecordCount(User user, string title, List<string> authors, List<string> keywords)
+        public int GetRecordCount(User user, string title, List<string> authors, List<string> keywords, string year, string personalComment)
         {
             int result = 1;
 
@@ -370,7 +370,7 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
 ");
 
             // 1. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, keywords);
+            string query = AddFilter(queryBuilder, user, title, authors, keywords, year, personalComment);
 
 
             // 2. Fetch count
@@ -531,7 +531,14 @@ WHERE cmp.ID = @ID;
                 }
             }
         }
-        private string AddFilter(StringBuilder queryBuilder, User user, string title, List<string> authors, List<string> keywords)
+        private string AddFilter(
+            StringBuilder queryBuilder,
+            User user,
+            string title,
+            List<string> authors,
+            List<string> keywords,
+            string year,
+            string personalCommnet)
         {
             StringBuilder result = queryBuilder;
 
@@ -544,7 +551,7 @@ WHERE cmp.ID = @ID;
 
 
             // 3. Add WHERE clause if title was null but authors or keywords aren't
-            if ((authors.Count > 0 || keywords.Count > 0) && title == null)
+            if ((authors.Count > 0 || keywords.Count > 0 || year != null || personalCommnet != null) && title == null)
                 result.Append(" WHERE ");
 
             // 4. Add authors filter
@@ -583,7 +590,38 @@ WHERE cmp.ID = @ID;
                 }
             }
 
-            // 6. Return the result
+            // 6. Year filter
+            if (year != null)
+            {
+                // Determine if we need to add "AND"
+                if (authors.Count > 0 || keywords.Count > 0 || year != null || personalCommnet != null || title != null)
+                    queryBuilder.Append(" AND ");
+
+                if (year.Contains("-"))
+                {
+                    string[] dates = year.Split('-');
+                    if (dates.Length == 2 && !string.IsNullOrWhiteSpace(dates[1]))
+                        queryBuilder.Append($" final.year >= {dates[0]} AND year <= {dates[1]}");
+                    else
+                        queryBuilder.Append($" final.year = {dates[0]}");
+                }
+                else
+                {
+                    queryBuilder.Append($" final.year = {year}");
+                }
+            }
+
+            // 7. Personal comment filter
+            if (personalCommnet != null)
+            {
+                // Determine if we need to add "AND"
+                if (authors.Count > 0 || keywords.Count > 0 || year != null || personalCommnet != null || title != null || year != null)
+                    queryBuilder.Append(" AND ");
+
+                queryBuilder.Append($" final.PersonalComment LIKE {ToWildCard(personalCommnet)}");
+            }
+
+            // 8. Return the result
             return result.ToString();
         }
         private string ToWildCard(string input)

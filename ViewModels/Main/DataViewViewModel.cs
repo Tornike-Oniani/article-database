@@ -214,7 +214,15 @@ namespace MainLib.ViewModels.Main
             Articles.Clear();
 
             // 4. Fetch artilces from database
-            foreach (Article article in (new ArticleRepo()).LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
+            foreach (Article article in (new ArticleRepo()).LoadArticles(
+                Users[UserIndex], 
+                FilterTitle, 
+                FilterAuthors.ToList(), 
+                FilterKeywords.ToList(),
+                FilterYear,
+                FilterPersonalComment,
+                _offset, 
+                ItemsPerPage))
             {
                 Articles.Add(article);
             }
@@ -232,7 +240,15 @@ namespace MainLib.ViewModels.Main
             Articles.Clear();
 
             // 4. Fetch artilces from database
-            foreach (Article article in (new ArticleRepo()).LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
+            foreach (Article article in (new ArticleRepo()).LoadArticles(
+                Users[UserIndex], 
+                FilterTitle, 
+                FilterAuthors.ToList(), 
+                FilterKeywords.ToList(),
+                FilterYear,
+                FilterPersonalComment,
+                _offset, 
+                ItemsPerPage))
             {
                 Articles.Add(article);
             }
@@ -241,7 +257,13 @@ namespace MainLib.ViewModels.Main
         {
 
             // 1. Calculate total pages
-            int record_count = (new ArticleRepo()).GetRecordCount(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList());
+            int record_count = (new ArticleRepo()).GetRecordCount(
+                Users[UserIndex], 
+                FilterTitle, 
+                FilterAuthors.ToList(), 
+                FilterKeywords.ToList(),
+                FilterYear,
+                FilterPersonalComment);
             if ((record_count % ItemsPerPage) == 0)
                 TotalPages = record_count / ItemsPerPage;
             else
@@ -253,7 +275,15 @@ namespace MainLib.ViewModels.Main
             Articles.Clear();
 
             // 3. Fetch artilces from database
-            foreach (Article article in (new ArticleRepo()).LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
+            foreach (Article article in (new ArticleRepo()).LoadArticles(
+                Users[UserIndex], 
+                FilterTitle, 
+                FilterAuthors.ToList(), 
+                FilterKeywords.ToList(),
+                FilterYear,
+                FilterPersonalComment,
+                _offset, 
+                ItemsPerPage))
             {
                 Articles.Add(article);
             }
@@ -398,6 +428,8 @@ namespace MainLib.ViewModels.Main
         private string _filterTitle;
         private string _filterAuthor;
         private string _filterKeyword;
+        private string _filterYear;
+        private string _filterPersonalComment;
 
         public string FilterTitle
         {
@@ -420,6 +452,16 @@ namespace MainLib.ViewModels.Main
             get { return _filterKeyword; }
             set { _filterKeyword = value; OnPropertyChanged("FilterKeyword"); }
         }
+        public string FilterYear
+        {
+            get { return _filterYear; }
+            set { _filterYear = value; OnPropertyChanged("FilterYear"); }
+        }
+        public string FilterPersonalComment
+        {
+            get { return _filterPersonalComment; }
+            set { _filterPersonalComment = value; OnPropertyChanged("FilterPersonalComment"); }
+        }
         public ObservableCollection<string> FilterAuthors { get; set; }
         public ObservableCollection<string> FilterKeywords { get; set; }
 
@@ -429,7 +471,13 @@ namespace MainLib.ViewModels.Main
         public void LoadArticles(object input = null)
         {
             // 1. Calculate total pages
-            int record_count = (new ArticleRepo()).GetRecordCount(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList());
+            int record_count = (new ArticleRepo()).GetRecordCount(
+                Users[UserIndex], 
+                FilterTitle, 
+                FilterAuthors.ToList(), 
+                FilterKeywords.ToList(),
+                FilterYear,
+                FilterPersonalComment);
             if ((record_count % ItemsPerPage) == 0)
                 TotalPages = record_count / ItemsPerPage;
             else
@@ -441,7 +489,15 @@ namespace MainLib.ViewModels.Main
             Articles.Clear();
 
             // 3. Fetch artilces from database
-            foreach (Article article in (new ArticleRepo()).LoadArticles(Users[UserIndex], FilterTitle, FilterAuthors.ToList(), FilterKeywords.ToList(), _offset, ItemsPerPage))
+            foreach (Article article in (new ArticleRepo()).LoadArticles(
+                Users[UserIndex], 
+                FilterTitle, 
+                FilterAuthors.ToList(), 
+                FilterKeywords.ToList(),
+                FilterYear,
+                FilterPersonalComment,
+                _offset, 
+                ItemsPerPage))
             {
                 Articles.Add(article);
             }

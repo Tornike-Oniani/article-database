@@ -10,6 +10,8 @@ using System.Windows.Input;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
+using System.Windows.Data;
+using System.ComponentModel;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -20,6 +22,11 @@ namespace MainLib.ViewModels.Popups
         private IDialogService _dialogService;
 
         public ObservableCollection<Bookmark> Bookmarks { get; set; }
+        public CollectionViewSource _bookmarkBoxesCollection { get; set; }
+        public ICollectionView BookmarkBoxesCollection
+        {
+            get { return _bookmarkBoxesCollection.View; }
+        }
         public Bookmark SelectedBookmark { get; set; }
 
         public RelayCommand AddArticlesToBookmarkCommand { get; set; }
@@ -33,6 +40,8 @@ namespace MainLib.ViewModels.Popups
             this._user = user;
             this._articles = articles;
             this.Bookmarks = new ObservableCollection<Bookmark>(PopulateBookmarks());
+            _bookmarkBoxesCollection = new CollectionViewSource();
+            _bookmarkBoxesCollection.Source = Bookmarks;
 
             // 2. Initialize commands
             AddArticlesToBookmarkCommand = new RelayCommand(AddArticlesToBookmark, CanAddArticlesToBookmark);

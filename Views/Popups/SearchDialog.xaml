@@ -8,7 +8,7 @@
              xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="550" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:CheckToListConverter x:Key="CheckToList" />
     </UserControl.Resources>
@@ -16,13 +16,17 @@
     <Border Padding="10">
         <Grid DataContext="{Binding Parent}">
             <Grid.RowDefinitions>
-                <!-- Checkboxes column -->
+                <!-- Checkboxes row -->
                 <RowDefinition Height="Auto" />
-                <!-- Title column -->
+                <!-- Title row -->
                 <RowDefinition Height="Auto" />
-                <!-- Authors & keywrods column -->
+                <!-- Authors & keywrods row -->
                 <RowDefinition Height="Auto" />
-                <!-- Buttons column -->
+                <!-- Year row -->
+                <RowDefinition Height="Auto" />
+                <!-- Personal comment row -->
+                <RowDefinition Height="Auto" />
+                <!-- Buttons row -->
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -63,14 +67,34 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Authors -->
-                <usercontrols:CollectionBox Text="Author" ItemsSource="{Binding FilterAuthors}" Margin="0 0 10 0" Grid.Column="0"  />
+                <usercontrols:CollectionBox Text="Author"
+                                            ItemsSource="{Binding FilterAuthors}" 
+                                            Margin="0 0 10 0" 
+                                            Grid.Column="0"  />
 
                 <!-- Keywords -->
-                <usercontrols:CollectionBox Text="Keyword" ItemsSource="{Binding FilterKeywords}" Margin="10 0 0 0" Grid.Column="1" />
+                <usercontrols:CollectionBox Text="Keyword" 
+                                            ItemsSource="{Binding FilterKeywords}" 
+                                            Margin="10 0 0 0" 
+                                            Grid.Column="1" />
             </Grid>
 
+            <!-- Year -->
+            <TextBox Text="{Binding FilterYear}" 
+                     materialDesign:HintAssist.Hint="Year ex. 2000-2020"
+                     materialDesign:HintAssist.IsFloating="True"
+                     Grid.Row="3"
+                     />
+            
+            <!-- Personal comment -->
+            <TextBox Text="{Binding FilterPersonalComment}" 
+                     materialDesign:HintAssist.Hint="Personal comment"
+                     materialDesign:HintAssist.IsFloating="True"
+                     Grid.Row="4"
+                     />
+
             <!-- Buttons -->
-            <Grid Margin="0 15 0 0" Grid.Row="3">
+            <Grid Margin="0 15 0 0" Grid.Row="5">
                 <Grid.ColumnDefinitions>
                     <!-- Search button column -->
                     <ColumnDefinition Width="*" />

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MainLib.Views.Popups"
              xmlns:converters="clr-namespace:MainLib.Views.Converters"
+             xmlns:usercontrols="clr-namespace:MainLib.Views.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -13,17 +14,23 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <!-- Bookmarks list column -->
-            <RowDefinition Height="*" />
-            <!-- Ok button column -->
+            <!-- Filter box row -->
+            <RowDefinition Height="Auto" />
+            <!-- Bookmarks list row -->
+            <RowDefinition Height="400" />
+            <!-- Ok button row -->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <usercontrols:FilterBox ItemsSource="{Binding _bookmarkBoxesCollection}"
+                                Margin="0 0 0 5"
+                                Grid.Row="0" />
+
         <!-- Bookmarks list -->
-        <ListView ItemsSource="{Binding Bookmarks}"
+        <ListView ItemsSource="{Binding BookmarkBoxesCollection}"
                   SelectedItem="{Binding SelectedBookmark}"
                   HorizontalContentAlignment="Stretch"
-                  Grid.Row="0">
+                  Grid.Row="1">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}"
@@ -36,7 +43,7 @@
         <!-- Buttons -->
         <StackPanel Orientation="Horizontal"
                     Margin="10 10 0 10" 
-                    Grid.Row="1">
+                    Grid.Row="2">
             <!-- Add button -->
             <Button Content="Add"
                 Width="80" 

@@ -47,7 +47,7 @@ namespace MainLib.ViewModels
             this.User = user;
 
             // Initialize tracker
-            new Tracker().init();
+            //new Tracker().init();
         }
     }
 }
