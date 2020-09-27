@@ -13,6 +13,7 @@ using MainLib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
 using Lib.ViewModels.Services.Browser;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels
 {
@@ -44,6 +45,9 @@ namespace MainLib.ViewModels
             // Set admin/user status
             user.Admin = (new UserRepo()).IsAdmin(user);
             this.User = user;
+
+            // Initialize tracker
+            new Tracker().init();
         }
     }
 }

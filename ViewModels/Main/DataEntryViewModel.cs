@@ -15,6 +15,7 @@ using Lib.ViewModels.Services.Browser;
 using Lib.ViewModels.Services.Windows;
 using MainLib.ViewModels.Popups;
 using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Main
 {
@@ -186,6 +187,8 @@ namespace MainLib.ViewModels.Main
             ClearArticleAttributesCommand.Execute(null);
             Bookmarks.Clear();
             References.Clear();
+
+            new Tracker().TrackCreate(Article);
         }
         public void ClearArticleAttributes(object input = null)
         {

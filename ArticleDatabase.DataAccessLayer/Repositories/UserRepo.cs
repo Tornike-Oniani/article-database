@@ -113,5 +113,23 @@ namespace Lib.DataAccessLayer.Repositories
 
             return results;
         }
+        // Get user by Username
+        public User GetUserByName(string userName)
+        {
+            User result;
+
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString("User")))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    // Check if Username and password match
+                    result = conn.QuerySingleOrDefault<User>("SELECT Username, Password, Admin FROM tblUser WHERE Username LIKE @Username;",
+                        new { Username = userName }, transaction);
+                }
+            }
+
+            return result;
+        }
     }
 }
