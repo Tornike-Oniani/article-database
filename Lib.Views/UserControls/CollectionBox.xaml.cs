@@ -51,6 +51,15 @@ namespace Lib.Views.UserControls
             set { SetValue(TextProperty, value); }
         }
 
+        private static readonly DependencyProperty BoxHeightProperty =
+    DependencyProperty.Register("BoxHeightProperty", typeof(int), typeof(CollectionBox), new PropertyMetadata(200));
+
+        public int BoxHeight
+        {
+            get { return (int)GetValue(BoxHeightProperty); }
+            set { SetValue(BoxHeightProperty, value); }
+        }
+
         private string _item;
 
         public string Item

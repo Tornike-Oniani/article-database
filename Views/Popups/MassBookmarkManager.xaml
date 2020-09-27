@@ -34,6 +34,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}"
+                               FontSize="16"
                                FontWeight="{Binding Global, 
                                Converter={StaticResource IntToFontWeight}}" />
                 </DataTemplate>

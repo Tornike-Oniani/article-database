@@ -19,7 +19,7 @@
             </TextBox.InputBindings>
         </TextBox>
         <ListBox x:Name="Test" ItemsSource="{Binding Path=ItemsSource, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                 Height="200"
+                 Height="{Binding BoxHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                  HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>

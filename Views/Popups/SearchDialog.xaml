@@ -69,12 +69,14 @@
                 <!-- Authors -->
                 <usercontrols:CollectionBox Text="Author"
                                             ItemsSource="{Binding FilterAuthors}" 
+                                            BoxHeight="150"
                                             Margin="0 0 10 0" 
                                             Grid.Column="0"  />
 
                 <!-- Keywords -->
                 <usercontrols:CollectionBox Text="Keyword" 
                                             ItemsSource="{Binding FilterKeywords}" 
+                                            BoxHeight="150"
                                             Margin="10 0 0 0" 
                                             Grid.Column="1" />
             </Grid>
