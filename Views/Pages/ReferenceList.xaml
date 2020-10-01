@@ -87,7 +87,7 @@
                                            Text="{Binding Name}"
                                            FontSize="18"
                                            Grid.Column="0" />
-                                <TextBlock x:Name="articlesCount" Text="{Binding Articles.Count, StringFormat='Number of articles: {0}'}"
+                                <TextBlock x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
                                            Foreground="Gray" 
                                            FontSize="16" 
                                            Visibility="Collapsed"

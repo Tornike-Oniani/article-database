@@ -19,9 +19,9 @@ namespace MainLib.ViewModels
 {
     public class NavigationViewModel : BaseViewModel
     {
-        private string _title;
         private BaseViewModel _selectedViewModel;
         private User _user;
+        private bool _isBusy;
 
         public BaseViewModel SelectedViewModel
         {
@@ -33,21 +33,33 @@ namespace MainLib.ViewModels
             get { return _user; }
             set { _user = value; OnPropertyChanged("User"); }
         }
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set { _isBusy = value; OnPropertyChanged("IsBusy"); }
+        }
+
 
         public ICommand UpdateViewCommand { get; set; }
 
         public NavigationViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
-            UpdateViewCommand = new UpdateViewCommand(this, user, dialogService, windowService, browserService);
+            UpdateViewCommand = new UpdateViewCommand(Navigate, WorkStatus, user, dialogService, windowService, browserService);
             //this.SelectedViewModel = new HomeViewModel(user, new DialogService(), new WindowService(), new BrowserService());
             UpdateViewCommand.Execute(ViewType.Home);
             this.Title = user.Username;
             // Set admin/user status
             user.Admin = (new UserRepo()).IsAdmin(user);
             this.User = user;
+        }
 
-            // Initialize tracker
-            //new Tracker().init();
+        public void Navigate(BaseViewModel viewModel)
+        {
+            this.SelectedViewModel = viewModel;
+        }
+        public void WorkStatus(bool isWorking)
+        {
+            this.IsBusy = isWorking;
         }
     }
 }

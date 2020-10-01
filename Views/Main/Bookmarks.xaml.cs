@@ -33,15 +33,16 @@ namespace MainLib.Views.Main
             {
                 if (this.DataContext is BookmarksViewModel)
                 {
-
-                    BookmarkListViewModel view_model = new BookmarkListViewModel(((BookmarksViewModel)this.DataContext).User, new DialogService(), new WindowService());
+                    BookmarksViewModel vm = (BookmarksViewModel)this.DataContext;
+                    BookmarkListViewModel view_model = new BookmarkListViewModel(vm.User, vm.WorkStatus, new DialogService(), new WindowService());
                     Page _mainPage = new BookmarkList(view_model);
                     _mainPage.DataContext = view_model;
                     _mainFrame.Navigate(_mainPage);
                 }
                 else if (this.DataContext is ReferencesViewModel)
                 {
-                    ReferenceListViewModel view_model = new ReferenceListViewModel(((ReferencesViewModel)this.DataContext).User, new DialogService(), new WindowService());
+                    ReferencesViewModel vm = (ReferencesViewModel)this.DataContext;
+                    ReferenceListViewModel view_model = new ReferenceListViewModel(vm.User, vm.WorkStatus, new DialogService(), new WindowService());
                     Page _mainPage = new ReferenceList(view_model);
                     _mainPage.DataContext = view_model;
                     _mainFrame.Navigate(_mainPage);

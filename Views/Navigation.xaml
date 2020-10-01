@@ -5,61 +5,94 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MainLib.Views"
+             xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:type="clr-namespace:MainLib.ViewModels.Main;assembly=MainLib.ViewModels"
+             xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+    </UserControl.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <!-- Navigation column -->
-            <ColumnDefinition Width="Auto" />
-            <!-- Content column -->
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <!-- Working overlay -->
+        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}"
+              Panel.ZIndex="1">
+            <Rectangle Fill="#ffffff"
+                       Opacity="0.7" />
+            <Border BorderThickness="0 0 0 3"
+                    BorderBrush="{StaticResource PrimaryColorBrush}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="10">
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <usercontrols:LoadingControl Diameter="50"
+                                                 Color1="{StaticResource PrimaryColor}"
+                                                 Color2="Transparent" />
+                    <Label Content="Working..." 
+                           FontSize="18" 
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="5 0 0 0" />
+                </StackPanel>
+            </Border>
+        </Grid>
+        
+        <!-- Content -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Navigation column -->
+                <ColumnDefinition Width="Auto" />
+                <!-- Content column -->
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <!-- Navigation -->
-        <StackPanel Style="{StaticResource NavigationWrapper}">
-            <!-- Home -->
-            <RadioButton Style="{StaticResource RadioButtonHome}"
+            <!-- Navigation -->
+            <StackPanel Style="{StaticResource NavigationWrapper}">
+                <!-- Home -->
+                <RadioButton Style="{StaticResource RadioButtonHome}"
                          Content="Home" 
                          GroupName="Navigation" 
                          IsChecked="True" 
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.Home}" />
-            <!-- Data entry -->
-            <RadioButton Style="{StaticResource NavigationButton}" 
+                <!-- Data entry -->
+                <RadioButton Style="{StaticResource NavigationButton}" 
                          IsEnabled="{Binding User.IsAdmin}"
                          Content="Data Entry" 
                          Tag="{x:Static materialDesign:PackIconKind.FilePlus}" 
                          GroupName="Navigation" 
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.DataEntry}" />
-            <!-- Data search -->
-            <RadioButton Style="{StaticResource NavigationButton}" 
+                <!-- Data search -->
+                <RadioButton Style="{StaticResource NavigationButton}" 
                          Content="Data Search" 
                          Tag="{x:Static materialDesign:PackIconKind.Search}" 
                          GroupName="Navigation" 
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.DataView}" 
                          Click="RadioButton_Click" />
-            <!-- Bookmark manager -->
-            <RadioButton Style="{StaticResource NavigationButton}"
+                <!-- Bookmark manager -->
+                <RadioButton Style="{StaticResource NavigationButton}"
                          Content="Bookmarks"
                          Tag="{x:Static materialDesign:PackIconKind.Bookmark}"
                          GroupName="Navigation"
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.Bookmarks}" />
-            <!-- Reference manager -->
-            <RadioButton Style="{StaticResource NavigationButton}"
+                <!-- Reference manager -->
+                <RadioButton Style="{StaticResource NavigationButton}"
                          Content="References"
                          Tag="{x:Static materialDesign:PackIconKind.ArrowCollapse}"
                          GroupName="Navigation"
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.References}" />
 
-        </StackPanel>
+            </StackPanel>
 
-        <!-- Content -->
-        <ContentControl Content="{Binding SelectedViewModel}" Grid.Column="1" />
+            <!-- Content -->
+            <ContentControl Content="{Binding SelectedViewModel}" Grid.Column="1" />
 
+        </Grid>
     </Grid>
 </UserControl>

@@ -28,6 +28,7 @@ namespace MainLib.ViewModels.Main
         private int _currentPage;
         private int _userIndex;
         private Article _selectedArticle;
+        private Action<bool> _workStatus;
         private IDialogService _dialogService;
         private IWindowService _windowService;
         private IBrowserService _browserService;
@@ -45,8 +46,8 @@ namespace MainLib.ViewModels.Main
                 _userIndex = value;
 
                 // Change comments and sic on data grid
-                if (RefreshCommand != null && Articles.Count > 0)
-                    RefreshCommand.Execute(null);
+                if (LoadArticlesCommand != null && Articles.Count > 0)
+                    LoadArticlesCommand.Execute(null);
             }
         }
         // User should only allowed to add comment/SIC if they are browsing their own comments and SIC
@@ -106,7 +107,7 @@ namespace MainLib.ViewModels.Main
         public RelayCommand OpenFileCommand { get; set; }
         public RelayCommand NextPageCommand { get; set; }
         public RelayCommand PreviousPageCommand { get; set; }
-        public RelayCommand RefreshCommand { get; set; }
+        public RelayCommand LoadArticlesCommand { get; set; }
         public RelayCommand ExportCommand { get; set; }
         public RelayCommand DeleteArticleCommand { get; set; }
         public RelayCommand MassBookmarkCommand { get; set; }
@@ -120,9 +121,10 @@ namespace MainLib.ViewModels.Main
         #endregion
 
         // Constructor
-        public DataViewViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public DataViewViewModel(User user, Action<bool> workStatus, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
-            User = user;
+            this.User = user;
+            this._workStatus = workStatus;
             this._dialogService = dialogService;
             this._windowService = windowService;
             this._browserService = browserService;
@@ -156,7 +158,7 @@ namespace MainLib.ViewModels.Main
             OpenFileCommand = new RelayCommand(OpenFile);
             NextPageCommand = new RelayCommand(NextPage);
             PreviousPageCommand = new RelayCommand(PreviousPage);
-            RefreshCommand = new RelayCommand(Refresh);
+            LoadArticlesCommand = new RelayCommand(LoadArticles);
             ExportCommand = new RelayCommand(Export, CanExport);
             DeleteArticleCommand = new RelayCommand(DeleteArticle, CanDeleteArticle);
             MassBookmarkCommand = new RelayCommand(MassBookmark);
@@ -175,7 +177,6 @@ namespace MainLib.ViewModels.Main
             FilterKeywords = new ObservableCollection<string>();
 
             // 2. Set up commands
-            LoadArticlesCommand = new RelayCommand(LoadArticles);
             ClearCommand = new RelayCommand(Clear, CanClear);
         }
 
@@ -201,7 +202,7 @@ namespace MainLib.ViewModels.Main
                 _dialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
-        public void NextPage(object input = null)
+        public async void NextPage(object input = null)
         {
             // 1. Check if next page is avaliable
             if (CurrentPage >= TotalPages)
@@ -210,24 +211,10 @@ namespace MainLib.ViewModels.Main
             // 2. Increment current page
             CurrentPage++;
 
-            // 3. Clear existing data grid source
-            Articles.Clear();
-
-            // 4. Fetch artilces from database
-            foreach (Article article in (new ArticleRepo()).LoadArticles(
-                Users[UserIndex], 
-                FilterTitle, 
-                FilterAuthors.ToList(), 
-                FilterKeywords.ToList(),
-                FilterYear,
-                FilterPersonalComment,
-                _offset, 
-                ItemsPerPage))
-            {
-                Articles.Add(article);
-            }
+            // 3. Populate article collection
+            await PopulateArticles();
         }
-        public void PreviousPage(object input = null)
+        public async void PreviousPage(object input = null)
         {
             // 1. Check if previous page is avaliable
             if (CurrentPage <= 1)
@@ -236,59 +223,37 @@ namespace MainLib.ViewModels.Main
             // 2. Decrement current page
             CurrentPage--;
 
-            // 3. Clear existing data grid source
-            Articles.Clear();
-
-            // 4. Fetch artilces from database
-            foreach (Article article in (new ArticleRepo()).LoadArticles(
-                Users[UserIndex], 
-                FilterTitle, 
-                FilterAuthors.ToList(), 
-                FilterKeywords.ToList(),
-                FilterYear,
-                FilterPersonalComment,
-                _offset, 
-                ItemsPerPage))
-            {
-                Articles.Add(article);
-            }
+            // 3. Populate articles collection
+            await PopulateArticles();
         }
-        public void Refresh(object input = null)
+        public async void LoadArticles(object input = null)
         {
+            _workStatus(true);
 
-            // 1. Calculate total pages
-            int record_count = (new ArticleRepo()).GetRecordCount(
-                Users[UserIndex], 
-                FilterTitle, 
-                FilterAuthors.ToList(), 
-                FilterKeywords.ToList(),
-                FilterYear,
-                FilterPersonalComment);
-            if ((record_count % ItemsPerPage) == 0)
-                TotalPages = record_count / ItemsPerPage;
-            else
-                TotalPages = (record_count / ItemsPerPage) + 1;
-
-            CurrentPage = 1;
-
-            // 2. Clear existing data grid source
-            Articles.Clear();
-
-            // 3. Fetch artilces from database
-            foreach (Article article in (new ArticleRepo()).LoadArticles(
-                Users[UserIndex], 
-                FilterTitle, 
-                FilterAuthors.ToList(), 
-                FilterKeywords.ToList(),
-                FilterYear,
-                FilterPersonalComment,
-                _offset, 
-                ItemsPerPage))
+            List<Article> articles = new List<Article>();
+            await Task.Run(() =>
             {
-                Articles.Add(article);
-            }
+                // 2. Calculate total pages
+                int record_count = (new ArticleRepo()).GetRecordCount(
+                    Users[UserIndex],
+                    FilterTitle,
+                    FilterAuthors.ToList(),
+                    FilterKeywords.ToList(),
+                    FilterYear,
+                    FilterPersonalComment);
+                if ((record_count % ItemsPerPage) == 0)
+                    TotalPages = record_count / ItemsPerPage;
+                else
+                    TotalPages = (record_count / ItemsPerPage) + 1;
+
+                CurrentPage = 1;
+            });
+
+            await PopulateArticles();
+
+            _workStatus(false);
         }
-        public void Export(object input = null)
+        public async void Export(object input = null)
         {
             // Destination will be the path chosen from dialog box (Where files should be exported)
             string destination = null;
@@ -298,33 +263,41 @@ namespace MainLib.ViewModels.Main
             // If path was chosen from the dialog box
             if (destination != null)
             {
-                // 2. Get the list of articles which were checked for export
-                List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
+                _workStatus(true);
 
-                foreach (Article article in checked_articles)
+                await Task.Run(() =>
                 {
-                    if (!string.IsNullOrEmpty(article.FileName))
+                    // 2. Get the list of articles which were checked for export
+                    List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
+
+                    foreach (Article article in checked_articles)
                     {
-                        // If title is too long just get the substring to name the .pdf file
-                        if (article.Title.Length > 40)
+                        if (!string.IsNullOrEmpty(article.FileName))
                         {
-                            string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
-                            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-                            string validName = r.Replace(article.Title.Substring(0, 40), "");
-                            File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
-                        }
-                        else
-                        {
-                            string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
-                            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-                            string validName = r.Replace(article.Title, "");
-                            File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                            // If title is too long just get the substring to name the .pdf file
+                            if (article.Title.Length > 40)
+                            {
+                                string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                string validName = r.Replace(article.Title.Substring(0, 40), "");
+                                File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                            }
+                            else
+                            {
+                                string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                string validName = r.Replace(article.Title, "");
+                                File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                            }
                         }
                     }
-                }
+                });
 
+                // 3. Uncheck articles
                 foreach (Article article in Articles)
                     article.Checked = false;
+
+                _workStatus(false);
 
                 _dialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
             }
@@ -360,7 +333,7 @@ namespace MainLib.ViewModels.Main
                 }
 
                 // 4. Refresh the data grid
-                RefreshCommand.Execute(null);
+                LoadArticlesCommand.Execute(null);
             }
         }
         public bool CanDeleteArticle(object input = null)
@@ -375,7 +348,6 @@ namespace MainLib.ViewModels.Main
             foreach (Article article in Articles)
                 article.BMChecked = (bool)input;
         }
-
 
         public void OpenSearchDialog(object input = null)
         {
@@ -395,7 +367,7 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenMassBookmarkManager(object input = null)
         {
-            _windowService.OpenWindow(new MassBookmarkManagerViewModel(User, BMCheckedArticles, _dialogService));
+            _windowService.OpenWindow(new MassBookmarkManagerViewModel(User, _workStatus, BMCheckedArticles, _dialogService));
         }
         public void OpenReferenceManager(object input)
         {
@@ -465,43 +437,8 @@ namespace MainLib.ViewModels.Main
         public ObservableCollection<string> FilterAuthors { get; set; }
         public ObservableCollection<string> FilterKeywords { get; set; }
 
-        public RelayCommand LoadArticlesCommand { get; set; }
         public RelayCommand ClearCommand { get; set; }
 
-        public void LoadArticles(object input = null)
-        {
-            // 1. Calculate total pages
-            int record_count = (new ArticleRepo()).GetRecordCount(
-                Users[UserIndex], 
-                FilterTitle, 
-                FilterAuthors.ToList(), 
-                FilterKeywords.ToList(),
-                FilterYear,
-                FilterPersonalComment);
-            if ((record_count % ItemsPerPage) == 0)
-                TotalPages = record_count / ItemsPerPage;
-            else
-                TotalPages = (record_count / ItemsPerPage) + 1;
-
-            CurrentPage = 1;
-
-            // 2. Clear existing data grid source
-            Articles.Clear();
-
-            // 3. Fetch artilces from database
-            foreach (Article article in (new ArticleRepo()).LoadArticles(
-                Users[UserIndex], 
-                FilterTitle, 
-                FilterAuthors.ToList(), 
-                FilterKeywords.ToList(),
-                FilterYear,
-                FilterPersonalComment,
-                _offset, 
-                ItemsPerPage))
-            {
-                Articles.Add(article);
-            }
-        }
         public void Clear(object input = null)
         {
             FilterTitle = null;
@@ -520,5 +457,35 @@ namespace MainLib.ViewModels.Main
         }
 
         #endregion
+
+        // Private helpers
+        private async Task PopulateArticles()
+        {
+            // 1. Clear existing data grid source
+            Articles.Clear();
+
+            List<Article> articles = new List<Article>();
+
+            await Task.Run(() =>
+            {
+                // 2. Fetch artilces from database
+                foreach (Article article in (new ArticleRepo()).LoadArticles(
+                    Users[UserIndex],
+                    FilterTitle,
+                    FilterAuthors.ToList(),
+                    FilterKeywords.ToList(),
+                    FilterYear,
+                    FilterPersonalComment,
+                    _offset,
+                    ItemsPerPage))
+                {
+                    articles.Add(article);
+                }
+            });
+
+            // 3. Populate article collection
+            foreach (Article article in articles)
+                this.Articles.Add(article);
+        }
     }
 }

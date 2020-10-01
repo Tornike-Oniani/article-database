@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MainLib.ViewModels.Pages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,10 @@ namespace MainLib.Views.Pages
         public BookmarkView()
         {
             InitializeComponent();
+
+            this.Loaded += async (s, e) => {
+                await ((BookmarkViewViewModel)this.DataContext).PopulateBookmarkArticles();
+            };
         }
     }
 }

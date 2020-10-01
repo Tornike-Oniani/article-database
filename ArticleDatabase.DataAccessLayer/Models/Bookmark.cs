@@ -17,13 +17,13 @@ namespace Lib.DataAccessLayer.Models
         public string Name { get; set; }
         public int UserID { get; set; }
         public int Global { get; set; }
-        public ObservableCollection<Article> Articles { get; set; }
+        //public ObservableCollection<Article> Articles { get; set; }
         public int ArticlesCount { get; set; }
 
         // Blank constructor
         public Bookmark()
         {
-            Articles = new ObservableCollection<Article>();
+
         }
 
         /**
@@ -35,12 +35,6 @@ namespace Lib.DataAccessLayer.Models
          *  - Copy by value
          *  [Copys all property values to another bookmark]
          */
-        public void PopulateArticles(User user)
-        {
-            Articles.Clear();
-            foreach (Article article in (new BookmarkRepo()).LoadArticlesForBookmark(user, this))
-                Articles.Add(article);
-        }
         public void GetArticleCount(User user)
         {
             this.ArticlesCount = (new BookmarkRepo()).CountArticlesInBookmark(this);

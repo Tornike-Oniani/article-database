@@ -25,7 +25,6 @@ namespace MainLib.ViewModels.Popups
         private Article _article;
         private string _name;
         private List<Reference> _references;
-        private double _initialHeight;
         private IDialogService _dialogService;
 
         public Visibility NewReferenceVisibility

@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Pages;
 using Lib.Views.Services.Dialogs;
+using Lib.Views.Services.Browser;
 
 namespace MainLib.Views.Pages
 {
@@ -41,13 +42,13 @@ namespace MainLib.Views.Pages
         {
             BookmarkListViewModel vm = (BookmarkListViewModel)this.DataContext;
             Bookmark sent_bookmark = input as Bookmark;
-            sent_bookmark.PopulateArticles(vm.User);
+            Page _bookmarkView = new BookmarkView();
             bool modify_rights = true;
+
             if (sent_bookmark.Global == 1 && !vm.User.IsAdmin)
                 modify_rights = false;
 
-            Page _bookmarkView = new BookmarkView();
-            _bookmarkView.DataContext = new BookmarkViewViewModel(sent_bookmark, vm.User, new DialogService(), modify_rights);
+            _bookmarkView.DataContext = new BookmarkViewViewModel(sent_bookmark, vm.User, vm.WorkStatus, new DialogService(), new BrowserService(), modify_rights);
             NavigationService.Navigate(_bookmarkView);
         }
 

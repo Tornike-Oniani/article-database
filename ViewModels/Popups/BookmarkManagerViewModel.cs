@@ -28,7 +28,6 @@ namespace MainLib.ViewModels.Popups
         private int _global;
         private User _user;
         private Article _article;
-        private double _initialHeight;
         private List<Bookmark> _bookmarks;
         private IDialogService _dialogService;
 

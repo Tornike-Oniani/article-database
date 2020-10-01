@@ -62,7 +62,7 @@
 
         <!-- Data grid -->
         <DataGrid Style="{StaticResource ArticleGrid}"
-                  ItemsSource="{Binding Bookmark.Articles}"
+                  ItemsSource="{Binding Articles}"
                   SelectedItem="{Binding SelectedArticle}"
                   Grid.Row="2">
 

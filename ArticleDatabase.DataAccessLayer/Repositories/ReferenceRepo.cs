@@ -197,5 +197,24 @@ WHERE r.ID = @ReferenceID;
 
             return results;
         }
+        // Count articls in reference
+        public int CountArticlesInReference(Reference reference)
+        {
+            int result;
+
+            string query = $@"SELECT COUNT(ID) FROM tblReferenceArticle WHERE ReferenceID=@ReferenceID;";
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    result = conn.QuerySingleOrDefault<int>(query, new { ReferenceID = reference.ID }, transaction: transaction);
+
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
     }
 }

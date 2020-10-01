@@ -15,14 +15,11 @@ namespace Lib.DataAccessLayer.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public int? ArticleID { get; set; }
-        public ObservableCollection<Article> Articles { get; set; }
         public Article Article { get; set; }
+        public int ArticlesCount { get; set; }
 
         // Constructor
-        public Reference()
-        {
-            Articles = new ObservableCollection<Article>();
-        }
+        public Reference() { }
 
         /** Public methods:
          *  - Populate articles
@@ -32,11 +29,9 @@ namespace Lib.DataAccessLayer.Models
          *  - Copy by value
          *  [Copys all property values to another bookmark]
          */
-        public void PopulateArticles()
+        public void GetArticleCount()
         {
-            Articles.Clear();
-            foreach (Article article in (new ReferenceRepo()).LoadArticlesForReference(this))
-                Articles.Add(article);
+            this.ArticlesCount = new ReferenceRepo().CountArticlesInReference(this);
         }
         public void SetMainArticle()
         {

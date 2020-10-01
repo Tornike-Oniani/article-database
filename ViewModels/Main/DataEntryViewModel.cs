@@ -79,6 +79,7 @@ namespace MainLib.ViewModels.Main
         private string _author;
         private string _keyword;
         private string _selectedFile;
+        private Action<bool> _workingStatus;
         private IDialogService _dialogService;
         private IWindowService _windowService;
         private IBrowserService _browserService;
@@ -118,11 +119,12 @@ namespace MainLib.ViewModels.Main
         public ObservableCollection<string> ItemsCollection { get; set; }
 
         // Constructor
-        public DataEntryViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public DataEntryViewModel(User user, Action<bool> workingStatus, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
             // 1. Initialize article and User
-            Article = new Article();
-            User = user;
+            this.Article = new Article();
+            this.User = user;
+            this._workingStatus = workingStatus;
             this.Bookmarks = new List<Bookmark>();
             this.References = new List<Reference>();
             this._dialogService = dialogService;
@@ -149,46 +151,51 @@ namespace MainLib.ViewModels.Main
             // Get the selected file
             SelectedFile = result;
         }
-        public void SaveArticle(object input = null)
+        public async void SaveArticle(object input = null)
         {
-            ArticleRepo articleRepo = new ArticleRepo();
+            _workingStatus(true);
 
-            // Regex to switch multiple spaces into one (Restricts user to enter more than one space in Title textboxes)
-            RegexOptions options = RegexOptions.None;
-            Regex regex = new Regex("[ ]{2,}", options);
+            await Task.Run(() =>
+            {
+                ArticleRepo articleRepo = new ArticleRepo();
 
-            // 1. Format title
-            Article.Title = Article.Title.Trim();
-            Article.Title = regex.Replace(Article.Title, " ");
+                // Regex to switch multiple spaces into one (Restricts user to enter more than one space in Title textboxes)
+                RegexOptions options = RegexOptions.None;
+                Regex regex = new Regex("[ ]{2,}", options);
 
-            // 2. Add article to database
-            articleRepo.SaveArticle(Article, User);
+                // 1. Format title
+                Article.Title = Article.Title.Trim();
+                Article.Title = regex.Replace(Article.Title, " ");
 
-            // 3. Copy selected file to root folder with the new ID-based name
-            File.Copy(SelectedFile, Path.Combine(Environment.CurrentDirectory, "Files\\") + Article.FileName + ".pdf");
+                // 2. Add article to database
+                articleRepo.SaveArticle(Article, User);
 
-            // 4. Move the selected file into "Done" subfolder
-            string done_path = Path.GetDirectoryName(SelectedFile) + "\\Done\\";
-            Directory.CreateDirectory(Path.GetDirectoryName(SelectedFile) + "\\Done");
-            File.Move(SelectedFile, done_path + System.IO.Path.GetFileName(SelectedFile));
+                // 3. Copy selected file to root folder with the new ID-based name
+                File.Copy(SelectedFile, Path.Combine(Environment.CurrentDirectory, "Files\\") + Article.FileName + ".pdf");
 
-            // 4.1 Retrieve id (in reality we retrieve whole article) of newly added article
-            Article currently_added_article = articleRepo.GetArticleWithTitle(Article.Title);
+                // 4. Move the selected file into "Done" subfolder
+                string done_path = Path.GetDirectoryName(SelectedFile) + "\\Done\\";
+                Directory.CreateDirectory(Path.GetDirectoryName(SelectedFile) + "\\Done");
+                File.Move(SelectedFile, done_path + System.IO.Path.GetFileName(SelectedFile));
 
-            // 4.2 Add bookmarks
-            foreach (Bookmark bookmark in Bookmarks)
-                new BookmarkRepo().AddArticleToBookmark(bookmark, currently_added_article);
+                // 4.1 Retrieve id (in reality we retrieve whole article) of newly added article
+                Article currently_added_article = articleRepo.GetArticleWithTitle(Article.Title);
 
-            // 4.3 Add references
-            foreach (Reference reference in References)
-                new ReferenceRepo().AddArticleToReference(reference, currently_added_article);
+                // 4.2 Add bookmarks
+                foreach (Bookmark bookmark in Bookmarks)
+                    new BookmarkRepo().AddArticleToBookmark(bookmark, currently_added_article);
+
+                // 4.3 Add references
+                foreach (Reference reference in References)
+                    new ReferenceRepo().AddArticleToReference(reference, currently_added_article);
+            });
 
             // 5. Clear article attributes
             ClearArticleAttributesCommand.Execute(null);
             Bookmarks.Clear();
             References.Clear();
 
-            new Tracker().TrackCreate(Article);
+            _workingStatus(false);
         }
         public void ClearArticleAttributes(object input = null)
         {

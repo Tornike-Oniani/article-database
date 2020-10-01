@@ -19,6 +19,7 @@ namespace MainLib.ViewModels.Popups
     {
         private User _user;
         private List<Article> _articles;
+        private Action<bool> _workStatus;
         private IDialogService _dialogService;
 
         public ObservableCollection<Bookmark> Bookmarks { get; set; }
@@ -31,7 +32,7 @@ namespace MainLib.ViewModels.Popups
 
         public RelayCommand AddArticlesToBookmarkCommand { get; set; }
 
-        public MassBookmarkManagerViewModel(User user, List<Article> articles, IDialogService dialogService)
+        public MassBookmarkManagerViewModel(User user, Action<bool> workStatus, List<Article> articles, IDialogService dialogService)
         {
             this.Title = "Save to...";
             this._dialogService = dialogService;
@@ -39,6 +40,7 @@ namespace MainLib.ViewModels.Popups
             // 1. Set starting state
             this._user = user;
             this._articles = articles;
+            this._workStatus = workStatus;
             this.Bookmarks = new ObservableCollection<Bookmark>(PopulateBookmarks());
             _bookmarkBoxesCollection = new CollectionViewSource();
             _bookmarkBoxesCollection.Source = Bookmarks;
@@ -47,16 +49,24 @@ namespace MainLib.ViewModels.Popups
             AddArticlesToBookmarkCommand = new RelayCommand(AddArticlesToBookmark, CanAddArticlesToBookmark);
         }
 
-        public void AddArticlesToBookmark(object input)
+        public async void AddArticlesToBookmark(object input)
         {
-            foreach (Article article in _articles)
-                if (!(new BookmarkRepo()).CheckArticleInBookmark(SelectedBookmark, article))
-                    (new BookmarkRepo()).AddArticleToBookmark(SelectedBookmark, article);
-
-            _dialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
-
             // Close window
             (input as ICommand).Execute(null);
+
+            _workStatus(true);
+
+            await Task.Run(() =>
+            {
+                BookmarkRepo repo = new BookmarkRepo();
+                foreach (Article article in _articles)
+                    if (!repo.CheckArticleInBookmark(SelectedBookmark, article))
+                        repo.AddArticleToBookmark(SelectedBookmark, article);
+            });
+
+            _workStatus(false);
+
+            _dialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
         }
         public bool CanAddArticlesToBookmark(object input = null)
         {

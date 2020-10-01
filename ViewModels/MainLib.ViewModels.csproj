@@ -50,7 +50,7 @@
     <Compile Include="Commands\UpdateViewCommand.cs" />
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="NavigationViewModel.cs" />
-    <Compile Include="Main\BookmakrsViewModel.cs" />
+    <Compile Include="Main\BookmarksViewModel.cs" />
     <Compile Include="Main\DataEntryViewModel.cs" />
     <Compile Include="Main\DataViewViewModel.cs" />
     <Compile Include="Main\HomeViewModel.cs" />

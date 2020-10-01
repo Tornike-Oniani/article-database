@@ -60,6 +60,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CheckToListConverter.cs" />
     <Compile Include="Converters\DialogTypeToIconConverter.cs" />
     <Compile Include="Converters\ListToVisibilityConverter.cs" />
@@ -107,6 +108,9 @@
     <Compile Include="Services\Windows\WindowService.cs" />
     <Compile Include="UserControls\CollectionBox.xaml.cs">
       <DependentUpon>CollectionBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\LoadingControl.xaml.cs">
+      <DependentUpon>LoadingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Widget.xaml.cs">
       <DependentUpon>Widget.xaml</DependentUpon>
@@ -157,6 +161,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\CollectionBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\LoadingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

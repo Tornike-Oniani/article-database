@@ -54,7 +54,7 @@
 
         <!-- Data grid -->
         <DataGrid Style="{StaticResource ArticleGrid}"
-                  ItemsSource="{Binding Reference.Articles}"
+                  ItemsSource="{Binding Articles}"
                   SelectedItem="{Binding SelectedArticle}"
                   Grid.Row="1">
 

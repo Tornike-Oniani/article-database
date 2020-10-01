@@ -11,10 +11,12 @@ namespace MainLib.ViewModels.Main
     public class ReferencesViewModel : BaseViewModel
     {
         public User User { get; set; }
+        public Action<bool> WorkStatus { get; set; }
 
-        public ReferencesViewModel(User user)
+        public ReferencesViewModel(User user, Action<bool> workStatus)
         {
             this.User = user;
+            this.WorkStatus = workStatus;
         }
     }
 }

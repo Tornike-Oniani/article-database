@@ -18,8 +18,7 @@ namespace MainLib.ViewModels.Pages
 {
     public class BookmarkListViewModel : BaseViewModel
     {
-        private string _filterText;
-        private string _filterTextGlobal;
+        // Private members
         IDialogService _dialogService;
         IWindowService _windowService;
 
@@ -35,26 +34,7 @@ namespace MainLib.ViewModels.Pages
         // Container of global bookmarks
         public ObservableCollection<Bookmark> GlobalBookmarks { get; set; }
         public ICollectionView GlobalBookmarksCollection { get { return _globalBookmarksCollection.View; } }
-        public string FilterText
-        {
-            get { return _filterText; }
-            set
-            {
-                _filterText = value;
-                _bookmarksCollection.View.Refresh();
-                OnPropertyChanged("FilterText");
-            }
-        }
-        public string FilterTextGlobal
-        {
-            get { return _filterTextGlobal; }
-            set
-            {
-                _filterTextGlobal = value;
-                _globalBookmarksCollection.View.Refresh();
-                OnPropertyChanged("FilterTextGlobal");
-            }
-        }
+        public Action<bool> WorkStatus { get; set; }
 
         /**
          * Commands:
@@ -67,9 +47,10 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand DeleteBookmarkCommand { get; set; }
 
         // Constructor
-        public BookmarkListViewModel(User user, IDialogService dialogService, IWindowService windowService)
+        public BookmarkListViewModel(User user, Action<bool> workStatus, IDialogService dialogService, IWindowService windowService)
         {
             this.User = user;
+            this.WorkStatus = workStatus;
             this._dialogService = dialogService;
             this._windowService = windowService;
             Bookmarks = new ObservableCollection<Bookmark>();
@@ -111,29 +92,61 @@ namespace MainLib.ViewModels.Pages
         /**
          * Public methods
          */
-        public void PopulateBookmarks(bool global = false)
+        public async void PopulateBookmarks(bool global = false)
         {
+            WorkStatus(true);
+
             // 1. Clear bookmarks
             Bookmarks.Clear();
             GlobalBookmarks.Clear();
 
             // 2. Populate local bookmarks
-            foreach (Bookmark bookmark in (new BookmarkRepo()).LoadBookmarks(User))
-            {
-                // Populate articles colletion for each bookmark
-                //bookmark.PopulateArticles(User);
-                bookmark.GetArticleCount(User);
-                Bookmarks.Add(bookmark);
-            }
+            await Populate(false);
 
             // 3. Populate global bookmarks
-            foreach (Bookmark bookmark in (new BookmarkRepo()).LoadGlobalBookmarks())
-            {
-                //bookmark.PopulateArticles(User);
-                bookmark.GetArticleCount(User);
-                GlobalBookmarks.Add(bookmark);
-            }
+            await Populate(true);
+
+            WorkStatus(false);
         }
 
+        private async Task Populate(bool global)
+        {
+            List<Bookmark> bookmarks = new List<Bookmark>();
+            BookmarkRepo repo = new BookmarkRepo();
+
+            if (global)
+            {
+                await Task.Run(() =>
+                {
+                    // 3. Populate global bookmarks
+                    foreach (Bookmark bookmark in (new BookmarkRepo()).LoadGlobalBookmarks())
+                    {
+                        //bookmark.PopulateArticles(User);
+                        bookmark.GetArticleCount(User);
+                        bookmarks.Add(bookmark);
+                    }
+                });
+
+                foreach (Bookmark bookmark in bookmarks)
+                    GlobalBookmarks.Add(bookmark);
+            }
+            else
+            {
+                await Task.Run(() =>
+                {
+                    // 2. Populate local bookmarks
+                    foreach (Bookmark bookmark in repo.LoadBookmarks(User))
+                    {
+                        // Populate articles colletion for each bookmark
+                        //bookmark.PopulateArticles(User);
+                        bookmark.GetArticleCount(User);
+                        bookmarks.Add(bookmark);
+                    }
+                });
+
+                foreach (Bookmark bookmark in bookmarks)
+                    Bookmarks.Add(bookmark);
+            }
+        }
     }
 }

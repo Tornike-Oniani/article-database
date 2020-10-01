@@ -39,8 +39,11 @@ namespace MainLib.Views.Pages
          */
         public void OpenReference(object input)
         {
+            ReferenceListViewModel vm = (ReferenceListViewModel)this.DataContext;
+            Reference sent_reference = input as Reference;
             Page _referenceView = new ReferenceView();
-            _referenceView.DataContext = new ReferenceViewViewModel(input as Reference, ((ReferenceListViewModel)this.DataContext).User, new DialogService());
+
+            _referenceView.DataContext = new ReferenceViewViewModel(sent_reference, vm.User, vm.WorkStatus, new DialogService());
             NavigationService.Navigate(_referenceView);
         }
     }

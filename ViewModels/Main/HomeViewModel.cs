@@ -19,6 +19,7 @@ namespace MainLib.ViewModels.Main
     {
         // Private members
         private User _user;
+        private Action<bool> _workStatus;
         private IDialogService _dialogService;
         private IBrowserService _browserService;
         private IWindowService _windowService;
@@ -35,9 +36,10 @@ namespace MainLib.ViewModels.Main
         public RelayCommand ImportCommand { get; set; }
 
         // Constructor
-        public HomeViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public HomeViewModel(User user, Action<bool> workStatus, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
             this.User = user;
+            this._workStatus = workStatus;
             this._dialogService = dialogService;
             this._windowService= windowService;
             this._browserService = browserService;
@@ -47,7 +49,7 @@ namespace MainLib.ViewModels.Main
         }
 
         // Command actions
-        public void Validate(object input = null)
+        public async void Validate(object input = null)
         {
             // Path to Logs folder (root directory + Logs)
             string current_directory = System.IO.Path.Combine(Environment.CurrentDirectory, "Logs\\");
@@ -64,22 +66,30 @@ namespace MainLib.ViewModels.Main
                 // If any mismatch was found create log file and write mismatched files in there
                 if (mismatch.Length > 0)
                 {
-                    // Current date will be set as file name
-                    DateTime current_date = DateTime.Today;
-                    // Full file path including its name
-                    string file_path = current_directory + current_date.ToLongDateString() + ".txt";
+                    _workStatus(true);
 
-                    // Open or Create file
-                    using (StreamWriter sw = File.AppendText(file_path))
+                    await Task.Run(() =>
                     {
-                        // Start writing log startin with current hour as timestamp
-                        sw.WriteLine(current_date.ToLongTimeString());
-                        sw.WriteLine("Following files are missing:");
-                        // Write each file name from mismatch folder into text file
-                        foreach (string file in mismatch)
-                            sw.WriteLine(file);
-                        sw.WriteLine("");
-                    }
+                        // Current date will be set as file name
+                        DateTime current_date = DateTime.Today;
+                        // Full file path including its name
+                        string file_path = current_directory + current_date.ToLongDateString() + ".txt";
+
+                        // Open or Create file
+                        using (StreamWriter sw = File.AppendText(file_path))
+                        {
+                            // Start writing log startin with current hour as timestamp
+                            sw.WriteLine(current_date.ToLongTimeString());
+                            sw.WriteLine("Following files are missing:");
+                            // Write each file name from mismatch folder into text file
+                            foreach (string file in mismatch)
+                                sw.WriteLine(file);
+                            sw.WriteLine("");
+                        }
+                    });
+
+                    _workStatus(false);
+
                     _dialogService.OpenDialog(new DialogOkViewModel("Some files are missing see Logs for more info...", "Result", DialogType.Warning));
                 }
                 else

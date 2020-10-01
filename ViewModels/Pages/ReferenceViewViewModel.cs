@@ -11,12 +11,15 @@ using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services;
 using Lib.ViewModels.Services.Dialogs;
+using System.Collections.ObjectModel;
+using System.Windows.Navigation;
 
 namespace MainLib.ViewModels.Pages
 {
     public class ReferenceViewViewModel : BaseViewModel
     {
         private User _user;
+        private Action<bool> _workStatus;
         private IDialogService _dialogService;
 
         /**
@@ -27,6 +30,7 @@ namespace MainLib.ViewModels.Pages
          */
         public Reference Reference { get; set; }
         public Article SelectedArticle { get; set; }
+        public ObservableCollection<Article> Articles { get; set; }
         public User User
         {
             get { return _user; }
@@ -50,10 +54,12 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand CopyCommand { get; set; }
 
         // Constructor
-        public ReferenceViewViewModel(Reference reference, User user, IDialogService dialogService)
+        public ReferenceViewViewModel(Reference reference, User user, Action<bool> workStatus, IDialogService dialogService)
         {
             this.Reference = reference;
             this.User = user;
+            this.Articles = new ObservableCollection<Article>();
+            this._workStatus = workStatus;
             this._dialogService = dialogService;
 
             // Initialize commands
@@ -65,6 +71,25 @@ namespace MainLib.ViewModels.Pages
         /**
          * Command actions
          */
+        public async Task PopulateReferenceArticles()
+        {
+            _workStatus(true);
+
+            Articles.Clear();
+
+            List<Article> articles = new List<Article>();
+
+            await Task.Run(() =>
+            {
+                foreach (Article article in (new ReferenceRepo()).LoadArticlesForReference(Reference))
+                    articles.Add(article);
+            });
+
+            foreach (Article article in articles)
+                Articles.Add(article);
+
+            _workStatus(false);
+        }
         public void OpenFile(object input = null)
         {
             // 1. If no item was selected return
@@ -86,13 +111,13 @@ namespace MainLib.ViewModels.Pages
                 _dialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
-        public void RemoveArticle(object input = null)
+        public async void RemoveArticle(object input = null)
         {
             // 1. Remove article from bookmark in database
             (new ReferenceRepo()).RemoveArticleFromReference(Reference, SelectedArticle);
 
             // 2. Refresh articles collection
-            Reference.PopulateArticles();
+            await PopulateReferenceArticles();
         }
         public void Copy(object input = null)
         {

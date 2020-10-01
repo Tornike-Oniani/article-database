@@ -273,7 +273,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="10 0 0 0">
                     <TextBlock VerticalAlignment="Center" Text="Items per page:" FontSize="16" />
                     <TextBox Text="{Binding ItemsPerPage}" Width="50" Margin="5 0 10 0"/>
-                    <Button Command="{Binding RefreshCommand}">
+                    <Button Command="{Binding LoadArticlesCommand}">
                         <materialDesign:PackIcon Kind="Refresh" />
                     </Button>
                 </StackPanel>

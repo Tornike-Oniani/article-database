@@ -30,6 +30,7 @@ namespace MainLib.ViewModels.Pages
             get { return _user; }
             set { _user = value; OnPropertyChanged("User"); }
         }
+        public Action<bool> WorkStatus { get; set; }
 
 
         /**
@@ -43,9 +44,10 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand DeleteReferenceCommand { get; set; }
 
         // Constructor
-        public ReferenceListViewModel(User user, IDialogService dialogService, IWindowService windowService)
+        public ReferenceListViewModel(User user, Action<bool> workStatus, IDialogService dialogService, IWindowService windowService)
         {
             this.User = user;
+            this.WorkStatus = workStatus;
             this._dialogService = dialogService;
             this._windowService = windowService;
             References = new ObservableCollection<Reference>();
@@ -85,19 +87,37 @@ namespace MainLib.ViewModels.Pages
         /**
          * Public methods
          */
-        public void PopulateReferences(bool global = false)
+        public async void PopulateReferences(bool global = false)
         {
+            WorkStatus(true);
+
             // 1. Clear bookmarks
             References.Clear();
 
             // 2. Populate references
-            foreach (Reference reference in (new ReferenceRepo()).LoadReferences())
+            await Populate();
+
+            WorkStatus(false);
+        }
+
+        public async Task Populate()
+        {
+            List<Reference> references = new List<Reference>();
+
+            await Task.Run(() =>
             {
-                reference.PopulateArticles();
-                reference.SetMainArticle();
-                // Populate articles colletion for each bookmark
-                References.Add(reference);
-            }
+                foreach (Reference reference in new ReferenceRepo().LoadReferences())
+                {
+                    // Populate articles colletion for each bookmark
+                    //reference.PopulateArticles();
+                    reference.GetArticleCount();
+                    reference.SetMainArticle();
+                    references.Add(reference);
+                }
+            });
+
+            foreach (Reference reference in references)
+                this.References.Add(reference);
         }
     }
 }
