@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CheckToListConverter.cs" />
+    <Compile Include="Converters\DialogTypeToColorConverter.cs" />
     <Compile Include="Converters\DialogTypeToIconConverter.cs" />
     <Compile Include="Converters\ListToVisibilityConverter.cs" />
     <Compile Include="Converters\NumberToSICConverter.cs" />
@@ -159,6 +160,10 @@
     <Page Include="Services\Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\DialogStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\CollectionBox.xaml">
       <Generator>MSBuild:Compile</Generator>

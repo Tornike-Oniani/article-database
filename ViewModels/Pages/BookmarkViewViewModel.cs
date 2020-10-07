@@ -98,7 +98,7 @@ namespace MainLib.ViewModels.Pages
 
             List<Article> articles = new List<Article>();
 
-            await Task.Run(async () =>
+            await Task.Run(() =>
             {
                 foreach (Article article in (new BookmarkRepo()).LoadArticlesForBookmark(_user, this.Bookmark))
                     articles.Add(article);

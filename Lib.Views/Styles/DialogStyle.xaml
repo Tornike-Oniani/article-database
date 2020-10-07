@@ -1,0 +1,79 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:local="clr-namespace:Lib.Views.Styles"
+                    xmlns:converters="clr-namespace:Lib.Views.Converters">
+
+    <converters:DialogTypeToColorConverter x:Key="DialogTypeToColor" />
+
+    <Style x:Key="DialogWindowStyle1" TargetType="{x:Type Window}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <!-- Outer border with a drop shadow margin -->
+                    <Border Padding="10">
+                        <!-- Main window outline-->
+                        <Grid>
+                            <!-- Window with border and drop shadow -->
+                            <Border Background="White">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="0" Opacity="1" />
+                                </Border.Effect>
+                            </Border>
+
+                            <!-- Main window content -->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <!-- Title bar -->
+                                    <RowDefinition Height="40" />
+                                    <!-- Drop shadow-->
+                                    <RowDefinition Height="Auto" />
+                                    <!-- Window Content -->
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Title bar -->
+                                <Border Background="{Binding Type, Converter={StaticResource DialogTypeToColor}}" Grid.Row="0">
+                                    <Grid Panel.ZIndex="1">
+                                        <Grid.ColumnDefinitions>
+                                            <!-- Title -->
+                                            <ColumnDefinition Width="Auto" />
+                                            <!-- Space -->
+                                            <ColumnDefinition Width="*" />
+                                            <!-- Window control buttons -->
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue=DummyText}"
+                                                   FontSize="18"
+                                                   Foreground="#ffffff"
+                                                   Padding="10 10 10 10"
+                                                   VerticalAlignment="Center"
+                                                   Grid.Column="0" />
+
+                                        <!-- Window control buttons -->
+                                        <StackPanel Orientation="Horizontal" Grid.Column="2">
+                                            <!--<Button Style="{StaticResource WindowControlButton}" Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}"  Command="{Binding MinimizeCommand}" />
+                                            <Button Style="{StaticResource WindowControlButton}" Tag="{x:Static materialDesign:PackIconKind.WindowMaximize}"  Command="{Binding MaximizeCommand}" IsEnabled="False" />-->
+                                            <Button Style="{StaticResource WindowCloseButton}"
+                                                    Foreground="#ffffff"
+                                                    Tag="{x:Static materialDesign:PackIconKind.WindowClose}" 
+                                                    Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <Border Grid.Row="2">
+                                    <ContentPresenter Content="{TemplateBinding Content}" />
+                                </Border>
+
+                            </Grid>
+
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -59,7 +59,7 @@ namespace MainLib.Views.Main
             if ((new ArticleRepo()).Exists(title, out file))
             {
 
-                if (new DialogService().OpenDialog(new DialogYesNoViewModel("An article with the given title already exists in Database, do you want to see the file?", "Duplicate", DialogType.Question)))
+                if (new DialogService().OpenDialog(new DialogYesNoViewModel("An article with the given title already exists in Database, do you want to see the file?", "Duplicate", DialogType.Warning)))
                 {
                     // User clicked yes
                     // Set the file path with filename and FolderPath static attribute
