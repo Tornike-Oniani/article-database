@@ -102,8 +102,6 @@ namespace MainLib.ViewModels.Pages
             {
                 foreach (Article article in (new BookmarkRepo()).LoadArticlesForBookmark(_user, this.Bookmark))
                     articles.Add(article);
-
-                await Task.Delay(2000);
             });
 
             foreach (Article article in articles)
@@ -185,6 +183,8 @@ namespace MainLib.ViewModels.Pages
         {
             // Destination will be the path chosen from dialog box (Where files should be exported)
             string destination = null;
+
+            destination = _browserService.OpenFolderDialog();
 
             // If path was chosen from the dialog box
             if (destination != null)

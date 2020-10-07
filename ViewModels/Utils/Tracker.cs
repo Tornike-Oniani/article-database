@@ -47,7 +47,6 @@ namespace MainLib.ViewModels.Utils
 
     }
 
-
     public class Tracker
     {
         private string syncPath;
