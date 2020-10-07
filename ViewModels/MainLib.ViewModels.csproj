@@ -68,6 +68,7 @@
     <Compile Include="Popups\ReferenceManagerViewModel.cs" />
     <Compile Include="Popups\SearchDialogViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterViewModel.cs" />
     <Compile Include="UIStructs\BookmarkBox.cs" />
     <Compile Include="UIStructs\ReferenceBox.cs" />
     <Compile Include="Utils\Tracker.cs" />

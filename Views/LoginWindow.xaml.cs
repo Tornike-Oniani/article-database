@@ -36,10 +36,22 @@ namespace Main
         private void LoginWindow_Loaded(object sender, RoutedEventArgs e)
         {
             _viewModel = new LoginViewModel(new DialogService(), new WindowService(), new BrowserService());
+            _viewModel.Window = this;
             this.DataContext = _viewModel;
             txbUsername.Focus();
 
             ConfigurationManager.AppSettings["Attach"] = "ATTACH DATABASE \'" + Environment.CurrentDirectory.ToString() + "\\" + "User.sqlite3\'" + "AS user;";
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            txbPassword.Password = null;
+            txbRegisterUsername.Focus();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            txbUsername.Focus();
         }
     }
 }

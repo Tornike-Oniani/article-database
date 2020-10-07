@@ -6,6 +6,9 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:Main"
         xmlns:base="clr-namespace:Lib.Views;assembly=Lib.Views"
+        xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
+        xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
+        xmlns:localConverters="clr-namespace:MainLib.Views.Converters"
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -13,8 +16,38 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
         Title="LoginWindow"  SizeToContent="Height" Height="Auto" Width="500">
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+        <localConverters:CurrentPageToBoolVisibilityConverter x:Key="CurrentPageToVisibility" />
+
+        <Storyboard x:Key="SlideRight">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                             From="0" To="490"
+                             Duration="0:0:0.3" />
+        </Storyboard>
+
+        <Storyboard x:Key="SlideLeft">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                             From="490" To="0" 
+                             Duration="0:0:0.3" />
+        </Storyboard>
+        
+        <Style x:Key="SlideGrid" TargetType="{x:Type Grid}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsVisible}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource SlideLeft}" />
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard Storyboard="{StaticResource SlideRight}" />
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
     <Window.InputBindings>
-        <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Key="Enter" />
+        <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=txbPassword}" Key="Enter" />
     </Window.InputBindings>
 
     <WindowChrome.WindowChrome>
@@ -27,78 +60,217 @@
     </WindowChrome.WindowChrome>
 
     <Grid>
-        <!-- Login fields -->
-        <Border Padding="30 20 30 10" Grid.Column="0">
-            <StackPanel>
-                <Image Source="/Lib.Styles;component/Images/logo.png" 
+        <!-- Working overlay -->
+        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}, FallbackValue=Collapsed}"
+              Panel.ZIndex="1">
+            <Rectangle Fill="#ffffff"
+                       Opacity="0.7" />
+            <Border BorderThickness="0 0 0 3"
+                    BorderBrush="{StaticResource PrimaryColorBrush}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="10">
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <usercontrols:LoadingControl Diameter="50"
+                                                 Color1="{StaticResource PrimaryColor}"
+                                                 Color2="Transparent" />
+                    <Label Content="Working..." 
+                           FontSize="18" 
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="5 0 0 0" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Login -->
+        <Grid Visibility="{Binding CurrentPage, Converter={StaticResource CurrentPageToVisibility}, ConverterParameter=Login}">
+            <!-- Login fields -->
+            <Border Padding="30 20 30 10">
+                <StackPanel>
+                    <Image Source="/Lib.Styles;component/Images/logo.png" 
                        Width="70"
                        RenderOptions.BitmapScalingMode="Fant"
                        HorizontalAlignment="Left"/>
 
-                <TextBlock Text="Sign in with your account "
+                    <TextBlock Text="Sign in with your Account"
                            FontSize="20"
                            FontWeight="Bold" 
                            Margin="0 50 0 30"/>
 
-                <Grid Margin="0 0 0 10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                    <!-- Username -->
+                    <Grid Margin="0 0 0 10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                    <materialDesign:PackIcon Kind="Account" 
+                        <materialDesign:PackIcon Kind="Account" 
                                              Foreground="Gray" 
                                              Width="25" 
                                              Height="25" 
                                              VerticalAlignment="Bottom" 
                                              Margin="0 0 8 0" 
                                              Grid.Column="0" />
-                    <TextBox x:Name="txbUsername" 
+                        <TextBox x:Name="txbUsername" 
                              Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" 
                              materialDesign:HintAssist.Hint="Username" 
                              materialDesign:HintAssist.IsFloating="True"
                              Grid.Column="1" />
-                </Grid>
+                    </Grid>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                    <!-- Password -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                    <materialDesign:PackIcon Kind="Key" 
+                        <materialDesign:PackIcon Kind="Key" 
                                              Foreground="Gray"
                                              Width="25" 
                                              Height="25" 
                                              VerticalAlignment="Bottom" 
                                              Margin="0 0 8 0" 
                                              Grid.Column="0" />
-                    <TextBox Text="{Binding CurrentUser.Password, UpdateSourceTrigger=PropertyChanged}" 
-                             materialDesign:HintAssist.Hint="Password" 
-                             materialDesign:HintAssist.IsFloating="True"
-                             FontFamily="Fonts/password.ttf"
-                             Grid.Column="1" />
-                </Grid>
+                        <PasswordBox x:Name="txbPassword"
+                                 materialDesign:HintAssist.Hint="Password"
+                                 materialDesign:HintAssist.IsFloating="True" 
+                                 Grid.Column="1" />
+                    </Grid>
 
-                <Grid Margin="0 20 0  25">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+                    <!-- Buttons -->
+                    <Grid Margin="0 20 0 25">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                    <Button Content="Log In" 
+                        <Button Content="Log In" 
                             Command="{Binding LoginCommand}" 
-                            CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                            CommandParameter="{Binding ElementName=txbPassword}" 
                             Margin="0 0 5 0" 
                             Grid.Column="0">
-                    </Button>
-                    <Button Content="Register" 
-                            Command="{Binding RegisterCommand}" 
+                        </Button>
+                        <Button Content="Register" 
+                            Command="{Binding ShowRegisterCommand}"
+                            Click="Button_Click"
                             Margin="5 0 0 0" 
                             Grid.Column="2" />
-                </Grid>
-            </StackPanel>
-        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
 
+        </Grid>
+        
+        <!-- Register-->
+        <Grid Style="{StaticResource SlideGrid}" Visibility="{Binding CurrentPage, Converter={StaticResource CurrentPageToVisibility}, ConverterParameter=Register}">
+            <Grid.RenderTransform>
+                <TranslateTransform X="490" Y="0" />
+            </Grid.RenderTransform>
+            <Border Padding="30 15 30 10">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="UserAdd"
+                                             Width="70"
+                                             Height="70"
+                                             Margin="0"
+                                             Padding="0"
+                                             Foreground="{StaticResource PrimaryColorBrush}" />
+
+                    <TextBlock Text="Register new Account"
+                               FontSize="20"
+                               FontWeight="Bold" 
+                               Margin="0 10 0 25"/>
+
+                    <!-- Username -->
+                    <Grid Margin="0 0 0 10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:PackIcon Kind="Account" 
+                                         Foreground="Gray" 
+                                         Width="25" 
+                                         Height="25" 
+                                         VerticalAlignment="Bottom" 
+                                         Margin="0 0 8 0" 
+                                         Grid.Column="0" />
+                        <TextBox x:Name="txbRegisterUsername"
+                                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
+                                 materialDesign:HintAssist.Hint="Username" 
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 Grid.Column="1" />
+                    </Grid>
+
+                    <!-- Password -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:PackIcon Kind="Key" 
+                                         Foreground="Gray"
+                                         Width="25" 
+                                         Height="25" 
+                                         VerticalAlignment="Bottom" 
+                                         Margin="0 0 8 0" 
+                                         Grid.Column="0" />
+
+                        <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Password"
+                                 materialDesign:HintAssist.IsFloating="True" 
+                                 Grid.Column="1" />
+                    </Grid>
+
+                    <!-- Confirm Password -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <materialDesign:PackIcon Kind="KeyAdd"
+                                         Foreground="Gray"
+                                         Width="25" 
+                                         Height="25" 
+                                         VerticalAlignment="Bottom" 
+                                         Margin="0 0 8 0" 
+                                         Grid.Column="0" />
+
+                        <TextBox Text="{Binding PasswordConfirm, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Confirm Password"
+                                 materialDesign:HintAssist.IsFloating="True" 
+                                 Grid.Column="1" />
+                    </Grid>
+
+                    <!-- Buttons -->
+                    <Grid Margin="0 20 0 25">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Content="Register" 
+                                Command="{Binding RegisterCommand}" 
+                                CommandParameter="{Binding ElementName=tbxPassword}" 
+                                Click="Button_Click_1"
+                                Margin="0 0 5 0" 
+                                Grid.Column="0">
+                        </Button>
+                        <Button Content="Cancel" 
+                                Command="{Binding CancelCommand}" 
+                                CommandParameter="{Binding ElementName=tbxPassword}" 
+                                Click="Button_Click_1"
+                                Margin="5 0 0 0" 
+                                Grid.Column="2" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
+
 </base:WindowBase>

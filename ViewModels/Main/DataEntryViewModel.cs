@@ -188,6 +188,9 @@ namespace MainLib.ViewModels.Main
                 // 4.3 Add references
                 foreach (Reference reference in References)
                     new ReferenceRepo().AddArticleToReference(reference, currently_added_article);
+
+                // 5. Track article create
+                new Tracker().TrackCreate(User, Article.Title);
             });
 
             // 5. Clear article attributes
@@ -230,41 +233,54 @@ namespace MainLib.ViewModels.Main
         public RelayCommand GenerateRandomArticlesCommand { get; set; }
 
         // TEST
-        public void GenerateRandomArticles(object input = null)
+        public async void GenerateRandomArticles(object input = null)
         {
             List<Article> random_articles = new List<Article>();
             Article random_article;
             string prevTitle = "";
 
-            for (int i = 0; i < 15; i++)
+            _workingStatus(true);
+
+            await Task.Run(() =>
             {
-                random_article = new Article();
+                Tracker tracker = new Tracker();
 
-                random_article.Title = RandomTitle(prevTitle);
-
-                for (int k = 1; k < rnd.Next(3, 7); k++)
+                for (int i = 0; i < 15; i++)
                 {
-                    random_article.AuthorsCollection.Add(RandomAuthor());
+                    random_article = new Article();
+
+                    random_article.Title = RandomTitle(prevTitle);
+
+                    for (int k = 1; k < rnd.Next(3, 7); k++)
+                    {
+                        random_article.AuthorsCollection.Add(RandomAuthor());
+                    }
+
+                    for (int k = 1; k < rnd.Next(3, 7); k++)
+                    {
+                        random_article.KeywordsCollection.Add(RandomKeyword());
+                    }
+
+                    random_article.Year = RandomYear();
+
+                    random_article.PersonalComment = RandomComment();
+
+                    random_article.SIC = RandomSIC();
+
+                    random_articles.Add(random_article);
+
+                    prevTitle = random_article.Title;
                 }
 
-                for (int k = 1; k < rnd.Next(3, 7); k++)
+                foreach (Article article in random_articles)
                 {
-                    random_article.KeywordsCollection.Add(RandomKeyword());
+                    new ArticleRepo().SaveArticle(article, User);
+                    tracker.TrackCreate(User, article.Title);
                 }
+                    
+            });
 
-                random_article.Year = RandomYear();
-
-                random_article.PersonalComment = RandomComment();
-
-                random_article.SIC = RandomSIC();
-
-                random_articles.Add(random_article);
-
-                prevTitle = random_article.Title;
-            }
-
-            foreach (Article article in random_articles)
-                (new ArticleRepo()).SaveArticle(article, User);
+            _workingStatus(false);
 
             Console.WriteLine("Done");
         }

@@ -27,14 +27,28 @@ namespace MainLib.ViewModels.Utils
 
     class ArticleInfo
     {
-        public long? Id { get; set; }
+        public long? ID { get; set; }
         public string Title { get; set; }
         public string Authors { get; set; }
         public string Keywords { get; set; }
         public int? Year { get; set; }
         public string FileName { get; set; }
         public string PersonalComment { get; set; }
-        public int Sic { get; set; }
+        public int SIC { get; set; }
+
+        public ArticleInfo(User user, string title)
+        {
+            Article article = new ArticleRepo().GetFullArticleWithTitle(user, title);
+
+            this.ID = article.ID;
+            this.Title = article.Title;
+            this.Authors = article.Authors;
+            this.Keywords = article.Keywords;
+            this.Year = article.Year;
+            this.FileName = article.FileName;
+            this.PersonalComment = article.PersonalComment;
+            this.SIC = article.SIC;
+        }
     }
 
     class BookmarkInfo
@@ -93,10 +107,11 @@ namespace MainLib.ViewModels.Utils
             }
         }
 
-        public void TrackCreate(Article article)
+        public void TrackCreate(User user, string title)
         {
-            string info = JsonConvert.SerializeObject(article);
-            using (StreamWriter sw = new StreamWriter(Path.Combine(syncPath, "create.json")))
+            ArticleInfo articleInfo = new ArticleInfo(user, title);
+            string info = JsonConvert.SerializeObject(articleInfo);
+            using (StreamWriter sw = new StreamWriter(Path.Combine(articlePath, "create.json"), true))
             {
                 sw.WriteLine(info);
             }

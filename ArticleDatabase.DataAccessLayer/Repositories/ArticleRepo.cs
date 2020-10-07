@@ -465,6 +465,51 @@ WHERE cmp.ID = @ID;
 
             return result;
         }
+        public Article GetFullArticleWithTitle(User user, string title)
+        {
+            Article result;
+
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    conn.Query(AttachUser(), transaction);
+
+                    string query = @"
+SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC
+FROM
+(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
+FROM
+(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
+FROM
+(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
+FROM tblArticle AS art
+LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
+LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
+GROUP BY art.Title) AS art_ath
+JOIN
+(SELECT art.Title AS Article, group_concat(kwd.Keyword, "", "") AS Keywords
+FROM tblArticle AS art
+LEFT JOIN jntArticleKeyword AS ak ON art.ID = ak.Article_ID
+LEFT JOIN tblKeyword AS kwd ON ak.Keyword_ID = kwd.ID
+GROUP BY art.Title) AS art_kwd
+ON art_ath.Article = art_kwd.Article) AS cmp
+LEFT JOIN
+(SELECT ArticleID, PersonalComment, SIC
+FROM tblUserPersonal WHERE UserID = @UserID) AS per ON cmp.ID = per.ArticleID) AS final
+WHERE Title = @Title
+";
+
+                    result = conn.QuerySingleOrDefault<Article>(query,
+                        new { UserID = user.ID, Title = title }, transaction: transaction);
+
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
 
         private void AddAuthors(SQLiteConnection conn, SQLiteTransaction transaction, Article article)
         {

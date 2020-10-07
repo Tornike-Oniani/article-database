@@ -13,7 +13,7 @@ namespace Lib.DataAccessLayer.Repositories
     public class UserRepo : BaseRepo
     {
         // Login
-        public bool Login(User user)
+        public bool Login(User user, string password)
         {
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString("User")))
             {
@@ -22,7 +22,7 @@ namespace Lib.DataAccessLayer.Repositories
                 {
                     // Check if Username and password match
                     User result = conn.QuerySingleOrDefault<User>("SELECT Id, Username, Password FROM tblUser WHERE Username LIKE @Username AND Password = @Password;",
-                        new { Username = user.Username, Password = user.Password }, transaction);
+                        new { Username = user.Username, Password = password }, transaction);
 
                     if (result != null)
                     {
@@ -90,8 +90,8 @@ namespace Lib.DataAccessLayer.Repositories
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
                     // Check if Username and password match
-                    result = conn.QuerySingleOrDefault<int>("SELECT Admin FROM tblUser WHERE Username LIKE @Username AND Password = @Password;",
-                        new { Username = user.Username, Password = user.Password }, transaction);
+                    result = conn.QuerySingleOrDefault<int>("SELECT Admin FROM tblUser WHERE Username LIKE @Username;",
+                        new { Username = user.Username }, transaction);
                 }
             }
 

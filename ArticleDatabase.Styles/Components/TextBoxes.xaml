@@ -7,6 +7,10 @@
         <Setter Property="TextAlignment" Value="Left" />
     </Style>
 
+    <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource MaterialDesignPasswordBox}">
+        <Setter Property="FontSize" Value="16" />
+    </Style>
+
     <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource MaterialDesignListBox}">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="Gray" />
