@@ -73,6 +73,42 @@ namespace Lib.DataAccessLayer.Repositories
                 }
             }
         }
+        // Get reference by name
+        public Reference GetReference(string name)
+        {
+            Reference result;
+
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    result = conn.QuerySingleOrDefault<Reference>("SELECT ID, Name, ArticleID FROM tblReference WHERE Name=@Name;",
+                        new { Name = name}, transaction: transaction);
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
+        // Get reference name (Used in update tracker)
+        public string GetReferenceNameWithId(int id)
+        {
+            string result;
+
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    result = conn.QuerySingleOrDefault<string>("SELECT Name FROM tblReference WHERE ID=@ID;",
+                        new { ID = id }, transaction: transaction);
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
         // Fetch references
         public List<Reference> LoadReferences()
         {

@@ -14,6 +14,7 @@ using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
 using System.Collections.ObjectModel;
 using Lib.ViewModels.Services.Browser;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Pages
 {
@@ -226,6 +227,10 @@ namespace MainLib.ViewModels.Pages
         {       
             // 1. Remove article from bookmark in database
             new BookmarkRepo().RemoveArticleFromBookmark(Bookmark, SelectedArticle);
+
+            // 1.1 Track removing article from bookmark
+            Couple info = new Couple("Bookmark", "Remove", SelectedArticle.Title, Bookmark.Name);
+            new Tracker(_user).TrackCoupling<Couple>(info);
 
             // 2. Refresh articles collection
             await PopulateBookmarkArticles();

@@ -33,6 +33,8 @@ namespace MainLib.ViewModels
         private bool _isBusy;
         private CurrentPage _currentPage;
         private bool _isVisible;
+        private bool _loginFocus;
+        private bool _registerFocus;
         private IDialogService _dialogService;
         private IWindowService _windowService;
         private IBrowserService _browserService;
@@ -68,6 +70,18 @@ namespace MainLib.ViewModels
             get { return _isBusy; }
             set { _isBusy = value; OnPropertyChanged("IsBusy"); }
         }
+        public bool LoginFocus
+        {
+            get { return _loginFocus; }
+            set { _loginFocus = value; OnPropertyChanged("LoginFocus"); }
+        }
+        public bool RegisterFocus
+        {
+            get { return _registerFocus; }
+            set { _registerFocus = value; OnPropertyChanged("RegisterFocus"); }
+        }
+
+
 
         public RelayCommand LoginCommand { get; set; }
         public RelayCommand ShowRegisterCommand { get; set; }
@@ -103,7 +117,7 @@ namespace MainLib.ViewModels
                 _windowService.OpenWindow(new NavigationViewModel(CurrentUser, _dialogService, _windowService, _browserService), WindowType.MainWindow, false, false);
                 await Task.Run(() =>
                 {
-                    new Tracker().init();
+                    new Tracker(CurrentUser).init();
                 });
                 Window.Close();
             }
@@ -115,18 +129,22 @@ namespace MainLib.ViewModels
             IsBusy = false;
         }
 
-        public void ShowRegister(object input = null)
+        public void ShowRegister(object input)
         {
             CurrentUser.Username = null;
             CurrentUser.Password = null;
+            PasswordBox passwordBox = input as PasswordBox;
+            passwordBox.Password = null;
             this.CurrentPage = CurrentPage.Register;
             this.IsVisible = true;
+            this.LoginFocus = false;
+            this.RegisterFocus = true;
         }
         public async void Register(object input = null)
         {
             if (Password != PasswordConfirm)
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("Passwords do not match!", "Register", DialogType.Error));
+                _dialogService.OpenDialog(new DialogOkViewModel("Passwords do not match!", "Registration", DialogType.Error));
                 return;
             }
 
@@ -144,11 +162,11 @@ namespace MainLib.ViewModels
 
             if (register)
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("New user created successfuly", "Result", DialogType.Success));
+                _dialogService.OpenDialog(new DialogOkViewModel("New user created successfuly", "Registration", DialogType.Success));
             }
             else
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("Username is already taken", "Warning", DialogType.Warning));
+                _dialogService.OpenDialog(new DialogOkViewModel("Username is already taken", "Registration", DialogType.Error));
             }
 
             IsBusy = false;
@@ -158,6 +176,8 @@ namespace MainLib.ViewModels
             this.PasswordConfirm = null;
             this.IsVisible = false;
             this.CurrentPage = CurrentPage.Login;
+            this.RegisterFocus = false;
+            this.LoginFocus = true;
         }
         public void Cancel(object input = null)
         {
@@ -166,6 +186,8 @@ namespace MainLib.ViewModels
             this.PasswordConfirm = null;
             this.IsVisible = false;
             this.CurrentPage = CurrentPage.Login;
+            this.RegisterFocus = false;
+            this.LoginFocus = true;
         }
     }
 }

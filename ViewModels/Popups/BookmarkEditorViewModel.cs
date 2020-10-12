@@ -10,6 +10,7 @@ using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Pages;
 using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -63,24 +64,24 @@ namespace MainLib.ViewModels.Popups
         {
             try
             {
+                BookmarkRepo bookmarkRepo = new BookmarkRepo();
+
+                // 0. Get old bookmark name
+                string name = bookmarkRepo.GetBookmarkNameWithId(Bookmark.ID);
+
                 // 1. Update new values to database
-                (new BookmarkRepo()).UpdateBookmark(Bookmark);
+                bookmarkRepo.UpdateBookmark(Bookmark);
+
+                // 1.1 Track bookmark update
+                BookmarkInfo info = new BookmarkInfo(Bookmark.Name, User);
+                new Tracker(User).TrackUpdate<BookmarkInfo>(info, name);
 
                 // 2. Refresh collections in parent;
                 _parent.PopulateBookmarks();
             }
             catch
             {
-                if (_dialogService.OpenDialog(new DialogYesNoViewModel("Bookmark with that name already exists, do you want to merge bookmarks?",
-                    "Duplicate", DialogType.Question)))
-                {
-                    Console.WriteLine("Yes was clicked");
-
-                    // 1. Get duplicate bookmark
-
-                    // 2. Merge bookmarks
-
-                }
+                _dialogService.OpenDialog(new DialogOkViewModel("Bookmark with that name already exists", "Edit bookmark", DialogType.Error));
             }
 
            // 3. Close window

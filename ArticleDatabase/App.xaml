@@ -97,7 +97,7 @@
                     </DataTemplate>
 
                     <!-- Edit article -->
-                    <DataTemplate DataType="{x:Type popupVMG:ArticleEditorViewModel}">
+                    <DataTemplate DataType="{x:Type popupVM:ArticleEditorViewModel}">
                         <popupVG:ArticleEditor />
                     </DataTemplate>
                     

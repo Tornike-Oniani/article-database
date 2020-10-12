@@ -510,6 +510,23 @@ WHERE Title = @Title
 
             return result;
         }
+        // I use this to get the old article title for update tracker
+        public string GetArticleTitleWithId(int id)
+        {
+            string result;
+
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    result = conn.QuerySingleOrDefault<string>(@"SELECT Title FROM tblArticle WHERE ID=@ID;", new { ID = id }, transaction: transaction);
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
 
         private void AddAuthors(SQLiteConnection conn, SQLiteTransaction transaction, Article article)
         {

@@ -92,6 +92,25 @@ namespace Lib.DataAccessLayer.Repositories
 
             return result;
         }
+        // Get bookmark name from Id (Used in update tracking)
+        public string GetBookmarkNameWithId(int id)
+        {
+            string result;
+
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString("User")))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    result = conn.QuerySingleOrDefault<string>($"SELECT Name FROM tblBookmark WHERE ID=@ID;",
+                        new { ID = id }, transaction: transaction);
+
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
         // Fetch bookmarks of the user
         public List<Bookmark> LoadBookmarks(User user, bool global = false)
         {

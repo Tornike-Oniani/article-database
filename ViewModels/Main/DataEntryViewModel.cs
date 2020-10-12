@@ -173,11 +173,6 @@ namespace MainLib.ViewModels.Main
                 // 3. Copy selected file to root folder with the new ID-based name
                 File.Copy(SelectedFile, Path.Combine(Environment.CurrentDirectory, "Files\\") + Article.FileName + ".pdf");
 
-                // 4. Move the selected file into "Done" subfolder
-                string done_path = Path.GetDirectoryName(SelectedFile) + "\\Done\\";
-                Directory.CreateDirectory(Path.GetDirectoryName(SelectedFile) + "\\Done");
-                File.Move(SelectedFile, done_path + System.IO.Path.GetFileName(SelectedFile));
-
                 // 4.1 Retrieve id (in reality we retrieve whole article) of newly added article
                 Article currently_added_article = articleRepo.GetArticleWithTitle(Article.Title);
 
@@ -189,8 +184,16 @@ namespace MainLib.ViewModels.Main
                 foreach (Reference reference in References)
                     new ReferenceRepo().AddArticleToReference(reference, currently_added_article);
 
-                // 5. Track article create
-                new Tracker().TrackCreate(User, Article.Title);
+                // 4.4 Tracking
+                ArticleInfo info = new ArticleInfo(User, Article.Title, Bookmarks, References);
+                Tracker tracker = new Tracker(User);
+                tracker.TrackCreate<ArticleInfo>(info);
+                File.Copy(SelectedFile, tracker.GetFilesPath() + "\\" + Article.FileName + ".pdf");
+
+                // 6. Move the selected file into "Done" subfolder
+                string done_path = Path.GetDirectoryName(SelectedFile) + "\\Done\\";
+                Directory.CreateDirectory(Path.GetDirectoryName(SelectedFile) + "\\Done");
+                File.Move(SelectedFile, done_path + System.IO.Path.GetFileName(SelectedFile));
             });
 
             // 5. Clear article attributes
@@ -243,8 +246,6 @@ namespace MainLib.ViewModels.Main
 
             await Task.Run(() =>
             {
-                Tracker tracker = new Tracker();
-
                 for (int i = 0; i < 15; i++)
                 {
                     random_article = new Article();
@@ -273,11 +274,8 @@ namespace MainLib.ViewModels.Main
                 }
 
                 foreach (Article article in random_articles)
-                {
                     new ArticleRepo().SaveArticle(article, User);
-                    tracker.TrackCreate(User, article.Title);
-                }
-                    
+
             });
 
             _workingStatus(false);

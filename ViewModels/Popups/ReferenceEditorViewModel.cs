@@ -9,6 +9,7 @@ using System.Windows.Input;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Pages;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -41,9 +42,19 @@ namespace MainLib.ViewModels.Popups
         // Command actions
         public void SaveReference(object input)
         {
+            ReferenceRepo referenceRepo = new ReferenceRepo();
+
+            // 0. Get old reference name
+            string name = referenceRepo.GetReferenceNameWithId(Reference.ID);
+
             Reference.ArticleID = (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle);
 
-            (new ReferenceRepo()).UpdateReference(Reference);
+            // 1. Update reference in database
+            referenceRepo.UpdateReference(Reference);
+
+            // 1.1 Track reference update
+            ReferenceInfo info = new ReferenceInfo(Reference.Name);
+            new Tracker(new User() { Username = "Nikoloz" }).TrackUpdate<ReferenceInfo>(info, name);
 
             _parent.PopulateReferences();
 

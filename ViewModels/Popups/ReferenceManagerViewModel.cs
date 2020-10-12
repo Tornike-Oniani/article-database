@@ -14,6 +14,8 @@ using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
 using ViewModels.UIStructs;
 using MainLib.ViewModels.Main;
+using MainLib.ViewModels.Utils;
+using System.Data.SqlTypes;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -25,6 +27,7 @@ namespace MainLib.ViewModels.Popups
         private Article _article;
         private string _name;
         private List<Reference> _references;
+        Tracker _tracker;
         private IDialogService _dialogService;
 
         public Visibility NewReferenceVisibility
@@ -54,11 +57,16 @@ namespace MainLib.ViewModels.Popups
         public RelayCommand CheckChangedCommand { get; set; }
 
         // Constructor
-        public ReferenceManagerViewModel(ViewType parent, IDialogService dialogService, Article article = null, List<Reference> references = null)
+        public ReferenceManagerViewModel(
+            ViewType parent, 
+            IDialogService dialogService, 
+            Article article = null, 
+            List<Reference> references = null)
         {
             this._parent = parent;
             this.Title = "Save to...";
             this._references = references;
+            this._tracker = new Tracker(new User());
             this._dialogService = dialogService;
 
             // 1. Initialize starting state
@@ -99,6 +107,10 @@ namespace MainLib.ViewModels.Popups
             string trimmedName = Name.Trim();
             bool duplicate_check = (new ReferenceRepo()).AddReference(trimmedName);
 
+            // 1.1 Track create reference
+            ReferenceInfo info = new ReferenceInfo(trimmedName);
+            new Tracker(new User() { Username = "Nikoloz" }).TrackCreate<ReferenceInfo>(info);
+
             // 2. Refresh Bookmarks collection
             ReferenceBoxes.Clear();
             PopulateReferenceBoxes();
@@ -126,12 +138,20 @@ namespace MainLib.ViewModels.Popups
             // 1. If user checked add article to reference
             if (current_reference_box.IsChecked)
             {
-                (new ReferenceRepo()).AddArticleToReference(current_reference_box.Reference, _article);
+                new ReferenceRepo().AddArticleToReference(current_reference_box.Reference, _article);
+
+                // Tack
+                Couple info = new Couple("Reference", "Add", _article.Title, current_reference_box.Reference.Name);
+                new Tracker(new User() { Username = "Nikoloz" }).TrackCoupling<Couple>(info);
             }
             // 2. If user unchecked remove article from bookmark
             else
             {
-                (new ReferenceRepo()).RemoveArticleFromReference(current_reference_box.Reference, _article);
+                new ReferenceRepo().RemoveArticleFromReference(current_reference_box.Reference, _article);
+
+                // Track
+                Couple info = new Couple("Reference", "Remove", _article.Title, current_reference_box.Reference.Name);
+                new Tracker(new User() { Username = "Nikoloz" }).TrackCoupling<Couple>(info);
             }
         }
         public void CheckChangedDataEntry(object input)

@@ -16,6 +16,7 @@ using Lib.ViewModels.Services.Browser;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
 using Lib.ViewModels.Popups;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Main
 {
@@ -318,7 +319,10 @@ namespace MainLib.ViewModels.Main
                ))
             {
                 // 2. Delete article record from database
-                (new ArticleRepo()).DeleteArticle(SelectedArticle);
+                new ArticleRepo().DeleteArticle(SelectedArticle);
+
+                // 2.2 Track article delete
+                new Tracker(User).TrackDelete("Article", SelectedArticle.Title);
 
                 // 3. Delete physical .pdf file
                 try
@@ -363,7 +367,7 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenEditDialog(object input = null)
         {
-            _windowService.OpenWindow(new ArticleEditorViewModel(SelectedArticle, User, _dialogService, _browserService));
+            _windowService.OpenWindow(new MainLib.ViewModels.Popups.ArticleEditorViewModel(SelectedArticle, User, _dialogService, _browserService));
         }
         public void OpenMassBookmarkManager(object input = null)
         {

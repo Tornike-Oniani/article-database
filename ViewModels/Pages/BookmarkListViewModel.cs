@@ -13,6 +13,7 @@ using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Popups;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Pages
 {
@@ -78,7 +79,10 @@ namespace MainLib.ViewModels.Pages
             if (_dialogService.OpenDialog(new DialogYesNoViewModel("Delete following bookmark?\n" + selected_bookmark.Name, "Check", DialogType.Question)))
             {
                 // 3. Delete bookmark record from database
-                (new BookmarkRepo()).DeleteBookmark(selected_bookmark);
+                new BookmarkRepo().DeleteBookmark(selected_bookmark);
+
+                // 3.1 Track bookmark delete
+                new Tracker(User).TrackDelete("Bookmark", selected_bookmark.Name);
 
                 // 4. Refresh bookmark collections
                 PopulateBookmarks();

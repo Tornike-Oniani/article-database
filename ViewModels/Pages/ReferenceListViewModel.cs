@@ -13,6 +13,7 @@ using Lib.ViewModels.Base;
 using MainLib.ViewModels.Popups;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Pages
 {
@@ -69,15 +70,18 @@ namespace MainLib.ViewModels.Pages
         }
         public void DeleteReference(object input)
         {
-            // 1. Retrieve sent bookmark
+            // 1. Retrieve sent reference
             Reference selected_reference = input as Reference;
 
             // 2. Ask user if they are sure
 
             if (_dialogService.OpenDialog(new DialogYesNoViewModel("Delete following reference?\n" + selected_reference.Name, "Check", DialogType.Question)))
             {
-                // 3. Delete bookmark record from database
-                (new ReferenceRepo()).DeleteReference(selected_reference);
+                // 3. Delete reference record from database
+                new ReferenceRepo().DeleteReference(selected_reference);
+
+                // 3.1 Track reference delete
+                new Tracker(new User() { Username = "Nikoloz" }).TrackDelete("Reference", selected_reference.Name);
 
                 // 4. Refresh bookmark collections
                 PopulateReferences();

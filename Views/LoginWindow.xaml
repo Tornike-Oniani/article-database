@@ -9,6 +9,7 @@
         xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
         xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
         xmlns:localConverters="clr-namespace:MainLib.Views.Converters"
+        xmlns:attachedProperties="clr-namespace:Lib.ViewModels.AttachedProperties;assembly=Lib.ViewModels"         
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -47,7 +48,7 @@
     </Window.Resources>
     
     <Window.InputBindings>
-        <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=txbPassword}" Key="Enter" />
+        <!--<KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=txbPassword}" Key="Enter" />-->
     </Window.InputBindings>
 
     <WindowChrome.WindowChrome>
@@ -87,6 +88,9 @@
 
         <!-- Login -->
         <Grid Visibility="{Binding CurrentPage, Converter={StaticResource CurrentPageToVisibility}, ConverterParameter=Login}">
+            <Grid.InputBindings>
+                <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=txbPassword}" Key="Enter" />
+            </Grid.InputBindings>
             <!-- Login fields -->
             <Border Padding="30 20 30 10">
                 <StackPanel>
@@ -118,6 +122,7 @@
                              Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" 
                              materialDesign:HintAssist.Hint="Username" 
                              materialDesign:HintAssist.IsFloating="True"
+                             attachedProperties:FocusExtension.IsFocused="{Binding LoginFocus}"
                              Grid.Column="1" />
                     </Grid>
 
@@ -156,7 +161,7 @@
                         </Button>
                         <Button Content="Register" 
                             Command="{Binding ShowRegisterCommand}"
-                            Click="Button_Click"
+                            CommandParameter="{Binding ElementName=txbPassword}"
                             Margin="5 0 0 0" 
                             Grid.Column="2" />
                     </Grid>
@@ -202,6 +207,7 @@
                                  Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
                                  materialDesign:HintAssist.Hint="Username" 
                                  materialDesign:HintAssist.IsFloating="True"
+                                 attachedProperties:FocusExtension.IsFocused="{Binding RegisterFocus}"
                                  Grid.Column="1" />
                     </Grid>
 
@@ -257,14 +263,12 @@
                         <Button Content="Register" 
                                 Command="{Binding RegisterCommand}" 
                                 CommandParameter="{Binding ElementName=tbxPassword}" 
-                                Click="Button_Click_1"
                                 Margin="0 0 5 0" 
                                 Grid.Column="0">
                         </Button>
                         <Button Content="Cancel" 
                                 Command="{Binding CancelCommand}" 
                                 CommandParameter="{Binding ElementName=tbxPassword}" 
-                                Click="Button_Click_1"
                                 Margin="5 0 0 0" 
                                 Grid.Column="2" />
                     </Grid>

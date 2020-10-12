@@ -12,6 +12,7 @@ using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
 using System.Windows.Data;
 using System.ComponentModel;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -61,7 +62,10 @@ namespace MainLib.ViewModels.Popups
                 BookmarkRepo repo = new BookmarkRepo();
                 foreach (Article article in _articles)
                     if (!repo.CheckArticleInBookmark(SelectedBookmark, article))
+                    {
+                        // 1. Add article to bookmark
                         repo.AddArticleToBookmark(SelectedBookmark, article);
+                    }
             });
 
             _workStatus(false);

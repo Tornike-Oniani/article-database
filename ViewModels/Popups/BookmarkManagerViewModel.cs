@@ -15,6 +15,7 @@ using MainLib.ViewModels.Main;
 using Lib.ViewModels.Services.Dialogs;
 using ViewModels.UIStructs;
 using Lib.ViewModels.Services.Windows;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -29,6 +30,7 @@ namespace MainLib.ViewModels.Popups
         private User _user;
         private Article _article;
         private List<Bookmark> _bookmarks;
+        private Tracker _tracker;
         private IDialogService _dialogService;
 
         // Public properties
@@ -80,6 +82,7 @@ namespace MainLib.ViewModels.Popups
             this.Title = "Save to...";
             this._parent = parent;
             this._dialogService = dialogService;
+            this._tracker = new Tracker(user);
 
             // 1. Initialize starting state
             NewBookmarkVisibility = Visibility.Visible;
@@ -121,6 +124,10 @@ namespace MainLib.ViewModels.Popups
             string trimmedName = Name.Trim();
             bool duplicate_check = (new BookmarkRepo()).AddBookmark(trimmedName, Global, User);
 
+            // 1.1 Track change
+            BookmarkInfo info = new BookmarkInfo(trimmedName, User);
+            new Tracker(User).TrackCreate<BookmarkInfo>(info);
+
             // 2. Refresh Bookmarks collection
             BookmarkBoxes.Clear();
             PopulateBookmarks();
@@ -150,12 +157,20 @@ namespace MainLib.ViewModels.Popups
             // 1. If user checked add article to bookmark
             if (current_bookmark_box.IsChecked)
             {
-                (new BookmarkRepo()).AddArticleToBookmark(current_bookmark_box.Bookmark, _article);
+                new BookmarkRepo().AddArticleToBookmark(current_bookmark_box.Bookmark, _article);
+
+                // Track
+                Couple info = new Couple("Bookmark", "Add", _article.Title, current_bookmark_box.Bookmark.Name);
+                new Tracker(User).TrackCoupling<Couple>(info);
             }
             // 2. If user unchecked remove article from bookmark
             else
             {
-                (new BookmarkRepo()).RemoveArticleFromBookmark(current_bookmark_box.Bookmark, _article);
+                new BookmarkRepo().RemoveArticleFromBookmark(current_bookmark_box.Bookmark, _article);
+
+                // Track
+                Couple info = new Couple("Bookmark", "Remove", _article.Title, current_bookmark_box.Bookmark.Name);
+                new Tracker(User).TrackCoupling<Couple>(info);
             }
         }
         public void CheckChangedDataEntry(object input)

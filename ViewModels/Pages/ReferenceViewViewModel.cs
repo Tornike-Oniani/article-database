@@ -13,6 +13,7 @@ using Lib.ViewModels.Services;
 using Lib.ViewModels.Services.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Navigation;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Pages
 {
@@ -114,7 +115,11 @@ namespace MainLib.ViewModels.Pages
         public async void RemoveArticle(object input = null)
         {
             // 1. Remove article from bookmark in database
-            (new ReferenceRepo()).RemoveArticleFromReference(Reference, SelectedArticle);
+            new ReferenceRepo().RemoveArticleFromReference(Reference, SelectedArticle);
+
+            // 1.1 Track removing article from reference
+            Couple info = new Couple("Reference", "Remove", SelectedArticle.Title, Reference.Name);
+            new Tracker(User).TrackCoupling<Couple>(info);
 
             // 2. Refresh articles collection
             await PopulateReferenceArticles();
