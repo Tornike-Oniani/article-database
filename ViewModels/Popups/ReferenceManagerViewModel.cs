@@ -16,6 +16,7 @@ using ViewModels.UIStructs;
 using MainLib.ViewModels.Main;
 using MainLib.ViewModels.Utils;
 using System.Data.SqlTypes;
+using Lib.DataAccessLayer.Info;
 
 namespace MainLib.ViewModels.Popups
 {

@@ -12,6 +12,10 @@
         <converters:DialogTypeToIconConverter x:Key="DialogTypeToIcon" />
         <converters:DialogTypeToColorConverter x:Key="DialogTypeToColor" />
     </UserControl.Resources>
+
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding OkCommand}" Key="Enter" />
+    </UserControl.InputBindings>
     <Grid Margin="14">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />

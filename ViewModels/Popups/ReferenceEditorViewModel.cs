@@ -10,6 +10,7 @@ using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Pages;
 using MainLib.ViewModels.Utils;
+using Lib.DataAccessLayer.Info;
 
 namespace MainLib.ViewModels.Popups
 {

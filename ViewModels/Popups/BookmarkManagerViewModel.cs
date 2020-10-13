@@ -16,6 +16,7 @@ using Lib.ViewModels.Services.Dialogs;
 using ViewModels.UIStructs;
 using Lib.ViewModels.Services.Windows;
 using MainLib.ViewModels.Utils;
+using Lib.DataAccessLayer.Info;
 
 namespace MainLib.ViewModels.Popups
 {

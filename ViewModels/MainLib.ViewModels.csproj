@@ -72,6 +72,8 @@
     <Compile Include="RegisterViewModel.cs" />
     <Compile Include="UIStructs\BookmarkBox.cs" />
     <Compile Include="UIStructs\ReferenceBox.cs" />
+    <Compile Include="Utils\LogConverter.cs" />
+    <Compile Include="Utils\LogReader.cs" />
     <Compile Include="Utils\Tracker.cs" />
   </ItemGroup>
   <ItemGroup>

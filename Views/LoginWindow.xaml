@@ -175,6 +175,9 @@
             <Grid.RenderTransform>
                 <TranslateTransform X="490" Y="0" />
             </Grid.RenderTransform>
+            <Grid.InputBindings>
+                <KeyBinding Command="{Binding RegisterCommand}" Key="Enter" />
+            </Grid.InputBindings>
             <Border Padding="30 15 30 10">
                 <StackPanel>
                     <materialDesign:PackIcon Kind="UserAdd"

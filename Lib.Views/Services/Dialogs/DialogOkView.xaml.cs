@@ -23,6 +23,12 @@ namespace Lib.Views.Services.Dialogs
         public DialogOkView()
         {
             InitializeComponent();
+
+            this.Loaded += (s, e) =>
+            {
+                this.Focus();
+                Keyboard.Focus(this);
+            };
         }
     }
 }

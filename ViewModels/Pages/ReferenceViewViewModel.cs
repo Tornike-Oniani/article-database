@@ -14,6 +14,7 @@ using Lib.ViewModels.Services.Dialogs;
 using System.Collections.ObjectModel;
 using System.Windows.Navigation;
 using MainLib.ViewModels.Utils;
+using Lib.DataAccessLayer.Info;
 
 namespace MainLib.ViewModels.Pages
 {

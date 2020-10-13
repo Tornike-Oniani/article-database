@@ -124,7 +124,7 @@ namespace Lib.DataAccessLayer.Repositories
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
                     // Check if Username and password match
-                    result = conn.QuerySingleOrDefault<User>("SELECT Username, Password, Admin FROM tblUser WHERE Username LIKE @Username;",
+                    result = conn.QuerySingleOrDefault<User>("SELECT ID, Username, Password, Admin FROM tblUser WHERE Username LIKE @Username;",
                         new { Username = userName }, transaction);
                 }
             }

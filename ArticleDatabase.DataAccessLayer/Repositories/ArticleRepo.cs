@@ -192,6 +192,18 @@ namespace Lib.DataAccessLayer.Repositories
                     // Clear keyword relationships
                     conn.Execute(@"DELETE FROM jntArticleKeyword WHERE Article_ID=@ArticleID;",
                         new { ArticleID = article.ID }, transaction);
+                    // Clear bookmark relationships
+                    conn.Execute(@"DELETE FROM user.tblBookmarkArticles WHERE ArticleID=@ArticleID",
+                        new { ArticleID = article.ID });
+                    // Clear user article relationship (REMOVE THIS TABLE COMPLETELY)
+                    conn.Execute(@"DELETE FROM user.tblUserArticles WHERE ArticleID=@ArticleID",
+                        new { ArticleID = article.ID });
+                    // Clear reference and main article relationships
+                    conn.Execute(@"DELETE FROM tblReferenceArticle WHERE ArticleID=@ArticleID",
+                        new { ArticleID = article.ID });
+                    // Remove article as main article from References
+                    conn.Execute(@"UPDATE tblReference SET ArticleID = NULL WHERE ArticleID=@ArticleID",
+                        new { ArticleID = article.ID });
                     // Remove actual article
                     conn.Execute(@"DELETE FROM tblArticle WHERE ID=@ID;",
                         new { ID = article.ID }, transaction);
@@ -503,6 +515,26 @@ WHERE Title = @Title
 
                     result = conn.QuerySingleOrDefault<Article>(query,
                         new { UserID = user.ID, Title = title }, transaction: transaction);
+
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
+        public string GetFileWithTitle(string title)
+        {
+            string result;
+
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    conn.Query(AttachUser(), transaction);
+
+                    result = conn.QuerySingleOrDefault<string>("SELECT File AS FileName FROM tblArticle WHERE Title=@Title",
+                        new { Title = title }, transaction: transaction);
 
                     transaction.Commit();
                 }

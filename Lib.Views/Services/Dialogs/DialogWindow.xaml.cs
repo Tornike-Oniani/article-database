@@ -22,6 +22,12 @@ namespace Lib.Views.Services.Dialogs
         public DialogWindow()
         {
             InitializeComponent();
+
+            this.Loaded += (s, e) =>
+            {
+                ContentPresenter.Focus();
+                Keyboard.Focus(ContentPresenter);
+            };
         }
     }
 }

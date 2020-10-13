@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lib.DataAccessLayer.Info;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -128,6 +129,24 @@ namespace Lib.DataAccessLayer.Models
         {
             AuthorsCollection = new ObservableCollection<string>();
             KeywordsCollection = new ObservableCollection<string>();
+        }
+
+        public Article(ArticleInfo info)
+        {
+            this.ID = info.ID;
+            this.Title = info.Title;
+            this.Authors = info.Authors;
+            this.Keywords = info.Keywords;
+            this.Year = info.Year;
+            this.FileName = info.FileName;
+            this.PersonalComment = info.PersonalComment;
+            this.SIC = info.SIC;
+
+            AuthorsCollection = new ObservableCollection<string>();
+            KeywordsCollection = new ObservableCollection<string>();
+
+            CollectionFromItemsString("Authors");
+            CollectionFromItemsString("Keywords");
         }
 
         public void Clear()

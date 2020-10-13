@@ -16,6 +16,7 @@ using Lib.ViewModels.Services.Windows;
 using MainLib.ViewModels.Popups;
 using Lib.ViewModels.Services.Dialogs;
 using MainLib.ViewModels.Utils;
+using Lib.DataAccessLayer.Info;
 
 namespace MainLib.ViewModels.Main
 {
@@ -117,6 +118,7 @@ namespace MainLib.ViewModels.Main
 
         // TEST
         public ObservableCollection<string> ItemsCollection { get; set; }
+        public RelayCommand TestCommand { get; set; }
 
         // Constructor
         public DataEntryViewModel(User user, Action<bool> workingStatus, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
@@ -141,6 +143,7 @@ namespace MainLib.ViewModels.Main
             // TEST
             GenerateRandomArticlesCommand = new RelayCommand(GenerateRandomArticles);
             ItemsCollection = new ObservableCollection<string>();
+            this.TestCommand = new RelayCommand(Test);
         }
 
         // Command actions
@@ -234,6 +237,12 @@ namespace MainLib.ViewModels.Main
 
         #region Test
         public RelayCommand GenerateRandomArticlesCommand { get; set; }
+        public void Test(object input = null)
+        {
+            LogReader reader = new LogReader();
+            reader.GetLogs(Path.Combine(Environment.CurrentDirectory, "Sync", "log.json"));
+            reader.Sync();
+        }
 
         // TEST
         public async void GenerateRandomArticles(object input = null)
