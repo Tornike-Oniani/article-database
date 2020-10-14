@@ -1,4 +1,5 @@
-﻿using Lib.DataAccessLayer.Repositories;
+﻿using Lib.DataAccessLayer.Info;
+using Lib.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,6 +21,13 @@ namespace Lib.DataAccessLayer.Models
 
         // Constructor
         public Reference() { }
+
+        public Reference(ReferenceInfo info)
+        {
+            this.ID = info.ID;
+            this.Name = info.Name;
+            this.ArticleID = info.ArticleID;
+        }
 
         /** Public methods:
          *  - Populate articles

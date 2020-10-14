@@ -27,6 +27,13 @@ namespace Lib.DataAccessLayer.Models
 
         }
 
+        public Bookmark(BookmarkInfo info)
+        {
+            this.ID = info.ID;
+            this.Name = info.Name;
+            this.Global = info.Global;
+        }
+
         /**
          * Public methods
          *  - Populate articles

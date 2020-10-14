@@ -38,7 +38,7 @@ namespace Lib.DataAccessLayer.Repositories
             return true;
         }
         // Update reference
-        public void UpdateReference(Reference reference)
+        public void UpdateReference(Reference reference, bool hasMainArticle = false)
         {
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
             {
@@ -46,8 +46,12 @@ namespace Lib.DataAccessLayer.Repositories
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
                     // Edit bookmark values in database
-                    conn.Execute("UPDATE tblReference SET Name=@Name, ArticleID=@ArticleID WHERE ID=@ID;",
-                        new { Name = reference.Name, ArticleID = reference.ArticleID, ID = reference.ID }, transaction: transaction);
+                    if (hasMainArticle)
+                        conn.Execute("UPDATE tblReference SET Name=@Name, ArticleID=@ArticleID WHERE ID=@ID;",
+                            new { Name = reference.Name, ArticleID = reference.ArticleID, ID = reference.ID }, transaction: transaction);
+                    else
+                        conn.Execute("UPDATE tblReference SET Name=@Name WHERE ID=@ID;",
+                            new { Name = reference.Name, ID = reference.ID }, transaction: transaction);
 
                     transaction.Commit();
                 }

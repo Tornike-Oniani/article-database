@@ -16,14 +16,14 @@ namespace MainLib.ViewModels.Utils
         private string _filesPath;
         private List<Log<IInfo>> _logs;
 
-        public LogReader()
+        public LogReader(string path)
         {
-            this._filesPath = Path.Combine(Environment.CurrentDirectory, "Sync", "Files");
+            this._filesPath = path;
         }
 
         public void GetLogs(string path)
         {
-            string info = File.ReadAllText(path);
+            string info = File.ReadAllText(Path.Combine(path, "log.json"));
             this._logs = JsonConvert.DeserializeObject<List<Log<IInfo>>>(info, new LogConverter());
         }
 
@@ -36,61 +36,150 @@ namespace MainLib.ViewModels.Utils
                 switch (log.Type)
                 {
                     case "Create":
+                        // Create article
                         if (log.Info.InfoType == "ArticleInfo")
                         {
-                            ArticleInfo info = log.Info as ArticleInfo;
-                            Article article = new Article(info);
+                            ArticleInfo local_info = log.Info as ArticleInfo;
+                            Article article = new Article(local_info);
                             ArticleRepo repo = new ArticleRepo();
 
                             // 1. Add article to database
                             repo.SaveArticle(article, user);
 
                             // 2. Copy file
-                            string fileName = repo.GetFileWithTitle(info.Title);
+                            string fileName = repo.GetFileWithTitle(local_info.Title);
                             File.Copy(
-                                Path.Combine(_filesPath, info.FileName + ".pdf"), 
+                                Path.Combine(_filesPath, local_info.FileName + ".pdf"), 
                                 Path.Combine(Path.Combine(Environment.CurrentDirectory, "Files"), fileName + ".pdf"));
 
-                            Article dbArticle = repo.GetArticleWithTitle(info.Title);
+                            Article dbArticle = repo.GetArticleWithTitle(local_info.Title);
 
                             // 3. Add references and bookmarks
                             BookmarkRepo bookmarkRepo = new BookmarkRepo();
                             ReferenceRepo referenceRepo = new ReferenceRepo();
 
                             // Bookmarks
-                            info.Bookmarks.ForEach((bookmark) =>
+                            local_info.Bookmarks.ForEach((bookmark) =>
                             {
                                 Bookmark dbBookmark = bookmarkRepo.GetBookmark(bookmark.Name, user);
                                 bookmarkRepo.AddArticleToBookmark(dbBookmark, dbArticle);
                             });
 
                             // References
-                            info.References.ForEach((reference) =>
+                            local_info.References.ForEach((reference) =>
                             {
                                 Reference dbReference = referenceRepo.GetReference(reference.Name);
                                 referenceRepo.AddArticleToReference(dbReference, dbArticle);
                             });
                         }
+                        // Create bookmark
                         else if (log.Info.InfoType == "BookmarkInfo")
                         {
-                            BookmarkInfo info = log.Info as BookmarkInfo;
-                            new BookmarkRepo().AddBookmark(info.Name, info.Global, user);
+                            BookmarkInfo local_info = log.Info as BookmarkInfo;
+                            new BookmarkRepo().AddBookmark(local_info.Name, local_info.Global, user);
                         }
+                        // Create reference
                         else if (log.Info.InfoType == "ReferenceInfo")
                         {
-                            ReferenceInfo info = log.Info as ReferenceInfo;
-                            new ReferenceRepo().AddReference(info.Name);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Garbage code");
+                            ReferenceInfo local_info = log.Info as ReferenceInfo;
+                            new ReferenceRepo().AddReference(local_info.Name);
                         }
                         break;
                     case "Update":
+                        // Update article
+                        if (log.Info.InfoType == "ArticleInfo")
+                        {
+                            ArticleInfo local_info = (ArticleInfo)log.Info;
+                            ArticleRepo repo = new ArticleRepo();
+                            Article existingArticle = repo.GetFullArticleWithTitle(user, log.Changed);
+
+                            Article newArticle = new Article(local_info);
+                            newArticle.ID = existingArticle.ID;
+                            repo.UpdateArticle(newArticle, user);
+                        }
+                        // Update bookmark
+                        else if(log.Info.InfoType == "BookmarkInfo")
+                        {
+                            BookmarkInfo local_info = (BookmarkInfo)log.Info;
+                            BookmarkRepo repo = new BookmarkRepo();
+                            Bookmark existingBookmark = repo.GetBookmark(log.Changed, user);
+
+                            Bookmark newBookmark = new Bookmark(local_info);
+                            newBookmark.ID = existingBookmark.ID;
+                            repo.UpdateBookmark(newBookmark);
+                        }
+                        // Update reference
+                        else if (log.Info.InfoType == "ReferenceInfo")
+                        {
+                            ReferenceInfo local_info = (ReferenceInfo)log.Info;
+                            ReferenceRepo repo = new ReferenceRepo();
+                            Reference existingReference = repo.GetReference(log.Changed);
+
+                            Reference newReference = new Reference(local_info);
+                            newReference.ID = existingReference.ID;
+                            if (local_info.Title != null)
+                                newReference.ArticleID = (int)new ArticleRepo().GetArticleWithTitle(local_info.Title).ID;
+                            repo.UpdateReference(newReference);
+                        }
                         break;
                     case "Coupling":
+                        Couple info = (Couple)log.Info;
+                        // Couple bookmark
+                        if (info.CollectionType == "Bookmark")
+                        {
+                            BookmarkRepo repo = new BookmarkRepo();
+                            // Add
+                            if (info.ActionType == "Add")
+                            {
+                                repo.AddArticleToBookmark(repo.GetBookmark(info.Name, user), new ArticleRepo().GetArticleWithTitle(info.Title));
+                            }
+                            // Remove
+                            else if (info.ActionType == "Remove")
+                            {
+                                repo.RemoveArticleFromBookmark(repo.GetBookmark(info.Name, user), new ArticleRepo().GetArticleWithTitle(info.Title));
+                            }
+                        }
+                        // Couple reference
+                        else if(info.CollectionType == "Reference")
+                        {
+                            ReferenceRepo repo = new ReferenceRepo();
+                            // Add
+                            if (info.ActionType == "Add")
+                            {
+                                repo.AddArticleToReference(repo.GetReference(info.Name), new ArticleRepo().GetArticleWithTitle(info.Title));
+                            }
+                            // Remove
+                            else if (info.ActionType == "Remove")
+                            {
+                                repo.RemoveArticleFromReference(repo.GetReference(info.Name), new ArticleRepo().GetArticleWithTitle(info.Title));
+                            }
+                        }
                         break;
                     case "Delete":
+                        DeleteInfo local_info1 = (DeleteInfo)log.Info;
+                        // Delete article
+                        if (local_info1.ObjectType == "Article")
+                        {
+                            ArticleRepo repo = new ArticleRepo();
+                            Article article = repo.GetArticleWithTitle(local_info1.Name);
+                            string file = repo.GetFileWithTitle(local_info1.Name);
+                            repo.DeleteArticle(article);
+                            File.Delete(Path.Combine(Environment.CurrentDirectory, "Files", file + ".pdf"));
+                        }
+                        // Delete bookmark
+                        else if (local_info1.ObjectType == "Bookmark")
+                        {
+                            BookmarkRepo repo = new BookmarkRepo();
+                            Bookmark bookmark = repo.GetBookmark(local_info1.Name, user);
+                            repo.DeleteBookmark(bookmark);
+                        }
+                        // Delete reference
+                        else if (local_info1.ObjectType == "Reference")
+                        {
+                            ReferenceRepo repo = new ReferenceRepo();
+                            Reference reference = repo.GetReference(local_info1.Name);
+                            repo.DeleteReference(reference);
+                        }
                         break;
                     default:
                         break;

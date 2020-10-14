@@ -12,6 +12,7 @@ using MainLib.ViewModels.Popups;
 using Lib.ViewModels.Services.Browser;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Main
 {
@@ -34,9 +35,16 @@ namespace MainLib.ViewModels.Main
         // Commands
         public RelayCommand ValidateCommand { get; set; }
         public RelayCommand ImportCommand { get; set; }
+        public RelayCommand SyncCommand { get; set; }
+        public RelayCommand ExportSyncCommand { get; set; }
 
         // Constructor
-        public HomeViewModel(User user, Action<bool> workStatus, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public HomeViewModel(
+            User user, 
+            Action<bool> workStatus, 
+            IDialogService dialogService, 
+            IWindowService windowService, 
+            IBrowserService browserService)
         {
             this.User = user;
             this._workStatus = workStatus;
@@ -46,6 +54,8 @@ namespace MainLib.ViewModels.Main
 
             ValidateCommand = new RelayCommand(Validate);
             ImportCommand = new RelayCommand(Import);
+            SyncCommand = new RelayCommand(Sync);
+            ExportSyncCommand = new RelayCommand(ExportSync);
         }
 
         // Command actions
@@ -187,6 +197,141 @@ namespace MainLib.ViewModels.Main
                 true,
                 true
                 );
+        }
+        public async void Sync(object input = null)
+        {
+            string destination = _browserService.OpenFolderDialog();
+
+            if (destination == null)
+                return;
+
+            if (
+                !Directory.Exists(Path.Combine(destination, "Files")) || 
+                !File.Exists(Path.Combine(destination, "log.json"))
+                )
+            {
+                _dialogService.OpenDialog(new DialogOkViewModel("Please select a valid folder", "Sync", DialogType.Error));
+                return;
+            }
+
+            _workStatus(true);
+
+            await Task.Run(() =>
+            {
+                LogReader reader = new LogReader(Path.Combine(destination, "Files"));
+                reader.GetLogs(destination);
+                reader.Sync();
+            });
+
+            _workStatus(false);
+        }
+        public async void ExportSync(object input = null)
+        {
+            string destination = _browserService.OpenFolderDialog();
+
+            if (destination == null)
+                return;
+
+            if (Directory.Exists(Path.Combine(destination, "Sync")))
+            {
+                _dialogService.OpenDialog(
+                    new DialogOkViewModel(
+                        "This folder already contains sync information. Please choose different path", 
+                        "Export Sync", 
+                        DialogType.Error)
+                    );
+                return;
+            }
+
+            destination = Path.Combine(destination, "Sync");
+
+            string syncPath = Path.Combine(Environment.CurrentDirectory, "Sync");
+
+            if (!Directory.Exists(syncPath))
+            {
+                _dialogService.OpenDialog(
+                    new DialogOkViewModel(
+                        "No information to export, please restart application.",
+                        "Export Sync",
+                        DialogType.Error)
+                    );
+                return;
+            }
+
+            _workStatus(true);
+
+            await Task.Run(() =>
+            {
+                // 0. Modify file to turn json into array
+                string fileContent = File.ReadAllText(Path.Combine(syncPath, "log.json"));
+                int index = fileContent.LastIndexOf(',');
+                fileContent = "[" + fileContent.Remove(index, 1) + "]";
+                using (StreamWriter sw = new StreamWriter(Path.Combine(syncPath, "log.json")))
+                {
+                    sw.WriteLine(fileContent);
+                }
+
+                // 1. Create/get backup folder path
+                string backupPath = Path.Combine(Environment.CurrentDirectory, "Backup");
+
+                if (!Directory.Exists(backupPath))
+                    Directory.CreateDirectory(backupPath);
+
+                // 2. Generate backup name (using current date)
+                string backupName = "Sync - " + DateTime.Today.ToLongDateString();
+                backupPath = Path.Combine(backupPath, backupName);
+
+                // 3. Backup sync
+                if (Directory.Exists(backupPath))
+                {
+                    string current_time = DateTime.Now.ToLongTimeString();
+                    string modified_time = "";
+                    foreach (string item in current_time.Split(':'))
+                    {
+                        modified_time += item + "-";
+                    }
+                    modified_time = modified_time.Remove(modified_time.Length - 1, 1);
+                    backupPath += " -- " + modified_time;
+                }
+                    
+                RelocateFiles(syncPath, backupPath);
+
+                // 4. Move sync to destination                  
+                RelocateFiles(syncPath, destination, true);
+
+                // 5. Recreate sync
+                new Tracker(User).init();
+            });
+
+            _workStatus(false);
+        }
+
+        private void RelocateFiles(string root, string destination, bool Move = false)
+        {
+            // Create subdirectory structure in destination    
+            foreach (string dir in Directory.GetDirectories(root, "*", SearchOption.AllDirectories))
+            {
+                Directory.CreateDirectory(Path.Combine(destination, dir.Substring(root.Length + 1)));
+                // Example:
+                //     > C:\sources (and not C:\E:\sources)
+            }
+
+            if (Move)
+            {
+                foreach (string file_name in Directory.GetFiles(root, "*", SearchOption.AllDirectories))
+                {
+                    File.Move(file_name, Path.Combine(destination, file_name.Substring(root.Length + 1)));
+                }
+
+                Directory.Delete(root, true);
+            }
+            else
+            {
+                foreach (string file_name in Directory.GetFiles(root, "*", SearchOption.AllDirectories))
+                {
+                    File.Copy(file_name, Path.Combine(destination, file_name.Substring(root.Length + 1)));
+                }
+            }
         }
     }
 }

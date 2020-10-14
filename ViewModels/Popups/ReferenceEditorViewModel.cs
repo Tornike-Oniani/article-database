@@ -48,10 +48,16 @@ namespace MainLib.ViewModels.Popups
             // 0. Get old reference name
             string name = referenceRepo.GetReferenceNameWithId(Reference.ID);
 
-            Reference.ArticleID = (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle);
+            bool hasMainArticle = !string.IsNullOrWhiteSpace(MainArticleTitle);
+
+            if (hasMainArticle)
+                Reference.ArticleID = (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle);
 
             // 1. Update reference in database
-            referenceRepo.UpdateReference(Reference);
+            if (hasMainArticle)
+                referenceRepo.UpdateReference(Reference, true);
+            else
+                referenceRepo.UpdateReference(Reference, false);
 
             // 1.1 Track reference update
             ReferenceInfo info = new ReferenceInfo(Reference.Name);
@@ -64,7 +70,8 @@ namespace MainLib.ViewModels.Popups
         }
         public bool CanSaveReference(object input = null)
         {
-            return !String.IsNullOrWhiteSpace(Reference.Name) && (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle) != 0;
+            return !string.IsNullOrWhiteSpace(Reference.Name) && 
+                   (string.IsNullOrWhiteSpace(MainArticleTitle) || (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle) != 0);
         }
     }
 }
