@@ -17,6 +17,7 @@ namespace SectionLib.ViewModels.Main
     public class HomeViewModel : BaseViewModel
     {
         private NavigationViewModel _mainViewModel;
+        private Action<bool> _workStatus;
         private IDialogService _dialogService;
         private IWindowService _windowService;
         private IBrowserService _browserService;
@@ -26,9 +27,10 @@ namespace SectionLib.ViewModels.Main
         public RelayCommand ValidateCommand { get; set; }
         public RelayCommand ExportCommand { get; set; }
 
-        public HomeViewModel(NavigationViewModel mainViewModel, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public HomeViewModel(NavigationViewModel mainViewModel, Action<bool> workStatus, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
             this._mainViewModel = mainViewModel;
+            this._workStatus = workStatus;
             this._dialogService = dialogService;
             this._windowService = windowService;
             this._browserService = browserService;
@@ -73,6 +75,7 @@ namespace SectionLib.ViewModels.Main
                 DialogType.Warning
                 )))
             {
+
                 // 2. Delte the section from database
                 new SectionRepo().DeleteSection(_mainViewModel.SelectedSection);
 
@@ -89,7 +92,7 @@ namespace SectionLib.ViewModels.Main
                 return;
             }
         }
-        public void Validate(object input = null)
+        public async void Validate(object input = null)
         {
             // Path to Logs folder (root directory + Logs)
             string current_directory = Program.GetSectionLogsPath();
@@ -107,22 +110,29 @@ namespace SectionLib.ViewModels.Main
                 // If any mismatch was found create log file and write mismatched files in there
                 if (mismatch.Length > 0)
                 {
-                    // Current date will be set as file name
-                    DateTime current_date = DateTime.Today;
-                    // Full file path including its name
-                    string file_path = current_directory + current_date.ToLongDateString() + ".txt";
+                    _workStatus(true);
 
-                    // Open or Create file
-                    using (StreamWriter sw = File.AppendText(file_path))
+                    await Task.Run(() =>
                     {
-                        // Start writing log startin with current hour as timestamp
-                        sw.WriteLine(current_date.ToLongTimeString());
-                        sw.WriteLine("Following files are missing:");
-                        // Write each file name from mismatch folder into text file
-                        foreach (string file in mismatch)
-                            sw.WriteLine(file);
-                        sw.WriteLine("");
-                    }
+                        // Current date will be set as file name
+                        DateTime current_date = DateTime.Today;
+                        // Full file path including its name
+                        string file_path = current_directory + current_date.ToLongDateString() + ".txt";
+
+                        // Open or Create file
+                        using (StreamWriter sw = File.AppendText(file_path))
+                        {
+                            // Start writing log startin with current hour as timestamp
+                            sw.WriteLine(current_date.ToLongTimeString());
+                            sw.WriteLine("Following files are missing:");
+                            // Write each file name from mismatch folder into text file
+                            foreach (string file in mismatch)
+                                sw.WriteLine(file);
+                            sw.WriteLine("");
+                        }
+                    });
+
+                    _workStatus(false);
 
                     _dialogService.OpenDialog(new DialogOkViewModel("Some files are missing see Logs for more info...", "Validation", DialogType.Error));
                 }

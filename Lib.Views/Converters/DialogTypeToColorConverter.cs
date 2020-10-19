@@ -18,7 +18,7 @@ namespace Lib.Views.Converters
             switch (type)
             {
                 case DialogType.Warning:
-                    return (SolidColorBrush)new BrushConverter().ConvertFrom("#ffbb34");
+                    return (SolidColorBrush)new BrushConverter().ConvertFrom("#eac85d");  //#ffbb34
                 case DialogType.Question:
                     return (SolidColorBrush)new BrushConverter().ConvertFrom("#3094C0");
                 case DialogType.Error:

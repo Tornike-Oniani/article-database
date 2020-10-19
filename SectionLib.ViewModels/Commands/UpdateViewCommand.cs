@@ -16,14 +16,22 @@ namespace SectionLib.ViewModels.Commands
     {
         private NavigationViewModel _mainViewModel;
         private User _user;
+        private Action<bool> _workStatus;
         private IDialogService _dialogService;
         private IWindowService _windowService;
         private IBrowserService _browserService;
 
-        public UpdateViewCommand(NavigationViewModel mainViewModel, User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public UpdateViewCommand(
+            NavigationViewModel mainViewModel,
+            Action<bool> workStatus,
+            User user, 
+            IDialogService dialogService, 
+            IWindowService windowService, 
+            IBrowserService browserService)
         {
-            _mainViewModel = mainViewModel;
-            _user = user;
+            this._mainViewModel = mainViewModel;
+            this._user = user;
+            this._workStatus = workStatus;
             this._dialogService = dialogService;
             this._windowService = windowService;
             this._browserService = browserService;
@@ -41,13 +49,13 @@ namespace SectionLib.ViewModels.Commands
             switch ((ViewType)parameter)
             {
                 case ViewType.Home:
-                    this._mainViewModel.SelectedViewModel = new HomeViewModel(_mainViewModel, _dialogService, _windowService, _browserService);
+                    this._mainViewModel.SelectedViewModel = new HomeViewModel(_mainViewModel, _workStatus, _dialogService, _windowService, _browserService);
                     break;
                 case ViewType.DataEntry:
-                    this._mainViewModel.SelectedViewModel = new DataEntryViewModel(_user, _browserService);
+                    this._mainViewModel.SelectedViewModel = new DataEntryViewModel(_user, _workStatus, _browserService);
                     break;
                 case ViewType.DataView:
-                    this._mainViewModel.SelectedViewModel = new DataViewViewModel(_user, _dialogService, _windowService, _browserService);
+                    this._mainViewModel.SelectedViewModel = new DataViewViewModel(_user, _workStatus, _dialogService, _windowService, _browserService);
                     break;
             }
         }

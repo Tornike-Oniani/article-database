@@ -24,6 +24,8 @@ namespace SectionLib.ViewModels
     {
         private BaseViewModel _selectedViewModel;
         private string _selectedSection;
+        private bool _canNavigate;
+        private bool _isBusy;
 
         public BaseViewModel SelectedViewModel
         {
@@ -65,13 +67,15 @@ namespace SectionLib.ViewModels
                 OnPropertyChanged("SelectedSection");
             }
         }
-
-        private bool _canNavigate;
-
         public bool CanNavigate
         {
             get { return _canNavigate; }
-            set { _canNavigate = value; }
+            set { _canNavigate = value; OnPropertyChanged("CanNavigate"); }
+        }
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set { _isBusy = value; OnPropertyChanged("IsBusy"); }
         }
 
         public ICommand UpdateViewCommand { get; set; }
@@ -80,7 +84,7 @@ namespace SectionLib.ViewModels
         public NavigationViewModel(IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
             this.User = new UserRepo().LoginFirst();
-            UpdateViewCommand = new UpdateViewCommand(this, User, dialogService, windowService, browserService);
+            UpdateViewCommand = new UpdateViewCommand(this, WorkStatus, User, dialogService, windowService, browserService);
             UpdateViewCommand.Execute(ViewType.Home);
             this.Title = User.Username;
             Sections = new ObservableCollection<string>();
@@ -108,6 +112,10 @@ namespace SectionLib.ViewModels
             // 3. Set last section as selected
             if (Sections.Count > 0)
                 SelectedSection = Sections.Last();
+        }
+        public void WorkStatus(bool isWorking)
+        {
+            this.IsBusy = isWorking;
         }
     }
 }

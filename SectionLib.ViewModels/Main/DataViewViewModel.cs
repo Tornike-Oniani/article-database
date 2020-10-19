@@ -23,6 +23,7 @@ namespace SectionLib.ViewModels.Main
         #region Private members
         private List<string> _columns;
         private string _filterTitle;
+        private Action<bool> _workStatus;
         private IDialogService _dialogService;
         private IWindowService _windowService;
         private IBrowserService _browserService;
@@ -57,9 +58,10 @@ namespace SectionLib.ViewModels.Main
         #endregion
 
         // Constructor
-        public DataViewViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public DataViewViewModel(User user, Action<bool> workStatus, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
             this.User = user;
+            this._workStatus = workStatus;
             this._dialogService = dialogService;
             this._windowService = windowService;
             this._browserService = browserService;
@@ -85,13 +87,27 @@ namespace SectionLib.ViewModels.Main
         }
 
         #region Command Actions
-        public void LoadArticles(object input = null)
+        public async void LoadArticles(object input = null)
         {
             // 1. Clear existing data grid source
             Articles.Clear();
 
             // 2. Fetch artilces from database
-            foreach (Article article in new ArticleRepo().GetAllArticles(User, FilterTitle))
+            List<Article> articles = new List<Article>();
+            _workStatus(true);
+
+            await Task.Run(() =>
+            {
+                new ArticleRepo().GetAllArticles(User, FilterTitle).ForEach((article) => 
+                {
+                    articles.Add(article);
+                });
+            });
+
+            _workStatus(false);
+
+            // 3. Populate collection
+            foreach (Article article in articles)
                 Articles.Add(article);
         }
         public void OpenFile(object input = null)

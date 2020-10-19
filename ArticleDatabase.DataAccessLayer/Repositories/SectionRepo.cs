@@ -25,7 +25,7 @@ namespace Lib.DataAccessLayer.Repositories
                     number++;
 
                     // 2. Set the section name according to the number
-                    string name = "Section " + number;
+                     string name = "Section " + number;
 
                     // 3. Insert the new record of name and number in database
                     conn.Execute("INSERT INTO tblSection (Name, Number) VALUES (@Name, @Number);", new { Name = name, Number = number }, transaction);

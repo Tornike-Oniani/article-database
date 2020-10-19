@@ -53,6 +53,9 @@
                 <!-- ListView resource dictionary -->
                 <ResourceDictionary Source="/Lib.Styles;component/Components/ListView.xaml" />
 
+                <!-- Dialog resource dictionary -->
+                <ResourceDictionary Source="/Lib.Views;component/Styles/DialogStyle.xaml" />
+
                 <!-- Local resource dictionary -->
                 <ResourceDictionary Source="/Section;component/Styles/Local.xaml" />
 

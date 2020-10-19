@@ -49,7 +49,7 @@ namespace MainLib.ViewModels
             UpdateViewCommand.Execute(ViewType.Home);
             this.Title = user.Username;
             // Set admin/user status
-            user.Admin = (new UserRepo()).IsAdmin(user);
+            user.Admin = new UserRepo().IsAdmin(user);
             this.User = user;
         }
 
