@@ -264,11 +264,14 @@ namespace MainLib.ViewModels.Main
             {
                 // 0. Modify file to turn json into array
                 string fileContent = File.ReadAllText(Path.Combine(syncPath, "log.json"));
-                int index = fileContent.LastIndexOf(',');
-                fileContent = "[" + fileContent.Remove(index, 1) + "]";
-                using (StreamWriter sw = new StreamWriter(Path.Combine(syncPath, "log.json")))
+                if (!string.IsNullOrEmpty(fileContent))
                 {
-                    sw.WriteLine(fileContent);
+                    int index = fileContent.LastIndexOf(',');
+                    fileContent = "[" + fileContent.Remove(index, 1) + "]";
+                    using (StreamWriter sw = new StreamWriter(Path.Combine(syncPath, "log.json")))
+                    {
+                        sw.WriteLine(fileContent);
+                    }
                 }
 
                 // 1. Create/get backup folder path

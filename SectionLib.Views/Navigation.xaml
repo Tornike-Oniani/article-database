@@ -5,21 +5,54 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:SectionLib.Views"
+             xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              xmlns:viewType="clr-namespace:SectionLib.ViewModels.Main;assembly=SectionLib.ViewModels"
+             xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+    </UserControl.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <!-- Navigation column -->
-            <ColumnDefinition Width="Auto" />
-            <!-- Content column -->
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <!-- Working overlay -->
+        <Grid Visibility="{Binding IsBusy, 
+              Converter={StaticResource BoolToVisibility}}"
+              Panel.ZIndex="1">
+            <Rectangle Fill="#ffffff"
+                       Opacity="0.7" />
+            <Border BorderThickness="0 0 0 3"
+                    BorderBrush="{StaticResource PrimaryColorBrush}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="10">
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <usercontrols:LoadingControl Diameter="50"
+                                                 Color1="{StaticResource PrimaryColor}"
+                                                 Color2="Transparent" />
+                    <Label Content="Working..." 
+                           FontSize="18" 
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="5 0 0 0" />
+                </StackPanel>
+            </Border>
+        </Grid>
+        
+        <!-- Content -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Navigation column -->
+                <ColumnDefinition Width="Auto" />
+                <!-- Content column -->
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <!-- Navigation -->
-        <StackPanel Style="{StaticResource NavigationWrapper}">
-            <!-- Home -->
-            <RadioButton Style="{StaticResource LocalHome}" 
+            <!-- Navigation -->
+            <StackPanel Style="{StaticResource NavigationWrapper}">
+                <!-- Home -->
+                <RadioButton Style="{StaticResource LocalHome}" 
                          Content="Home"
                          Tag="{x:Static materialDesign:PackIconKind.Book}"
                          GroupName="Navigation" 
@@ -27,27 +60,27 @@
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static viewType:ViewType.Home}" />
 
-            <!-- Sections -->
-            <Border Padding="15" 
+                <!-- Sections -->
+                <Border Padding="15" 
                     Margin="0 0 0 50" 
                     Background="{StaticResource ComplementaryColorBrush}">
-                <ComboBox ItemsSource="{Binding Sections}" 
+                    <ComboBox ItemsSource="{Binding Sections}" 
                           SelectedItem="{Binding SelectedSection}"
                           Background="White" 
                           Width="125"
                           Padding="5"  />
-            </Border>
+                </Border>
 
-            <!-- Data entry -->
-            <RadioButton Style="{StaticResource NavigationButton}" 
+                <!-- Data entry -->
+                <RadioButton Style="{StaticResource NavigationButton}" 
                          Content="Data Entry" 
                          Tag="{x:Static materialDesign:PackIconKind.FilePlus}" 
                          GroupName="Navigation" 
                          IsEnabled="{Binding CanNavigate}"
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static viewType:ViewType.DataEntry}" />
-            <!-- Data search -->
-            <RadioButton Style="{StaticResource NavigationButton}" 
+                <!-- Data search -->
+                <RadioButton Style="{StaticResource NavigationButton}" 
                          Content="Data Search" 
                          Tag="{x:Static materialDesign:PackIconKind.Search}" 
                          GroupName="Navigation" 
@@ -55,10 +88,11 @@
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static viewType:ViewType.DataView}" 
                          Click="RadioButton_Click" />
-        </StackPanel>
+            </StackPanel>
 
-        <!-- Content -->
-        <ContentControl Content="{Binding SelectedViewModel}" Grid.Column="1" />
+            <!-- Content -->
+            <ContentControl Content="{Binding SelectedViewModel}" Grid.Column="1" />
 
+        </Grid>
     </Grid>
 </UserControl>
