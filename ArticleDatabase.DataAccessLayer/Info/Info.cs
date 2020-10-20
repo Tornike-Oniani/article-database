@@ -186,4 +186,22 @@ namespace Lib.DataAccessLayer.Info
             this.Name = name;
         }
     }
+    public class PersonalInfo : IInfo
+    {
+        public string Title { get; set; }
+        public string PersonalComment { get; set; }
+        public int SIC { get; set; }
+
+        public PersonalInfo()
+        {
+            this.InfoType = "Personal";
+        }
+
+        public PersonalInfo(string title, string personalComment, int sic)
+        {
+            this.Title = title;
+            this.PersonalComment = personalComment;
+            this.SIC = sic;
+        }
+    }
 }

@@ -27,7 +27,8 @@ namespace MainLib.ViewModels.Utils
                 if (value.ToString() == "Create" 
                     || value.ToString() == "Update" 
                     || value.ToString() == "Delete"
-                    || value.ToString() == "Coupling")
+                    || value.ToString() == "Coupling"
+                    || value.ToString() == "Personal")
                     _type = value;
                 else
                     throw new ArgumentException("Invalid argument. It has to be Create, Update, Delete or Coupling");
@@ -98,8 +99,17 @@ namespace MainLib.ViewModels.Utils
             Track<DeleteInfo>("Delete", info);
         }
 
+        public void TrackPersonal(PersonalInfo info)
+        {
+            Track<PersonalInfo>("Personal", info);
+        }
+
         private void Track<T>(string action, T instance, string id = null)
         {
+            // If user is not admin, don't track
+            if (!_user.IsAdmin)
+                return;
+
             Log<T> log = new Log<T>(action, _user.Username, instance, id);
             string info = JsonConvert.SerializeObject(log);
             using (StreamWriter sw = new StreamWriter(logPath, true))

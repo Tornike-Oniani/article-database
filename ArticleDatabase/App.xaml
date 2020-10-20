@@ -92,7 +92,7 @@
                     </DataTemplate>
                     
                     <!-- AddPersonal -->
-                    <DataTemplate DataType="{x:Type popupVMG:AddPersonalDialogViewModel}">
+                    <DataTemplate DataType="{x:Type popupVM:AddPersonalDialogViewModel}">
                         <popupVG:AddPersonal />
                     </DataTemplate>
 

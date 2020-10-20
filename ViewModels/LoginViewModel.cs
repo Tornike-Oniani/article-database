@@ -115,10 +115,14 @@ namespace MainLib.ViewModels
             if (login)
             {
                 _windowService.OpenWindow(new NavigationViewModel(CurrentUser, _dialogService, _windowService, _browserService), WindowType.MainWindow, false, false);
+                // Initialize tracker if user is admin
                 await Task.Run(() =>
                 {
-                    new Tracker(CurrentUser).init();
+                    CurrentUser.Admin = new UserRepo().IsAdmin(CurrentUser);
+                    if (CurrentUser.IsAdmin)
+                        new Tracker(CurrentUser).init();
                 });
+
                 Window.Close();
             }
             else

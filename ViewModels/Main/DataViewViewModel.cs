@@ -359,7 +359,7 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenAddPersonal(object input)
         {
-            _windowService.OpenWindow(new AddPersonalDialogViewModel(SelectedArticle, User));
+            _windowService.OpenWindow(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle, User));
         }
         public void OpenBookmarkManager(object input = null)
         {

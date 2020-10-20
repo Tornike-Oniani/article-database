@@ -45,7 +45,6 @@ namespace MainLib.ViewModels
         public NavigationViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
             UpdateViewCommand = new UpdateViewCommand(Navigate, WorkStatus, user, dialogService, windowService, browserService);
-            //this.SelectedViewModel = new HomeViewModel(user, new DialogService(), new WindowService(), new BrowserService());
             UpdateViewCommand.Execute(ViewType.Home);
             this.Title = user.Username;
             // Set admin/user status

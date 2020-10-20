@@ -181,6 +181,15 @@ namespace MainLib.ViewModels.Utils
                             repo.DeleteReference(reference);
                         }
                         break;
+                    case "Personal":
+                        PersonalInfo local_info2 = (PersonalInfo)log.Info;
+                        ArticleRepo repo1 = new ArticleRepo();
+                        Article article3 = repo1.GetArticleWithTitle(local_info2.Title);
+                        article3.PersonalComment = local_info2.PersonalComment;
+                        article3.SIC = local_info2.SIC;
+
+                        repo1.UpdatePersonal(article3, user);
+                        break;
                     default:
                         break;
                 }

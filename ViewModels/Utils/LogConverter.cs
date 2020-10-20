@@ -55,6 +55,12 @@ namespace MainLib.ViewModels.Utils
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
                     result.Add(log);
                 }
+                else if (check.Contains("Personal"))
+                {
+                    Log<PersonalInfo> temp = item.ToObject<Log<PersonalInfo>>();
+                    Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
+                    result.Add(log);
+                }
             }
 
             return result;
