@@ -180,7 +180,7 @@ namespace MainLib.ViewModels.Main
             // Open or Create file
             using (StreamWriter sw = File.AppendText(merge_log_path))
             {
-                // Start writing log startin with current hour as timestamp
+                // Start writing log starting with current hour as timestamp
                 sw.WriteLine(current_time.ToLongTimeString());
                 sw.WriteLine("Following titles are duplicate:");
                 // Write each file name from mismatch folder into text file
@@ -216,14 +216,22 @@ namespace MainLib.ViewModels.Main
 
             _workStatus(true);
 
+            LogReader reader = new LogReader(Path.Combine(destination, "Files"));
+
             await Task.Run(() =>
             {
-                LogReader reader = new LogReader(Path.Combine(destination, "Files"));
                 reader.GetLogs(destination);
                 reader.Sync();
             });
 
             _workStatus(false);
+
+
+            // Show messagebox regarding errors
+            if (reader.NoErrors)
+                _dialogService.OpenDialog(new DialogOkViewModel("Synchronisation successful", "Synchronisation", DialogType.Success));
+            else
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong, see logs for more information", "Synchronisation", DialogType.Error));
         }
         public async void ExportSync(object input = null)
         {
