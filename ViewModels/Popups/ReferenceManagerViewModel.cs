@@ -110,7 +110,7 @@ namespace MainLib.ViewModels.Popups
 
             // 1.1 Track create reference
             ReferenceInfo info = new ReferenceInfo(trimmedName);
-            new Tracker(new User() { Username = "Nikoloz" }).TrackCreate<ReferenceInfo>(info);
+            new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCreate<ReferenceInfo>(info);
 
             // 2. Refresh Bookmarks collection
             ReferenceBoxes.Clear();
@@ -143,7 +143,7 @@ namespace MainLib.ViewModels.Popups
 
                 // Tack
                 Couple info = new Couple("Reference", "Add", _article.Title, current_reference_box.Reference.Name);
-                new Tracker(new User() { Username = "Nikoloz" }).TrackCoupling<Couple>(info);
+                new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCoupling<Couple>(info);
             }
             // 2. If user unchecked remove article from bookmark
             else
@@ -152,7 +152,7 @@ namespace MainLib.ViewModels.Popups
 
                 // Track
                 Couple info = new Couple("Reference", "Remove", _article.Title, current_reference_box.Reference.Name);
-                new Tracker(new User() { Username = "Nikoloz" }).TrackCoupling<Couple>(info);
+                new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCoupling<Couple>(info);
             }
         }
         public void CheckChangedDataEntry(object input)

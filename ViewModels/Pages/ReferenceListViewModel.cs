@@ -81,7 +81,7 @@ namespace MainLib.ViewModels.Pages
                 new ReferenceRepo().DeleteReference(selected_reference);
 
                 // 3.1 Track reference delete
-                new Tracker(new User() { Username = "Nikoloz" }).TrackDelete("Reference", selected_reference.Name);
+                new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackDelete("Reference", selected_reference.Name);
 
                 // 4. Refresh bookmark collections
                 PopulateReferences();

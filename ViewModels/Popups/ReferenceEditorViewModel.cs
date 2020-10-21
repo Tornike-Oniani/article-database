@@ -61,7 +61,7 @@ namespace MainLib.ViewModels.Popups
 
             // 1.1 Track reference update
             ReferenceInfo info = new ReferenceInfo(Reference.Name);
-            new Tracker(new User() { Username = "Nikoloz" }).TrackUpdate<ReferenceInfo>(info, name);
+            new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackUpdate<ReferenceInfo>(info, name);
 
             _parent.PopulateReferences();
 
