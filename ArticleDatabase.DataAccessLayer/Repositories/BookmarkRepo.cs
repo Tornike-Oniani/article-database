@@ -275,5 +275,23 @@ WHERE b.ID = {bookmark.ID};
 
             return result;
         }
+        // Add list of articles in bookmark
+        public void AddListOfArticlesToBookmark(Bookmark bookmark, List<Article> articles)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString("User")))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    foreach (Article article in articles)
+                    {
+                        conn.Execute("INSERT INTO tblBookmarkArticles (BookmarkID, ArticleID) VALUES (@BookmarkID, @ArticleID);",
+                            new { BookmarkID = bookmark.ID, ArticleID = article.ID });
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
     }
 }

@@ -52,25 +52,37 @@ namespace MainLib.ViewModels.Popups
 
         public async void AddArticlesToBookmark(object input)
         {
-            // Close window
-            (input as ICommand).Execute(null);
-
-            _workStatus(true);
-
-            await Task.Run(() =>
+            try
             {
-                BookmarkRepo repo = new BookmarkRepo();
-                foreach (Article article in _articles)
-                    if (!repo.CheckArticleInBookmark(SelectedBookmark, article))
-                    {
-                        // 1. Add article to bookmark
-                        repo.AddArticleToBookmark(SelectedBookmark, article);
-                    }
-            });
+                // Close window
+                (input as ICommand).Execute(null);
 
-            _workStatus(false);
+                _workStatus(true);
 
-            _dialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
+                await Task.Run(() =>
+                {
+                    BookmarkRepo repo = new BookmarkRepo();
+                    foreach (Article article in _articles)
+                        if (!repo.CheckArticleInBookmark(SelectedBookmark, article))
+                        {
+                            // 1. Add article to bookmark
+                            repo.AddArticleToBookmark(SelectedBookmark, article);
+                        }
+                });
+
+                _workStatus(false);
+
+                _dialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
+            }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Mass Bookmark Manager", "Mass Bookmark", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
         }
         public bool CanAddArticlesToBookmark(object input = null)
         {

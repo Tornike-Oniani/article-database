@@ -147,69 +147,97 @@ namespace MainLib.ViewModels.Main
         // Command actions
         public void SelectFile(object input = null)
         {
-            string result = _browserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
+            try
+            {
+                string result = _browserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
 
-            // Get the selected file
-            SelectedFile = result;
+                // Get the selected file
+                SelectedFile = result;
+            }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Data Entry", "Select file", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
         }
         public async void SaveArticle(object input = null)
         {
-            _workingStatus(true);
-
-            await Task.Run(() =>
+            try
             {
-                ArticleRepo articleRepo = new ArticleRepo();
+                _workingStatus(true);
 
-                // Regex to switch multiple spaces into one (Restricts user to enter more than one space in Title textboxes)
-                RegexOptions options = RegexOptions.None;
-                Regex regex = new Regex("[ ]{2,}", options);
+                await Task.Run(() =>
+                {
+                    ArticleRepo articleRepo = new ArticleRepo();
 
-                // 1. Format title
-                Article.Title = Article.Title.Trim();
-                Article.Title = regex.Replace(Article.Title, " ");
+                    // Regex to switch multiple spaces into one (Restricts user to enter more than one space in Title textboxes)
+                    RegexOptions options = RegexOptions.None;
+                    Regex regex = new Regex("[ ]{2,}", options);
 
-                // 2. Add article to database
-                articleRepo.SaveArticle(Article, User);
+                    // 1. Format title
+                    Article.Title = Article.Title.Trim();
+                    Article.Title = regex.Replace(Article.Title, " ");
 
-                // 3. Copy selected file to root folder with the new ID-based name
-                File.Copy(SelectedFile, Path.Combine(Environment.CurrentDirectory, "Files\\") + Article.FileName + ".pdf");
+                    // 2. Add article to database
+                    articleRepo.SaveArticle(Article, User);
 
-                // 4.1 Retrieve id (in reality we retrieve whole article) of newly added article
-                Article currently_added_article = articleRepo.GetArticleWithTitle(Article.Title);
+                    // 3. Copy selected file to root folder with the new ID-based name
+                    File.Copy(SelectedFile, Path.Combine(Environment.CurrentDirectory, "Files\\") + Article.FileName + ".pdf");
 
-                // 4.2 Add bookmarks
-                foreach (Bookmark bookmark in Bookmarks)
-                    new BookmarkRepo().AddArticleToBookmark(bookmark, currently_added_article);
+                    // 4.1 Retrieve id (in reality we retrieve whole article) of newly added article
+                    Article currently_added_article = articleRepo.GetArticleWithTitle(Article.Title);
 
-                // 4.3 Add references
-                foreach (Reference reference in References)
-                    new ReferenceRepo().AddArticleToReference(reference, currently_added_article);
+                    // 4.2 Add bookmarks
+                    foreach (Bookmark bookmark in Bookmarks)
+                        new BookmarkRepo().AddArticleToBookmark(bookmark, currently_added_article);
 
-                // 4.4 Tracking
-                ArticleInfo info = new ArticleInfo(User, Article.Title, Bookmarks, References);
-                Tracker tracker = new Tracker(User);
-                tracker.TrackCreate<ArticleInfo>(info);
-                File.Copy(SelectedFile, tracker.GetFilesPath() + "\\" + Article.FileName + ".pdf");
+                    // 4.3 Add references
+                    foreach (Reference reference in References)
+                        new ReferenceRepo().AddArticleToReference(reference, currently_added_article);
 
-                // 6. Move the selected file into "Done" subfolder
-                string done_path = Path.GetDirectoryName(SelectedFile) + "\\Done\\";
-                Directory.CreateDirectory(Path.GetDirectoryName(SelectedFile) + "\\Done");
-                File.Move(SelectedFile, done_path + System.IO.Path.GetFileName(SelectedFile));
-            });
+                    // 4.4 Tracking
+                    ArticleInfo info = new ArticleInfo(User, Article.Title, Bookmarks, References);
+                    Tracker tracker = new Tracker(User);
+                    tracker.TrackCreate<ArticleInfo>(info);
+                    File.Copy(SelectedFile, tracker.GetFilesPath() + "\\" + Article.FileName + ".pdf");
 
-            // 5. Clear article attributes
-            ClearArticleAttributesCommand.Execute(null);
-            Bookmarks.Clear();
-            References.Clear();
+                    // 6. Move the selected file into "Done" subfolder
+                    string done_path = Path.GetDirectoryName(SelectedFile) + "\\Done\\";
+                    Directory.CreateDirectory(Path.GetDirectoryName(SelectedFile) + "\\Done");
+                    File.Move(SelectedFile, done_path + System.IO.Path.GetFileName(SelectedFile));
+                });
 
-            _workingStatus(false);
+                // 5. Clear article attributes
+                ClearArticleAttributesCommand.Execute(null);
+                Bookmarks.Clear();
+                References.Clear();
+
+                _workingStatus(false);
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Data Entry", "Add article", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workingStatus(false);
+            }
         }
         public void ClearArticleAttributes(object input = null)
         {
-            Article.Clear();
-            SelectedFile = null;
-            Bookmarks.Clear();
-            References.Clear();
+            try
+            {
+                Article.Clear();
+                SelectedFile = null;
+                Bookmarks.Clear();
+                References.Clear();
+            }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Data Entry", "Clear Article Attributes", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
         }
         public void OpenBookmarkManager(object input = null)
         {

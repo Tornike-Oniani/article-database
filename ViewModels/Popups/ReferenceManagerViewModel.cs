@@ -104,29 +104,37 @@ namespace MainLib.ViewModels.Popups
 
         public void Create(object input = null)
         {
-            // 1. Add new bookmark to database
-            string trimmedName = Name.Trim();
-            bool duplicate_check = (new ReferenceRepo()).AddReference(trimmedName);
+            try
+            {
+                // 1. Add new reference to database
+                string trimmedName = Name.Trim();
+                bool duplicate_check = (new ReferenceRepo()).AddReference(trimmedName);
 
-            // 1.1 Track create reference
-            ReferenceInfo info = new ReferenceInfo(trimmedName);
-            new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCreate<ReferenceInfo>(info);
+                // 1.1 Track create reference
+                ReferenceInfo info = new ReferenceInfo(trimmedName);
+                new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCreate<ReferenceInfo>(info);
 
-            // 2. Refresh Bookmarks collection
-            ReferenceBoxes.Clear();
-            PopulateReferenceBoxes();
-            Name = "";
+                // 2. Refresh References collection
+                ReferenceBoxes.Clear();
+                PopulateReferenceBoxes();
+                Name = "";
 
-            // 3. Hide detailed view
-            //Win.Height = _initialHeight;
-            CreateVisibility = Visibility.Collapsed;
-            NewReferenceVisibility = Visibility.Visible;
+                // 3. Hide detailed view
+                //Win.Height = _initialHeight;
+                CreateVisibility = Visibility.Collapsed;
+                NewReferenceVisibility = Visibility.Visible;
 
-            // 4. Check bookmark boxes
-            CheckReferenceBoxes();
+                // 4. Check reference boxes
+                CheckReferenceBoxes();
 
-            if (!duplicate_check)
-                _dialogService.OpenDialog(new DialogOkViewModel("This reference already exists.", "Warning", DialogType.Warning));
+                if (!duplicate_check)
+                    _dialogService.OpenDialog(new DialogOkViewModel("This reference already exists.", "Warning", DialogType.Warning));
+            }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Reference Manager", "Create reference", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
         }
         public bool CanCreate(object input = null)
         {
@@ -139,20 +147,36 @@ namespace MainLib.ViewModels.Popups
             // 1. If user checked add article to reference
             if (current_reference_box.IsChecked)
             {
-                new ReferenceRepo().AddArticleToReference(current_reference_box.Reference, _article);
+                try
+                {
+                    new ReferenceRepo().AddArticleToReference(current_reference_box.Reference, _article);
 
-                // Tack
-                Couple info = new Couple("Reference", "Add", _article.Title, current_reference_box.Reference.Name);
-                new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCoupling<Couple>(info);
+                    // Tack
+                    Couple info = new Couple("Reference", "Add", _article.Title, current_reference_box.Reference.Name);
+                    new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCoupling<Couple>(info);
+                }
+                catch(Exception e)
+                {
+                    new BugTracker().Track("Reference Manager", "Add article to reference", e.Message);
+                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                }
             }
             // 2. If user unchecked remove article from bookmark
             else
             {
-                new ReferenceRepo().RemoveArticleFromReference(current_reference_box.Reference, _article);
+                try
+                {
+                    new ReferenceRepo().RemoveArticleFromReference(current_reference_box.Reference, _article);
 
-                // Track
-                Couple info = new Couple("Reference", "Remove", _article.Title, current_reference_box.Reference.Name);
-                new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCoupling<Couple>(info);
+                    // Track
+                    Couple info = new Couple("Reference", "Remove", _article.Title, current_reference_box.Reference.Name);
+                    new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCoupling<Couple>(info);
+                }
+                catch(Exception e)
+                {
+                    new BugTracker().Track("Reference Manager", "Remove article from reference", e.Message);
+                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                }
             }
         }
         public void CheckChangedDataEntry(object input)
@@ -162,8 +186,16 @@ namespace MainLib.ViewModels.Popups
             // If Bookmarks contains the input remove it
             if (_references.Exists(el => el.Name == current_reference_box.Reference.Name))
             {
-                int index = _references.FindIndex(el => el.Name == current_reference_box.Reference.Name);
-                _references.RemoveAt(index);
+                try
+                {
+                    int index = _references.FindIndex(el => el.Name == current_reference_box.Reference.Name);
+                    _references.RemoveAt(index);
+                }
+                catch(Exception e)
+                {
+                    new BugTracker().Track("Reference Manager (Data Entry)", "Remove article from reference", e.Message);
+                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                }
             }
             // If Bookmarks doesn't contain the input add it
             else

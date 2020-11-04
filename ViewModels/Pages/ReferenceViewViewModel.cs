@@ -75,22 +75,34 @@ namespace MainLib.ViewModels.Pages
          */
         public async Task PopulateReferenceArticles()
         {
-            _workStatus(true);
-
-            Articles.Clear();
-
-            List<Article> articles = new List<Article>();
-
-            await Task.Run(() =>
+            try
             {
-                foreach (Article article in (new ReferenceRepo()).LoadArticlesForReference(Reference))
-                    articles.Add(article);
-            });
+                _workStatus(true);
 
-            foreach (Article article in articles)
-                Articles.Add(article);
+                Articles.Clear();
 
-            _workStatus(false);
+                List<Article> articles = new List<Article>();
+
+                await Task.Run(() =>
+                {
+                    foreach (Article article in (new ReferenceRepo()).LoadArticlesForReference(Reference))
+                        articles.Add(article);
+                });
+
+                foreach (Article article in articles)
+                    Articles.Add(article);
+
+                _workStatus(false);
+            }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Reference View", "Populate references", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
         }
         public void OpenFile(object input = null)
         {
@@ -115,15 +127,23 @@ namespace MainLib.ViewModels.Pages
         }
         public async void RemoveArticle(object input = null)
         {
-            // 1. Remove article from bookmark in database
-            new ReferenceRepo().RemoveArticleFromReference(Reference, SelectedArticle);
+            try
+            {
+                // 1. Remove article from bookmark in database
+                new ReferenceRepo().RemoveArticleFromReference(Reference, SelectedArticle);
 
-            // 1.1 Track removing article from reference
-            Couple info = new Couple("Reference", "Remove", SelectedArticle.Title, Reference.Name);
-            new Tracker(User).TrackCoupling<Couple>(info);
+                // 1.1 Track removing article from reference
+                Couple info = new Couple("Reference", "Remove", SelectedArticle.Title, Reference.Name);
+                new Tracker(User).TrackCoupling<Couple>(info);
 
-            // 2. Refresh articles collection
-            await PopulateReferenceArticles();
+                // 2. Refresh articles collection
+                await PopulateReferenceArticles();
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Reference List", "Remove article", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
         }
         public void Copy(object input = null)
         {

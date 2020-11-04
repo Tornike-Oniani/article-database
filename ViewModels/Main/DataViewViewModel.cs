@@ -205,103 +205,160 @@ namespace MainLib.ViewModels.Main
         }
         public async void NextPage(object input = null)
         {
-            // 1. Check if next page is avaliable
-            if (CurrentPage >= TotalPages)
-                return;
+            try
+            {
+                // 1. Check if next page is avaliable
+                if (CurrentPage >= TotalPages)
+                    return;
 
-            // 2. Increment current page
-            CurrentPage++;
+                // 2. Increment current page
+                CurrentPage++;
 
-            // 3. Populate article collection
-            await PopulateArticles();
+                _workStatus(true);
+
+                // 3. Populate article collection
+                await PopulateArticles();
+
+                _workStatus(false);
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Data View", "Next Page", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
         }
         public async void PreviousPage(object input = null)
         {
-            // 1. Check if previous page is avaliable
-            if (CurrentPage <= 1)
-                return;
+            try
+            {
+                // 1. Check if previous page is avaliable
+                if (CurrentPage <= 1)
+                    return;
 
-            // 2. Decrement current page
-            CurrentPage--;
+                // 2. Decrement current page
+                CurrentPage--;
 
-            // 3. Populate articles collection
-            await PopulateArticles();
+                _workStatus(true);
+
+                // 3. Populate articles collection
+                await PopulateArticles();
+
+                _workStatus(false);
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Data View", "Previous Page", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
         }
         public async void LoadArticles(object input = null)
         {
-            _workStatus(true);
-
-            List<Article> articles = new List<Article>();
-            await Task.Run(() =>
-            {
-                // 2. Calculate total pages
-                int record_count = (new ArticleRepo()).GetRecordCount(
-                    Users[UserIndex],
-                    FilterTitle,
-                    FilterAuthors.ToList(),
-                    FilterKeywords.ToList(),
-                    FilterYear,
-                    FilterPersonalComment);
-                if ((record_count % ItemsPerPage) == 0)
-                    TotalPages = record_count / ItemsPerPage;
-                else
-                    TotalPages = (record_count / ItemsPerPage) + 1;
-
-                CurrentPage = 1;
-            });
-
-            await PopulateArticles();
-
-            _workStatus(false);
-        }
-        public async void Export(object input = null)
-        {
-            // Destination will be the path chosen from dialog box (Where files should be exported)
-            string destination = null;
-
-            destination = _browserService.OpenFolderDialog();
-
-            // If path was chosen from the dialog box
-            if (destination != null)
+            try
             {
                 _workStatus(true);
 
+                List<Article> articles = new List<Article>();
                 await Task.Run(() =>
                 {
-                    // 2. Get the list of articles which were checked for export
-                    List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
+                    // 2. Calculate total pages
+                    int record_count = (new ArticleRepo()).GetRecordCount(
+                        Users[UserIndex],
+                        FilterTitle,
+                        FilterAuthors.ToList(),
+                        FilterKeywords.ToList(),
+                        FilterYear,
+                        FilterPersonalComment);
+                    if ((record_count % ItemsPerPage) == 0)
+                        TotalPages = record_count / ItemsPerPage;
+                    else
+                        TotalPages = (record_count / ItemsPerPage) + 1;
 
-                    foreach (Article article in checked_articles)
-                    {
-                        if (!string.IsNullOrEmpty(article.FileName))
-                        {
-                            // If title is too long just get the substring to name the .pdf file
-                            if (article.Title.Length > 40)
-                            {
-                                string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
-                                Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-                                string validName = r.Replace(article.Title.Substring(0, 40), "");
-                                File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
-                            }
-                            else
-                            {
-                                string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
-                                Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-                                string validName = r.Replace(article.Title, "");
-                                File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
-                            }
-                        }
-                    }
+                    CurrentPage = 1;
                 });
 
-                // 3. Uncheck articles
-                foreach (Article article in Articles)
-                    article.Checked = false;
+                await PopulateArticles();
 
                 _workStatus(false);
-
-                _dialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
             }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Data View", "Load Articles", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
+        }
+        public async void Export(object input = null)
+        {
+            try
+            {
+                // Destination will be the path chosen from dialog box (Where files should be exported)
+                string destination = null;
+
+                destination = _browserService.OpenFolderDialog();
+
+                // If path was chosen from the dialog box
+                if (destination != null)
+                {
+                    _workStatus(true);
+
+                    await Task.Run(() =>
+                    {
+                        // 2. Get the list of articles which were checked for export
+                        List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
+
+                        foreach (Article article in checked_articles)
+                        {
+                            if (!string.IsNullOrEmpty(article.FileName))
+                            {
+                                // If title is too long just get the substring to name the .pdf file
+                                if (article.Title.Length > 40)
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title.Substring(0, 40), "");
+                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
+                                else
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title, "");
+                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
+                            }
+                        }
+                    });
+
+                    // 3. Uncheck articles
+                    foreach (Article article in Articles)
+                        article.Checked = false;
+
+                    _workStatus(false);
+
+                    _dialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
+                }
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Data View", "Export", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
+
         }
         public bool CanExport(object input = null)
         {
@@ -313,31 +370,39 @@ namespace MainLib.ViewModels.Main
         }
         public void DeleteArticle(object input = null)
         {
-            // 1. Ask user if they are sure
-            if (_dialogService.OpenDialog(
-                new DialogYesNoViewModel("Delete following record?\n" + SelectedArticle.Title, "Warning", DialogType.Question)
-               ))
+            try
             {
-                // 2. Delete article record from database
-                new ArticleRepo().DeleteArticle(SelectedArticle);
-
-                // 2.2 Track article delete
-                new Tracker(User).TrackDelete("Article", SelectedArticle.Title);
-
-                // 3. Delete physical .pdf file
-                try
+                // 1. Ask user if they are sure
+                if (_dialogService.OpenDialog(
+                    new DialogYesNoViewModel("Delete following record?\n" + SelectedArticle.Title, "Warning", DialogType.Question)
+                   ))
                 {
-                    File.Delete(Path.Combine(Environment.CurrentDirectory, "Files\\") + SelectedArticle.FileName + ".pdf");
-                }
+                    // 2. Delete article record from database
+                    new ArticleRepo().DeleteArticle(SelectedArticle);
 
-                catch
-                {
-                    _dialogService.OpenDialog(
-                        new DialogOkViewModel("The file is missing, validate your database.", "Error", DialogType.Error));
-                }
+                    // 2.2 Track article delete
+                    new Tracker(User).TrackDelete("Article", SelectedArticle.Title);
 
-                // 4. Refresh the data grid
-                LoadArticlesCommand.Execute(null);
+                    // 3. Delete physical .pdf file
+                    try
+                    {
+                        File.Delete(Path.Combine(Environment.CurrentDirectory, "Files\\") + SelectedArticle.FileName + ".pdf");
+                    }
+
+                    catch
+                    {
+                        _dialogService.OpenDialog(
+                            new DialogOkViewModel("The file is missing, validate your database.", "Error", DialogType.Error));
+                    }
+
+                    // 4. Refresh the data grid
+                    LoadArticlesCommand.Execute(null);
+                }
+            }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Data View", "Delete Article", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public bool CanDeleteArticle(object input = null)
@@ -353,13 +418,14 @@ namespace MainLib.ViewModels.Main
                 article.BMChecked = (bool)input;
         }
 
+        // Window open commands
         public void OpenSearchDialog(object input = null)
         {
             _windowService.OpenWindow(new SearchDialogViewModel(this));
         }
         public void OpenAddPersonal(object input)
         {
-            _windowService.OpenWindow(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle, User));
+            _windowService.OpenWindow(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle, User, _dialogService));
         }
         public void OpenBookmarkManager(object input = null)
         {

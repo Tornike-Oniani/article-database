@@ -121,31 +121,39 @@ namespace MainLib.ViewModels.Popups
         }
         public void Create(object input = null)
         {
-            // 1. Add new bookmark to database
-            string trimmedName = Name.Trim();
-            bool duplicate_check = (new BookmarkRepo()).AddBookmark(trimmedName, Global, User);
+            try
+            {
+                // 1. Add new bookmark to database
+                string trimmedName = Name.Trim();
+                bool duplicate_check = (new BookmarkRepo()).AddBookmark(trimmedName, Global, User);
 
-            // 1.1 Track change
-            BookmarkInfo info = new BookmarkInfo(trimmedName, User);
-            new Tracker(User).TrackCreate<BookmarkInfo>(info);
+                // 1.1 Track change
+                BookmarkInfo info = new BookmarkInfo(trimmedName, User);
+                new Tracker(User).TrackCreate<BookmarkInfo>(info);
 
-            // 2. Refresh Bookmarks collection
-            BookmarkBoxes.Clear();
-            PopulateBookmarks();
-            Name = "";
+                // 2. Refresh Bookmarks collection
+                BookmarkBoxes.Clear();
+                PopulateBookmarks();
+                Name = "";
 
-            // 3. Hide detailed view
-            //Win.Height = _initialHeight;
-            CreateVisibility = Visibility.Collapsed;
-            NewBookmarkVisibility = Visibility.Visible;
+                // 3. Hide detailed view
+                //Win.Height = _initialHeight;
+                CreateVisibility = Visibility.Collapsed;
+                NewBookmarkVisibility = Visibility.Visible;
 
-            // 4. Check bookmark boxes
-            CheckBookmarkBoxes();
+                // 4. Check bookmark boxes
+                CheckBookmarkBoxes();
 
-            Global = 0;
+                Global = 0;
 
-            if (!duplicate_check)
-                _dialogService.OpenDialog(new DialogOkViewModel("This bookmark already exists.", "Warning", DialogType.Warning));
+                if (!duplicate_check)
+                    _dialogService.OpenDialog(new DialogOkViewModel("This bookmark already exists.", "Warning", DialogType.Warning));
+            }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Bookmark Manager", "Create Bookmark", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
         }
         public bool CanCreate(object input = null)
         {
@@ -158,20 +166,36 @@ namespace MainLib.ViewModels.Popups
             // 1. If user checked add article to bookmark
             if (current_bookmark_box.IsChecked)
             {
-                new BookmarkRepo().AddArticleToBookmark(current_bookmark_box.Bookmark, _article);
+                try
+                {
+                    new BookmarkRepo().AddArticleToBookmark(current_bookmark_box.Bookmark, _article);
 
-                // Track
-                Couple info = new Couple("Bookmark", "Add", _article.Title, current_bookmark_box.Bookmark.Name);
-                new Tracker(User).TrackCoupling<Couple>(info);
+                    // Track
+                    Couple info = new Couple("Bookmark", "Add", _article.Title, current_bookmark_box.Bookmark.Name);
+                    new Tracker(User).TrackCoupling<Couple>(info);
+                }
+                catch(Exception e)
+                {
+                    new BugTracker().Track("Bookmark Manager", "Add article to bookmark", e.Message);
+                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                }
             }
             // 2. If user unchecked remove article from bookmark
             else
             {
-                new BookmarkRepo().RemoveArticleFromBookmark(current_bookmark_box.Bookmark, _article);
+                try
+                {
+                    new BookmarkRepo().RemoveArticleFromBookmark(current_bookmark_box.Bookmark, _article);
 
-                // Track
-                Couple info = new Couple("Bookmark", "Remove", _article.Title, current_bookmark_box.Bookmark.Name);
-                new Tracker(User).TrackCoupling<Couple>(info);
+                    // Track
+                    Couple info = new Couple("Bookmark", "Remove", _article.Title, current_bookmark_box.Bookmark.Name);
+                    new Tracker(User).TrackCoupling<Couple>(info);
+                }
+                catch (Exception e)
+                {
+                    new BugTracker().Track("Bookmark Manager", "Remove article from bookmark", e.Message);
+                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                }
             }
         }
         public void CheckChangedDataEntry(object input)
@@ -181,13 +205,29 @@ namespace MainLib.ViewModels.Popups
             // If Bookmarks contains the input remove it
             if (_bookmarks.Exists(el => el.Name == current_bookmark_box.Bookmark.Name))
             {
-                int index = _bookmarks.FindIndex(el => el.Name == current_bookmark_box.Bookmark.Name);
-                _bookmarks.RemoveAt(index);
+                try
+                {
+                    int index = _bookmarks.FindIndex(el => el.Name == current_bookmark_box.Bookmark.Name);
+                    _bookmarks.RemoveAt(index);
+                }
+                catch(Exception e)
+                {
+                    new BugTracker().Track("Bookmark Manager (Data Entry)", "Remove article from bookmark", e.Message);
+                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                }
             }
             // If Bookmarks doesn't contain the input add it
             else
             {
-                _bookmarks.Add(current_bookmark_box.Bookmark);
+                try
+                {
+                    _bookmarks.Add(current_bookmark_box.Bookmark);
+                }
+                catch(Exception e)
+                {
+                    new BugTracker().Track("Bookmark Manager (Data Entry)", "Add article to bookmark", e.Message);
+                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                }
             }
         }
 

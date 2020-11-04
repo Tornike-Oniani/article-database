@@ -66,25 +66,32 @@ namespace MainLib.ViewModels.Pages
          */
         public void EditReference(object input)
         {
-            _windowService.OpenWindow(new ReferenceEditorViewModel(input as Reference, this));
+            _windowService.OpenWindow(new ReferenceEditorViewModel(input as Reference, this, _dialogService));
         }
         public void DeleteReference(object input)
         {
-            // 1. Retrieve sent reference
-            Reference selected_reference = input as Reference;
-
-            // 2. Ask user if they are sure
-
-            if (_dialogService.OpenDialog(new DialogYesNoViewModel("Delete following reference?\n" + selected_reference.Name, "Check", DialogType.Question)))
+            try
             {
-                // 3. Delete reference record from database
-                new ReferenceRepo().DeleteReference(selected_reference);
+                // 1. Retrieve sent reference
+                Reference selected_reference = input as Reference;
 
-                // 3.1 Track reference delete
-                new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackDelete("Reference", selected_reference.Name);
+                // 2. Ask user if they are sure
+                if (_dialogService.OpenDialog(new DialogYesNoViewModel("Delete following reference?\n" + selected_reference.Name, "Check", DialogType.Question)))
+                {
+                    // 3. Delete reference record from database
+                    new ReferenceRepo().DeleteReference(selected_reference);
 
-                // 4. Refresh bookmark collections
-                PopulateReferences();
+                    // 3.1 Track reference delete
+                    new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackDelete("Reference", selected_reference.Name);
+
+                    // 4. Refresh bookmark collections
+                    PopulateReferences();
+                }
+            }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Reference List", "Delete reference", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
 
@@ -93,15 +100,27 @@ namespace MainLib.ViewModels.Pages
          */
         public async void PopulateReferences(bool global = false)
         {
-            WorkStatus(true);
+            try
+            {
+                WorkStatus(true);
 
-            // 1. Clear bookmarks
-            References.Clear();
+                // 1. Clear bookmarks
+                References.Clear();
 
-            // 2. Populate references
-            await Populate();
+                // 2. Populate references
+                await Populate();
 
-            WorkStatus(false);
+                WorkStatus(false);
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Reference List", "Populate references", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                WorkStatus(false);
+            }
         }
 
         public async Task Populate()

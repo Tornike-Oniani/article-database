@@ -11,6 +11,7 @@ using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Pages;
 using MainLib.ViewModels.Utils;
 using Lib.DataAccessLayer.Info;
+using Lib.ViewModels.Services.Dialogs;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -18,6 +19,8 @@ namespace MainLib.ViewModels.Popups
     {
         // Private members
         private ReferenceListViewModel _parent;
+        private IDialogService _dialogService;
+        private string _name;
 
         // Public properties
         public Reference Reference { get; set; }
@@ -27,9 +30,10 @@ namespace MainLib.ViewModels.Popups
         public RelayCommand SaveReferenceCommand { get; set; }
 
         // Constructor
-        public ReferenceEditorViewModel(Reference reference, ReferenceListViewModel parent)
+        public ReferenceEditorViewModel(Reference reference, ReferenceListViewModel parent, IDialogService dialogService)
         {
             this.Title = "Save as...";
+            this._dialogService = dialogService;
 
             this.Reference = new Reference();
             this.Reference.CopyByValue(reference);
@@ -43,30 +47,67 @@ namespace MainLib.ViewModels.Popups
         // Command actions
         public void SaveReference(object input)
         {
-            ReferenceRepo referenceRepo = new ReferenceRepo();
+            try
+            {
+                ReferenceRepo referenceRepo = new ReferenceRepo();
 
-            // 0. Get old reference name
-            string name = referenceRepo.GetReferenceNameWithId(Reference.ID);
+                // 0. Get old reference name
+                _name = referenceRepo.GetReferenceNameWithId(Reference.ID);
 
-            bool hasMainArticle = !string.IsNullOrWhiteSpace(MainArticleTitle);
+                bool hasMainArticle = !string.IsNullOrWhiteSpace(MainArticleTitle);
 
-            if (hasMainArticle)
-                Reference.ArticleID = (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle);
+                if (hasMainArticle)
+                    Reference.ArticleID = (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle);
 
-            // 1. Update reference in database
-            if (hasMainArticle)
-                referenceRepo.UpdateReference(Reference, true);
-            else
-                referenceRepo.UpdateReference(Reference, false);
+                // 1. Update reference in database
+                if (hasMainArticle)
+                    referenceRepo.UpdateReference(Reference, true);
+                else
+                    referenceRepo.UpdateReference(Reference, false);
 
-            // 1.1 Track reference update
-            ReferenceInfo info = new ReferenceInfo(Reference.Name);
-            new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackUpdate<ReferenceInfo>(info, name);
+                // 1.1 Track reference update
+                ReferenceInfo info = new ReferenceInfo(Reference.Name);
+                new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackUpdate<ReferenceInfo>(info, _name);
+            }
+            catch(Exception e)
+            {
+                // Reference with that name already exists (ask merge dialog)
+                if (e.Message.Contains("UNIQUE"))
+                {
+                    if (
+                        _dialogService.OpenDialog(new DialogYesNoViewModel("Reference with that name already exists, do you want to merge?", "Merge reference", DialogType.Question))
+                       )
+                    {
+                        ReferenceRepo repo = new ReferenceRepo();
+                        Reference referenceFrom = repo.GetReference(_name);
+                        Reference referenceInto = repo.GetReference(Reference.Name);
+                        List<Article> articlesFrom = repo.LoadArticlesForReference(referenceFrom);
+                        List<Article> articlesInto = repo.LoadArticlesForReference(referenceInto);
 
-            _parent.PopulateReferences();
+                        // 1. Get unique articles between 2 references
+                        List<Article> uniques = articlesFrom.Where(art => !articlesInto.Exists(el => el.Title == art.Title)).ToList();
 
-            // Close window
-            (input as ICommand).Execute(null);
+                        // 2. Add those articles into merged reference
+                        repo.AddListOfArticlesToReference(referenceInto, uniques);
+
+                        // 3. Delete old reference
+                        repo.DeleteReference(referenceFrom);
+                    }
+                }
+                // Generic exception
+                else
+                {
+                    new BugTracker().Track("Refernce Editor", "Save Reference", e.Message);
+                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                }
+            }
+            finally
+            {
+                _parent.PopulateReferences();
+
+                // Close window
+                (input as ICommand).Execute(null);
+            }
         }
         public bool CanSaveReference(object input = null)
         {

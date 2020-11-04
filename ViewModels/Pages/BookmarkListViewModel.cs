@@ -72,20 +72,28 @@ namespace MainLib.ViewModels.Pages
          */
         public void DeleteBookmark(object input)
         {
-            // 1. Retrieve sent bookmark
-            Bookmark selected_bookmark = input as Bookmark;
-
-            // 2. Ask user if they are sure
-            if (_dialogService.OpenDialog(new DialogYesNoViewModel("Delete following bookmark?\n" + selected_bookmark.Name, "Check", DialogType.Question)))
+            try
             {
-                // 3. Delete bookmark record from database
-                new BookmarkRepo().DeleteBookmark(selected_bookmark);
+                // 1. Retrieve sent bookmark
+                Bookmark selected_bookmark = input as Bookmark;
 
-                // 3.1 Track bookmark delete
-                new Tracker(User).TrackDelete("Bookmark", selected_bookmark.Name);
+                // 2. Ask user if they are sure
+                if (_dialogService.OpenDialog(new DialogYesNoViewModel("Delete following bookmark?\n" + selected_bookmark.Name, "Check", DialogType.Question)))
+                {
+                    // 3. Delete bookmark record from database
+                    new BookmarkRepo().DeleteBookmark(selected_bookmark);
 
-                // 4. Refresh bookmark collections
-                PopulateBookmarks();
+                    // 3.1 Track bookmark delete
+                    new Tracker(User).TrackDelete("Bookmark", selected_bookmark.Name);
+
+                    // 4. Refresh bookmark collections
+                    PopulateBookmarks();
+                }
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Bookmark List", "Delete bookmark", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public void EditBookmark(object input)
@@ -98,19 +106,31 @@ namespace MainLib.ViewModels.Pages
          */
         public async void PopulateBookmarks(bool global = false)
         {
-            WorkStatus(true);
+            try
+            {
+                WorkStatus(true);
 
-            // 1. Clear bookmarks
-            Bookmarks.Clear();
-            GlobalBookmarks.Clear();
+                // 1. Clear bookmarks
+                Bookmarks.Clear();
+                GlobalBookmarks.Clear();
 
-            // 2. Populate local bookmarks
-            await Populate(false);
+                // 2. Populate local bookmarks
+                await Populate(false);
 
-            // 3. Populate global bookmarks
-            await Populate(true);
+                // 3. Populate global bookmarks
+                await Populate(true);
 
-            WorkStatus(false);
+                WorkStatus(false);
+            }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Bookmark List", "Populate Bookmarks", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                WorkStatus(false);
+            }
         }
 
         private async Task Populate(bool global)

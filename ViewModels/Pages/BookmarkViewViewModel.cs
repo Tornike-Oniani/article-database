@@ -94,22 +94,34 @@ namespace MainLib.ViewModels.Pages
          */
         public async Task PopulateBookmarkArticles()
         {
-            _workStatus(true);
-
-            Articles.Clear();
-
-            List<Article> articles = new List<Article>();
-
-            await Task.Run(() =>
+            try
             {
-                foreach (Article article in (new BookmarkRepo()).LoadArticlesForBookmark(_user, this.Bookmark))
-                    articles.Add(article);
-            });
+                _workStatus(true);
 
-            foreach (Article article in articles)
-                Articles.Add(article);
+                Articles.Clear();
 
-            _workStatus(false);
+                List<Article> articles = new List<Article>();
+
+                await Task.Run(() =>
+                {
+                    foreach (Article article in (new BookmarkRepo()).LoadArticlesForBookmark(_user, this.Bookmark))
+                        articles.Add(article);
+                });
+
+                foreach (Article article in articles)
+                    Articles.Add(article);
+
+                _workStatus(false);
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Bookmark View", "Populate bookmark articles", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
         }
         public void OpenFile(object input = null)
         {
@@ -134,107 +146,140 @@ namespace MainLib.ViewModels.Pages
         }
         public async void Export(object input = null)
         {
-            // Destination will be the path chosen from dialog box (Where files should be exported)
-            string destination = null;
-
-            destination = _browserService.OpenFolderDialog();
-
-            // If path was chosen from the dialog box
-            if (destination != null)
+            try
             {
-                _workStatus(true);
+                // Destination will be the path chosen from dialog box (Where files should be exported)
+                string destination = null;
 
-                await Task.Run(() =>
+                destination = _browserService.OpenFolderDialog();
+
+                // If path was chosen from the dialog box
+                if (destination != null)
                 {
-                    // 2. Get the list of articles which were checked for export
-                    List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
+                    _workStatus(true);
 
-                    foreach (Article article in checked_articles)
+                    await Task.Run(() =>
                     {
-                        if (!string.IsNullOrEmpty(article.FileName))
+                        // 2. Get the list of articles which were checked for export
+                        List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
+
+                        foreach (Article article in checked_articles)
                         {
-                            // If title is too long just get the substring to name the .pdf file
-                            if (article.Title.Length > 40)
+                            if (!string.IsNullOrEmpty(article.FileName))
                             {
-                                string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
-                                Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-                                string validName = r.Replace(article.Title.Substring(0, 40), "");
-                                File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
-                            }
-                            else
-                            {
-                                string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
-                                Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-                                string validName = r.Replace(article.Title, "");
-                                File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                // If title is too long just get the substring to name the .pdf file
+                                if (article.Title.Length > 40)
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title.Substring(0, 40), "");
+                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
+                                else
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title, "");
+                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                // 3. Uncheck articles
-                foreach (Article article in Articles)
-                    article.Checked = false;
+                    // 3. Uncheck articles
+                    foreach (Article article in Articles)
+                        article.Checked = false;
 
+                    _workStatus(false);
+
+                    _dialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
+                }
+            }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Bookmark View", "Export", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
                 _workStatus(false);
-
-                _dialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
             }
         }
         public async void ExportBookmark(object input = null)
         {
-            // Destination will be the path chosen from dialog box (Where files should be exported)
-            string destination = null;
-
-            destination = _browserService.OpenFolderDialog();
-
-            // If path was chosen from the dialog box
-            if (destination != null)
+            try
             {
-                _workStatus(true);
+                // Destination will be the path chosen from dialog box (Where files should be exported)
+                string destination = null;
 
-                await Task.Run(() =>
+                destination = _browserService.OpenFolderDialog();
+
+                // If path was chosen from the dialog box
+                if (destination != null)
                 {
-                    // Export each article in bookmark's article collection
-                    foreach (Article article in Articles)
+                    _workStatus(true);
+
+                    await Task.Run(() =>
                     {
-                        if (!string.IsNullOrEmpty(article.FileName))
+                        // Export each article in bookmark's article collection
+                        foreach (Article article in Articles)
                         {
-                            // If title is too long just get the substring to name the .pdf file
-                            if (article.Title.Length > 40)
+                            if (!string.IsNullOrEmpty(article.FileName))
                             {
-                                string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
-                                Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-                                string validName = r.Replace(article.Title.Substring(0, 40), "");
-                                File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
-                            }
-                            else
-                            {
-                                string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
-                                Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-                                string validName = r.Replace(article.Title, "");
-                                File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                // If title is too long just get the substring to name the .pdf file
+                                if (article.Title.Length > 40)
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title.Substring(0, 40), "");
+                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
+                                else
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title, "");
+                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                _workStatus(false);
+                    _workStatus(false);
 
-                _dialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
+                    _dialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
+                }
             }
+            catch(Exception e)
+            {
+                new BugTracker().Track("Bookmark View", "Export Bookmark", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
+
         }
         public async void RemoveArticle(object input = null)
-        {       
-            // 1. Remove article from bookmark in database
-            new BookmarkRepo().RemoveArticleFromBookmark(Bookmark, SelectedArticle);
+        {
+            try
+            {
+                // 1. Remove article from bookmark in database
+                new BookmarkRepo().RemoveArticleFromBookmark(Bookmark, SelectedArticle);
 
-            // 1.1 Track removing article from bookmark
-            Couple info = new Couple("Bookmark", "Remove", SelectedArticle.Title, Bookmark.Name);
-            new Tracker(_user).TrackCoupling<Couple>(info);
+                // 1.1 Track removing article from bookmark
+                Couple info = new Couple("Bookmark", "Remove", SelectedArticle.Title, Bookmark.Name);
+                new Tracker(_user).TrackCoupling<Couple>(info);
 
-            // 2. Refresh articles collection
-            await PopulateBookmarkArticles();
+                // 2. Refresh articles collection
+                await PopulateBookmarkArticles();
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Bookmark View", "Remove article", e.Message);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
         }
         public void Copy(object input = null)
         {

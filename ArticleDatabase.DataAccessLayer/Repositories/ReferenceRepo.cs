@@ -159,21 +159,6 @@ namespace Lib.DataAccessLayer.Repositories
                 }
             }
         }
-        // Fetch reference articles from database
-        public void LoadReferenceArticles(Reference reference)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
-            {
-                conn.Open();
-                using (SQLiteTransaction transaction = conn.BeginTransaction())
-                {
-
-                    // !!! We have to load all articles as default (Joined with personal comments, SIC etc. and then we have to inner join it with bookmark table)
-
-                    transaction.Commit();
-                }
-            }
-        }
         // Check if article is in reference
         public bool CheckArticleInReference(Reference reference, Article article)
         {
@@ -255,6 +240,24 @@ WHERE r.ID = @ReferenceID;
             }
 
             return result;
+        }
+        // Add list of articles into reference
+        public void AddListOfArticlesToReference(Reference reference, List<Article> articles)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    foreach (Article article in articles)
+                    {
+                        conn.Execute("INSERT INTO tblReferenceArticle(ReferenceID, ArticleID) VALUES (@ReferenceID, @ArticleID);",
+                            new { ReferenceID = reference.ID, ArticleID = article.ID });
+                    }
+
+                    transaction.Commit();
+                }
+            }
         }
     }
 }

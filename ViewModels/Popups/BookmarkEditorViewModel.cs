@@ -12,6 +12,7 @@ using MainLib.ViewModels.Pages;
 using Lib.ViewModels.Services.Dialogs;
 using MainLib.ViewModels.Utils;
 using Lib.DataAccessLayer.Info;
+using System.Data.SqlTypes;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -23,6 +24,7 @@ namespace MainLib.ViewModels.Popups
         private BookmarkListViewModel _parent;
         private User _user;
         private IDialogService _dialogService;
+        private string _name;
 
         /**
          * Public properties
@@ -68,25 +70,54 @@ namespace MainLib.ViewModels.Popups
                 BookmarkRepo bookmarkRepo = new BookmarkRepo();
 
                 // 0. Get old bookmark name
-                string name = bookmarkRepo.GetBookmarkNameWithId(Bookmark.ID);
+                _name = bookmarkRepo.GetBookmarkNameWithId(Bookmark.ID);
 
                 // 1. Update new values to database
                 bookmarkRepo.UpdateBookmark(Bookmark);
 
                 // 1.1 Track bookmark update
                 BookmarkInfo info = new BookmarkInfo(Bookmark.Name, User);
-                new Tracker(User).TrackUpdate<BookmarkInfo>(info, name);
+                new Tracker(User).TrackUpdate<BookmarkInfo>(info, _name);
+            }
+            catch(Exception e)
+            {
+                // Message = "constraint failed\r\nUNIQUE constraint failed: tblBookmark.Name, tblBookmark.UserID"}	System.Exception {System.Data.SQLite.SQLiteException}
+                if (e.Message.Contains("UNIQUE"))
+                {
+                    if (
+                        _dialogService.OpenDialog(new DialogYesNoViewModel("Bookmark with that name already exists, do you want to merge?", "Merge reference", DialogType.Question))
+                       )
+                    {
+                        BookmarkRepo repo = new BookmarkRepo();
+                        Bookmark bookmarkFrom = repo.GetBookmark(_name, User);
+                        Bookmark bookmarkInto = repo.GetBookmark(Bookmark.Name, User);
+                        List<Article> articlesFrom = repo.LoadArticlesForBookmark(User, bookmarkFrom);
+                        List<Article> articlesInto = repo.LoadArticlesForBookmark(User, bookmarkInto);
 
+                        // 1. Get unique articles between 2 references
+                        List<Article> uniques = articlesFrom.Where(art => !articlesInto.Exists(el => el.Title == art.Title)).ToList();
+
+                        // 2. Add those articles into merged reference
+                        repo.AddListOfArticlesToBookmark(bookmarkInto, uniques);
+
+                        // 3. Delete old reference
+                        repo.DeleteBookmark(bookmarkFrom);
+                    }
+                }
+                else
+                {
+                    new BugTracker().Track("Bookmark Editor", "Save Bookmark", e.Message);
+                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                }
+            }
+            finally
+            {
                 // 2. Refresh collections in parent;
                 _parent.PopulateBookmarks();
-            }
-            catch
-            {
-                _dialogService.OpenDialog(new DialogOkViewModel("Bookmark with that name already exists", "Edit bookmark", DialogType.Error));
-            }
 
-           // 3. Close window
-           (input as ICommand).Execute(null);
+                // 3. Close window
+                (input as ICommand).Execute(null);
+            }
         }
         public bool CanSaveBookmark(object input = null)
         {
