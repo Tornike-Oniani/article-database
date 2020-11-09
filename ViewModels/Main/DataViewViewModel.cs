@@ -122,7 +122,12 @@ namespace MainLib.ViewModels.Main
         #endregion
 
         // Constructor
-        public DataViewViewModel(User user, Action<bool> workStatus, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public DataViewViewModel(
+            User user, 
+            Action<bool> workStatus, 
+            IDialogService dialogService, 
+            IWindowService windowService, 
+            IBrowserService browserService)
         {
             this.User = user;
             this._workStatus = workStatus;

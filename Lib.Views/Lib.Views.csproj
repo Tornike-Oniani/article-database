@@ -106,6 +106,9 @@
     <Compile Include="Services\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\Windows\MediumWindow.xaml.cs">
+      <DependentUpon>MediumWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\Windows\WindowService.cs" />
     <Compile Include="UserControls\CollectionBox.xaml.cs">
       <DependentUpon>CollectionBox.xaml</DependentUpon>
@@ -160,6 +163,10 @@
     <Page Include="Services\Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Services\Windows\MediumWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\DialogStyle.xaml">
       <SubType>Designer</SubType>

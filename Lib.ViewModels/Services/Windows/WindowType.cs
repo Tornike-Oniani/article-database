@@ -9,6 +9,7 @@ namespace Lib.ViewModels.Services.Windows
     public enum WindowType
     {
         MainWindow,
-        Generic
+        Generic,
+        Medium
     }
 }

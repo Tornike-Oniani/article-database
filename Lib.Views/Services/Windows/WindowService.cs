@@ -39,6 +39,8 @@ namespace Lib.Views.Services.Windows
                     return new MainWindow();
                 case WindowType.Generic:
                     return new GenericWindow();
+                case WindowType.Medium:
+                    return new MediumWindow();
                 default:
                     throw new ArgumentException("Wrong window type");
             }
