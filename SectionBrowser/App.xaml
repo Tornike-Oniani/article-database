@@ -1,0 +1,58 @@
+﻿<Application x:Class="SectionBrowser.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:SectionBrowser"
+             
+             xmlns:viewModels="clr-namespace:SectionBrowser.ViewModels"
+             xmlns:views="clr-namespace:SectionBrowser.Views"
+             
+             Startup="Application_Startup">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Colors resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Colors.xaml" />
+
+                <!--Material design essentials-->
+                <materialDesign:CustomColorTheme BaseTheme="Light" PrimaryColor="{StaticResource PrimaryColor}" SecondaryColor="{StaticResource SecondaryColor}" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+                <!-- Texts resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Texts.xaml" />
+
+                <!-- Buttons resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Buttons.xaml" />
+
+                <!-- Textboxes resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/TextBoxes.xaml" />
+
+                <!-- Navigation resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Navigation.xaml" />
+
+                <!-- Checkboxes resource dictionary-->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Checkboxes.xaml" />
+
+                <!-- Windows resource dictionary-->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Windows.xaml" />
+
+                <!-- Datagrid resource dictionary-->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Datagrid.xaml" />
+
+                <!-- ListView resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/ListView.xaml" />
+
+                <!-- Dialog resource dictionary -->
+                <ResourceDictionary Source="/Lib.Views;component/Styles/DialogStyle.xaml" />
+
+                <!-- Data template for views -->
+                <ResourceDictionary>
+                    <!-- Main -->
+                    <DataTemplate DataType="{x:Type viewModels:BrowserViewModel}">
+                        <views:Browser />
+                    </DataTemplate>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

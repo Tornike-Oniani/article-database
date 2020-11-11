@@ -10,28 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Lib.Views.Services.Windows
+namespace SectionBrowser.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Browser.xaml
     /// </summary>
-    public partial class MediumWindow : WindowBase
+    public partial class Browser : UserControl
     {
-        public MediumWindow()
+        public Browser()
         {
             InitializeComponent();
-
-            this.Loaded += (s, e) =>
-            {
-                Application.Current.MainWindow = this;
-            };
-
-            this.Closing += (s, e) =>
-            {
-                Application.Current.Shutdown();
-            };
         }
     }
 }

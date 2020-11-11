@@ -1,16 +1,19 @@
-﻿<Window x:Class="Lib.Views.Services.Windows.MediumWindow"
+﻿<base:WindowBase x:Class="Lib.Views.Services.Windows.MediumWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lib.Views.Services.Windows"
+        xmlns:base="clr-namespace:Lib.Views"
         mc:Ignorable="d"
         AllowsTransparency="True"
         WindowStyle="None"
-        Style="{StaticResource GenericWindowStyle}"
-        WindowStartupLocation="CenterOwner"
-        Title="{Binding Title, FallbackValue=DummyTitle}" 
-        Height="Auto" Width="Auto">
+        Style="{StaticResource MediumWindowStyle}"
+        MinWidth="{Binding WindowMinimumWidth, RelativeSource={RelativeSource Self}}"
+        MinHeight="{Binding WindowMinimumHeight, RelativeSource={RelativeSource Self}}" 
+        WindowStartupLocation="CenterScreen"
+        Title="{Binding Title}" Height="Auto" Width="Auto">
+
     <WindowChrome.WindowChrome>
         <WindowChrome 
             ResizeBorderThickness="{Binding ResizeBorderThickness, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
@@ -21,4 +24,4 @@
     </WindowChrome.WindowChrome>
 
     <ContentPresenter x:Name="ContentPresenter" Content="{Binding}" />
-</Window>
+</base:WindowBase>
