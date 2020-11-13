@@ -106,7 +106,7 @@ namespace MainLib.ViewModels.Popups
                 }
                 else
                 {
-                    new BugTracker().Track("Bookmark Editor", "Save Bookmark", e.Message);
+                    new BugTracker().Track("Bookmark Editor", "Save Bookmark", e.Message, e.StackTrace);
                     _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }

@@ -65,7 +65,7 @@ namespace MainLib.ViewModels.Popups
             }
             catch(Exception e)
             {
-                new BugTracker().Track("Data View (sub window)", "Add Personal", e.Message);
+                new BugTracker().Track("Data View (sub window)", "Add Personal", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }

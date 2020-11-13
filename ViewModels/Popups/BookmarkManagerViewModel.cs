@@ -151,7 +151,7 @@ namespace MainLib.ViewModels.Popups
             }
             catch(Exception e)
             {
-                new BugTracker().Track("Bookmark Manager", "Create Bookmark", e.Message);
+                new BugTracker().Track("Bookmark Manager", "Create Bookmark", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
@@ -176,7 +176,7 @@ namespace MainLib.ViewModels.Popups
                 }
                 catch(Exception e)
                 {
-                    new BugTracker().Track("Bookmark Manager", "Add article to bookmark", e.Message);
+                    new BugTracker().Track("Bookmark Manager", "Add article to bookmark", e.Message, e.StackTrace);
                     _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
@@ -193,7 +193,7 @@ namespace MainLib.ViewModels.Popups
                 }
                 catch (Exception e)
                 {
-                    new BugTracker().Track("Bookmark Manager", "Remove article from bookmark", e.Message);
+                    new BugTracker().Track("Bookmark Manager", "Remove article from bookmark", e.Message, e.StackTrace);
                     _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
@@ -212,7 +212,7 @@ namespace MainLib.ViewModels.Popups
                 }
                 catch(Exception e)
                 {
-                    new BugTracker().Track("Bookmark Manager (Data Entry)", "Remove article from bookmark", e.Message);
+                    new BugTracker().Track("Bookmark Manager (Data Entry)", "Remove article from bookmark", e.Message, e.StackTrace);
                     _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
@@ -225,7 +225,7 @@ namespace MainLib.ViewModels.Popups
                 }
                 catch(Exception e)
                 {
-                    new BugTracker().Track("Bookmark Manager (Data Entry)", "Add article to bookmark", e.Message);
+                    new BugTracker().Track("Bookmark Manager (Data Entry)", "Add article to bookmark", e.Message, e.StackTrace);
                     _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }

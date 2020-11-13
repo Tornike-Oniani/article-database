@@ -13,7 +13,7 @@ namespace Lib.DataAccessLayer.Repositories
     public class GlobalRepo : BaseRepo
     {
         // Import section database records
-        public List<CompFile> ImportSection(string importQuery, string filesQuery, string duplicatesQuery, out List<ExistCheck> duplicates)
+        public List<CompFile> ImportSection(string importQuery, string pendingQuery, string filesQuery, string duplicatesQuery, out List<ExistCheck> duplicates)
         {
             List<CompFile> files;
 
@@ -24,6 +24,8 @@ namespace Lib.DataAccessLayer.Repositories
                 {
                     // Execute query to merge .sqlite3 files
                     conn.Execute(importQuery, transaction);
+                    // Execute section pending query
+                    conn.Execute(pendingQuery, transaction);
                     // Execute query to retrieve list of files to copy
                     files = conn.Query<CompFile>(filesQuery, transaction).ToList();
                     duplicates = conn.Query<ExistCheck>(duplicatesQuery, transaction).ToList();
@@ -68,6 +70,20 @@ namespace Lib.DataAccessLayer.Repositories
             }
 
             return fetched_files;
+        }
+        // Remove articles from pending section (Might move to different repo)
+        public void RemovePending(string section)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    // Execute query to merge .sqlite3 files
+                    conn.Execute($"DELETE from tblPending WHERE Section = \"{section}\"", transaction);
+                    transaction.Commit();
+                }
+            }
         }
     }
 }

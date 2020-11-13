@@ -92,7 +92,7 @@ namespace MainLib.ViewModels.Pages
             }
             catch (Exception e)
             {
-                new BugTracker().Track("Bookmark List", "Delete bookmark", e.Message);
+                new BugTracker().Track("Bookmark List", "Delete bookmark", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
@@ -124,7 +124,7 @@ namespace MainLib.ViewModels.Pages
             }
             catch(Exception e)
             {
-                new BugTracker().Track("Bookmark List", "Populate Bookmarks", e.Message);
+                new BugTracker().Track("Bookmark List", "Populate Bookmarks", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally

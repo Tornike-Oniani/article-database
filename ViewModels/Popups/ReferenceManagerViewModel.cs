@@ -132,7 +132,7 @@ namespace MainLib.ViewModels.Popups
             }
             catch(Exception e)
             {
-                new BugTracker().Track("Reference Manager", "Create reference", e.Message);
+                new BugTracker().Track("Reference Manager", "Create reference", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
@@ -157,7 +157,7 @@ namespace MainLib.ViewModels.Popups
                 }
                 catch(Exception e)
                 {
-                    new BugTracker().Track("Reference Manager", "Add article to reference", e.Message);
+                    new BugTracker().Track("Reference Manager", "Add article to reference", e.Message, e.StackTrace);
                     _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
@@ -174,7 +174,7 @@ namespace MainLib.ViewModels.Popups
                 }
                 catch(Exception e)
                 {
-                    new BugTracker().Track("Reference Manager", "Remove article from reference", e.Message);
+                    new BugTracker().Track("Reference Manager", "Remove article from reference", e.Message, e.StackTrace);
                     _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
@@ -193,7 +193,7 @@ namespace MainLib.ViewModels.Popups
                 }
                 catch(Exception e)
                 {
-                    new BugTracker().Track("Reference Manager (Data Entry)", "Remove article from reference", e.Message);
+                    new BugTracker().Track("Reference Manager (Data Entry)", "Remove article from reference", e.Message, e.StackTrace);
                     _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }

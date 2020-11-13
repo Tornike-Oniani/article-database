@@ -27,6 +27,9 @@
                 <materialDesign:CustomColorTheme BaseTheme="Light" PrimaryColor="{StaticResource PrimaryColor}" SecondaryColor="{StaticResource SecondaryColor}" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 
+                <!-- Fonts resource dictionary -->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Fonts.xaml" />
+                
                 <!-- Texts resource dictionary -->
                 <ResourceDictionary Source="/Lib.Styles;component/Components/Texts.xaml" />
 

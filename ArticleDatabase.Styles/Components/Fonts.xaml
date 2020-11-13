@@ -1,0 +1,7 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Lib.Styles.Components">
+    <FontFamily x:Key="SourseSansPro">../fonts/SourceSansPro-Regular.ttf #Source Sans Pro</FontFamily>
+    <FontFamily x:Key="SourseSansProSemiBold">../fonts/SourceSansPro-SemiBold.ttf #Source Sans Pro</FontFamily>
+    <FontFamily x:Key="SourseSansProBold">../fonts/SourceSansPro-Bold.ttf #Source Sans Pro</FontFamily>
+</ResourceDictionary>

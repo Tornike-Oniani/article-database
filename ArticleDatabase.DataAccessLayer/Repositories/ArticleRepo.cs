@@ -280,7 +280,7 @@ LEFT JOIN
 FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
 ");
             // 1. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, new List<string>(), new List<string>(), null, null);
+            string query = AddFilter(queryBuilder, user, title, new List<string>(), new List<string>(), null, null, false);
 
             // 3.Fetch articles
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
@@ -299,7 +299,7 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             return results;
         }
         // Fetch list of articles from database
-        public List<Article> LoadArticles(User user, string title, List<string> authors, List<string> keywords, string year, string personalComment, int offset, int itemsPerPage)
+        public List<Article> LoadArticles(User user, string title, List<string> authors, List<string> keywords, string year, string personalComment, int offset, int itemsPerPage, string section)
         {
             // Results
             List<Article> results;
@@ -328,13 +328,21 @@ LEFT JOIN
 (SELECT ArticleID, PersonalComment, SIC
 FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
 ");
-            // 1. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, keywords, year, personalComment);
+            bool wasSection = false;
+            // 1. Add Section
+            if (section != "None")
+            {
+                queryBuilder.Append($"JOIN tblPending AS p ON final.ID = p.Article_ID WHERE Section = \"{section}\"");
+                wasSection = true;
+            }
 
-            // 2. Add Pagination
+            // 2. Add filters to template query
+            string query = AddFilter(queryBuilder, user, title, authors, keywords, year, personalComment, wasSection);
+
+            // 3. Add Pagination
             query += " LIMIT " + itemsPerPage.ToString() + " OFFSET " + offset.ToString() + ";";
 
-            // 3.Fetch articles
+            // 4. Fetch articles
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
             {
                 conn.Open();
@@ -349,10 +357,9 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             }
 
             return results;
-
         }
         // Get count of fetched articles
-        public int GetRecordCount(User user, string title, List<string> authors, List<string> keywords, string year, string personalComment)
+        public int GetRecordCount(User user, string title, List<string> authors, List<string> keywords, string year, string personalComment, string section)
         {
             int result = 1;
 
@@ -380,12 +387,19 @@ LEFT JOIN
 (SELECT ArticleID, PersonalComment, SIC
 FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
 ");
+            bool wasSection = false;
+            // 1. Add Section
+            if (section != "None")
+            {
+                queryBuilder.Append("JOIN tblPending AS p ON final.ID = p.Article_ID");
+                wasSection = true;
+            }
 
-            // 1. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, keywords, year, personalComment);
+            // 2. Add filters to template query
+            string query = AddFilter(queryBuilder, user, title, authors, keywords, year, personalComment, wasSection);
 
 
-            // 2. Fetch count
+            // 3. Fetch count
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
             {
                 conn.Open();
@@ -632,7 +646,8 @@ WHERE Title = @Title
             List<string> authors,
             List<string> keywords,
             string year,
-            string personalCommnet)
+            string personalCommnet,
+            bool section)
         {
             StringBuilder result = queryBuilder;
 
@@ -641,11 +656,19 @@ WHERE Title = @Title
 
             // 2. Append title filter
             if (!string.IsNullOrWhiteSpace(title))
-                result.Append(" WHERE final.Title LIKE " + ToWildCard(title));
-
-
+            {
+                if (section)
+                {
+                    result.Append(" AND final.Title LIKE " + ToWildCard(title));
+                }
+                else
+                {
+                    result.Append(" WHERE final.Title LIKE " + ToWildCard(title));
+                }
+            }
+                
             // 3. Add WHERE clause if title was null but authors or keywords aren't
-            if ((authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(year) || !string.IsNullOrEmpty(personalCommnet)) && string.IsNullOrEmpty(title))
+            if ((authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(year) || !string.IsNullOrEmpty(personalCommnet)) && string.IsNullOrEmpty(title) && !section)
                 result.Append(" WHERE ");
 
             // 4. Add authors filter

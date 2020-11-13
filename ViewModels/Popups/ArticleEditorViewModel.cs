@@ -111,7 +111,7 @@ namespace MainLib.ViewModels.Popups
                 }
                 else
                 {
-                    new BugTracker().Track("Data View (sub window)", "Update Article", e.Message);
+                    new BugTracker().Track("Data View (sub window)", "Update Article", e.Message, e.StackTrace);
                     _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }

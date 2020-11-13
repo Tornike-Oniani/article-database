@@ -156,7 +156,7 @@ namespace MainLib.ViewModels.Main
             }
             catch(Exception e)
             {
-                new BugTracker().Track("Data Entry", "Select file", e.Message);
+                new BugTracker().Track("Data Entry", "Select file", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
@@ -216,7 +216,7 @@ namespace MainLib.ViewModels.Main
             }
             catch (Exception e)
             {
-                new BugTracker().Track("Data Entry", "Add article", e.Message);
+                new BugTracker().Track("Data Entry", "Add article", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -235,7 +235,7 @@ namespace MainLib.ViewModels.Main
             }
             catch(Exception e)
             {
-                new BugTracker().Track("Data Entry", "Clear Article Attributes", e.Message);
+                new BugTracker().Track("Data Entry", "Clear Article Attributes", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }

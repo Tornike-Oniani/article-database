@@ -17,6 +17,8 @@ using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
 using Lib.ViewModels.Popups;
 using MainLib.ViewModels.Utils;
+using System.Windows.Input;
+using Newtonsoft.Json;
 
 namespace MainLib.ViewModels.Main
 {
@@ -29,6 +31,8 @@ namespace MainLib.ViewModels.Main
         private int _currentPage;
         private int _userIndex;
         private Article _selectedArticle;
+        private string _selectedSection;
+        private bool _isSectionSelected;
         private Action<bool> _workStatus;
         private IDialogService _dialogService;
         private IWindowService _windowService;
@@ -103,6 +107,18 @@ namespace MainLib.ViewModels.Main
             }
             set { _totalPages = value; OnPropertyChanged("TotalPages"); }
         }
+        public ObservableCollection<string> Sections { get; set; }
+        public string SelectedSection
+        {
+            get { return _selectedSection; }
+            set { _selectedSection = value; OnPropertyChanged("SelectedSection"); }
+        }
+        public bool IsSectionSelected
+        {
+            get { return _isSectionSelected; }
+            set { _isSectionSelected = value; OnPropertyChanged("IsSectionSelected"); }
+        }
+
 
         #region Commands
         public RelayCommand OpenFileCommand { get; set; }
@@ -142,6 +158,9 @@ namespace MainLib.ViewModels.Main
                 "Keywords",
                 "Year"
             };
+
+            // Initialize sections collection
+            this.Sections = new ObservableCollection<string>() {};
 
             // 2. Initialize articles collection and paging
             Users = new ObservableCollection<User>((new UserRepo()).GetUsers());
@@ -184,6 +203,12 @@ namespace MainLib.ViewModels.Main
 
             // 2. Set up commands
             ClearCommand = new RelayCommand(Clear, CanClear);
+
+            // Set up section selector
+            this.FinishCommand = new RelayCommand(Finish);
+
+            // Populate sections collection from json file
+            PopulateSections();
         }
 
         #region Command Actions
@@ -228,7 +253,7 @@ namespace MainLib.ViewModels.Main
             }
             catch (Exception e)
             {
-                new BugTracker().Track("Data View", "Next Page", e.Message);
+                new BugTracker().Track("Data View", "Next Page", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -256,7 +281,7 @@ namespace MainLib.ViewModels.Main
             }
             catch (Exception e)
             {
-                new BugTracker().Track("Data View", "Previous Page", e.Message);
+                new BugTracker().Track("Data View", "Previous Page", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -274,13 +299,14 @@ namespace MainLib.ViewModels.Main
                 await Task.Run(() =>
                 {
                     // 2. Calculate total pages
-                    int record_count = (new ArticleRepo()).GetRecordCount(
+                    int record_count = new ArticleRepo().GetRecordCount(
                         Users[UserIndex],
                         FilterTitle,
                         FilterAuthors.ToList(),
                         FilterKeywords.ToList(),
                         FilterYear,
-                        FilterPersonalComment);
+                        FilterPersonalComment,
+                        SelectedSection);
                     if ((record_count % ItemsPerPage) == 0)
                         TotalPages = record_count / ItemsPerPage;
                     else
@@ -291,11 +317,16 @@ namespace MainLib.ViewModels.Main
 
                 await PopulateArticles();
 
+                if (!string.IsNullOrEmpty(SelectedSection) && SelectedSection != "None")
+                    this.IsSectionSelected = true;
+                else
+                    this.IsSectionSelected = false;
+
                 _workStatus(false);
             }
             catch (Exception e)
             {
-                new BugTracker().Track("Data View", "Load Articles", e.Message);
+                new BugTracker().Track("Data View", "Load Articles", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -356,7 +387,7 @@ namespace MainLib.ViewModels.Main
             }
             catch (Exception e)
             {
-                new BugTracker().Track("Data View", "Export", e.Message);
+                new BugTracker().Track("Data View", "Export", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -406,7 +437,7 @@ namespace MainLib.ViewModels.Main
             }
             catch(Exception e)
             {
-                new BugTracker().Track("Data View", "Delete Article", e.Message);
+                new BugTracker().Track("Data View", "Delete Article", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
@@ -533,6 +564,44 @@ namespace MainLib.ViewModels.Main
 
         #endregion
 
+        #region Section selector setup
+        public ICommand FinishCommand { get; set; }
+
+        public void Select(string selectedItem)
+        {
+            // 1. Set selected section
+            this.SelectedSection = selectedItem;
+
+            // 2. Fetch section articles from database
+
+            // 3. Refresh articles collection
+        }
+
+        public void Finish(object input = null)
+        {
+            if (
+                _dialogService.OpenDialog(new DialogYesNoViewModel("Are you sure you want to remove this section from pending?", "Finish Section", DialogType.Warning)))
+            {
+                // 1. Remove pending status from selected section articles
+                new GlobalRepo().RemovePending(SelectedSection);
+
+                // 2. Remove section from json
+                string path = Path.Combine(Environment.CurrentDirectory, "sections.json");
+                string info = File.ReadAllText(path);
+                List<string> sections = JsonConvert.DeserializeObject<List<string>>(info);
+                sections.Remove(SelectedSection);
+                info = JsonConvert.SerializeObject(sections);
+                File.WriteAllText(path, info);
+
+                // 3. Clear articles collection
+                this.Sections.Remove(SelectedSection);
+                this.SelectedSection = this.Sections.First();
+                this.Articles.Clear();
+                this.IsSectionSelected = false;
+            }
+        }
+        #endregion
+
         // Private helpers
         private async Task PopulateArticles()
         {
@@ -544,7 +613,7 @@ namespace MainLib.ViewModels.Main
             await Task.Run(() =>
             {
                 // 2. Fetch artilces from database
-                foreach (Article article in (new ArticleRepo()).LoadArticles(
+                foreach (Article article in new ArticleRepo().LoadArticles(
                     Users[UserIndex],
                     FilterTitle,
                     FilterAuthors.ToList(),
@@ -552,7 +621,8 @@ namespace MainLib.ViewModels.Main
                     FilterYear,
                     FilterPersonalComment,
                     _offset,
-                    ItemsPerPage))
+                    ItemsPerPage,
+                    SelectedSection))
                 {
                     articles.Add(article);
                 }
@@ -561,6 +631,45 @@ namespace MainLib.ViewModels.Main
             // 3. Populate article collection
             foreach (Article article in articles)
                 this.Articles.Add(article);
+        }
+        private async Task PopulateSections()
+        {
+            this.Sections.Clear();
+
+            try
+            {
+                List<string> sections = new List<string>();
+
+                _workStatus(true);
+                
+                await Task.Run(() =>
+                {
+                    string info = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "sections.json"));
+
+                    JsonConvert.DeserializeObject<List<string>>(info).ForEach((cur) =>
+                    {
+                        sections.Add(cur);
+                    });
+                });
+
+                _workStatus(false);
+
+                this.Sections.Add("None");
+                sections.ForEach((cur) =>
+                {
+                    this.Sections.Add(cur);
+                });
+                this.SelectedSection = this.Sections.First();
+            }
+            catch(Exception e)
+            {
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong", "Error", DialogType.Error));
+                new BugTracker().Track("Data View", "Reading sections from json", e.Message, e.StackTrace);
+            }
+            finally
+            {
+                _workStatus(false);
+            }
         }
     }
 }

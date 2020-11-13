@@ -14,6 +14,7 @@ using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
 using MainLib.ViewModels.Utils;
 using System.CodeDom;
+using Newtonsoft.Json;
 
 namespace MainLib.ViewModels.Main
 {
@@ -117,7 +118,7 @@ namespace MainLib.ViewModels.Main
             }
             catch (Exception e)
             {
-                new BugTracker().Track("App", "Validate", e.Message);
+                new BugTracker().Track("App", "Validate", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -161,6 +162,28 @@ namespace MainLib.ViewModels.Main
                 string files_query = @"SELECT tf.File AS OldFile, tnf.File AS NewFile FROM temp_Files AS tf, temp_NewFiles AS tnf WHERE tf.Title = tnf.Title;";
                 string duplicates_query = @"SELECT Title, File FROM temp_tblDuplicates;";
 
+                // 1. Get Section name
+                string info = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "sections.json"));
+                List<string> sections = JsonConvert.DeserializeObject<List<string>>(info);
+
+                string section_name;
+
+                if (sections == null || sections.Count == 0)
+                    section_name = "Section 1";
+                else
+                {
+                    int number = int.Parse(sections.Last().Split(' ')[1]) + 1;
+                    section_name = "Section " + number.ToString();
+                }
+
+                // 2. Add section to json file
+                sections.Add(section_name);
+                info = JsonConvert.SerializeObject(sections);
+                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "sections.json"), info);
+
+                // 3. Query for pending articles
+                string pending_query = $"INSERT INTO tblPending (Article_ID, Section) SELECT ID, \"{section_name}\" AS Section FROM tblArticle WHERE Title IN (SELECT Title FROM temp_tblArticle);";
+
                 // Open or Create file
                 using (StreamWriter sw = File.AppendText(file_path))
                 {
@@ -173,7 +196,7 @@ namespace MainLib.ViewModels.Main
 
                 // 6. Import recrods to database, return list of files to copy and duplicates to log
                 List<ExistCheck> duplicates;
-                List<CompFile> files = (new GlobalRepo()).ImportSection(full_query, files_query, duplicates_query, out duplicates);
+                List<CompFile> files = new GlobalRepo().ImportSection(full_query, pending_query, files_query, duplicates_query, out duplicates);
 
                 // 7. Create dictionary of files to copy
                 Dictionary<string, string> files_to_copy = new Dictionary<string, string>();
@@ -215,7 +238,7 @@ namespace MainLib.ViewModels.Main
             }
             catch(Exception e)
             {
-                new BugTracker().Track("App", "Import", e.Message);
+                new BugTracker().Track("App", "Import", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -262,7 +285,7 @@ namespace MainLib.ViewModels.Main
             }
             catch(Exception e)
             {
-                new BugTracker().Track("App", "Sync", e.Message);
+                new BugTracker().Track("App", "Sync", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -357,7 +380,7 @@ namespace MainLib.ViewModels.Main
             }
             catch (Exception e)
             {
-                new BugTracker().Track("App", "Export Sync", e.Message);
+                new BugTracker().Track("App", "Export Sync", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally

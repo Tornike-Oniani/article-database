@@ -105,7 +105,7 @@
                     <Grid Margin="0 15 0 0">
                         <Grid.ColumnDefinitions>
                             <!-- Space -->
-                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width=".3*" />
                             <!-- Add button column -->
                             <ColumnDefinition Width="*" />
                             <!-- Clear button column -->

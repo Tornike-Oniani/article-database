@@ -252,6 +252,8 @@
                     <ColumnDefinition Width="Auto" />
                     <!-- Items per page column -->
                     <ColumnDefinition Width="Auto" />
+                    <!-- Section colum -->
+                    <ColumnDefinition Width="Auto" />
                     <!-- Dialog button colum -->
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -277,6 +279,20 @@
                         <materialDesign:PackIcon Kind="Refresh" />
                     </Button>
                 </StackPanel>
+                
+                <!-- Section selection -->
+                <StackPanel Orientation="Horizontal"
+                            Visibility="{Binding User.IsAdmin, 
+                                                 Converter={StaticResource BoolToVisibility}}"
+                            Grid.Column="2">
+                    <ComboBox ItemsSource="{Binding Sections}"
+                              SelectedItem="{Binding SelectedSection}"
+                              Width="100"
+                              Margin="10 0 10 0" />
+                    <Button Content="Finish"
+                            IsEnabled="{Binding IsSectionSelected}"
+                            Command="{Binding FinishCommand}" />
+                </StackPanel>
 
                 <!-- Filter button -->
                 <Button Content="Filter" 
@@ -284,7 +300,7 @@
                         HorizontalAlignment="Right" 
                         Command="{Binding OpenSearchDialogCommand}" 
                         CommandParameter="{Binding Columns}"
-                        Grid.Column="2"/>
+                        Grid.Column="3"/>
             </Grid>
         </Border>
     </Grid>

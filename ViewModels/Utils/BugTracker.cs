@@ -21,13 +21,14 @@ namespace MainLib.ViewModels.Utils
                 Directory.CreateDirectory(directoryPath);
         }
 
-        public void Track(string name, string action, string message)
+        public void Track(string name, string action, string message, string trace)
         {
             using(StreamWriter sw = File.AppendText(filePath))
             {
                 sw.WriteLine(DateTime.Today.ToString());
                 sw.WriteLine($"{name} -> {action}");
                 sw.WriteLine(message);
+                sw.WriteLine(trace);
                 sw.WriteLine();
             }
         }

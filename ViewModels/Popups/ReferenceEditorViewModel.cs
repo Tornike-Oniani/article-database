@@ -97,7 +97,7 @@ namespace MainLib.ViewModels.Popups
                 // Generic exception
                 else
                 {
-                    new BugTracker().Track("Refernce Editor", "Save Reference", e.Message);
+                    new BugTracker().Track("Refernce Editor", "Save Reference", e.Message, e.StackTrace);
                     _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }

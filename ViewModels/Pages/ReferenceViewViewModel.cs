@@ -96,7 +96,7 @@ namespace MainLib.ViewModels.Pages
             }
             catch(Exception e)
             {
-                new BugTracker().Track("Reference View", "Populate references", e.Message);
+                new BugTracker().Track("Reference View", "Populate references", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -141,7 +141,7 @@ namespace MainLib.ViewModels.Pages
             }
             catch (Exception e)
             {
-                new BugTracker().Track("Reference List", "Remove article", e.Message);
+                new BugTracker().Track("Reference List", "Remove article", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }

@@ -115,7 +115,7 @@ namespace MainLib.ViewModels.Pages
             }
             catch (Exception e)
             {
-                new BugTracker().Track("Bookmark View", "Populate bookmark articles", e.Message);
+                new BugTracker().Track("Bookmark View", "Populate bookmark articles", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -197,7 +197,7 @@ namespace MainLib.ViewModels.Pages
             }
             catch(Exception e)
             {
-                new BugTracker().Track("Bookmark View", "Export", e.Message);
+                new BugTracker().Track("Bookmark View", "Export", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -252,7 +252,7 @@ namespace MainLib.ViewModels.Pages
             }
             catch(Exception e)
             {
-                new BugTracker().Track("Bookmark View", "Export Bookmark", e.Message);
+                new BugTracker().Track("Bookmark View", "Export Bookmark", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
@@ -277,7 +277,7 @@ namespace MainLib.ViewModels.Pages
             }
             catch (Exception e)
             {
-                new BugTracker().Track("Bookmark View", "Remove article", e.Message);
+                new BugTracker().Track("Bookmark View", "Remove article", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
