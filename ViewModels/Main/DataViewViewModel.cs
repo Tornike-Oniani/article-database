@@ -34,6 +34,7 @@ namespace MainLib.ViewModels.Main
         private string _selectedSection;
         private bool _isSectionSelected;
         private Action<bool> _workStatus;
+        private string _currentSort;
         private IDialogService _dialogService;
         private IWindowService _windowService;
         private IBrowserService _browserService;
@@ -128,6 +129,7 @@ namespace MainLib.ViewModels.Main
         public RelayCommand ExportCommand { get; set; }
         public RelayCommand DeleteArticleCommand { get; set; }
         public RelayCommand MassBookmarkCommand { get; set; }
+        public RelayCommand SortCommand { get; set; }
 
         public RelayCommand OpenSearchDialogCommand { get; set; }
         public RelayCommand OpenAddPersonalCommand { get; set; }
@@ -146,6 +148,7 @@ namespace MainLib.ViewModels.Main
             IBrowserService browserService)
         {
             this.User = user;
+            this._currentSort = "Title ASC";
             this._workStatus = workStatus;
             this._dialogService = dialogService;
             this._windowService = windowService;
@@ -187,6 +190,7 @@ namespace MainLib.ViewModels.Main
             ExportCommand = new RelayCommand(Export, CanExport);
             DeleteArticleCommand = new RelayCommand(DeleteArticle, CanDeleteArticle);
             MassBookmarkCommand = new RelayCommand(MassBookmark);
+            SortCommand = new RelayCommand(Sort);
 
             OpenSearchDialogCommand = new RelayCommand(OpenSearchDialog);
             OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
@@ -453,6 +457,33 @@ namespace MainLib.ViewModels.Main
             foreach (Article article in Articles)
                 article.BMChecked = (bool)input;
         }
+        public async void Sort(object input)
+        {
+            string header = input.ToString();
+
+            // Ignore columns
+            if (header == "Authors" || header == "Keywords" || header == "Export" || header == "Bookmark")
+                return;
+
+
+            if (_currentSort.Contains(header))
+            {
+                if (_currentSort.Contains("ASC"))
+                    _currentSort = $"{header} DESC";
+                else
+                    _currentSort = $"{header} ASC";
+            }
+            else
+            {
+                _currentSort = $"{header} ASC";
+            }
+
+            _workStatus(true);
+
+            await PopulateArticles();
+
+            _workStatus(false);
+        }
 
         // Window open commands
         public void OpenSearchDialog(object input = null)
@@ -622,7 +653,8 @@ namespace MainLib.ViewModels.Main
                     FilterPersonalComment,
                     _offset,
                     ItemsPerPage,
-                    SelectedSection))
+                    SelectedSection,
+                    _currentSort))
                 {
                     articles.Add(article);
                 }

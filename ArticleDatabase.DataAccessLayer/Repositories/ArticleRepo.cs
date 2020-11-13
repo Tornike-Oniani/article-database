@@ -299,7 +299,17 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             return results;
         }
         // Fetch list of articles from database
-        public List<Article> LoadArticles(User user, string title, List<string> authors, List<string> keywords, string year, string personalComment, int offset, int itemsPerPage, string section)
+        public List<Article> LoadArticles(
+            User user, 
+            string title, 
+            List<string> authors, 
+            List<string> keywords, 
+            string year, 
+            string personalComment, 
+            int offset, 
+            int itemsPerPage, 
+            string section,
+            string order = "Title ASC")
         {
             // Results
             List<Article> results;
@@ -337,10 +347,12 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             }
 
             // 2. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, keywords, year, personalComment, wasSection);
+            string query = AddFilter(queryBuilder, user, title, authors, keywords, year, personalComment, wasSection, order);
 
             // 3. Add Pagination
             query += " LIMIT " + itemsPerPage.ToString() + " OFFSET " + offset.ToString() + ";";
+
+            Console.WriteLine(query);
 
             // 4. Fetch articles
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
@@ -647,7 +659,8 @@ WHERE Title = @Title
             List<string> keywords,
             string year,
             string personalCommnet,
-            bool section)
+            bool section,
+            string order = "Title ASC")
         {
             StringBuilder result = queryBuilder;
 
@@ -738,10 +751,10 @@ WHERE Title = @Title
                 queryBuilder.Append($" final.PersonalComment LIKE {ToWildCard(personalCommnet)}");
             }
 
+            // 8. Apply order
+            queryBuilder.Append($" ORDER BY {order}");
 
-            Console.WriteLine(result.ToString());
-
-            // 8. Return the result
+            // 9. Return the result
             return result.ToString();
         }
         private string ToWildCard(string input)
