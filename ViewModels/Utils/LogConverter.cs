@@ -61,6 +61,12 @@ namespace MainLib.ViewModels.Utils
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
                     result.Add(log);
                 }
+                else if (check.Contains("Pending"))
+                {
+                    Log<PendingInfo> temp = item.ToObject<Log<PendingInfo>>();
+                    Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
+                    result.Add(log);
+                }
             }
 
             return result;

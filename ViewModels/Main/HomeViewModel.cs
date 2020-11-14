@@ -377,6 +377,8 @@ namespace MainLib.ViewModels.Main
                 });
 
                 _workStatus(false);
+
+                _dialogService.OpenDialog(new DialogOkViewModel("Sync information exported successfully.", "Sync export", DialogType.Success));
             }
             catch (Exception e)
             {

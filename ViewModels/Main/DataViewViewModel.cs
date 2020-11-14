@@ -598,6 +598,7 @@ namespace MainLib.ViewModels.Main
         #region Section selector setup
         public ICommand FinishCommand { get; set; }
 
+        // [Obsolete]
         public void Select(string selectedItem)
         {
             // 1. Set selected section
@@ -608,27 +609,49 @@ namespace MainLib.ViewModels.Main
             // 3. Refresh articles collection
         }
 
-        public void Finish(object input = null)
+        public async void Finish(object input = null)
         {
             if (
                 _dialogService.OpenDialog(new DialogYesNoViewModel("Are you sure you want to remove this section from pending?", "Finish Section", DialogType.Warning)))
             {
-                // 1. Remove pending status from selected section articles
-                new GlobalRepo().RemovePending(SelectedSection);
+                try
+                {
+                    _workStatus(true);
 
-                // 2. Remove section from json
-                string path = Path.Combine(Environment.CurrentDirectory, "sections.json");
-                string info = File.ReadAllText(path);
-                List<string> sections = JsonConvert.DeserializeObject<List<string>>(info);
-                sections.Remove(SelectedSection);
-                info = JsonConvert.SerializeObject(sections);
-                File.WriteAllText(path, info);
+                    await Task.Run(() =>
+                    {
+                        // 1. Remove pending status from selected section articles
+                        new GlobalRepo().RemovePending(SelectedSection);
 
-                // 3. Clear articles collection
-                this.Sections.Remove(SelectedSection);
-                this.SelectedSection = this.Sections.First();
-                this.Articles.Clear();
-                this.IsSectionSelected = false;
+                        // Track Pending
+                        new Tracker(this.User).TrackPending(new Lib.DataAccessLayer.Info.PendingInfo(SelectedSection));
+
+                        // 2. Remove section from json
+                        string path = Path.Combine(Environment.CurrentDirectory, "sections.json");
+                        string info = File.ReadAllText(path);
+                        List<string> sections = JsonConvert.DeserializeObject<List<string>>(info);
+                        sections.Remove(SelectedSection);
+                        info = JsonConvert.SerializeObject(sections);
+                        File.WriteAllText(path, info);
+                    });
+
+                    _workStatus(false);
+
+                    // 3. Clear articles collection
+                    this.Sections.Remove(SelectedSection);
+                    this.SelectedSection = this.Sections.First();
+                    this.Articles.Clear();
+                    this.IsSectionSelected = false;
+                }
+                catch (Exception e)
+                {
+                    new BugTracker().Track("DataView", "Finish", e.Message, e.StackTrace);
+                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                }
+                finally
+                {
+                    _workStatus(false);
+                }
             }
         }
         #endregion

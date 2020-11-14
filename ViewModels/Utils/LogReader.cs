@@ -352,6 +352,20 @@ namespace MainLib.ViewModels.Utils
 
                         repo1.UpdatePersonal(article3, user);
                         break;
+                    case "Pending":
+                        PendingInfo l_info = (PendingInfo)log.Info;
+
+                        // 1. Remove pending section status from db
+                        new GlobalRepo().RemovePending(l_info.Section);
+
+                        // 2. Remove section from json
+                        string path = Path.Combine(Environment.CurrentDirectory, "sections.json");
+                        string textInfo = File.ReadAllText(path);
+                        List<string> sections = JsonConvert.DeserializeObject<List<string>>(textInfo);
+                        sections.Remove(l_info.Section);
+                        textInfo = JsonConvert.SerializeObject(sections);
+                        File.WriteAllText(path, textInfo);
+                        break;
                     default:
                         break;
                 }
@@ -375,7 +389,7 @@ namespace MainLib.ViewModels.Utils
             this._path = Path.Combine(_logsPath, name);
             DateTime currentTime = DateTime.Now;
 
-            //[Obsolete File.Append already creates file if it doesn't exist and this causes another process exception]
+            //[Obsolete, File.Append already creates file if it doesn't exist and this causes another process exception]
             /*
             // Create if it doesn't exist
             if (!File.Exists(_path))

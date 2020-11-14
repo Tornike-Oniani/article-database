@@ -28,7 +28,8 @@ namespace MainLib.ViewModels.Utils
                     || value.ToString() == "Update" 
                     || value.ToString() == "Delete"
                     || value.ToString() == "Coupling"
-                    || value.ToString() == "Personal")
+                    || value.ToString() == "Personal"
+                    || value.ToString() == "Pending")
                     _type = value;
                 else
                     throw new ArgumentException("Invalid argument. It has to be Create, Update, Delete or Coupling");
@@ -102,6 +103,11 @@ namespace MainLib.ViewModels.Utils
         public void TrackPersonal(PersonalInfo info)
         {
             Track<PersonalInfo>("Personal", info);
+        }
+
+        public void TrackPending(PendingInfo info)
+        {
+            Track<PendingInfo>("Pending", info);
         }
 
         private void Track<T>(string action, T instance, string id = null)

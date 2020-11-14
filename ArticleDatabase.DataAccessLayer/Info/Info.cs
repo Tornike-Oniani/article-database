@@ -204,4 +204,14 @@ namespace Lib.DataAccessLayer.Info
             this.SIC = sic;
         }
     }
+    public class PendingInfo : IInfo
+    {
+        public string Section { get; set; }
+
+        public PendingInfo(string section)
+        {
+            this.InfoType = "PendingInfo";
+            this.Section = section;
+        }
+    }
 }
