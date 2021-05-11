@@ -29,18 +29,49 @@
                     <!-- Header -->
                     <TextBlock Text="Article:" Style="{StaticResource Header}" Margin="0 0 0 10" />
                     <!-- Title -->
-                    <TextBox x:Name="txbTitle"
-                    Text="{Binding Article.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
-                    materialDesign:HintAssist.Hint="Title" 
-                    materialDesign:HintAssist.IsFloating="True" 
-                    AcceptsReturn="True" 
-                    TextWrapping="Wrap" 
-                    FontSize="15"
-                    SpellCheck.IsEnabled="True"
-                    materialDesign:ValidationAssist.UsePopup="True"
-                    Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                    LostFocus="txbTitle_LostFocus" />
-
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="txbTitle"
+                                Text="{Binding Article.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
+                                materialDesign:HintAssist.Hint="Title" 
+                                materialDesign:HintAssist.IsFloating="True" 
+                                AcceptsReturn="True" 
+                                TextWrapping="Wrap" 
+                                FontSize="16"
+                                SpellCheck.IsEnabled="True"
+                                materialDesign:ValidationAssist.UsePopup="True"
+                                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                                FontFamily="Verdana"
+                                Grid.Column="0"
+                                LostFocus="txbTitle_LostFocus" />
+                        <Button Grid.Column="1"
+                                Command="{Binding ClearTitleCommand}"
+                                Click="Button_Click">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Margin" Value="5 0 0 0" />
+                                    <Setter Property="Cursor" Value="Hand" />
+                                    <Setter Property="Foreground" Value="#80868b" />
+                                    <Setter Property="Width" Value="25" />
+                                    <Setter Property="Height" Value="25" />
+                                </Style>
+                            </Button.Style>
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="Transparent">
+                                        <materialDesign:PackIcon Kind="Close"
+                                                             Foreground="{TemplateBinding Foreground}"
+                                                             Height="{TemplateBinding Width}"
+                                                             Width="{TemplateBinding Height}" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
 
                     <!-- Authors and keywords wrapper -->
                     <Grid Margin="0 15 0 0">
@@ -52,10 +83,18 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Authors -->
-                        <usercontrols:CollectionBox Text="Authors" ItemsSource="{Binding Article.AuthorsCollection}" Margin="0 0 10 0" Grid.Column="0" />
+                        <usercontrols:CollectionBox Text="Authors" 
+                                                    ItemsSource="{Binding Article.AuthorsCollection}" 
+                                                    Restriction="Author"
+                                                    Margin="0 0 10 0" 
+                                                    Grid.Column="0" />
 
                         <!-- Keywords -->
-                        <usercontrols:CollectionBox Text="Keywords" ItemsSource="{Binding Article.KeywordsCollection}" Margin="10 0 0 0" Grid.Column="1" />
+                        <usercontrols:CollectionBox Text="Keywords" 
+                                                    ItemsSource="{Binding Article.KeywordsCollection}" 
+                                                    Restriction="Keyword"
+                                                    Margin="10 0 0 0" 
+                                                    Grid.Column="1" />
                     </Grid>
 
                     <!-- Year and SIC -->
@@ -77,7 +116,10 @@
                     </StackPanel>
 
                     <!-- Personal Comment -->
-                    <TextBox Text="{Binding Article.PersonalComment}" materialDesign:HintAssist.Hint="Personal comment" materialDesign:HintAssist.IsFloating="True" />
+                    <TextBox Text="{Binding Article.PersonalComment}" 
+                             materialDesign:HintAssist.Hint="Personal comment" 
+                             materialDesign:HintAssist.IsFloating="True"
+                             FontFamily="Verdana" />
 
                     <!-- File -->
                     <StackPanel Orientation="Horizontal" Margin="0 15 0 0">
@@ -114,8 +156,16 @@
                             <ColumnDefinition Width="*" />-->
                         </Grid.ColumnDefinitions>
 
-                        <Button Content="Add" Command="{Binding SaveArticleCommand}" Click="Button_Click" Margin="0 0 5 0" Grid.Column="1" />
-                        <Button Content="Clear" Margin="5 0 0 0" Command="{Binding ClearArticleAttributesCommand}" Click="Button_Click" Grid.Column="2" />
+                        <Button Content="Add" 
+                                Command="{Binding SaveArticleCommand}" 
+                                Click="Button_Click" 
+                                Margin="0 0 5 0" 
+                                Grid.Column="1" />
+                        <Button Content="Clear" 
+                                Command="{Binding ClearArticleAttributesCommand}" 
+                                Click="Button_Click" 
+                                Margin="5 0 0 0" 
+                                Grid.Column="2" />
                         <!--<Button Content="Generate" Margin="5 0 0 0" Command="{Binding GenerateRandomArticlesCommand}" Grid.Column="3" />
                         <Button Content="Testing" Margin="5 0 0 0" Command="{Binding TestCommand}" Grid.Column="4" />-->
                     </Grid>

@@ -16,6 +16,7 @@ using System.Collections.ObjectModel;
 using Lib.ViewModels.Services.Browser;
 using MainLib.ViewModels.Utils;
 using Lib.DataAccessLayer.Info;
+using System.Windows.Input;
 
 namespace MainLib.ViewModels.Pages
 {
@@ -68,6 +69,7 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand ExportBookmarkCommand { get; set; }
         public RelayCommand RemoveArticleCommand { get; set; }
         public RelayCommand CopyCommand { get; set; }
+        public ICommand EnableExportCommand { get; set; }
 
         // Constructor
         public BookmarkViewViewModel(Bookmark bookmark, User user, Action<bool> workStatus, IDialogService dialogService, IBrowserService browserService, bool modifyRights = true)
@@ -83,10 +85,11 @@ namespace MainLib.ViewModels.Pages
 
             // Initialize commands
             OpenFileCommand = new RelayCommand(OpenFile);
-            ExportCommand = new RelayCommand(Export);
+            ExportCommand = new RelayCommand(Export, CanExport);
             ExportBookmarkCommand = new RelayCommand(ExportBookmark, CanExportBookmark);
             RemoveArticleCommand = new RelayCommand(RemoveArticle, CanOnSelectedArticle);
             CopyCommand = new RelayCommand(Copy, CanOnSelectedArticle);
+            EnableExportCommand = new RelayCommand(EnableExport);
         }
 
         /**
@@ -143,6 +146,11 @@ namespace MainLib.ViewModels.Pages
             {
                 _dialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
+        }
+        public void EnableExport(object input)
+        {
+            foreach (Article article in Articles)
+                article.Checked = false;
         }
         public async void Export(object input = null)
         {

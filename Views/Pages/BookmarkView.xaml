@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MainLib.Views.Pages"
+      xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
       xmlns:converters="clr-namespace:MainLib.Views.Converters"
       xmlns:commonConverters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
       mc:Ignorable="d" 
@@ -51,7 +52,8 @@
                           Margin="0 0 10 0"
                           IsChecked="{Binding Columns, 
                                               Converter={StaticResource CheckToList}, 
-                                              ConverterParameter='Export'}"/>
+                                              ConverterParameter='Export'}"
+                          Command="{Binding EnableExportCommand}" />
                 <Button Content="Export"
                         Margin="0 0 10 0"
                         Command="{Binding ExportCommand}"/>
@@ -62,6 +64,7 @@
 
         <!-- Data grid -->
         <DataGrid Style="{StaticResource ArticleGrid}"
+                  FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
                   ItemsSource="{Binding Articles}"
                   SelectedItem="{Binding SelectedArticle}"
                   Grid.Row="2">

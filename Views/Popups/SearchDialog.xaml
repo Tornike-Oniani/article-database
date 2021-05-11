@@ -8,13 +8,20 @@
              xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              mc:Ignorable="d" 
+             Focusable = "True"
              d:DesignHeight="550" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:CheckToListConverter x:Key="CheckToList" />
     </UserControl.Resources>
 
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding SearchCommand}"
+                    Key="Enter" />
+    </UserControl.InputBindings>
+
     <Border Padding="10">
-        <Grid DataContext="{Binding Parent}">
+        <Grid Focusable = "True" 
+              DataContext="{Binding Parent}">
             <Grid.RowDefinitions>
                 <!-- Checkboxes row -->
                 <RowDefinition Height="Auto" />
@@ -48,13 +55,16 @@
             </StackPanel>
 
             <!-- Title -->
-            <TextBox Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox x:Name="txbSearch"
+                     Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}" 
+                     SpellCheck.IsEnabled="True"
                      materialDesign:HintAssist.Hint="Title" 
                      materialDesign:HintAssist.IsFloating="True" 
-                     AcceptsReturn="True" 
                      TextWrapping="Wrap" 
+                     FontFamily="Verdana"
                      FontSize="15"
                      Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                     LostFocus="txbSearch_LostFocus"
                      Grid.Row="1" />
 
             <!-- Authors & keywords -->
@@ -69,6 +79,7 @@
                 <!-- Authors -->
                 <usercontrols:CollectionBox Text="Author"
                                             ItemsSource="{Binding FilterAuthors}" 
+                                            Restriction="Author"
                                             BoxHeight="150"
                                             Margin="0 0 10 0" 
                                             Grid.Column="0"  />
@@ -76,6 +87,7 @@
                 <!-- Keywords -->
                 <usercontrols:CollectionBox Text="Keyword" 
                                             ItemsSource="{Binding FilterKeywords}" 
+                                            Restriction="Keyword"
                                             BoxHeight="150"
                                             Margin="10 0 0 0" 
                                             Grid.Column="1" />
@@ -92,8 +104,8 @@
             <TextBox Text="{Binding FilterPersonalComment, UpdateSourceTrigger=PropertyChanged}" 
                      materialDesign:HintAssist.Hint="Personal comment"
                      materialDesign:HintAssist.IsFloating="True"
-                     Grid.Row="4"
-                     />
+                     FontFamily="Verdana"
+                     Grid.Row="4" />
 
             <!-- Buttons -->
             <Grid Margin="0 15 0 0" Grid.Row="5">
@@ -106,7 +118,7 @@
 
                 <!-- Search button -->
                 <Button Content="Search" 
-                        Command="{Binding LoadArticlesCommand}" 
+                        Command="{Binding DataContext.SearchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                         Margin="0 0 5 0" 
                         Grid.Column="0"/>
                 <!-- Clear button -->

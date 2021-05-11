@@ -25,6 +25,8 @@
                          TextWrapping="Wrap"
                          SpellCheck.IsEnabled="True" 
                          FontSize="15"
+                         FontFamily="Verdana"
+                         LostFocus="txbTitle_LostFocus"
                          Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
             </AdornerDecorator>
 
@@ -38,10 +40,18 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Authors -->
-                <usercontrols:CollectionBox Text="Author" ItemsSource="{Binding Article.AuthorsCollection}" Margin="0 0 10 0" Grid.Column="0" />
+                <usercontrols:CollectionBox Text="Author" 
+                                            ItemsSource="{Binding Article.AuthorsCollection}" 
+                                            Restriction="Author"
+                                            Margin="0 0 10 0" 
+                                            Grid.Column="0" />
 
                 <!-- Keywords -->
-                <usercontrols:CollectionBox Text="Keyword" ItemsSource="{Binding Article.KeywordsCollection}" Margin="10 0 0 0" Grid.Column="1"/>
+                <usercontrols:CollectionBox Text="Keyword" 
+                                            ItemsSource="{Binding Article.KeywordsCollection}" 
+                                            Restriction="Keyword"
+                                            Margin="10 0 0 0" 
+                                            Grid.Column="1"/>
             </Grid>
 
             <!-- Year and SIC -->
@@ -60,7 +70,10 @@
             </StackPanel>
 
             <!-- Personal Comment -->
-            <TextBox Text="{Binding Article.PersonalComment}" materialDesign:HintAssist.Hint="Personal comment" materialDesign:HintAssist.IsFloating="True" />
+            <TextBox Text="{Binding Article.PersonalComment}" 
+                     FontFamily="Verdana"
+                     materialDesign:HintAssist.Hint="Personal comment" 
+                     materialDesign:HintAssist.IsFloating="True" />
 
             <!-- File -->
             <StackPanel Orientation="Horizontal" Margin="0 15 0 0">

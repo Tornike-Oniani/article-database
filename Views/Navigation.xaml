@@ -48,47 +48,87 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- Navigation -->
-            <StackPanel Style="{StaticResource NavigationWrapper}">
-                <!-- Home -->
-                <RadioButton Style="{StaticResource RadioButtonHome}"
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Navigation -->
+                <StackPanel Style="{StaticResource NavigationWrapper}"
+                            Grid.Row="0">
+                    <!-- Home -->
+                    <RadioButton Style="{StaticResource RadioButtonHome}"
                          Content="Home" 
                          GroupName="Navigation" 
                          IsChecked="True" 
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.Home}" />
-                <!-- Data entry -->
-                <RadioButton Style="{StaticResource NavigationButton}" 
+                    <!-- Data entry -->
+                    <RadioButton Style="{StaticResource NavigationButton}" 
                          IsEnabled="{Binding User.IsAdmin}"
                          Content="Data Entry" 
                          Tag="{x:Static materialDesign:PackIconKind.FilePlus}" 
                          GroupName="Navigation" 
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.DataEntry}" />
-                <!-- Data search -->
-                <RadioButton Style="{StaticResource NavigationButton}" 
+                    <!-- Data search -->
+                    <RadioButton Style="{StaticResource NavigationButton}" 
                          Content="Data Search" 
                          Tag="{x:Static materialDesign:PackIconKind.Search}" 
                          GroupName="Navigation" 
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.DataView}" 
                          Click="RadioButton_Click" />
-                <!-- Bookmark manager -->
-                <RadioButton Style="{StaticResource NavigationButton}"
+                    <!-- Bookmark manager -->
+                    <RadioButton Style="{StaticResource NavigationButton}"
                          Content="Bookmarks"
                          Tag="{x:Static materialDesign:PackIconKind.Bookmark}"
                          GroupName="Navigation"
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.Bookmarks}" />
-                <!-- Reference manager -->
-                <RadioButton Style="{StaticResource NavigationButton}"
+                    <!-- Reference manager -->
+                    <RadioButton Style="{StaticResource NavigationButton}"
                          Content="References"
                          Tag="{x:Static materialDesign:PackIconKind.ArrowCollapse}"
                          GroupName="Navigation"
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.References}" />
 
-            </StackPanel>
+                    <Button>
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                            </Style>
+                        </Button.Style>
+                        <Button.Template>
+                            <ControlTemplate TargetType="{x:Type Button}">
+
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+
+                <Border Background="{StaticResource PrimaryColorBrush}"
+                        Grid.Row="1">
+                    <Button Style="{x:Null}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Cursor="Hand"
+                            Margin="10 0 0 10"
+                            Command="{Binding OpenSettingsCommand}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <materialDesign:PackIcon Kind="Gear"
+                                                         Width="25"
+                                                         Height="25"
+                                                         Foreground="#ffffff"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                </Button>
+                </Border>
+            </Grid>
+
 
             <!-- Content -->
             <ContentControl Content="{Binding SelectedViewModel}" Grid.Column="1" />

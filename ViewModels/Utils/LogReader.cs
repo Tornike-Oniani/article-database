@@ -172,16 +172,21 @@ namespace MainLib.ViewModels.Utils
                             // Edge case: Reference I am trying to update doesn't exist
                             if (existingReference == null)
                             {
-                                string mismatch = $"Bookmark '{local_info.Name}' doesn't exist and can't be updated.";
+                                string mismatch = $"Reference '{local_info.Name}' doesn't exist and can't be updated.";
                                 _mismatches.Add(mismatch);
                                 return;
                             }
 
                             Reference newReference = new Reference(local_info);
                             newReference.ID = existingReference.ID;
+                            bool has = false;
                             if (local_info.Title != null)
+                            {
                                 newReference.ArticleID = (int)new ArticleRepo().GetArticleWithTitle(local_info.Title).ID;
-                            repo.UpdateReference(newReference);
+                                has = true;
+                            }
+                                
+                            repo.UpdateReference(newReference, has);
                         }
                         break;
                     case "Coupling":

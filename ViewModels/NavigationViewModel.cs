@@ -14,6 +14,8 @@ using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
 using Lib.ViewModels.Services.Browser;
 using MainLib.ViewModels.Utils;
+using MainLib.ViewModels.Popups;
+using Lib.ViewModels.Commands;
 
 namespace MainLib.ViewModels
 {
@@ -22,6 +24,7 @@ namespace MainLib.ViewModels
         private BaseViewModel _selectedViewModel;
         private User _user;
         private bool _isBusy;
+        private IWindowService _windowService;
 
         public BaseViewModel SelectedViewModel
         {
@@ -41,11 +44,14 @@ namespace MainLib.ViewModels
 
 
         public ICommand UpdateViewCommand { get; set; }
+        public ICommand OpenSettingsCommand { get; set; }
 
         public NavigationViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
+            _windowService = windowService;
             UpdateViewCommand = new UpdateViewCommand(Navigate, WorkStatus, user, dialogService, windowService, browserService);
             UpdateViewCommand.Execute(ViewType.Home);
+            OpenSettingsCommand = new RelayCommand(OpenSettings);
             this.Title = user.Username;
             // Set admin/user status
             user.Admin = new UserRepo().IsAdmin(user);
@@ -56,6 +62,11 @@ namespace MainLib.ViewModels
         {
             this.SelectedViewModel = viewModel;
         }
+        public void OpenSettings(object input = null)
+        {
+            _windowService.OpenWindow(new SettingsViewModel(), passWindow: true);
+        }
+
         public void WorkStatus(bool isWorking)
         {
             this.IsBusy = isWorking;

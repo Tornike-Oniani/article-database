@@ -126,6 +126,7 @@ namespace MainLib.ViewModels.Main
         public RelayCommand NextPageCommand { get; set; }
         public RelayCommand PreviousPageCommand { get; set; }
         public RelayCommand LoadArticlesCommand { get; set; }
+        public ICommand EnableExportCommand { get; set; }
         public RelayCommand ExportCommand { get; set; }
         public RelayCommand DeleteArticleCommand { get; set; }
         public RelayCommand MassBookmarkCommand { get; set; }
@@ -187,6 +188,7 @@ namespace MainLib.ViewModels.Main
             NextPageCommand = new RelayCommand(NextPage);
             PreviousPageCommand = new RelayCommand(PreviousPage);
             LoadArticlesCommand = new RelayCommand(LoadArticles);
+            EnableExportCommand = new RelayCommand(EnableExport);
             ExportCommand = new RelayCommand(Export, CanExport);
             DeleteArticleCommand = new RelayCommand(DeleteArticle, CanDeleteArticle);
             MassBookmarkCommand = new RelayCommand(MassBookmark);
@@ -295,8 +297,14 @@ namespace MainLib.ViewModels.Main
         }
         public async void LoadArticles(object input = null)
         {
+            OnPropertyChanged("FilterTitle");
             try
             {
+                string _filterTitle = FilterTitle;
+
+                if (!string.IsNullOrWhiteSpace(_filterTitle))
+                    _filterTitle = _filterTitle.Replace("'", "''");
+
                 _workStatus(true);
 
                 List<Article> articles = new List<Article>();
@@ -305,7 +313,7 @@ namespace MainLib.ViewModels.Main
                     // 2. Calculate total pages
                     int record_count = new ArticleRepo().GetRecordCount(
                         Users[UserIndex],
-                        FilterTitle,
+                        _filterTitle,
                         FilterAuthors.ToList(),
                         FilterKeywords.ToList(),
                         FilterYear,
@@ -337,6 +345,11 @@ namespace MainLib.ViewModels.Main
             {
                 _workStatus(false);
             }
+        }
+        public void EnableExport(object input = null)
+        {
+            foreach (Article article in Articles)
+                article.Checked = false;
         }
         public async void Export(object input = null)
         {
@@ -460,6 +473,7 @@ namespace MainLib.ViewModels.Main
         public async void Sort(object input)
         {
             string header = input.ToString();
+            header = header == "Comment" ? "PersonalComment" : header;
 
             // Ignore columns
             if (header == "Authors" || header == "Keywords" || header == "Export" || header == "Bookmark")
@@ -488,7 +502,7 @@ namespace MainLib.ViewModels.Main
         // Window open commands
         public void OpenSearchDialog(object input = null)
         {
-            _windowService.OpenWindow(new SearchDialogViewModel(this));
+            _windowService.OpenWindow(new SearchDialogViewModel(this), passWindow: true);
         }
         public void OpenAddPersonal(object input)
         {
@@ -549,7 +563,9 @@ namespace MainLib.ViewModels.Main
 
                 return _filterTitle;
             }
-            set { _filterTitle = value; OnPropertyChanged("FilterTitle"); }
+            set { _filterTitle = value; 
+                //OnPropertyChanged("FilterTitle"); 
+            }
         }
         public string FilterAuthor
         {
@@ -584,6 +600,7 @@ namespace MainLib.ViewModels.Main
             FilterYear = null;
             FilterPersonalComment = null;
             Articles.Clear();
+            OnPropertyChanged("FilterTitle");
         }
         public bool CanClear(object input = null)
         {
@@ -666,10 +683,15 @@ namespace MainLib.ViewModels.Main
 
             await Task.Run(() =>
             {
+                string _filterTitle = FilterTitle;
+
+                if (!string.IsNullOrWhiteSpace(_filterTitle))
+                    _filterTitle = _filterTitle.Replace("'", "''");
+
                 // 2. Fetch artilces from database
                 foreach (Article article in new ArticleRepo().LoadArticles(
                     Users[UserIndex],
-                    FilterTitle,
+                    _filterTitle,
                     FilterAuthors.ToList(),
                     FilterKeywords.ToList(),
                     FilterYear,

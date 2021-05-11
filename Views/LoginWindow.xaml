@@ -141,9 +141,10 @@
                                              Margin="0 0 8 0" 
                                              Grid.Column="0" />
                         <PasswordBox x:Name="txbPassword"
-                                 materialDesign:HintAssist.Hint="Password"
-                                 materialDesign:HintAssist.IsFloating="True" 
-                                 Grid.Column="1" />
+                                     FontSize="16"
+                                     materialDesign:HintAssist.Hint="Password"
+                                     materialDesign:HintAssist.IsFloating="True" 
+                                     Grid.Column="1" />
                     </Grid>
 
                     <!-- Buttons -->

@@ -69,9 +69,9 @@ namespace MainLib.ViewModels.Main
                 string current_directory = System.IO.Path.Combine(Environment.CurrentDirectory, "Logs\\");
 
                 // All pdf files in Files folder
-                string[] existingFiles = Directory.GetFiles(System.IO.Path.Combine(Environment.CurrentDirectory, "Files"), "*.pdf").Select(System.IO.Path.GetFileName).ToArray();
+                string[] existingFiles = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Files"), "*.pdf").Select(Path.GetFileName).ToArray();
                 // All file names in tblArticle database table
-                string[] databaseFiles = (new GlobalRepo()).GetFileNames();
+                string[] databaseFiles = new GlobalRepo().GetFileNames();
 
                 // Mismatch between physical pdf files and database names
                 if (databaseFiles != null)
@@ -130,106 +130,43 @@ namespace MainLib.ViewModels.Main
         {
             try
             {
-                string destination = null;
+                string destination;
 
-                // 1. Using winforms dialog box select a folder
-                destination = _browserService.OpenFolderDialog();
-
-                // 2. If nothing was selected return
-                if (destination == null)
+                if (!SelectAndCheckFolder(out destination))
                     return;
-
-                // 3. If the wrong folder was selected return with an error messagebox
-                if ((!File.Exists(destination + "\\" + "NikasDB.sqlite3")) || (!Directory.Exists(destination + @"\Files")) || (!File.Exists(destination + "\\" + "user.sqlite3")))
-                {
-                    _dialogService.OpenDialog(new DialogOkViewModel("Please select a correct folder.", "Error", DialogType.Error));
-                    return;
-                }
 
                 string root_directory = Environment.CurrentDirectory;
 
-                // 4. If an old temp query file exists delete it
-                if (File.Exists(Environment.CurrentDirectory + "\\" + "temp_query.txt"))
-                    File.Delete(Environment.CurrentDirectory + "\\" + "temp_query.txt");
+                // If an old temp query file exists delete it
+                QueryManager queryManager = new QueryManager(destination);
+                queryManager.DeleteTempQuery();
 
-                // 5. Set up queries for database import
-                string base_query = System.IO.File.ReadAllText(root_directory + "\\" + "Query.txt");
-                string file_path = root_directory + "\\" + "temp_query.txt";
-                string attach_string =
-                    "ATTACH DATABASE \'" + root_directory + "\\" + "user.sqlite3\'" + "AS user;\n" +
-                    "ATTACH DATABASE \'" + destination + "\\" + "NikasDB.sqlite3\'" + "AS db2main;\n" +
-                    "ATTACH DATABASE \'" + destination + "\\" + "user.sqlite3\'" + "AS db2user;\n";
-                string files_query = @"SELECT tf.File AS OldFile, tnf.File AS NewFile FROM temp_Files AS tf, temp_NewFiles AS tnf WHERE tf.Title = tnf.Title;";
-                string duplicates_query = @"SELECT Title, File FROM temp_tblDuplicates;";
+                // Generate section name and add it to json file
+                SectionManager sectionManager = new SectionManager();
+                sectionManager.GenerateSectionName();
+                sectionManager.AddSectionToJsonFile();
 
-                // 1. Get Section name
-                string info = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "sections.json"));
-                List<string> sections = JsonConvert.DeserializeObject<List<string>>(info);
+                // Query for pending articles
+                queryManager.SetPendingQuery(sectionManager.sectionName);
 
-                string section_name;
+                // Create temp query file
+                queryManager.CreateTempQuery();
 
-                if (sections == null || sections.Count == 0)
-                    section_name = "Section 1";
-                else
-                {
-                    int number = int.Parse(sections.Last().Split(' ')[1]) + 1;
-                    section_name = "Section " + number.ToString();
-                }
+                // Import recrods to database, return list of files to copy and duplicates to log
+                FileManager fileManager = new FileManager();
+                fileManager.files = new GlobalRepo().ImportSection(
+                    queryManager.GetFullQuery(), 
+                    queryManager.pendingQuery, 
+                    queryManager.filesQuery, 
+                    queryManager.duplicatesQuery, 
+                    out fileManager.duplicates);
 
-                // 2. Add section to json file
-                sections.Add(section_name);
-                info = JsonConvert.SerializeObject(sections);
-                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "sections.json"), info);
+                // Log duplicate files
+                fileManager.LogDuplicateFiles();
 
-                // 3. Query for pending articles
-                string pending_query = $"INSERT INTO tblPending (Article_ID, Section) SELECT ID, \"{section_name}\" AS Section FROM tblArticle WHERE Title IN (SELECT Title FROM temp_tblArticle);";
-
-                // Open or Create file
-                using (StreamWriter sw = File.AppendText(file_path))
-                {
-                    sw.WriteLine(attach_string);
-                    sw.WriteLine(base_query);
-                }
-
-                // Path to temp file where full query is written (Including attaches)
-                string full_query = System.IO.File.ReadAllText(root_directory + "\\" + "temp_query.txt");
-
-                // 6. Import recrods to database, return list of files to copy and duplicates to log
-                List<ExistCheck> duplicates;
-                List<CompFile> files = new GlobalRepo().ImportSection(full_query, pending_query, files_query, duplicates_query, out duplicates);
-
-                // 7. Create dictionary of files to copy
-                Dictionary<string, string> files_to_copy = new Dictionary<string, string>();
-                foreach (CompFile file in files)
-                {
-                    files_to_copy.Add(file.OldFile + ".pdf", file.NewFile + ".pdf");
-                }
-
-                // 8. Log duplicate files
-                DirectoryInfo current_directory_logs = new DirectoryInfo("." + @"\Logs\");
-
-                // Current date will be set as file name
-                DateTime current_date = DateTime.Today;
-                // Current time
-                DateTime current_time = DateTime.Now;
-                // Full file path including its name
-                string merge_log_path = current_directory_logs.FullName + "Merge --- " + current_date.ToLongDateString() + ".txt";
-
-                // Open or Create file
-                using (StreamWriter sw = File.AppendText(merge_log_path))
-                {
-                    // Start writing log starting with current hour as timestamp
-                    sw.WriteLine(current_time.ToLongTimeString());
-                    sw.WriteLine("Following titles are duplicate:");
-                    // Write each file name from mismatch folder into text file
-                    foreach (ExistCheck duplicate in duplicates)
-                        sw.WriteLine(duplicate.Title + " ||| " + duplicate.File);
-                    sw.WriteLine("");
-                }
-
-                // 9. Create progress bar and copy physical .pdf files
+                // Create progress bar and copy physical .pdf files
                 _windowService.OpenWindow(
-                    new ImportViewModel(files_to_copy, destination, _dialogService),
+                    new ImportViewModel(fileManager.filesToCopy, destination, _dialogService),
                     WindowType.Generic,
                     true,
                     true,
@@ -355,17 +292,14 @@ namespace MainLib.ViewModels.Main
                     backupPath = Path.Combine(backupPath, backupName);
 
                     // 3. Backup sync
-                    if (Directory.Exists(backupPath))
+                    string current_time = DateTime.Now.ToLongTimeString();
+                    string modified_time = "";
+                    foreach (string item in current_time.Split(':'))
                     {
-                        string current_time = DateTime.Now.ToLongTimeString();
-                        string modified_time = "";
-                        foreach (string item in current_time.Split(':'))
-                        {
-                            modified_time += item + "-";
-                        }
-                        modified_time = modified_time.Remove(modified_time.Length - 1, 1);
-                        backupPath += " -- " + modified_time;
+                        modified_time += item + "-";
                     }
+                    modified_time = modified_time.Remove(modified_time.Length - 1, 1);
+                    backupPath += " (" + modified_time + ")";
 
                     RelocateFiles(syncPath, backupPath);
 
@@ -416,6 +350,168 @@ namespace MainLib.ViewModels.Main
                 {
                     File.Copy(file_name, Path.Combine(destination, file_name.Substring(root.Length + 1)));
                 }
+            }
+        }
+        private bool SelectAndCheckFolder(out string result)
+        {
+            string destination = null;
+
+            // 1. Using winforms dialog box select a folder
+            destination = _browserService.OpenFolderDialog();
+
+            result = destination;
+
+            // 2. If nothing was selected return
+            if (destination == null)
+                return false;
+
+            // 3. If the wrong folder was selected return with an error messagebox
+            if (IsFolderCorrupt(destination))
+            {
+                _dialogService.OpenDialog(new DialogOkViewModel("Please select a correct folder.", "Error", DialogType.Error));
+                return false;
+            }
+
+            return true;
+        }
+        private bool IsFolderCorrupt(string destination)
+        {
+            return (!File.Exists(destination + "\\" + "NikasDB.sqlite3")) || 
+                   (!Directory.Exists(destination + @"\Files")) || 
+                   (!File.Exists(destination + "\\" + "user.sqlite3"));
+        }
+
+        private class QueryManager
+        {
+            private string rootDirectory;
+            private string baseQuery;
+            private string tempQueryPath;
+            private string attachQuery;
+
+            public string filesQuery { get; set; }
+            public string duplicatesQuery { get; set; }
+            public string pendingQuery { get; set; }
+
+            public QueryManager(string destination)
+            {
+                this.rootDirectory = Environment.CurrentDirectory;
+                this.baseQuery = File.ReadAllText(Path.Combine(rootDirectory, "Query.txt"));
+                this.tempQueryPath = Path.Combine(rootDirectory, "temp_query.txt");
+                this.attachQuery = $@"
+ATTACH DATABASE '{rootDirectory}\user.sqlite3' AS user;
+ATTACH DATABASE '{destination}\NikasDB.sqlite3' AS db2main;
+ATTACH DATABASE '{destination}\user.sqlite3' AS db2user;
+";
+                this.filesQuery = "SELECT tf.File AS OldFile, tnf.File AS NewFile FROM temp_Files AS tf, temp_NewFiles AS tnf WHERE tf.Title = tnf.Title;";
+                this.duplicatesQuery = "SELECT Title, File FROM temp_tblDuplicates;";
+            }
+
+            public void DeleteTempQuery()
+            {
+                if (File.Exists(tempQueryPath))
+                    File.Delete(tempQueryPath);
+            }
+            public void CreateTempQuery()
+            {
+                // Open or Create file
+                using (StreamWriter sw = File.AppendText(tempQueryPath))
+                {
+                    sw.WriteLine(attachQuery);
+                    sw.WriteLine(baseQuery);
+                }
+            }
+            public void SetPendingQuery(string sectionName)
+            {
+                this.pendingQuery = $"INSERT INTO tblPending (Article_ID, Section) SELECT ID, \"{sectionName}\" AS Section FROM tblArticle WHERE Title IN (SELECT Title FROM temp_tblArticle);";
+            }
+            public string GetFullQuery()
+            {
+                return File.ReadAllText(Path.Combine(rootDirectory, "temp_query.txt"));
+            }
+        }
+        private class SectionManager
+        {
+            private string info;
+            private string rootDirectory;
+            List<string> sections;
+
+            public string sectionName { get; set; }
+
+            public SectionManager()
+            {
+                this.rootDirectory = Environment.CurrentDirectory;
+                this.info = File.ReadAllText(Path.Combine(rootDirectory, "sections.json"));
+                this.sections = JsonConvert.DeserializeObject<List<string>>(info);
+            }
+
+            public void GenerateSectionName()
+            {
+                if (sections == null || sections.Count == 0)
+                    this.sectionName = "Section 1";
+                else
+                {
+                    int number = int.Parse(sections.Last().Split(' ')[1]) + 1;
+                    this.sectionName = "Section " + number.ToString();
+                }
+            }
+            public void AddSectionToJsonFile()
+            {
+                sections.Add(sectionName);
+                info = JsonConvert.SerializeObject(sections);
+                File.WriteAllText(Path.Combine(rootDirectory, "sections.json"), info);
+            }
+        }
+        private class FileManager
+        {
+            private DirectoryInfo logs;
+            private string logFileName;
+
+            public List<ExistCheck> duplicates;
+            public List<CompFile> files;
+            public Dictionary<string, string> filesToCopy;
+
+            public FileManager() 
+            {
+                this.filesToCopy = new Dictionary<string, string>();
+                this.logs = new DirectoryInfo("." + @"\Logs\");
+            }
+
+            public void LogDuplicateFiles()
+            {
+                GenerateFilesToCopy();
+                CreateLogFileName();
+
+                // Current time
+                DateTime current_time = DateTime.Now;
+
+                // Open or Create file
+                using (StreamWriter sw = File.AppendText(logFileName))
+                {
+                    // Start writing log starting with current hour as timestamp
+                    sw.WriteLine(current_time.ToLongTimeString());
+                    sw.WriteLine("Following titles are duplicate:");
+                    // Write each file name from mismatch folder into text file
+                    foreach (ExistCheck duplicate in duplicates)
+                        sw.WriteLine(duplicate.Title + " ||| " + duplicate.File);
+                    sw.WriteLine("");
+                }
+            }
+
+            private void GenerateFilesToCopy()
+            {
+                // Create dictionary of files to copy
+                foreach (CompFile file in files)
+                {
+                    this.filesToCopy.Add(file.OldFile + ".pdf", file.NewFile + ".pdf");
+                }
+            }
+            private void CreateLogFileName()
+            {
+                // Current date will be set as file name
+                DateTime current_date = DateTime.Today;
+
+                // Full file path including its name
+                this.logFileName = logs.FullName + "Merge --- " + current_date.ToLongDateString() + ".txt";
             }
         }
     }

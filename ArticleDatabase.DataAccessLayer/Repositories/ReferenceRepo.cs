@@ -45,7 +45,7 @@ namespace Lib.DataAccessLayer.Repositories
                 conn.Open();
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
-                    // Edit bookmark values in database
+                    // Edit reference values in database
                     if (hasMainArticle)
                         conn.Execute("UPDATE tblReference SET Name=@Name, ArticleID=@ArticleID WHERE ID=@ID;",
                             new { Name = reference.Name, ArticleID = reference.ArticleID, ID = reference.ID }, transaction: transaction);

@@ -5,6 +5,7 @@
                     xmlns:converters="clr-namespace:Lib.Styles.Converters">
     
     <converters:IntToFontWeightConverter x:Key="IntToFontWeight" />
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
 
     <!-- Bookmark manager -->
     <Style x:Key="BookmarkManagerList" TargetType="{x:Type ListView}">
@@ -124,6 +125,168 @@
                             <!-- Buttons -->
                             <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Right"
+                                        Grid.Column="1">
+                                <!-- Edit button-->
+                                <Button x:Name="EditButton"
+                                        Style="{x:Null}"
+                                        Visibility="Hidden" 
+                                        Opacity="0.0"
+                                        Cursor="Hand"
+                                        Margin="0 0 10 0"
+                                        Command="{Binding DataContext.EditBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
+                                        CommandParameter="{Binding}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Border Background="Transparent">
+                                                <materialDesign:PackIcon x:Name="Icon" 
+                                                                     Kind="Edit"
+                                                                     Height="25"
+                                                                     Width="25"
+                                                                     VerticalAlignment="Center"
+                                                                     Foreground="#28B9B5" />
+                                            </Border>
+
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Icon" Property="Foreground" Value="#FF62EE62" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                                <!-- Delete button -->
+                                <Button x:Name="DeleteButton"
+                                        Style="{x:Null}"
+                                        Visibility="Hidden" 
+                                        Opacity="0.0"
+                                        Cursor="Hand"
+                                        Command="{Binding DataContext.DeleteBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
+                                        CommandParameter="{Binding}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Border Background="Transparent">
+                                                <materialDesign:PackIcon x:Name="DeleteIcon" 
+                                                                     Kind="MinusCircleOutline"
+                                                                     Height="25"
+                                                                     Width="25"
+                                                                     VerticalAlignment="Center"
+                                                                     Foreground="#FF5049" />
+                                            </Border>
+
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="DeleteIcon" Property="Foreground" Value="Red" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <!-- Trigger -->
+                    <DataTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="DeleteButton" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="EditButton" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="articlesCount" Property="Visibility" Value="Visible" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation Storyboard.TargetName="articlesCount"
+                                                            Storyboard.TargetProperty="Margin"
+                                                            To="0 5 10 5"
+                                                            Duration="0:0:0.3" />
+                                        <DoubleAnimation Storyboard.TargetName="EditButton"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1.0"
+                                                         Duration="0:0:0.3" />
+                                        <DoubleAnimation Storyboard.TargetName="DeleteButton"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1.0"
+                                                         Duration="0:0:0.3" />
+                                        <DoubleAnimation Storyboard.TargetName="articlesCount"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1.0"
+                                                         Duration="0:0:0.3" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation Storyboard.TargetName="articlesCount"
+                                                            Storyboard.TargetProperty="Margin"
+                                                            To="0"
+                                                            Duration="0:0:0" />
+                                        <DoubleAnimation Storyboard.TargetName="articlesCount"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.0"
+                                                         Duration="0:0:0" />
+                                        <DoubleAnimation Storyboard.TargetName="EditButton"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.0"
+                                                         Duration="0:0:0" />
+                                        <DoubleAnimation Storyboard.TargetName="DeleteButton"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.0"
+                                                         Duration="0:0:0" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Global Bookmark list -->
+    <Style x:Key="GlobalBookmarkList" TargetType="{x:Type ListView}" BasedOn="{x:Null}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="AlternationCount" Value="2" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="BorderThickness" Value="0" />
+        <!-- Removes padding and margin from items (So that mouse double click will be caught without clicking exactly on text) -->
+        <Setter Property="ItemContainerStyle" Value="{StaticResource CleanItem}" />
+        <!-- Item template on how to show bound data-->
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <!-- Wrapper -->
+                    <Border x:Name="wrapper" 
+                            Padding="10" 
+                            Background="Transparent" 
+                            BorderThickness="0 0 0 1" 
+                            BorderBrush="LightGray">
+                        <!-- Command binding to mouse double click -->
+                        <Border.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.OpenBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}" CommandParameter="{Binding}" />
+                        </Border.InputBindings>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <!-- Bookmark name column -->
+                                <ColumnDefinition Width="*" />
+                                <!-- Buttons column -->
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Bookmark name -->
+                            <StackPanel Grid.Column="0">
+                                <TextBlock x:Name="bookmarkName" 
+                                           Text="{Binding Name}"
+                                           TextWrapping="Wrap"
+                                           FontSize="18" />
+                                <TextBlock x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
+                                           Foreground="Gray" 
+                                           FontSize="16" 
+                                           Visibility="Collapsed"
+                                           Opacity="0.0" />
+                            </StackPanel>
+                            <!-- Buttons -->
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Right"
+                                        Visibility="{Binding DataContext.User.IsAdmin, Converter={StaticResource BoolToVisibility}, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
                                         Grid.Column="1">
                                 <!-- Edit button-->
                                 <Button x:Name="EditButton"

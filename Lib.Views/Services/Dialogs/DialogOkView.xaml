@@ -15,8 +15,9 @@
     </UserControl.Resources>
 
     <UserControl.InputBindings>
-        <KeyBinding Command="{Binding OkCommand}" Key="Enter" />
+        <KeyBinding Command="{Binding OkCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Key="Enter" />
     </UserControl.InputBindings>
+    
     <Grid Margin="14">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />

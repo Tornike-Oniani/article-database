@@ -123,12 +123,12 @@ namespace Lib.DataAccessLayer.Repositories
                 {
                     if (global)
                     {
-                        result = conn.Query<Bookmark>($"SELECT ID, Name, Global FROM tblBookmark WHERE UserID = @UserID;",
+                        result = conn.Query<Bookmark>($"SELECT ID, Name, Global FROM tblBookmark WHERE UserID = @UserID ORDER BY Name;",
                             new { UserID = user.ID }, transaction: transaction).ToList();
                     }
                     else
                     {
-                        result = conn.Query<Bookmark>($"SELECT ID, Name, Global FROM tblBookmark WHERE UserID = @UserID AND Global = 0;",
+                        result = conn.Query<Bookmark>($"SELECT ID, Name, Global FROM tblBookmark WHERE UserID = @UserID AND Global = 0 ORDER BY Name;",
                             new { UserID = user.ID }, transaction: transaction).ToList();
                     }
                     transaction.Commit();
@@ -147,7 +147,7 @@ namespace Lib.DataAccessLayer.Repositories
                 conn.Open();
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
-                    result = conn.Query<Bookmark>($"SELECT ID, Name, Global FROM tblBookmark WHERE Global = 1;", transaction: transaction).ToList();
+                    result = conn.Query<Bookmark>($"SELECT ID, Name, Global FROM tblBookmark WHERE Global = 1 ORDER BY Name;", transaction: transaction).ToList();
                     transaction.Commit();
                 }
             }

@@ -8,6 +8,11 @@
              xmlns:usercontrols="clr-namespace:MainLib.Views.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Modifiers="Ctrl" Key="R" />
+    </UserControl.InputBindings>
+    
     <Grid>
         <Grid.RowDefinitions>
             <!-- Filter box column -->

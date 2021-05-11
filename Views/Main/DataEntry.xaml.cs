@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.Views.Services.Dialogs;
+using System.Text.RegularExpressions;
 
 namespace MainLib.Views.Main
 {
@@ -53,7 +54,25 @@ namespace MainLib.Views.Main
         // Check if article already exists
         private void txbTitle_LostFocus(object sender, RoutedEventArgs e)
         {
-            string title = ((TextBox)sender).Text;
+            TextBox txbTitle = sender as TextBox;
+
+            // Regex to switch multiple spaces into one (Restricts user to enter more than one space in Title textboxes)
+            RegexOptions options = RegexOptions.None;
+            Regex regex = new Regex("[ ]{2,}", options);
+            Regex unusualCharacters = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
+
+            txbTitle.Text = txbTitle.Text.Trim();
+            txbTitle.Text = regex.Replace(txbTitle.Text, " ");
+
+            // Check for unusual characters
+            if (!string.IsNullOrEmpty(txbTitle.Text) & !unusualCharacters.IsMatch(txbTitle.Text))
+            {
+                new DialogService().OpenDialog(new DialogOkViewModel("This input contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
+                txbTitle.Text = null;
+                return;
+            }
+
+            string title = txbTitle.Text;
             string file;
 
             if ((new ArticleRepo()).Exists(title, out file))

@@ -124,7 +124,7 @@
 
         <!-- Bookmarks list view -->
         <ListView ItemsSource="{Binding GlobalBookmarksCollection}"
-                  Style="{StaticResource BookmarkList}"
+                  Style="{StaticResource GlobalBookmarkList}"
                   LostFocus="ListView_LostFocus"
                   Grid.Row="2"
                   Grid.Column="2" />

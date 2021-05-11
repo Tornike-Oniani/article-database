@@ -17,6 +17,7 @@ using MainLib.ViewModels.Popups;
 using Lib.ViewModels.Services.Dialogs;
 using MainLib.ViewModels.Utils;
 using Lib.DataAccessLayer.Info;
+using System.Windows.Input;
 
 namespace MainLib.ViewModels.Main
 {
@@ -113,6 +114,7 @@ namespace MainLib.ViewModels.Main
         public RelayCommand SelectFileCommand { get; set; }
         public RelayCommand SaveArticleCommand { get; set; }
         public RelayCommand ClearArticleAttributesCommand { get; set; }
+        public ICommand ClearTitleCommand { get; set; }
         public RelayCommand OpenBookmarkManagerCommand { get; set; }
         public RelayCommand OpenReferenceManagerCommand { get; set; }
 
@@ -136,6 +138,7 @@ namespace MainLib.ViewModels.Main
             SelectFileCommand = new RelayCommand(SelectFile);
             SaveArticleCommand = new RelayCommand(SaveArticle, CanSaveArticle);
             ClearArticleAttributesCommand = new RelayCommand(ClearArticleAttributes);
+            ClearTitleCommand = new RelayCommand(ClearTitle);
             OpenBookmarkManagerCommand = new RelayCommand(OpenBookmarkManager);
             OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager);
 
@@ -238,6 +241,10 @@ namespace MainLib.ViewModels.Main
                 new BugTracker().Track("Data Entry", "Clear Article Attributes", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
+        }
+        public void ClearTitle(object input = null)
+        {
+            Article.Title = null;
         }
         public void OpenBookmarkManager(object input = null)
         {

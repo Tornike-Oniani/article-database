@@ -16,9 +16,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Dialogs;
+using Lib.Views.Services.Dialogs;
+using Lib.Views.Services.Windows;
 
 namespace Lib.Views.UserControls
 {
+    public enum InputRestriction
+    {
+        None,
+        Author,
+        Keyword
+    }
+
     /// <summary>
     /// Interaction logic for CollectionBox.xaml
     /// </summary>
@@ -60,6 +70,15 @@ namespace Lib.Views.UserControls
             set { SetValue(BoxHeightProperty, value); }
         }
 
+        private static readonly DependencyProperty RestrictionProperty =
+DependencyProperty.Register("RestrictionProperty", typeof(InputRestriction), typeof(CollectionBox), new PropertyMetadata(InputRestriction.None));
+
+        public InputRestriction Restriction
+        {
+            get { return (InputRestriction)GetValue(RestrictionProperty); }
+            set { SetValue(RestrictionProperty, value); }
+        }
+
         private string _item;
 
         public string Item
@@ -84,6 +103,15 @@ namespace Lib.Views.UserControls
         {
             RegexOptions options = RegexOptions.None;
             Regex regex = new Regex("[ ]{2,}", options);
+            Regex unusualCharacters = null;
+
+            // Restrict input with regex
+            if (Restriction == InputRestriction.None)
+                unusualCharacters = null;
+            else if (Restriction == InputRestriction.Author)
+                unusualCharacters = new Regex("^[A-Za-z .'()-]+$");
+            else if (Restriction == InputRestriction.Keyword)
+                unusualCharacters = new Regex("^[A-Za-z0-9 .'()+/_?:\"\\&-]+$");
 
             // 1. Make sure the item is not blank
             if (Item == null || String.IsNullOrWhiteSpace(Item))
@@ -92,6 +120,14 @@ namespace Lib.Views.UserControls
             // 2. Format the item
             Item = Item.Trim();
             Item = regex.Replace(Item, " ");
+
+            // Check for unusual characters
+            if (unusualCharacters != null & !unusualCharacters.IsMatch(Item))
+            {
+                new DialogService().OpenDialog(new DialogOkViewModel("This input contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
+                Item = null;
+                return;
+            }
 
             // 3. Make sure the Listbox doesn't already contain the item
             if (ItemsSource.Contains(Item))

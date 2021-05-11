@@ -5,8 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MainLib.Views.Main"
+             xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
              xmlns:converters="clr-namespace:MainLib.Views.Converters"
              xmlns:commonConverters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
+             xmlns:ap="clr-namespace:Lib.Views.Attached_Properties;assembly=Lib.Views"
              mc:Ignorable="d" 
              Focusable="True"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -67,9 +69,12 @@
 
                 <!-- Export/Print -->
                 <StackPanel Orientation="Horizontal" Grid.Column="0">
-                    <CheckBox Content="Enable Export" FontSize="16" IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='Export'}" />
+                    <CheckBox Content="Enable Export" 
+                              FontSize="16" 
+                              IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='Export'}"
+                              Command="{Binding EnableExportCommand}" />
                     <Button Name="btnExport" Content="Export" Width="80" Margin="10 0 10 0" Command="{Binding ExportCommand}" />
-                    <Button Name="btnPrint" Content="Print" Width="80" IsEnabled="False" />
+                    <Button Name="btnPrint" Content="Print" Width="80" IsEnabled="False" Visibility="Collapsed" />
                 </StackPanel>
 
                 <!-- Comment/SIC -->
@@ -102,6 +107,7 @@
 
         <!-- Datagrid -->
         <DataGrid Style="{StaticResource ArticleGrid}"
+                  FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
                   ItemsSource="{Binding Articles}"
                   SelectedItem="{Binding SelectedArticle}"
                   x:Name="myGrid"
@@ -173,7 +179,11 @@
                 <DataGridTemplateColumn Header="Title" Width="*" SortMemberPath="Title">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Title}" 
+                                       TextWrapping="Wrap"
+                                       ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource ComplementaryColorBrush}"
+                                       ap:TextBlockHighlighter.Forecolor="#ffffff" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

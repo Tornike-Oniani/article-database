@@ -15,6 +15,10 @@
         <converters:IntToFontWeightConverter x:Key="IntToFontWeight" />
     </UserControl.Resources>
 
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Modifiers="Ctrl" Key="B" />
+    </UserControl.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <!-- Filter box row -->

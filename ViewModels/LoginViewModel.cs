@@ -128,6 +128,7 @@ namespace MainLib.ViewModels
             else
             {
                 _dialogService.OpenDialog(new DialogOkViewModel("Invalid username or password", "Error", DialogType.Error));
+                passwordBox.Password = null;
             }
 
             IsBusy = false;

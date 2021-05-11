@@ -129,6 +129,10 @@
                         <popupV:ReferenceEditor />
                     </DataTemplate>
 
+                    <DataTemplate DataType="{x:Type popupVM:SettingsViewModel}">
+                        <popupV:SettingsDialog />
+                    </DataTemplate>
+
                     <!-- Progress -->
                     <DataTemplate DataType="{x:Type popupVM:ImportViewModel}">
                         <popupVG:Progress />

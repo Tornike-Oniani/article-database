@@ -12,8 +12,8 @@
         <TextBox materialDesign:HintAssist.Hint="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                  materialDesign:HintAssist.IsFloating="True"
                  Text="{Binding Item, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                 Margin="0 0 0 10"
-                 >
+                 FontFamily="Verdana"
+                 Margin="0 0 0 10">
             <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding AddItemToListCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
             </TextBox.InputBindings>
@@ -34,7 +34,8 @@
 
                             <!-- Item text -->
                             <TextBlock x:Name="ItemText" 
-                                       Text="{Binding}" 
+                                       Text="{Binding}"
+                                       FontFamily="Verdana"
                                        TextWrapping="Wrap"
                                        VerticalAlignment="Center" 
                                        LineHeight="0"
