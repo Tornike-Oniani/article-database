@@ -192,7 +192,11 @@
                 <DataGridTemplateColumn Header="Authors" Width="0.5*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Authors'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Authors}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Authors}" 
+                                       TextWrapping="Wrap" 
+                                       ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource ComplementaryColorBrush}"
+                                       ap:TextBlockHighlighter.Forecolor="#ffffff" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -201,7 +205,11 @@
                 <DataGridTemplateColumn Header="Keywords" Width="0.5*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Keywords'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Keywords}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Keywords}" 
+                                       TextWrapping="Wrap" 
+                                       ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource ComplementaryColorBrush}"
+                                       ap:TextBlockHighlighter.Forecolor="#ffffff" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

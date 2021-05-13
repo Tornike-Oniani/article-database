@@ -570,12 +570,14 @@ namespace MainLib.ViewModels.Main
         public string FilterAuthor
         {
             get { return _filterAuthor; }
-            set { _filterAuthor = value; OnPropertyChanged("FilterAuthor"); }
+            set { _filterAuthor = value; OnPropertyChanged("FilterAuthor"); 
+            }
         }
         public string FilterKeyword
         {
             get { return _filterKeyword; }
-            set { _filterKeyword = value; OnPropertyChanged("FilterKeyword"); }
+            set { _filterKeyword = value; OnPropertyChanged("FilterKeyword"); 
+            }
         }
         public string FilterYear
         {
@@ -589,6 +591,26 @@ namespace MainLib.ViewModels.Main
         }
         public ObservableCollection<string> FilterAuthors { get; set; }
         public ObservableCollection<string> FilterKeywords { get; set; }
+
+        // Temporary authors and keywords highlighter
+        public string AuthorHighlight 
+        {
+            get 
+            {
+                if (FilterAuthors.Count > 0) { return FilterAuthors[0]; }
+
+                return "";
+            }
+        }
+        public string KeywordHighlight
+        {
+            get
+            {
+                if (FilterKeywords.Count > 0) { return FilterKeywords[0]; }
+
+                return "";
+            }
+        }
 
         public RelayCommand ClearCommand { get; set; }
 

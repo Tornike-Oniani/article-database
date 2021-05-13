@@ -37,11 +37,6 @@ namespace Lib.Views.Attached_Properties
 
             string highlightText = (string)d.GetValue(SelectionProperty);
             if (string.IsNullOrEmpty(highlightText)) return;
-            //{
-            //    txtBlock.Inlines.Clear();
-            //    txtBlock.Inlines.AddRange(new Inline[] { new Run(text) });
-            //    return;
-            //}
 
             int index = text.IndexOf(highlightText, StringComparison.CurrentCultureIgnoreCase);
             if (index < 0) return;

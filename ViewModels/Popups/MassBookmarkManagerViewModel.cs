@@ -13,6 +13,7 @@ using Lib.ViewModels.Services.Dialogs;
 using System.Windows.Data;
 using System.ComponentModel;
 using MainLib.ViewModels.Utils;
+using Lib.DataAccessLayer.Info;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -67,6 +68,10 @@ namespace MainLib.ViewModels.Popups
                         {
                             // 1. Add article to bookmark
                             repo.AddArticleToBookmark(SelectedBookmark, article);
+
+                            // 2. Track
+                            Couple info = new Couple("Bookmark", "Add", article.Title, SelectedBookmark.Name);
+                            new Tracker(_user).TrackCoupling<Couple>(info);
                         }
                 });
 
