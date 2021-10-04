@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Pages;
 using Lib.Views.Services.Dialogs;
+using Lib.Views.Services.Browser;
 
 namespace MainLib.Views.Pages
 {
@@ -43,7 +44,7 @@ namespace MainLib.Views.Pages
             Reference sent_reference = input as Reference;
             Page _referenceView = new ReferenceView();
 
-            _referenceView.DataContext = new ReferenceViewViewModel(sent_reference, vm.User, vm.WorkStatus, new DialogService());
+            _referenceView.DataContext = new ReferenceViewViewModel(sent_reference, vm.User, vm.WorkStatus, new DialogService(), new BrowserService());
             NavigationService.Navigate(_referenceView);
         }
     }

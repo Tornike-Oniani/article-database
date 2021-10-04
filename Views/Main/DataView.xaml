@@ -110,6 +110,7 @@
                   FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
                   ItemsSource="{Binding Articles}"
                   SelectedItem="{Binding SelectedArticle}"
+                  VirtualizingStackPanel.VirtualizationMode="Standard"
                   x:Name="myGrid"
                   Grid.Row="2">
 
@@ -182,8 +183,9 @@
                             <TextBlock Text="{Binding Title}" 
                                        TextWrapping="Wrap"
                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource ComplementaryColorBrush}"
-                                       ap:TextBlockHighlighter.Forecolor="#ffffff" />
+                                       ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
+                                       ap:TextBlockHighlighter.Forecolor="#000000" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -193,10 +195,13 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Authors}" 
-                                       TextWrapping="Wrap" 
+                                       TextWrapping="Wrap"
                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource ComplementaryColorBrush}"
-                                       ap:TextBlockHighlighter.Forecolor="#ffffff" />
+                                       ap:TextBlockHighlighter.WordBreakMode="True"
+                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
+                                       ap:TextBlockHighlighter.Forecolor="#000000" />
+                            <!--<TextBlock Text="{Binding Authors}" 
+                                       TextWrapping="Wrap" />-->
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -206,10 +211,11 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Keywords}" 
-                                       TextWrapping="Wrap" 
+                                       TextWrapping="Wrap"
                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource ComplementaryColorBrush}"
-                                       ap:TextBlockHighlighter.Forecolor="#ffffff" />
+                                       ap:TextBlockHighlighter.WordBreakMode="True"
+                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
+                                       ap:TextBlockHighlighter.Forecolor="#000000" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

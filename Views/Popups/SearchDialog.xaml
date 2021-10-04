@@ -54,8 +54,16 @@
                 </Grid>
             </StackPanel>
 
-            <!-- Title -->
-            <TextBox x:Name="txbSearch"
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <!-- Title column-->
+                    <ColumnDefinition Width="*" />
+                    <!-- Search mode column -->
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Title -->
+                <TextBox x:Name="txbSearch"
                      Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}" 
                      SpellCheck.IsEnabled="True"
                      materialDesign:HintAssist.Hint="Title" 
@@ -65,7 +73,13 @@
                      FontSize="15"
                      Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                      LostFocus="txbSearch_LostFocus"
-                     Grid.Row="1" />
+                     Margin="0 0 10 0"
+                     Grid.Column="0" />
+
+                <CheckBox IsChecked="{Binding WordBreakMode}"
+                          Content="Word Break"
+                          Grid.Column="1" />
+            </Grid>
 
             <!-- Authors & keywords -->
             <Grid Margin="0 15 0 0" Grid.Row="2">
@@ -75,22 +89,51 @@
                     <!-- Keywords column -->
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <!-- Pairing row -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Collection box row -->
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
+                <!-- Pairing -->
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="0"
+                            Grid.Row="0">
+                    <TextBlock Text="Author pairing:" FontSize="15" FontWeight="SemiBold" Margin="0 5 5 5" />
+                    <ComboBox SelectedValuePath="Content" SelectedValue="{Binding SelectedAuthorPairing}">
+                        <ComboBoxItem IsSelected="True">AND</ComboBoxItem>
+                        <ComboBoxItem>OR</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
                 <!-- Authors -->
                 <usercontrols:CollectionBox Text="Author"
                                             ItemsSource="{Binding FilterAuthors}" 
                                             Restriction="Author"
                                             BoxHeight="150"
                                             Margin="0 0 10 0" 
-                                            Grid.Column="0"  />
+                                            Grid.Column="0"
+                                            Grid.Row="1" />
 
+                <!-- Pairing -->
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="1"
+                            Grid.Row="0">
+                    <TextBlock Text="Keyword pairing:" FontSize="15" FontWeight="SemiBold" Margin="0 5 5 5" />
+                    <ComboBox SelectedValuePath="Content" SelectedValue="{Binding SelectedKeywordPairing}">
+                        <ComboBoxItem IsSelected="True">AND</ComboBoxItem>
+                        <ComboBoxItem>OR</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+                
                 <!-- Keywords -->
                 <usercontrols:CollectionBox Text="Keyword" 
                                             ItemsSource="{Binding FilterKeywords}" 
                                             Restriction="Keyword"
                                             BoxHeight="150"
                                             Margin="10 0 0 0" 
-                                            Grid.Column="1" />
+                                            Grid.Column="1"
+                                            Grid.Row="1"/>
             </Grid>
 
             <!-- Year -->

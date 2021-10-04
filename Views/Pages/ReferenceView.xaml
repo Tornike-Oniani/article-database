@@ -18,15 +18,21 @@
     </Page.Resources>
 
     <Grid>
+        <Grid.Resources>
+            <FrameworkElement x:Key="ProxyElement" DataContext="{Binding}" />
+        </Grid.Resources>
         <Grid.RowDefinitions>
-            <!-- Header column -->
+            <!-- Header Row -->
             <RowDefinition Height="Auto" />
-            <!-- Data grid column-->
+            <!-- Data grid Row -->
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <!-- Proxy element to change datagrid columns' DataContext -->
+        <ContentControl Visibility="Collapsed" Content="{StaticResource ProxyElement}" Grid.Row="0" />
+        
         <!-- Header -->
-        <Grid Margin="0 0 0 10">
+        <Grid Margin="0 0 0 10" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <!-- Reference name column -->
                 <ColumnDefinition Width="Auto" />
@@ -35,21 +41,59 @@
                 <!-- Main article title column -->
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <!-- Header row -->
+                <RowDefinition Height="Auto" />
+                <!-- Export row -->
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
             <!-- Bookmark name -->
             <TextBlock Text="{Binding Reference.Name,FallbackValue=BindingWentWrong}" 
                    VerticalAlignment="Center"
                    FontSize="18" 
                    Margin="0 0 0 10"
-                   Grid.Column="0" />
+                   Grid.Column="0"
+                   Grid.Row="0" />
+
+            <!-- Export button -->
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="0 10 0 10"
+                        Grid.Column="2"
+                        Grid.Row="1">
+                <CheckBox Content="Export" 
+                          FontSize="16"
+                          Margin="0 0 10 0"
+                          IsChecked="{Binding Columns, 
+                                              Converter={StaticResource CheckToList}, 
+                                              ConverterParameter='Export'}"
+                          Command="{Binding EnableExportCommand}" />
+                <Button Content="Export"
+                        Margin="0 0 10 0"
+                        Command="{Binding ExportCommand}"/>
+                <Button Content="Export All"
+                        Command="{Binding ExportReferenceCommand}"/>
+            </StackPanel>
 
             <!-- Main article title -->
-            <Border BorderThickness="0 0 0 1" BorderBrush="{StaticResource SecondaryColorBrush}" Grid.Column="2">
-                <TextBlock Text="{Binding Reference.Article.Title}"
-                           TextTrimming="WordEllipsis"
-                           ToolTip="{Binding Reference.Article.Title}"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right"
-                           FontSize="18" />
+            <Border BorderThickness="0 0 0 1" 
+                    BorderBrush="{StaticResource SecondaryColorBrush}" 
+                    Grid.Column="2" 
+                    Grid.Row="0">
+            <Button Style="{x:Null}" Cursor="Hand" Command="{Binding OpenMainArticleCommand}">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <TextBlock Text="{Binding Reference.Article.Title}"
+                                   TextTrimming="WordEllipsis"
+                                   ToolTip="{Binding Reference.Article.Title}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   FontSize="18" />
+                        </ControlTemplate>
+                </Button.Template>
+            </Button>
             </Border>
         </Grid>
 
@@ -154,6 +198,20 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Year}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Export column -->
+                <DataGridTemplateColumn Header="Export" 
+                                    Width="Auto" 
+                                    Visibility="{Binding DataContext.Columns, 
+                                                         Source={StaticResource ProxyElement}, 
+                                                         Converter={StaticResource ListToVisibility}, 
+                                                         ConverterParameter='Export'}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

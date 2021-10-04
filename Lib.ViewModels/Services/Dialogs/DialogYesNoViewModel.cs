@@ -11,7 +11,6 @@ namespace Lib.ViewModels.Services.Dialogs
 {
     public class DialogYesNoViewModel : DialogViewModelBase
     {
-
         public ICommand YesCommand { get; set; }
         public ICommand NoCommand { get; set; }
 

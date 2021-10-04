@@ -15,14 +15,19 @@ using System.Collections.ObjectModel;
 using System.Windows.Navigation;
 using MainLib.ViewModels.Utils;
 using Lib.DataAccessLayer.Info;
+using Lib.ViewModels.Services.Browser;
+using System.Text.RegularExpressions;
+using System.IO;
 
 namespace MainLib.ViewModels.Pages
 {
     public class ReferenceViewViewModel : BaseViewModel
     {
         private User _user;
+        private List<string> _columns;
         private Action<bool> _workStatus;
         private IDialogService _dialogService;
+        private IBrowserService _browserService;
 
         /**
          * Public properties:
@@ -37,6 +42,11 @@ namespace MainLib.ViewModels.Pages
         {
             get { return _user; }
             set { _user = value; OnPropertyChanged("User"); }
+        }
+        public List<string> Columns
+        {
+            get { return _columns; }
+            set { _columns = value; OnPropertyChanged("Columns"); }
         }
 
 
@@ -54,20 +64,30 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand OpenFileCommand { get; set; }
         public RelayCommand RemoveArticleCommand { get; set; }
         public RelayCommand CopyCommand { get; set; }
+        public RelayCommand OpenMainArticleCommand { get; set; }
+        public RelayCommand ExportCommand { get; set; }
+        public RelayCommand ExportReferenceCommand { get; set; }
+        public RelayCommand EnableExportCommand { get; set; }
 
         // Constructor
-        public ReferenceViewViewModel(Reference reference, User user, Action<bool> workStatus, IDialogService dialogService)
+        public ReferenceViewViewModel(Reference reference, User user, Action<bool> workStatus, IDialogService dialogService, IBrowserService browserService)
         {
+            this.Columns = new List<string>();
             this.Reference = reference;
             this.User = user;
             this.Articles = new ObservableCollection<Article>();
             this._workStatus = workStatus;
             this._dialogService = dialogService;
+            this._browserService = browserService;
 
             // Initialize commands
             OpenFileCommand = new RelayCommand(OpenFile);
             RemoveArticleCommand = new RelayCommand(RemoveArticle, CanOnSelectedArticle);
             CopyCommand = new RelayCommand(Copy, CanOnSelectedArticle);
+            OpenMainArticleCommand = new RelayCommand(OpenMainArticle);
+            ExportCommand = new RelayCommand(Export, CanExport);
+            ExportReferenceCommand = new RelayCommand(ExportReference, CanExportReference);
+            EnableExportCommand = new RelayCommand(EnableExport);
         }
 
         /**
@@ -152,6 +172,161 @@ namespace MainLib.ViewModels.Pages
         public bool CanOnSelectedArticle(object input = null)
         {
             return SelectedArticle != null;
+        }
+        public void OpenMainArticle(object input = null)
+        {
+            // 1. If main article is not set return
+            if (Reference.Article == null || Reference.ArticleID == null)
+                return;
+
+            // 2. Get full path of the file
+            string full_path = Environment.CurrentDirectory + "\\Files\\" + Reference.Article.FileName + ".pdf";
+
+            // 3. Open file with default program
+            try
+            {
+                Process.Start(full_path);
+            }
+
+            // 4. Catch if file doesn't exist physically
+            catch
+            {
+                _dialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
+            }
+        }
+        public void EnableExport(object input)
+        {
+            foreach (Article article in Articles)
+                article.Checked = false;
+        }
+        public async void Export(object input = null)
+        {
+            try
+            {
+                // Destination will be the path chosen from dialog box (Where files should be exported)
+                string destination = null;
+
+                destination = _browserService.OpenFolderDialog();
+
+                // If path was chosen from the dialog box
+                if (destination != null)
+                {
+                    _workStatus(true);
+
+                    await Task.Run(() =>
+                    {
+                        // 2. Get the list of articles which were checked for export
+                        List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
+
+                        foreach (Article article in checked_articles)
+                        {
+                            if (!string.IsNullOrEmpty(article.FileName))
+                            {
+                                // If title is too long just get the substring to name the .pdf file
+                                if (article.Title.Length > 40)
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title.Substring(0, 40), "");
+                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
+                                else
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title, "");
+                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
+                            }
+                        }
+                    });
+
+                    // 3. Uncheck articles
+                    foreach (Article article in Articles)
+                        article.Checked = false;
+
+                    _workStatus(false);
+
+                    _dialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
+                }
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Bookmark View", "Export", e.Message, e.StackTrace);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
+        }
+        public bool CanExport(object input = null)
+        {
+            List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
+            if (checked_articles.Count > 0)
+                return true;
+
+            return false;
+        }
+        public async void ExportReference(object input = null)
+        {
+            try
+            {
+                // Destination will be the path chosen from dialog box (Where files should be exported)
+                string destination = null;
+
+                destination = _browserService.OpenFolderDialog();
+
+                // If path was chosen from the dialog box
+                if (destination != null)
+                {
+                    _workStatus(true);
+
+                    await Task.Run(() =>
+                    {
+                        // Export each article in bookmark's article collection
+                        foreach (Article article in Articles)
+                        {
+                            if (!string.IsNullOrEmpty(article.FileName))
+                            {
+                                // If title is too long just get the substring to name the .pdf file
+                                if (article.Title.Length > 40)
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title.Substring(0, 40), "");
+                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
+                                else
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title, "");
+                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
+                            }
+                        }
+                    });
+
+                    _workStatus(false);
+
+                    _dialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
+                }
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Bookmark View", "Export Bookmark", e.Message, e.StackTrace);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
+
+        }
+        public bool CanExportReference(object input = null)
+        {
+            return Articles.Count > 0;
         }
     }
 }

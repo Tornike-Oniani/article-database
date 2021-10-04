@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MainLib.ViewModels.Main;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,10 @@ namespace MainLib.Views.Main
 
                 // 2. Get the view to static
                 CurrentView = this;
+
+                // 3. Open search dialog
+                DataViewViewModel vm = (DataViewViewModel)this.DataContext;
+                vm.OpenSearchDialogCommand.Execute(null);
             };
         }
     }

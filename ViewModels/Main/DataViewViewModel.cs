@@ -315,10 +315,13 @@ namespace MainLib.ViewModels.Main
                         Users[UserIndex],
                         _filterTitle,
                         FilterAuthors.ToList(),
+                        SelectedAuthorPairing,
                         FilterKeywords.ToList(),
+                        SelectedKeywordPairing,
                         FilterYear,
                         FilterPersonalComment,
-                        SelectedSection);
+                        SelectedSection,
+                        WordBreakMode);
                     if ((record_count % ItemsPerPage) == 0)
                         TotalPages = record_count / ItemsPerPage;
                     else
@@ -553,6 +556,9 @@ namespace MainLib.ViewModels.Main
         private string _filterKeyword;
         private string _filterYear;
         private string _filterPersonalComment;
+        private bool _wordBreakMode;
+        private string _selectedAuthorPairing;
+        private string _selectedKeywordPairing;
 
         public string FilterTitle
         {
@@ -590,14 +596,25 @@ namespace MainLib.ViewModels.Main
             set { _filterPersonalComment = value; OnPropertyChanged("FilterPersonalComment"); }
         }
         public ObservableCollection<string> FilterAuthors { get; set; }
+        public string SelectedAuthorPairing
+        {
+            get { return _selectedAuthorPairing; }
+            set { _selectedAuthorPairing = value; OnPropertyChanged("SelectedAuthorPairing"); }
+        }
         public ObservableCollection<string> FilterKeywords { get; set; }
+        public string SelectedKeywordPairing
+        {
+            get { return _selectedKeywordPairing; }
+            set { _selectedKeywordPairing = value; OnPropertyChanged("SelectedKeywordPairing"); }
+        }
+
 
         // Temporary authors and keywords highlighter
         public string AuthorHighlight 
         {
             get 
             {
-                if (FilterAuthors.Count > 0) { return FilterAuthors[0]; }
+                if (FilterAuthors.Count > 0) { return String.Join(" ", FilterAuthors); }
 
                 return "";
             }
@@ -606,10 +623,15 @@ namespace MainLib.ViewModels.Main
         {
             get
             {
-                if (FilterKeywords.Count > 0) { return FilterKeywords[0]; }
+                if (FilterKeywords.Count > 0) { return String.Join(" ", FilterKeywords); }
 
                 return "";
             }
+        }
+        public bool WordBreakMode
+        {
+            get { return _wordBreakMode; }
+            set { _wordBreakMode = value; }
         }
 
         public RelayCommand ClearCommand { get; set; }
@@ -715,12 +737,15 @@ namespace MainLib.ViewModels.Main
                     Users[UserIndex],
                     _filterTitle,
                     FilterAuthors.ToList(),
+                    SelectedAuthorPairing,
                     FilterKeywords.ToList(),
+                    SelectedKeywordPairing,
                     FilterYear,
                     FilterPersonalComment,
                     _offset,
                     ItemsPerPage,
                     SelectedSection,
+                    WordBreakMode,
                     _currentSort))
                 {
                     articles.Add(article);

@@ -280,7 +280,7 @@ LEFT JOIN
 FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
 ");
             // 1. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, new List<string>(), new List<string>(), null, null, false);
+            string query = AddFilter(queryBuilder, user, title, new List<string>(), "AND", new List<string>(), "AND", null, null, false, false);
 
             // 3.Fetch articles
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
@@ -302,13 +302,16 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
         public List<Article> LoadArticles(
             User user, 
             string title, 
-            List<string> authors, 
+            List<string> authors,
+            string authorPairing,
             List<string> keywords, 
+            string keywordPairing,
             string year, 
             string personalComment, 
             int offset, 
             int itemsPerPage, 
             string section,
+            bool wordBreak,
             string order = "Title ASC")
         {
             // Results
@@ -347,12 +350,12 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             }
 
             // 2. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, keywords, year, personalComment, wasSection, order);
+            string query = AddFilter(queryBuilder, user, title, authors, authorPairing, keywords, keywordPairing, year, personalComment, wasSection, wordBreak, order);
 
             // 3. Add Pagination
             query += " LIMIT " + itemsPerPage.ToString() + " OFFSET " + offset.ToString() + ";";
 
-            Console.WriteLine(query);
+            //Console.WriteLine(query);
 
             // 4. Fetch articles
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
@@ -371,7 +374,17 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             return results;
         }
         // Get count of fetched articles
-        public int GetRecordCount(User user, string title, List<string> authors, List<string> keywords, string year, string personalComment, string section)
+        public int GetRecordCount(
+            User user, 
+            string title, 
+            List<string> authors,
+            string authorPairing,
+            List<string> keywords, 
+            string keywordPairing,
+            string year, 
+            string personalComment, 
+            string section,
+            bool wordBreak)
         {
             int result = 1;
 
@@ -408,8 +421,8 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             }
 
             // 2. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, keywords, year, personalComment, wasSection);
-
+            string query = AddFilter(queryBuilder, user, title, authors, authorPairing, keywords, keywordPairing, year, personalComment, wasSection, wordBreak);
+            //Console.WriteLine(query);
 
             // 3. Fetch count
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
@@ -656,10 +669,13 @@ WHERE Title = @Title
             User user,
             string title,
             List<string> authors,
+            string authorPairing,
             List<string> keywords,
+            string keywordPairing,
             string year,
             string personalCommnet,
             bool section,
+            bool wordBreak,
             string order = "Title ASC")
         {
             StringBuilder result = queryBuilder;
@@ -676,7 +692,25 @@ WHERE Title = @Title
                 }
                 else
                 {
-                    result.Append(" WHERE final.Title LIKE " + ToWildCard(title));
+                    if (wordBreak)
+                    {
+                        result.Append(" WHERE ");
+
+                        string[] words = title.Split(' ');
+                        for (int i = 0; i < words.Length; i++)
+                        {
+                            result.Append("final.Title LIKE " + ToWildCard(words[i]));
+
+                            if (i < words.Length - 1)
+                            {
+                                result.Append(" AND ");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result.Append(" WHERE final.Title LIKE " + ToWildCard(title));
+                    }
                 }
             }
                 
@@ -698,7 +732,7 @@ WHERE Title = @Title
 
                     // If its not the last iteration add "AND"
                     if (author != authors.Last())
-                        result.Append(" AND ");
+                        result.Append($" {authorPairing} ");
                 }
             }
 
@@ -716,7 +750,7 @@ WHERE Title = @Title
 
                     // If its not the last iteration add "AND"
                     if (keyword != keywords.Last())
-                        result.Append(" AND ");
+                        result.Append($" {keywordPairing} ");
                 }
             }
 

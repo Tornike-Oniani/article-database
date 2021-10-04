@@ -15,6 +15,10 @@
     <Color x:Key="ComplementaryColor">#f07c41</Color>
     <SolidColorBrush x:Key="ComplementaryColorBrush" Color="{StaticResource ComplementaryColor}" />
 
+    <!-- Highlight color -->
+    <Color x:Key="HighlightColor">#f0c748</Color>
+    <SolidColorBrush x:Key="HighlightColorBrush" Color="{StaticResource HighlightColor}" />
+
     <!-- Light highlight color -->
     <Color x:Key="LightHighlightColor">#e5f3fb</Color>
     <SolidColorBrush x:Key="LightHighlightColorBrush" Color="{StaticResource LightHighlightColor}" />
