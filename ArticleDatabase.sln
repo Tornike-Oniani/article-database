@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SectionLib.ViewModels", "Se
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{D547D199-F2D9-4142-A3F5-10BC53C78045}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Updater", "Updater\Updater.vdproj", "{2A653C6A-7A79-4AFB-8C8B-C49D904A0708}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,8 @@ Global
 		{509C0937-F245-4448-918B-9F589A338592}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D547D199-F2D9-4142-A3F5-10BC53C78045}.Debug|Any CPU.ActiveCfg = Debug
 		{D547D199-F2D9-4142-A3F5-10BC53C78045}.Release|Any CPU.ActiveCfg = Release
+		{2A653C6A-7A79-4AFB-8C8B-C49D904A0708}.Debug|Any CPU.ActiveCfg = Debug
+		{2A653C6A-7A79-4AFB-8C8B-C49D904A0708}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
