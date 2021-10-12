@@ -280,7 +280,7 @@ LEFT JOIN
 FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
 ");
             // 1. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, new List<string>(), "AND", new List<string>(), "AND", null, null, false, false);
+            string query = AddFilter(queryBuilder, user, title, new List<string>(), "AND", new List<string>(), "AND", null, null, false, false, null);
 
             // 3.Fetch articles
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
@@ -312,6 +312,7 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             int itemsPerPage, 
             string section,
             bool wordBreak,
+            int[] idFilters,
             string order = "Title ASC")
         {
             // Results
@@ -350,7 +351,7 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             }
 
             // 2. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, authorPairing, keywords, keywordPairing, year, personalComment, wasSection, wordBreak, order);
+            string query = AddFilter(queryBuilder, user, title, authors, authorPairing, keywords, keywordPairing, year, personalComment, wasSection, wordBreak, idFilters, order);
 
             // 3. Add Pagination
             query += " LIMIT " + itemsPerPage.ToString() + " OFFSET " + offset.ToString() + ";";
@@ -384,8 +385,10 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             string year, 
             string personalComment, 
             string section,
-            bool wordBreak)
+            bool wordBreak,
+            int[] idFilters)
         {
+
             int result = 1;
 
             // Template query
@@ -421,7 +424,7 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             }
 
             // 2. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, authorPairing, keywords, keywordPairing, year, personalComment, wasSection, wordBreak);
+            string query = AddFilter(queryBuilder, user, title, authors, authorPairing, keywords, keywordPairing, year, personalComment, wasSection, wordBreak, idFilters);
             //Console.WriteLine(query);
 
             // 3. Fetch count
@@ -676,6 +679,7 @@ WHERE Title = @Title
             string personalCommnet,
             bool section,
             bool wordBreak,
+            int[] idFilters,
             string order = "Title ASC")
         {
             StringBuilder result = queryBuilder;
@@ -714,8 +718,8 @@ WHERE Title = @Title
                 }
             }
                 
-            // 3. Add WHERE clause if title was null but authors or keywords aren't
-            if ((authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(year) || !string.IsNullOrEmpty(personalCommnet)) && string.IsNullOrEmpty(title) && !section)
+            // 3. Add WHERE clause if title was null but authors or keywords aren't (or Id filters)
+            if ((authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(year) || !string.IsNullOrEmpty(personalCommnet) || idFilters != null) && string.IsNullOrEmpty(title) && !section)
                 result.Append(" WHERE ");
 
             // 4. Add authors filter
@@ -785,8 +789,17 @@ WHERE Title = @Title
                 queryBuilder.Append($" final.PersonalComment LIKE {ToWildCard(personalCommnet)}");
             }
 
+            // Id filters
+            if (idFilters != null)
+            {
+                if (authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(year) || !string.IsNullOrEmpty(title) || !string.IsNullOrEmpty(personalCommnet))
+                    queryBuilder.Append(" AND ");
+
+                queryBuilder.Append($" ID >= {idFilters[0]} AND ID <= {idFilters[1]}");
+            }
+
             // 8. Apply order
-            queryBuilder.Append($" ORDER BY {order}");
+            queryBuilder.Append($" ORDER BY {(idFilters == null ? order : "ID")}");
 
             // 9. Return the result
             return result.ToString();

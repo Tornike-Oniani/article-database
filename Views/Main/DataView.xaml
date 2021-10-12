@@ -229,6 +229,15 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
+                <!-- File column -->
+                <DataGridTemplateColumn Header="FileName" SortMemberPath="FileName" MinWidth="95" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='FileName'}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <!-- Comment column -->
                 <DataGridTemplateColumn Header="Comment" SortMemberPath="PersonalComment" Width="0.4*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='PersonalComment'}">
                     <DataGridTemplateColumn.CellTemplate>

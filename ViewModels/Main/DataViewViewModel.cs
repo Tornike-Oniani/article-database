@@ -120,7 +120,6 @@ namespace MainLib.ViewModels.Main
             set { _isSectionSelected = value; OnPropertyChanged("IsSectionSelected"); }
         }
 
-
         #region Commands
         public RelayCommand OpenFileCommand { get; set; }
         public RelayCommand NextPageCommand { get; set; }
@@ -160,7 +159,8 @@ namespace MainLib.ViewModels.Main
             {
                 "Authors",
                 "Keywords",
-                "Year"
+                "Year",
+                "FileName"
             };
 
             // Initialize sections collection
@@ -321,7 +321,8 @@ namespace MainLib.ViewModels.Main
                         FilterYear,
                         FilterPersonalComment,
                         SelectedSection,
-                        WordBreakMode);
+                        WordBreakMode,
+                        GetFilterIds(IdFilter));
                     if ((record_count % ItemsPerPage) == 0)
                         TotalPages = record_count / ItemsPerPage;
                     else
@@ -559,6 +560,7 @@ namespace MainLib.ViewModels.Main
         private bool _wordBreakMode;
         private string _selectedAuthorPairing;
         private string _selectedKeywordPairing;
+        private string _idFilter;
 
         public string FilterTitle
         {
@@ -596,18 +598,22 @@ namespace MainLib.ViewModels.Main
             set { _filterPersonalComment = value; OnPropertyChanged("FilterPersonalComment"); }
         }
         public ObservableCollection<string> FilterAuthors { get; set; }
+        public ObservableCollection<string> FilterKeywords { get; set; }
         public string SelectedAuthorPairing
         {
             get { return _selectedAuthorPairing; }
             set { _selectedAuthorPairing = value; OnPropertyChanged("SelectedAuthorPairing"); }
         }
-        public ObservableCollection<string> FilterKeywords { get; set; }
         public string SelectedKeywordPairing
         {
             get { return _selectedKeywordPairing; }
             set { _selectedKeywordPairing = value; OnPropertyChanged("SelectedKeywordPairing"); }
         }
-
+        public string IdFilter
+        {
+            get { return _idFilter; }
+            set { _idFilter = value; OnPropertyChanged("IdFilter"); }
+        }
 
         // Temporary authors and keywords highlighter
         public string AuthorHighlight 
@@ -746,6 +752,7 @@ namespace MainLib.ViewModels.Main
                     ItemsPerPage,
                     SelectedSection,
                     WordBreakMode,
+                    GetFilterIds(IdFilter),
                     _currentSort))
                 {
                     articles.Add(article);
@@ -794,6 +801,23 @@ namespace MainLib.ViewModels.Main
             {
                 _workStatus(false);
             }
+        }
+        private int[] GetFilterIds(string filterId)
+        {
+            if (String.IsNullOrEmpty(filterId)) return null;
+
+            int[] idFilters = null;
+
+            if (filterId.Contains('-'))
+            {
+                string[] split = filterId.Split('-');
+                if (split.Length == 2 && int.TryParse(split[0], out _) && int.TryParse(split[1], out _))
+                {
+                    idFilters = new int[2] { int.Parse(split[0]), int.Parse(split[1]) };
+                }
+            }
+
+            return idFilters;
         }
     }
 }

@@ -33,6 +33,8 @@
                 <RowDefinition Height="Auto" />
                 <!-- Personal comment row -->
                 <RowDefinition Height="Auto" />
+                <!-- Id/File filter row -->
+                <RowDefinition Height="Auto" />
                 <!-- Buttons row -->
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -150,8 +152,14 @@
                      FontFamily="Verdana"
                      Grid.Row="4" />
 
+            <TextBox Text="{Binding IdFilter, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="Id ex. 1-400"
+                     materialDesign:HintAssist.IsFloating="True"
+                     FontFamily="Verdana"
+                     Grid.Row="5" />
+
             <!-- Buttons -->
-            <Grid Margin="0 15 0 0" Grid.Row="5">
+            <Grid Margin="0 15 0 0" Grid.Row="6">
                 <Grid.ColumnDefinitions>
                     <!-- Search button column -->
                     <ColumnDefinition Width="*" />
