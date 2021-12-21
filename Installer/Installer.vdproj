@@ -451,7 +451,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MainLib.Views, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MainLib.Views, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_1EECC6B0E347C87707696F6A8AC2C91F"
@@ -1026,7 +1026,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Article Database"
         "ProductCode" = "8:{DD5A982A-4145-4062-A984-9CFE46A1E071}"
-        "PackageCode" = "8:{FB795209-A663-4C66-A8B5-C4D827F4A95C}"
+        "PackageCode" = "8:{23A4ABBE-7BCB-4F9B-92B3-AC9C696AB499}"
         "UpgradeCode" = "8:{D9CF4364-FEF5-43C0-86F5-FD264AB82DF8}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -1128,6 +1128,14 @@
                                     "Transitive" = "11:FALSE"
                                     "ValueTypes" = "3:1"
                                     "Value" = "8:True"
+                                    }
+                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_75072F9BB752423FAAE502CDF0E5E71D"
+                                    {
+                                    "Name" = "8:Version"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "ValueTypes" = "3:1"
+                                    "Value" = "8:[ProductVersion]"
                                     }
                                 }
                             }
