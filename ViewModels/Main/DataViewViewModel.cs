@@ -159,9 +159,10 @@ namespace MainLib.ViewModels.Main
             {
                 "Authors",
                 "Keywords",
-                "Year",
-                "FileName"
+                "Year"
             };
+
+            if (User.IsAdmin) { Columns.Add("FileName"); }
 
             // Initialize sections collection
             this.Sections = new ObservableCollection<string>() {};
@@ -649,12 +650,20 @@ namespace MainLib.ViewModels.Main
             FilterKeywords.Clear();
             FilterYear = null;
             FilterPersonalComment = null;
+            IdFilter = null;
             Articles.Clear();
             OnPropertyChanged("FilterTitle");
         }
         public bool CanClear(object input = null)
         {
-            if (string.IsNullOrEmpty(FilterTitle) && FilterAuthors.Count == 0 && FilterKeywords.Count == 0 && string.IsNullOrEmpty(FilterYear) && string.IsNullOrEmpty(FilterPersonalComment))
+            if (
+                string.IsNullOrEmpty(FilterTitle) && 
+                FilterAuthors.Count == 0 && 
+                FilterKeywords.Count == 0 && 
+                string.IsNullOrEmpty(FilterYear) && 
+                string.IsNullOrEmpty(FilterPersonalComment) &&
+                string.IsNullOrEmpty(IdFilter)
+                )
                 return false;
 
             return true;
