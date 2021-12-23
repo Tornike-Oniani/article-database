@@ -8,40 +8,52 @@
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <WrapPanel HorizontalAlignment="Center">
-        <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.Account}" 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{Binding SyncNameAndNumber}"
+                   FontSize="16"
+                   Margin="25 0 0 0"
+                   Grid.Row="0"/>
+
+        <WrapPanel HorizontalAlignment="Center" Grid.Row="1">
+            <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.Account}" 
                              Title="Change Account" 
                              Description="Go back to login window" 
                              Background="#3baae1" 
                              Foreground="#ffffff" 
                              Click="ChangeAccount_Click"/>
-        <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.Import}" 
+            <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.Import}" 
                              IsEnabled="{Binding User.IsAdmin}"
                              Title="Import Section" 
                              Description="Imports data from selected section" 
                              Background="#55bc75" 
                              Foreground="#ffffff"
                              Command="{Binding ImportCommand}" />
-        <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.TableSearch}" 
+            <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.TableSearch}" 
                              IsEnabled="{Binding User.IsAdmin}"
                              Title="Validate" 
                              Description="Checks if all records have valid .pdf file" 
                              Background="#eac85d" 
                              Foreground="#ffffff" 
                              Command="{Binding ValidateCommand}" />
-        <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.DatabaseSync}" 
+            <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.DatabaseSync}" 
                              IsEnabled="{Binding User.IsAdmin}"
                              Title="Sync" 
                              Description="Synchronize information from json" 
                              Background="#FF31B4AE" 
                              Foreground="#ffffff" 
                              Command="{Binding SyncCommand}" />
-        <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.DatabaseExport}" 
+            <usercontrols:Widget Icon="{x:Static materialDesign:PackIconKind.DatabaseExport}" 
                              IsEnabled="{Binding User.IsAdmin}"
                              Title="Export Sync" 
                              Description="Export synchronization json file" 
                              Background="#FFB94A69" 
                              Foreground="#ffffff" 
                              Command="{Binding ExportSyncCommand}" />
-    </WrapPanel>
+        </WrapPanel>
+    </Grid>
 </UserControl>

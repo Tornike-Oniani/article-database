@@ -34,5 +34,17 @@ namespace MainLib.ViewModels.Properties {
                 this["FontSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Default")]
+        public string SyncName {
+            get {
+                return ((string)(this["SyncName"]));
+            }
+            set {
+                this["SyncName"] = value;
+            }
+        }
     }
 }

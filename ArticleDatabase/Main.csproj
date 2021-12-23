@@ -100,6 +100,9 @@
     <Content Include="sections.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="syncInformation.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Logo.ico" />
     <Content Include="Files\init.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

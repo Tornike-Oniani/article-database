@@ -22,6 +22,7 @@ namespace MainLib.ViewModels.Main
     {
         // Private members
         private User _user;
+        private string _syncNameAndNumber;
         private Action<bool> _workStatus;
         private IDialogService _dialogService;
         private IBrowserService _browserService;
@@ -32,6 +33,11 @@ namespace MainLib.ViewModels.Main
         {
             get { return _user; }
             set { _user = value; OnPropertyChanged("User"); }
+        }
+        public string SyncNameAndNumber
+        {
+            get { return _syncNameAndNumber; }
+            set { _syncNameAndNumber = value; OnPropertyChanged("SyncNameAndNumber"); }
         }
 
         // Commands
@@ -58,6 +64,8 @@ namespace MainLib.ViewModels.Main
             ImportCommand = new RelayCommand(Import);
             SyncCommand = new RelayCommand(Sync);
             ExportSyncCommand = new RelayCommand(ExportSync);
+
+            UpdateSyncInformationDisplay();
         }
 
         // Command actions
@@ -194,7 +202,8 @@ namespace MainLib.ViewModels.Main
 
                 if (
                     !Directory.Exists(Path.Combine(destination, "Files")) ||
-                    !File.Exists(Path.Combine(destination, "log.json"))
+                    !File.Exists(Path.Combine(destination, "log.json")) ||
+                    !File.Exists(Path.Combine(destination, "sync.json"))
                     )
                 {
                     _dialogService.OpenDialog(new DialogOkViewModel("Please select a valid folder", "Sync", DialogType.Error));
@@ -203,6 +212,22 @@ namespace MainLib.ViewModels.Main
 
                 _workStatus(true);
 
+                SyncInformationManager syncManager = new SyncInformationManager();
+                SyncInfo syncInfo = null;
+                string stringSync = File.ReadAllText(Path.Combine(destination, "sync.json"));
+                Sync sync = JsonConvert.DeserializeObject<Sync>(stringSync);
+
+                await Task.Run(() =>
+                {
+                    syncInfo = syncManager.Read();
+                });
+
+                if (syncInfo.Syncs.FindIndex((el) => el.Name == sync.Name && el.Number == sync.Number) >= 0)
+                {
+                    _dialogService.OpenDialog(new DialogOkViewModel("This synchronisation was already imported", "Synchronisation", DialogType.Error));
+                    return;
+                }
+
                 LogReader reader = new LogReader(Path.Combine(destination, "Files"));
 
                 await Task.Run(() =>
@@ -210,6 +235,18 @@ namespace MainLib.ViewModels.Main
                     reader.GetLogs(destination);
                     reader.Sync();
                 });
+
+                // Update sync information
+                syncInfo.LastSyncedName = sync.Name;
+                syncInfo.LastSyncedNumber = sync.Number;
+                syncInfo.Syncs.Add(sync);
+
+                await Task.Run(() =>
+                {
+                    syncManager.Write(syncInfo);
+                });
+                
+
 
                 _workStatus(false);
 
@@ -227,6 +264,7 @@ namespace MainLib.ViewModels.Main
             }
             finally
             {
+                UpdateSyncInformationDisplay();
                 _workStatus(false);
             }
         }
@@ -239,6 +277,7 @@ namespace MainLib.ViewModels.Main
                 if (destination == null)
                     return;
 
+                // If sync is already exported in destination
                 if (Directory.Exists(Path.Combine(destination, "Sync")))
                 {
                     _dialogService.OpenDialog(
@@ -250,10 +289,12 @@ namespace MainLib.ViewModels.Main
                     return;
                 }
 
-                destination = Path.Combine(destination, "Sync");
+                
 
+                // Root sync folder path
                 string syncPath = Path.Combine(Environment.CurrentDirectory, "Sync");
 
+                // There is no sync folder in root
                 if (!Directory.Exists(syncPath))
                 {
                     _dialogService.OpenDialog(
@@ -269,6 +310,14 @@ namespace MainLib.ViewModels.Main
 
                 await Task.Run(() =>
                 {
+                    SyncInformationManager syncManager = new SyncInformationManager();
+                    SyncInfo syncInfo = syncManager.Read();
+                    syncInfo.LastSyncExportNumber += 1;
+                    string syncName = Properties.Settings.Default.SyncName;
+
+                    // Destination sync folder path
+                    destination = Path.Combine(destination, $"Sync {syncName} [{syncInfo.LastSyncExportNumber}]");
+
                     // 0. Modify file to turn json into array
                     string fileContent = File.ReadAllText(Path.Combine(syncPath, "log.json"));
                     if (!string.IsNullOrEmpty(fileContent))
@@ -281,6 +330,11 @@ namespace MainLib.ViewModels.Main
                         }
                     }
 
+                    // Create export sync info file
+                    string infoFilePath = Path.Combine(syncPath, "sync.json");
+                    Sync sync = new Sync() { Name = syncName, Number = syncInfo.LastSyncExportNumber };
+                    File.WriteAllText(infoFilePath, JsonConvert.SerializeObject(sync));
+
                     // 1. Create/get backup folder path
                     string backupPath = Path.Combine(Environment.CurrentDirectory, "Backup");
 
@@ -288,7 +342,7 @@ namespace MainLib.ViewModels.Main
                         Directory.CreateDirectory(backupPath);
 
                     // 2. Generate backup name (using current date)
-                    string backupName = "Sync - " + DateTime.Today.ToLongDateString();
+                    string backupName = $"Sync {syncName} [{syncInfo.LastSyncExportNumber}] - " + DateTime.Today.ToLongDateString();
                     backupPath = Path.Combine(backupPath, backupName);
 
                     // 3. Backup sync
@@ -308,7 +362,12 @@ namespace MainLib.ViewModels.Main
 
                     // 5. Recreate sync
                     new Tracker(User).init();
+
+                    // Update sync information
+                    syncManager.Write(syncInfo);
                 });
+
+                UpdateSyncInformationDisplay();
 
                 _workStatus(false);
 
@@ -379,6 +438,12 @@ namespace MainLib.ViewModels.Main
             return (!File.Exists(destination + "\\" + "NikasDB.sqlite3")) || 
                    (!Directory.Exists(destination + @"\Files")) || 
                    (!File.Exists(destination + "\\" + "user.sqlite3"));
+        }
+
+        private void UpdateSyncInformationDisplay()
+        {
+            SyncInfo syncInfo = new SyncInformationManager().Read();
+            SyncNameAndNumber = $"Last export sync number: {syncInfo.LastSyncExportNumber}\n\nLast sync: {(String.IsNullOrEmpty(syncInfo.LastSyncedName) ? "none" : syncInfo.LastSyncedName)} [{syncInfo.LastSyncedNumber}]";
         }
 
         private class QueryManager

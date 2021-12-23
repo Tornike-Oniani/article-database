@@ -1,4 +1,5 @@
-﻿using Lib.ViewModels.Base;
+﻿using Lib.DataAccessLayer.Models;
+using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
@@ -13,20 +14,29 @@ namespace MainLib.ViewModels.Popups
     {
 
         private int _fontSize;
+        private string _syncName;
 
         public int FontSize
         {
             get { return _fontSize; }
             set { _fontSize = value; OnPropertyChanged("FontSize"); }
         }
+        public string SyncName
+        {
+            get { return _syncName; }
+            set { _syncName = value; OnPropertyChanged("SyncName"); }
+        }
+        public User User { get; set; }
 
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
-        public SettingsViewModel()
+        public SettingsViewModel(User user)
         {
+            this.User = user;
             this.Title = "Settings...";
             this.FontSize = Properties.Settings.Default.FontSize;
+            this.SyncName = Properties.Settings.Default.SyncName;
             SaveCommand = new RelayCommand(Save);
             CancelCommand = new RelayCommand(Cancel);
         }
@@ -34,6 +44,7 @@ namespace MainLib.ViewModels.Popups
         public void Save(object input = null)
         {
             Properties.Settings.Default.FontSize = FontSize;
+            Properties.Settings.Default.SyncName = SyncName;
             Properties.Settings.Default.Save();
             this.Window.Close();
         }

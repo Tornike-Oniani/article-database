@@ -64,7 +64,7 @@ namespace MainLib.ViewModels
         }
         public void OpenSettings(object input = null)
         {
-            _windowService.OpenWindow(new SettingsViewModel(), passWindow: true);
+            _windowService.OpenWindow(new SettingsViewModel(User), passWindow: true);
         }
 
         public void WorkStatus(bool isWorking)
