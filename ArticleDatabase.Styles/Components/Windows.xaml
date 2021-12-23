@@ -25,8 +25,9 @@
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <!-- Title bar -->
-                                    <RowDefinition Height="{Binding TitleHeightGridLength, FallbackValue=30, 
-                                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                                    <!--<RowDefinition Height="{Binding TitleHeightGridLength, FallbackValue=30, 
+                                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />-->
+                                    <RowDefinition Height="Auto" />
                                     <!-- Drop shadow-->
                                     <RowDefinition Height="Auto" />
                                     <!-- Window Content -->
@@ -45,24 +46,35 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Title text -->
-                                    <Border Grid.Column="0" Background="{StaticResource SecondaryColorBrush}" Padding="5 10 5 10" >
-                                        <Viewbox HorizontalAlignment="Left">
-                                            <TextBlock Style="{StaticResource WindowHeader}" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue=DummyText}" />
-                                        </Viewbox>
+                                    <Border BorderThickness="0 0 1 0"
+                                            BorderBrush="{StaticResource GrayColorLightBrush}"  
+                                            Padding="10" 
+                                            Grid.Column="0">
+                                        <TextBlock Style="{StaticResource WindowHeader}" 
+                                                   Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue=DummyText}"
+                                                   HorizontalAlignment="Left"/>
+                                        <!--<Viewbox HorizontalAlignment="Left">
+
+                                        </Viewbox>-->
                                     </Border>
 
                                     <!-- Window control buttons -->
-                                    <StackPanel Orientation="Horizontal" Grid.Column="2">
-                                        <Button Style="{StaticResource WindowControlButton}" 
+                                    <Border BorderThickness="0 0 0 1" 
+                                            BorderBrush="{StaticResource GrayColorLightBrush}" 
+                                            Grid.Column="1" 
+                                            Grid.ColumnSpan="2">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <Button Style="{StaticResource WindowControlButton}" 
                                                 Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}" 
                                                 Command="{Binding MinimizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
-                                        <Button Style="{StaticResource WindowControlButton}" 
+                                            <Button Style="{StaticResource WindowControlButton}" 
                                                 Tag="{x:Static materialDesign:PackIconKind.WindowMaximize}" 
                                                 Command="{Binding MaximizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
-                                        <Button Style="{StaticResource WindowCloseButton}" 
+                                            <Button Style="{StaticResource WindowCloseButton}" 
                                                 Tag="{x:Static materialDesign:PackIconKind.WindowClose}" 
                                                 Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
-                                    </StackPanel>
+                                        </StackPanel>
+                                    </Border>
                                 </Grid>
 
                                 <Border Grid.Row="2">

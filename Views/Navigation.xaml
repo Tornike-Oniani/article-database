@@ -48,18 +48,19 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0">
+            <Grid Style="{StaticResource NavigationWrapper}" Grid.Column="0">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="50px" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <!-- Navigation -->
-                <StackPanel Style="{StaticResource NavigationWrapper}"
-                            Grid.Row="0">
+                <StackPanel Grid.Row="1">
                     <!-- Home -->
-                    <RadioButton Style="{StaticResource RadioButtonHome}"
+                    <RadioButton Style="{StaticResource NavigationButton}"
                          Content="Home" 
+                         Tag="{x:Static materialDesign:PackIconKind.Home}" 
                          GroupName="Navigation" 
                          IsChecked="True" 
                          Command="{Binding UpdateViewCommand}" 
@@ -109,8 +110,7 @@
                     </Button>
                 </StackPanel>
 
-                <Border Background="{StaticResource PrimaryColorBrush}"
-                        Grid.Row="1">
+                <Border Grid.Row="2">
                     <Button Style="{x:Null}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"

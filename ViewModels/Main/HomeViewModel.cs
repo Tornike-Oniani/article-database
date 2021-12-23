@@ -22,6 +22,7 @@ namespace MainLib.ViewModels.Main
     {
         // Private members
         private User _user;
+        private string _exportedSync;
         private string _syncNameAndNumber;
         private Action<bool> _workStatus;
         private IDialogService _dialogService;
@@ -33,6 +34,11 @@ namespace MainLib.ViewModels.Main
         {
             get { return _user; }
             set { _user = value; OnPropertyChanged("User"); }
+        }
+        public string ExportedSync
+        {
+            get { return _exportedSync; }
+            set { _exportedSync = value; OnPropertyChanged("ExportedSync"); }
         }
         public string SyncNameAndNumber
         {
@@ -443,7 +449,8 @@ namespace MainLib.ViewModels.Main
         private void UpdateSyncInformationDisplay()
         {
             SyncInfo syncInfo = new SyncInformationManager().Read();
-            SyncNameAndNumber = $"Last export sync number: {syncInfo.LastSyncExportNumber}\n\nLast sync: {(String.IsNullOrEmpty(syncInfo.LastSyncedName) ? "none" : syncInfo.LastSyncedName)} [{syncInfo.LastSyncedNumber}]";
+            ExportedSync = syncInfo.LastSyncExportNumber.ToString();
+            SyncNameAndNumber = $"{(String.IsNullOrEmpty(syncInfo.LastSyncedName) ? "none" : syncInfo.LastSyncedName)} [{syncInfo.LastSyncedNumber}]";
         }
 
         private class QueryManager

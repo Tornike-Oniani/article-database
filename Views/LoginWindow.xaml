@@ -100,9 +100,10 @@
                        HorizontalAlignment="Left"/>
 
                     <TextBlock Text="Sign in with your Account"
-                           FontSize="20"
-                           FontWeight="Bold" 
-                           Margin="0 50 0 30"/>
+                               Foreground="{StaticResource LabelColorBrush}"
+                               FontSize="20"
+                               FontWeight="Bold" 
+                               Margin="0 50 0 30"/>
 
                     <!-- Username -->
                     <Grid Margin="0 0 0 10">
@@ -112,7 +113,7 @@
                         </Grid.ColumnDefinitions>
 
                         <materialDesign:PackIcon Kind="Account" 
-                                             Foreground="Gray" 
+                                             Foreground="{StaticResource LabelColorLightBrush}" 
                                              Width="25" 
                                              Height="25" 
                                              VerticalAlignment="Bottom" 
@@ -134,7 +135,7 @@
                         </Grid.ColumnDefinitions>
 
                         <materialDesign:PackIcon Kind="Key" 
-                                             Foreground="Gray"
+                                             Foreground="{StaticResource LabelColorLightBrush}"
                                              Width="25" 
                                              Height="25" 
                                              VerticalAlignment="Bottom" 

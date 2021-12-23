@@ -5,7 +5,7 @@
     <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
         <Setter Property="FontSize" Value="15" />
         <Setter Property="Padding" Value="5" />
-        <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+        <Setter Property="Background" Value="{StaticResource PrimaryColorNewBrush}" />
         <Setter Property="Foreground" Value="{StaticResource ControlColorBrush}" />
         <Setter Property="BorderThickness" Value="0 0 2 0" />
         <Setter Property="BorderBrush" Value="{StaticResource ControlColorBrush}" />

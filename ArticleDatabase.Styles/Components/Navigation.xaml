@@ -3,9 +3,18 @@
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:local="clr-namespace:Lib.Styles">
     <!-- Navigation wrapper -->
-    <Style  x:Key="NavigationWrapper" TargetType="{x:Type StackPanel}">
+    <Style  x:Key="NavigationWrapper" TargetType="{x:Type Grid}">
         <Setter Property="Width" Value="200" />
-        <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0 1" EndPoint="1 0">
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStop Offset="0" Color="{StaticResource PrimaryColorNewDark}" />
+                        <GradientStop Offset="1" Color="{StaticResource PrimaryColorNew}" />
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- RadioButton as TabItem -->
@@ -24,23 +33,23 @@
                                                      Height="30"
                                                      Width="30"
                                                      VerticalAlignment="Center" 
-                                                     Margin="0 0 5 0"/>
+                                                     Margin="0 0 8 0"/>
                             <TextBlock x:Name="tbMain" 
                                        Text="{TemplateBinding Content}" 
                                        FontSize="18" 
-                                       FontWeight="Bold"
+                                       FontWeight="SemiBold"
                                        VerticalAlignment="Center" />
                         </StackPanel>
                     </Border>
                     <!-- Triggers -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="wrapper" Property="Background" Value="{StaticResource SecondaryColorBrush}" />
+                            <Setter TargetName="wrapper" Property="Background" Value="{StaticResource PrimaryColorNewLightBrush}" />
                             <Setter TargetName="tbMain" Property="Foreground" Value="#ffffff" />
                             <Setter TargetName="icon" Property="Margin" Value="0 0 10 0" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="wrapper" Property="Background" Value="{StaticResource SecondaryColorBrush}" />
+                            <Setter TargetName="wrapper" Property="Background" Value="{StaticResource PrimaryColorNewLightBrush}" />
                             <Setter TargetName="tbMain" Property="Foreground" Value="#ffffff" />
                             <Setter TargetName="icon" Property="Margin" Value="0 0 10 0" />
                         </Trigger>

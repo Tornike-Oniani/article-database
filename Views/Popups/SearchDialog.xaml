@@ -103,7 +103,11 @@
                 <StackPanel Orientation="Horizontal"
                             Grid.Column="0"
                             Grid.Row="0">
-                    <TextBlock Text="Author pairing:" FontSize="15" FontWeight="SemiBold" Margin="0 5 5 5" />
+                    <TextBlock Text="Author pairing:" 
+                               Foreground="{StaticResource LabelColorBrush}"
+                               FontSize="15" 
+                               FontWeight="SemiBold" 
+                               Margin="0 5 5 5" />
                     <ComboBox SelectedValuePath="Content" SelectedValue="{Binding SelectedAuthorPairing}">
                         <ComboBoxItem IsSelected="True">AND</ComboBoxItem>
                         <ComboBoxItem>OR</ComboBoxItem>
@@ -122,7 +126,11 @@
                 <StackPanel Orientation="Horizontal"
                             Grid.Column="1"
                             Grid.Row="0">
-                    <TextBlock Text="Keyword pairing:" FontSize="15" FontWeight="SemiBold" Margin="0 5 5 5" />
+                    <TextBlock Text="Keyword pairing:" 
+                               Foreground="{StaticResource LabelColorBrush}"
+                               FontSize="15" 
+                               FontWeight="SemiBold" 
+                               Margin="0 5 5 5" />
                     <ComboBox SelectedValuePath="Content" SelectedValue="{Binding SelectedKeywordPairing}">
                         <ComboBoxItem IsSelected="True">AND</ComboBoxItem>
                         <ComboBoxItem>OR</ComboBoxItem>

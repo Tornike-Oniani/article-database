@@ -30,13 +30,16 @@
                         <!-- Title and description -->
                         <Border Padding="10">
                             <StackPanel>
-                                <TextBlock Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                               FontSize="16"
-                               FontWeight="Bold"
-                               TextAlignment="Center" />
-                                <TextBlock Text="{Binding Description, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                               TextWrapping="Wrap" 
-                               TextAlignment="Center" />
+                                <TextBlock Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=Lorem}" 
+                                           Foreground="{StaticResource LabelColorBrush}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           TextAlignment="Center" />
+                                <TextBlock Text="{Binding Description, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=LoremIpsum}" 
+                                           Foreground="{StaticResource LabelColorSemiLightBrush}"
+                                           FontSize="14"
+                                           TextWrapping="Wrap" 
+                                           TextAlignment="Center" />
                             </StackPanel>
                         </Border>
                     </StackPanel>

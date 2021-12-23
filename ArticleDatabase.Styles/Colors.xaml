@@ -31,4 +31,27 @@
     <Color x:Key="ControlColor">#ffffff</Color>
     <SolidColorBrush x:Key="ControlColorBrush" Color="{StaticResource ControlColor}" />
 
+    <!-- Primary color new -->
+    <Color x:Key="PrimaryColorNew">#458dbd</Color>
+    <SolidColorBrush x:Key="PrimaryColorNewBrush" Color="{StaticResource PrimaryColorNew}" />
+    <!-- Primary color new dark -->
+    <Color x:Key="PrimaryColorNewDark">#2375af</Color>
+    <SolidColorBrush x:Key="PrimaryColorNewDarkBrush" Color="{StaticResource PrimaryColorNewDark}" />
+    <!-- Primary color new light -->
+    <Color x:Key="PrimaryColorNewLight">#509dd3</Color>
+    <SolidColorBrush x:Key="PrimaryColorNewLightBrush" Color="{StaticResource PrimaryColorNewLight}" />
+    <!-- Gray color light -->
+    <Color x:Key="GrayColorLight">#dedfe1</Color>
+    <SolidColorBrush x:Key="GrayColorLightBrush" Color="{StaticResource GrayColorLight}" />
+    <!-- Label color -->
+    <Color x:Key="LabelColor">#35495E</Color>
+    <SolidColorBrush x:Key="LabelColorBrush" Color="{StaticResource LabelColor}" />
+    <!-- Label color light -->
+    <Color x:Key="LabelColorLight">#35495E</Color>
+    <SolidColorBrush x:Key="LabelColorLightBrush" Color="{StaticResource LabelColor}" Opacity="0.66" />
+    <!-- Label color light -->
+    <Color x:Key="LabelColorSemiLight">#35495E</Color>
+    <SolidColorBrush x:Key="LabelColorSemiLightBrush" Color="{StaticResource LabelColorSemiLight}" Opacity="0.8" />
+
+
 </ResourceDictionary>
