@@ -43,6 +43,9 @@
     <!-- Gray color light -->
     <Color x:Key="GrayColorLight">#dedfe1</Color>
     <SolidColorBrush x:Key="GrayColorLightBrush" Color="{StaticResource GrayColorLight}" />
+    <!-- Gray color light -->
+    <Color x:Key="GrayColorLight--1">#f0f2f5</Color>
+    <SolidColorBrush x:Key="GrayColorLightBrush--1" Color="{StaticResource GrayColorLight--1}" />
     <!-- Label color -->
     <Color x:Key="LabelColor">#35495E</Color>
     <SolidColorBrush x:Key="LabelColorBrush" Color="{StaticResource LabelColor}" />

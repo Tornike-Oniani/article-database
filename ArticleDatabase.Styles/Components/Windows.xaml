@@ -50,9 +50,16 @@
                                             BorderBrush="{StaticResource GrayColorLightBrush}"  
                                             Padding="10" 
                                             Grid.Column="0">
-                                        <TextBlock Style="{StaticResource WindowHeader}" 
-                                                   Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue=DummyText}"
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="/Lib.Styles;component/Images/logo.png" 
+                                                   Width="35"
+                                                   Margin="0 0 7 0"
+                                                   RenderOptions.BitmapScalingMode="Fant"
                                                    HorizontalAlignment="Left"/>
+                                            <TextBlock Style="{StaticResource WindowHeader}" 
+                                                       Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue=DummyText}"
+                                                       HorizontalAlignment="Left"/>
+                                        </StackPanel>
                                         <!--<Viewbox HorizontalAlignment="Left">
 
                                         </Viewbox>-->
