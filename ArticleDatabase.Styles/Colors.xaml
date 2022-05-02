@@ -55,6 +55,19 @@
     <!-- Label color light -->
     <Color x:Key="LabelColorSemiLight">#35495E</Color>
     <SolidColorBrush x:Key="LabelColorSemiLightBrush" Color="{StaticResource LabelColorSemiLight}" Opacity="0.8" />
-
+    
+    
+    <!-- New UI color palette -->
+    <!-- Red color (main branding) -->
+    <Color x:Key="ColorRed">#FC5B5C</Color>
+    <SolidColorBrush x:Key="ColorRedBrush" Color="{StaticResource ColorRed}" />
+    
+    <!-- Gray color -->
+    <Color x:Key="ColorGray">#838383</Color>
+    <SolidColorBrush x:Key="ColorGrayBrush" Color="{StaticResource ColorGray}" />
+    
+    <!-- Black color -->
+    <Color x:Key="ColorBlack">#1B1C31</Color>
+    <SolidColorBrush x:Key="ColorBlackBrush" Color="{StaticResource ColorBlack}" />
 
 </ResourceDictionary>

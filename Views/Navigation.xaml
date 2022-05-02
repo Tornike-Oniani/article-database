@@ -15,7 +15,8 @@
     </UserControl.Resources>
     <Grid>
         <!-- Working overlay -->
-        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}"
+        <!-- Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" -->
+        <Grid Visibility="Collapsed"
               Panel.ZIndex="1">
             <Rectangle Fill="#ffffff"
                        Opacity="0.7" />
@@ -48,85 +49,123 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Grid Style="{StaticResource NavigationWrapper}" Grid.Column="0">
+            <Grid Style="{StaticResource NavigationWrapper}" 
+                  Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50px" />
+                    <!-- Logo row -->
+                    <RowDefinition Height="70px" />
+                    <!-- Menu title row -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Navigation list row -->
                     <RowDefinition Height="*" />
+                    <!-- Configuration title row -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Configuration row -->
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
+                <!-- Logo -->
+                <StackPanel Orientation="Horizontal"
+                            Margin="30 0 0 0"
+                            Grid.Row="0">
+                    <Image Source="/Lib.Styles;component/Images/logo.png" 
+                           Width="27px"
+                           RenderOptions.BitmapScalingMode="Fant" />
+                    <TextBlock Text="{Binding User.Username, FallbackValue=dummy}"
+                               Foreground="{StaticResource ColorBlackBrush}"
+                               FontSize="20"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Margin="10 0 0 0" />
+                </StackPanel>
+                
+
                 <!-- Navigation -->
-                <StackPanel Grid.Row="1">
+                <TextBlock Text="Menu"
+                           Foreground="{StaticResource ColorBlackBrush}"
+                           FontWeight="SemiBold"
+                           FontSize="16"
+                           Margin="30 0 0 5"
+                           Grid.Row="1" />
+                
+                <StackPanel Grid.Row="2">
                     <!-- Home -->
                     <RadioButton Style="{StaticResource NavigationButton}"
-                         Content="Home" 
-                         Tag="{x:Static materialDesign:PackIconKind.Home}" 
-                         GroupName="Navigation" 
-                         IsChecked="True" 
-                         Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.Home}" />
+                                 Content="Home" 
+                                 Tag="{x:Static materialDesign:PackIconKind.Home}" 
+                                 GroupName="Navigation" 
+                                 IsChecked="True" 
+                                 Command="{Binding UpdateViewCommand}" 
+                                 CommandParameter="{x:Static type:ViewType.Home}" />
                     <!-- Data entry -->
                     <RadioButton Style="{StaticResource NavigationButton}" 
-                         IsEnabled="{Binding User.IsAdmin}"
-                         Content="Data Entry" 
-                         Tag="{x:Static materialDesign:PackIconKind.FilePlus}" 
-                         GroupName="Navigation" 
-                         Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.DataEntry}" />
+                                 IsEnabled="{Binding User.IsAdmin}"
+                                 Content="Data Entry" 
+                                 Tag="{x:Static materialDesign:PackIconKind.FilePlus}" 
+                                 GroupName="Navigation" 
+                                 Command="{Binding UpdateViewCommand}" 
+                                 CommandParameter="{x:Static type:ViewType.DataEntry}" />
                     <!-- Data search -->
                     <RadioButton Style="{StaticResource NavigationButton}" 
-                         Content="Data Search" 
-                         Tag="{x:Static materialDesign:PackIconKind.Search}" 
-                         GroupName="Navigation" 
-                         Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.DataView}" 
-                         Click="RadioButton_Click" />
+                                 Content="Data Search" 
+                                 Tag="{x:Static materialDesign:PackIconKind.Search}" 
+                                 GroupName="Navigation" 
+                                 Command="{Binding UpdateViewCommand}" 
+                                 CommandParameter="{x:Static type:ViewType.DataView}" 
+                                 Click="RadioButton_Click" />
                     <!-- Bookmark manager -->
                     <RadioButton Style="{StaticResource NavigationButton}"
-                         Content="Bookmarks"
-                         Tag="{x:Static materialDesign:PackIconKind.Bookmark}"
-                         GroupName="Navigation"
-                         Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.Bookmarks}" />
+                                 Content="Bookmarks"
+                                 Tag="{x:Static materialDesign:PackIconKind.Bookmark}"
+                                 GroupName="Navigation"
+                                 Command="{Binding UpdateViewCommand}" 
+                                 CommandParameter="{x:Static type:ViewType.Bookmarks}" />
                     <!-- Reference manager -->
                     <RadioButton Style="{StaticResource NavigationButton}"
-                         Content="References"
-                         Tag="{x:Static materialDesign:PackIconKind.ArrowCollapse}"
-                         GroupName="Navigation"
-                         Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.References}" />
-
-                    <Button>
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
-                                <Setter Property="HorizontalAlignment" Value="Left" />
-                            </Style>
-                        </Button.Style>
-                        <Button.Template>
-                            <ControlTemplate TargetType="{x:Type Button}">
-
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                                 Content="References"
+                                 Tag="{x:Static materialDesign:PackIconKind.ArrowCollapse}"
+                                 GroupName="Navigation"
+                                 Command="{Binding UpdateViewCommand}" 
+                                 CommandParameter="{x:Static type:ViewType.References}" />
                 </StackPanel>
 
-                <Border Grid.Row="2">
-                    <Button Style="{x:Null}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"
-                            Cursor="Hand"
-                            Margin="10 0 0 10"
-                            Command="{Binding OpenSettingsCommand}">
-                        <Button.Template>
-                            <ControlTemplate TargetType="{x:Type Button}">
+
+                <!-- Configuration -->
+                <TextBlock Text="Config"
+                           Foreground="{StaticResource ColorBlackBrush}"
+                           FontWeight="SemiBold"
+                           FontSize="16"
+                           Margin="30 0 0 5"
+                           Grid.Row="3" />
+                <Button Style="{x:Null}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Cursor="Hand"
+                        Margin="30 5 0 14"
+                        Command="{Binding OpenSettingsCommand}"
+                        Grid.Row="4">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Gear"
                                                          Width="25"
                                                          Height="25"
-                                                         Foreground="#ffffff"/>
-                            </ControlTemplate>
-                        </Button.Template>
+                                                         Foreground="{StaticResource ColorGrayBrush}" />
+                                <TextBlock Text="Settings"
+                                           Foreground="{StaticResource ColorGrayBrush}"
+                                           FontWeight="SemiBold"
+                                           FontSize="16"
+                                           Margin="5 0 0 0"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Button.Template>
                 </Button>
-                </Border>
+
+                <!-- Right border -->
+                <Border BorderThickness="0 0 1 0"
+                        BorderBrush="{StaticResource ColorGrayBrush}"
+                        Grid.Row="0"
+                        Grid.RowSpan="5" />
             </Grid>
 
 
