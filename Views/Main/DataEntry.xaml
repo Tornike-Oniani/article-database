@@ -18,12 +18,8 @@
             <ColumnDefinition MinWidth="500" MaxWidth="800" Width="*" />
             <ColumnDefinition Width=".2*" />
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height=".5*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <ScrollViewer Grid.Column="1" Grid.Row="1">
+        <ScrollViewer VerticalAlignment="Center" 
+                      Grid.Column="1">
             <Border Padding="20 5 20 10">
                 <StackPanel>
                     <!-- Header -->
