@@ -81,6 +81,7 @@
 
                 <CheckBox IsChecked="{Binding WordBreakMode}"
                           Content="Word Break"
+                          IsTabStop="False"
                           Grid.Column="1" />
             </Grid>
 
@@ -108,7 +109,7 @@
                                FontSize="15" 
                                FontWeight="SemiBold" 
                                Margin="0 5 5 5" />
-                    <ComboBox SelectedValuePath="Content" SelectedValue="{Binding SelectedAuthorPairing}">
+                    <ComboBox SelectedValuePath="Content" SelectedValue="{Binding SelectedAuthorPairing}" IsTabStop="False">
                         <ComboBoxItem IsSelected="True">AND</ComboBoxItem>
                         <ComboBoxItem>OR</ComboBoxItem>
                     </ComboBox>
@@ -131,7 +132,7 @@
                                FontSize="15" 
                                FontWeight="SemiBold" 
                                Margin="0 5 5 5" />
-                    <ComboBox SelectedValuePath="Content" SelectedValue="{Binding SelectedKeywordPairing}">
+                    <ComboBox SelectedValuePath="Content" SelectedValue="{Binding SelectedKeywordPairing}" IsTabStop="False">
                         <ComboBoxItem IsSelected="True">AND</ComboBoxItem>
                         <ComboBoxItem>OR</ComboBoxItem>
                     </ComboBox>

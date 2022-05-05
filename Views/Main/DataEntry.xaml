@@ -43,9 +43,12 @@
                                 FontFamily="Verdana"
                                 Grid.Column="0"
                                 LostFocus="txbTitle_LostFocus" />
-                        <Button Grid.Column="1"
-                                Command="{Binding ClearTitleCommand}"
-                                Click="Button_Click">
+                        <Button 
+                            Command="{Binding ClearTitleCommand}"
+                            Click="Button_Click"
+                            IsTabStop="False"
+                            Grid.Column="1"
+                            >
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
                                     <Setter Property="VerticalAlignment" Value="Center" />
