@@ -27,6 +27,7 @@ namespace Lib.Views.Services.Windows
             this.Loaded += (s, e) =>
             {
                 this.MinHeight = this.ActualHeight;
+                Keyboard.Focus(this);
             };
         }
     }

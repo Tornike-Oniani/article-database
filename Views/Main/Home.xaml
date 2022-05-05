@@ -55,8 +55,7 @@
                 BorderBrush="{StaticResource GrayColorLightBrush}"
                 Padding="20 15 20 15"
                 Grid.Row="1">
-            <StackPanel HorizontalAlignment="Left"
-                        Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel HorizontalAlignment="Left">
                 <Border Background="{StaticResource GrayColorLightBrush--1}"
                         Width="400"
                         Padding="10"

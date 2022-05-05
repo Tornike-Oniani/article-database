@@ -13,6 +13,7 @@
         WindowStartupLocation="CenterOwner"
         Title="{Binding Title, FallbackValue=DummyTitle}" 
         SizeToContent="Height"
+        Focusable="True"
         Height="Auto" Width="500">
 
     <WindowChrome.WindowChrome>
@@ -23,6 +24,10 @@
             GlassFrameThickness="0"
             />
     </WindowChrome.WindowChrome>
+
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+    </Window.InputBindings>
 
     <ContentPresenter x:Name="ContentPresenter" Content="{Binding}" />
 </base:WindowBase>
