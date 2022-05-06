@@ -95,19 +95,6 @@
                          GroupName="Navigation"
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.References}" />
-
-                    <Button>
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
-                                <Setter Property="HorizontalAlignment" Value="Left" />
-                            </Style>
-                        </Button.Style>
-                        <Button.Template>
-                            <ControlTemplate TargetType="{x:Type Button}">
-
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
                 </StackPanel>
 
                 <Border Grid.Row="2">
