@@ -1,21 +1,14 @@
-﻿using System;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Lib.Views;
+﻿using Lib.Views;
+using Lib.Views.Services.Browser;
 using Lib.Views.Services.Dialogs;
 using Lib.Views.Services.Windows;
-using Lib.Views.Services.Browser;
 using MainLib.ViewModels;
+using System;
+using System.Configuration;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace Main
 {
@@ -41,6 +34,18 @@ namespace Main
             txbUsername.Focus();
 
             ConfigurationManager.AppSettings["Attach"] = "ATTACH DATABASE \'" + Environment.CurrentDirectory.ToString() + "\\" + "User.sqlite3\'" + "AS user;";
+        }
+
+        // Animate watermark when password is changed
+        // we do this in code behind because we can't 
+        // check if password is empty in XAML
+        private void txbPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            PasswordBox passBox = sender as PasswordBox;
+
+            DoubleAnimation moveAnimation = new DoubleAnimation(0, -24, new Duration(TimeSpan.FromSeconds(0.1)));
+            Border watermark = (Border)passBox.Template.FindName("watermark", passBox);
+            watermark.BeginAnimation(TranslateTransform.YProperty, moveAnimation);
         }
     }
 }

@@ -92,7 +92,7 @@
 
     <Style x:Key="PrimaryButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
         <!-- Generic setters -->
-        <Setter Property="Background" Value="#0d6efd" />
+        <Setter Property="Background" Value="#17a2b8" />
         <Setter Property="Foreground" Value="#ffffff" />
         <Setter Property="Padding" Value="12 6 12 6" />
         <Setter Property="FontSize" Value="16" />
@@ -115,15 +115,15 @@
         <Style.Triggers>
             <!-- Hover styling -->
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#0a58ca" />
+                <Setter Property="Background" Value="#17a2b8" />
             </Trigger>
             <!-- Press styling -->
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="#0a58ca" />
+                <Setter Property="Background" Value="#17a2b8" />
             </Trigger>
             <!-- Not enabled styling -->
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="#0d6efd" />
+                <Setter Property="Background" Value="#7cc7d3" />
             </Trigger>
         </Style.Triggers>
     </Style>

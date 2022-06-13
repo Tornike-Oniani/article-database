@@ -5,10 +5,10 @@
     <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
         <Setter Property="FontSize" Value="15" />
         <Setter Property="Padding" Value="7" />
-        <Setter Property="Background" Value="{StaticResource PrimaryColorNewBrush}" />
+        <Setter Property="Background" Value="#4a4893" />
         <Setter Property="Foreground" Value="{StaticResource ControlColorBrush}" />
         <Setter Property="BorderThickness" Value="0 0 1 0" />
-        <Setter Property="BorderBrush" Value="#1d546c" />
+        <Setter Property="BorderBrush" Value="#424184" />
         <Setter Property="Command" Value="{Binding DataContext.SortCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
         <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Cursor" Value="Hand" />
@@ -18,11 +18,11 @@
             </Trigger>
             <Trigger Property="SortDirection" Value="Ascending">
                 <Setter Property="Foreground" Value="{StaticResource ControlColorBrush}" />
-                <Setter Property="Background" Value="{StaticResource ComplementaryColorBrush}" />
+                <Setter Property="Background" Value="#17a2b8" />
             </Trigger>
             <Trigger Property="SortDirection" Value="Descending">
                 <Setter Property="Foreground" Value="{StaticResource ControlColorBrush}" />
-                <Setter Property="Background" Value="{StaticResource ComplementaryColorBrush}" />
+                <Setter Property="Background" Value="#17a2b8" />
             </Trigger>
         </Style.Triggers>
     </Style>

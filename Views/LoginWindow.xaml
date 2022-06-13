@@ -101,26 +101,32 @@
 
                     <TextBlock Text="Sign in with your Account"
                                Foreground="{StaticResource LabelColorBrush}"
-                               FontSize="20"
+                               FontSize="22"
                                FontWeight="Bold" 
                                Margin="0 50 0 30"/>
 
                     <!-- Username -->
-                    <Grid Margin="0 0 0 10">
+                    <Grid Margin="0 0 0 15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        
-                        <materialDesign:PackIcon Kind="Account" 
-                                             Foreground="{StaticResource LabelColorLightBrush}" 
+
+                        <Border Padding="7"
+                                CornerRadius="6"
+                                Margin="0 0 8 0"
+                                Background="#6c757d">
+                            
+                            <materialDesign:PackIcon Kind="Account" 
+                                             Foreground="#ffffff" 
                                              Width="25" 
                                              Height="25" 
-                                             VerticalAlignment="Bottom" 
-                                             Margin="0 0 8 0" 
+                                             VerticalAlignment="Center" 
                                              Grid.Column="0" />
+                        </Border>                                
                         <TextBox x:Name="txbUsername" 
                                  Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" 
+                                 Tag="Username"
                                  Style="{StaticResource WatermarkTextBox}"
                                  materialDesign:HintAssist.Hint="Username" 
                                  materialDesign:HintAssist.IsFloating="True"
@@ -134,20 +140,25 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
+                        <Border Padding="7"
+                                CornerRadius="6"
+                                Margin="0 0 8 0"
+                                Background="#6c757d">
 
-                        <materialDesign:PackIcon Kind="Key" 
-                                             Foreground="{StaticResource LabelColorLightBrush}"
+                            <materialDesign:PackIcon Kind="Key" 
+                                             Foreground="#ffffff" 
                                              Width="25" 
                                              Height="25" 
-                                             VerticalAlignment="Bottom" 
-                                             Margin="0 0 8 0" 
+                                             VerticalAlignment="Center" 
                                              Grid.Column="0" />
-                        <PasswordBox x:Name="txbPassword"
-                                     Style="{StaticResource WatermarkPasswordBox}"
-                                     FontSize="16"
-                                     materialDesign:HintAssist.Hint="Password"
-                                     materialDesign:HintAssist.IsFloating="True" 
-                                     Grid.Column="1" />
+                        </Border>
+                        <PasswordBox 
+                            x:Name="txbPassword"
+                            Tag="Password"
+                            Style="{StaticResource WatermarkPasswordBox}"
+                            GotFocus="txbPassword_PasswordChanged"
+                            Grid.Column="1" 
+                            />
                     </Grid>
 
                     <!-- Buttons -->
@@ -177,7 +188,8 @@
         </Grid>
         
         <!-- Register-->
-        <Grid Style="{StaticResource SlideGrid}" Visibility="{Binding CurrentPage, Converter={StaticResource CurrentPageToVisibility}, ConverterParameter=Register}">
+        <Grid Style="{StaticResource SlideGrid}" 
+              Visibility="{Binding CurrentPage, Converter={StaticResource CurrentPageToVisibility}, ConverterParameter=Register}">
             <Grid.RenderTransform>
                 <TranslateTransform X="490" Y="0" />
             </Grid.RenderTransform>
@@ -199,7 +211,7 @@
                                Margin="0 10 0 25"/>
 
                     <!-- Username -->
-                    <Grid Margin="0 0 0 10">
+                    <Grid Margin="0 0 0 15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -214,14 +226,14 @@
                                          Grid.Column="0" />
                         <TextBox x:Name="txbRegisterUsername"
                                  Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
-                                 materialDesign:HintAssist.Hint="Username" 
-                                 materialDesign:HintAssist.IsFloating="True"
+                                 Tag="Username"
+                                 Style="{StaticResource WatermarkTextBox}"
                                  attachedProperties:FocusExtension.IsFocused="{Binding RegisterFocus}"
                                  Grid.Column="1" />
                     </Grid>
 
                     <!-- Password -->
-                    <Grid>
+                    <Grid Margin="0 0 0 15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -236,8 +248,8 @@
                                          Grid.Column="0" />
 
                         <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                                 materialDesign:HintAssist.Hint="Password"
-                                 materialDesign:HintAssist.IsFloating="True" 
+                                 Tag="Password"
+                                 Style="{StaticResource WatermarkTextBox}"
                                  Grid.Column="1" />
                     </Grid>
 
@@ -257,8 +269,8 @@
                                          Grid.Column="0" />
 
                         <TextBox Text="{Binding PasswordConfirm, UpdateSourceTrigger=PropertyChanged}"
-                                 materialDesign:HintAssist.Hint="Confirm Password"
-                                 materialDesign:HintAssist.IsFloating="True" 
+                                 Tag="Confirm Password"
+                                 Style="{StaticResource WatermarkTextBox}"
                                  Grid.Column="1" />
                     </Grid>
 

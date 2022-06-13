@@ -15,8 +15,8 @@
     </UserControl.Resources>
     <Grid>
         <!-- Working overlay -->
-        <!-- Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}} -->
-        <Grid Visibility="Hidden"
+        <!-- Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" -->
+        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}"
               Panel.ZIndex="1">
             <Rectangle Fill="#ffffff"
                        Opacity="0.7" />
@@ -52,9 +52,10 @@
             <Border Padding="10"
                     Grid.Column="0">
                 <Border.Background>
-                    <LinearGradientBrush StartPoint="0 1" EndPoint="1 0">
+                    <LinearGradientBrush StartPoint="0 1" EndPoint="0 0">
                         <LinearGradientBrush.GradientStops>
                             <GradientStop Offset="0" Color="#3a0647" />
+                            <GradientStop Offset="0.2" Color="#3a0647" />
                             <GradientStop Offset="1" Color="#052767" />
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
@@ -81,6 +82,7 @@
                     <!-- Data entry -->
                     <RadioButton Style="{StaticResource NavigationButton}" 
                          IsEnabled="{Binding User.IsAdmin}"
+                         Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
                          Content="Data Entry" 
                          Tag="{x:Static materialDesign:PackIconKind.FilePlus}" 
                          GroupName="Navigation" 
