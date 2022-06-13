@@ -111,7 +111,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-
+                        
                         <materialDesign:PackIcon Kind="Account" 
                                              Foreground="{StaticResource LabelColorLightBrush}" 
                                              Width="25" 
@@ -120,11 +120,12 @@
                                              Margin="0 0 8 0" 
                                              Grid.Column="0" />
                         <TextBox x:Name="txbUsername" 
-                             Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" 
-                             materialDesign:HintAssist.Hint="Username" 
-                             materialDesign:HintAssist.IsFloating="True"
-                             attachedProperties:FocusExtension.IsFocused="{Binding LoginFocus}"
-                             Grid.Column="1" />
+                                 Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource WatermarkTextBox}"
+                                 materialDesign:HintAssist.Hint="Username" 
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 attachedProperties:FocusExtension.IsFocused="{Binding LoginFocus}"
+                                 Grid.Column="1" />
                     </Grid>
 
                     <!-- Password -->
@@ -142,6 +143,7 @@
                                              Margin="0 0 8 0" 
                                              Grid.Column="0" />
                         <PasswordBox x:Name="txbPassword"
+                                     Style="{StaticResource WatermarkPasswordBox}"
                                      FontSize="16"
                                      materialDesign:HintAssist.Hint="Password"
                                      materialDesign:HintAssist.IsFloating="True" 
@@ -156,16 +158,18 @@
                         </Grid.ColumnDefinitions>
 
                         <Button Content="Log In" 
-                            Command="{Binding LoginCommand}" 
-                            CommandParameter="{Binding ElementName=txbPassword}" 
-                            Margin="0 0 5 0" 
-                            Grid.Column="0">
+                                Command="{Binding LoginCommand}" 
+                                CommandParameter="{Binding ElementName=txbPassword}" 
+                                Style="{StaticResource PrimaryButton}"
+                                Margin="0 0 5 0" 
+                                Grid.Column="0">
                         </Button>
                         <Button Content="Register" 
-                            Command="{Binding ShowRegisterCommand}"
-                            CommandParameter="{Binding ElementName=txbPassword}"
-                            Margin="5 0 0 0" 
-                            Grid.Column="2" />
+                                Command="{Binding ShowRegisterCommand}"
+                                CommandParameter="{Binding ElementName=txbPassword}"
+                                Style="{StaticResource PrimaryButton}"
+                                Margin="5 0 0 0" 
+                                Grid.Column="2" />
                     </Grid>
                 </StackPanel>
             </Border>
@@ -268,12 +272,14 @@
                         <Button Content="Register" 
                                 Command="{Binding RegisterCommand}" 
                                 CommandParameter="{Binding ElementName=tbxPassword}" 
+                                Style="{StaticResource PrimaryButton}"
                                 Margin="0 0 5 0" 
                                 Grid.Column="0">
                         </Button>
                         <Button Content="Cancel" 
                                 Command="{Binding CancelCommand}" 
                                 CommandParameter="{Binding ElementName=tbxPassword}" 
+                                Style="{StaticResource PrimaryButton}"
                                 Margin="5 0 0 0" 
                                 Grid.Column="2" />
                     </Grid>

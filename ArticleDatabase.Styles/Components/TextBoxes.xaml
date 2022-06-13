@@ -25,4 +25,64 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
+    <Style x:Key="WatermarkTextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
+        <!-- Generic styling -->
+        <Setter Property="BorderThickness" Value="1 1 1 1" />
+        <Setter Property="BorderBrush" Value="#ced4da" />
+        <Setter Property="Padding" Value="6 6 6 6" />
+        <Setter Property="FontSize" Value="16" />
+        <!-- Template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Triggers -->
+        <Style.Triggers>
+            <!-- Focused styling -->
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="#86b7fe" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="WatermarkPasswordBox" TargetType="{x:Type PasswordBox}" BasedOn="{x:Null}">
+        <!-- Generic styling -->
+        <Setter Property="BorderThickness" Value="1 1 1 1" />
+        <Setter Property="BorderBrush" Value="#ced4da" />
+        <Setter Property="Padding" Value="6 6 6 6" />
+        <Setter Property="FontSize" Value="16" />
+        <!-- Template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type PasswordBox}">
+                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Triggers -->
+        <Style.Triggers>
+            <!-- Focused styling -->
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="#86b7fe" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

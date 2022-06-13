@@ -4,11 +4,11 @@
 
     <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
         <Setter Property="FontSize" Value="15" />
-        <Setter Property="Padding" Value="5" />
+        <Setter Property="Padding" Value="7" />
         <Setter Property="Background" Value="{StaticResource PrimaryColorNewBrush}" />
         <Setter Property="Foreground" Value="{StaticResource ControlColorBrush}" />
-        <Setter Property="BorderThickness" Value="0 0 2 0" />
-        <Setter Property="BorderBrush" Value="{StaticResource ControlColorBrush}" />
+        <Setter Property="BorderThickness" Value="0 0 1 0" />
+        <Setter Property="BorderBrush" Value="#1d546c" />
         <Setter Property="Command" Value="{Binding DataContext.SortCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
         <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Cursor" Value="Hand" />
@@ -37,6 +37,9 @@
         <Setter Property="SelectionMode" Value="Single" />
         <Setter Property="CanUserReorderColumns" Value="False" />
         <Setter Property="CanUserResizeColumns" Value="False" />
+        <Setter Property="GridLinesVisibility" Value="All" />
+        <Setter Property="VerticalGridLinesBrush" Value="#e4e4e4" />
+        <Setter Property="HorizontalGridLinesBrush" Value="#efefef" />
         <Setter Property="RowStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type DataGridRow}">
@@ -46,13 +49,10 @@
                             <Setter Property="Background" Value="White" />
                         </Trigger>
                         <Trigger Property="AlternationIndex" Value="1">
-                            <Setter Property="Background" Value="#FFF1F1F1" />
+                            <Setter Property="Background" Value="#f2f2f2" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <!--<Setter Property="Background" Value="#34495E" />
-                            <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />-->
-                            <Setter Property="BorderThickness" Value="0 3 0 3" />
-                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
+                            <Setter Property="Background" Value="#FFC2D9EF" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>

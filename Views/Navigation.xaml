@@ -15,7 +15,8 @@
     </UserControl.Resources>
     <Grid>
         <!-- Working overlay -->
-        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}"
+        <!-- Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}} -->
+        <Grid Visibility="Hidden"
               Panel.ZIndex="1">
             <Rectangle Fill="#ffffff"
                        Opacity="0.7" />
@@ -48,7 +49,19 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Grid Style="{StaticResource NavigationWrapper}" Grid.Column="0">
+            <Border Padding="10"
+                    Grid.Column="0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0 1" EndPoint="1 0">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop Offset="0" Color="#3a0647" />
+                            <GradientStop Offset="1" Color="#052767" />
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </Border.Background>
+                
+                <Grid Style="{StaticResource NavigationWrapper}" 
+                  Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50px" />
                     <RowDefinition Height="*" />
@@ -115,6 +128,7 @@
                 </Button>
                 </Border>
             </Grid>
+            </Border>
 
 
             <!-- Content -->

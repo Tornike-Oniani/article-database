@@ -88,7 +88,7 @@
                 <!-- Mass bookmark -->
                 <StackPanel Orientation="Horizontal" 
                             Visibility="{Binding User.IsAdmin, 
-                                                 Converter={StaticResource BoolToVisibility}}"
+                            Converter={StaticResource BoolToVisibility}}"
                             Grid.Column="3">
                     <CheckBox Content="Mass bookmark" 
                               FontSize="16" 
@@ -137,7 +137,7 @@
 
             <DataGrid.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                    <!-- We set these items' commands from code behind-->
+                    <!-- We set these items' commands from code behind -->
                     <MenuItem x:Name="itemAddCommentSIC" Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" Command="{Binding OpenAddPersonalCommand}" />
                     <MenuItem x:Name="itemEdit" Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
                     <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding DeleteArticleCommand}" />
@@ -189,7 +189,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
                 <!-- Authors column -->
                 <DataGridTemplateColumn Header="Authors" Width="0.5*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Authors'}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -205,7 +204,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
                 <!-- Keywords column -->
                 <DataGridTemplateColumn Header="Keywords" Width="0.5*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Keywords'}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -219,7 +217,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
                 <!-- Year column -->
                 <DataGridTemplateColumn Header="Year" SortMemberPath="Year" MinWidth="80" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Year'}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -228,7 +225,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
                 <!-- File column -->
                 <DataGridTemplateColumn Header="FileName" SortMemberPath="FileName" MinWidth="95" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='FileName'}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -237,7 +233,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
                 <!-- Comment column -->
                 <DataGridTemplateColumn Header="Comment" SortMemberPath="PersonalComment" Width="0.4*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='PersonalComment'}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -246,7 +241,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
                 <!-- SIC column -->
                 <DataGridTemplateColumn Header="SIC" SortMemberPath="SIC" MinWidth="70" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='SIC'}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -255,7 +249,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
                 <!-- Export column -->
                 <DataGridTemplateColumn Header="Export" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Export'}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -264,7 +257,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
                 <!-- Mass bookmark column -->
                 <DataGridTemplateColumn Header="Bookmark" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Bookmark'}">
                     <DataGridTemplateColumn.CellTemplate>
