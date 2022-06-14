@@ -125,8 +125,8 @@
     </UserControl.Resources>
 
     <Border
-        BorderBrush="#f0f0f0"
-        BorderThickness="2 1 2 2"
+        BorderBrush="#ced4da"
+        BorderThickness="1 0 1 1"
         CornerRadius="6"
         >
         <Grid>
@@ -172,6 +172,7 @@
                 <ListBox 
                     Style="{StaticResource CollectionListBox}"
                     ItemsSource="{Binding Path=ItemsSource, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                    IsTabStop="False"
                     MaxHeight="{Binding BoxHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                     Grid.Row="1"
                     />
