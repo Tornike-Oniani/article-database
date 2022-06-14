@@ -17,6 +17,44 @@
         <commonConverters:ListToVisibilityConverter x:Key="ListToVisibility" />
         <commonConverters:NumberToSICConverter x:Key="NumberToSIC" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+
+        <Style x:Key="Accordion" TargetType="{x:Type ToggleButton}">
+            <!-- Generic styling -->
+            <Setter Property="BorderThickness" Value="1 1 1 1" />
+            <Setter Property="BorderBrush" Value="#dee2e6" />
+            <Setter Property="Background" Value="#dee2e6" />
+            <Setter Property="Foreground" Value="#212529" />
+            <Setter Property="Padding" Value="15 10 15 10" />
+            <!-- Template -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border
+                            BorderThickness="1 1 1 1"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6 6 0 0"
+                            Padding="{TemplateBinding Padding}"
+                            >
+                            <TextBlock 
+                                x:Name="text"
+                                Text="{TemplateBinding Content}"
+                                Foreground="{TemplateBinding Foreground}"
+                                FontSize="20"
+                                />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            
+            <!-- Triggers -->
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#e7f1ff" />
+                    <Setter Property="Foreground" Value="#0c63e4" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <UserControl.InputBindings>
@@ -53,8 +91,48 @@
         <!-- Proxy element to change datagrid columns' DataContext -->
         <ContentControl Visibility="Collapsed" Content="{StaticResource ProxyElement}" Grid.Row="0" />
 
+        <!-- Top menu filter -->
+        <Grid 
+            Margin="5 5 5 5"
+            Grid.Row="1"
+            >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ToggleButton 
+                x:Name="accodion"
+                Content="Accordion"
+                Style="{StaticResource Accordion}"
+                Grid.Row="0" 
+                />
+
+            <Border
+                BorderThickness="1 0 1 1"
+                BorderBrush="#dee2e6"
+                Padding="15 10 15 10"
+                Height="0"
+                Grid.Row="1"
+                >
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsChecked, ElementName=accordion}" Value="True">
+                                <Setter Property="Height" Value="200" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <TextBlock Text="Content" />
+                </Grid>
+            </Border>
+
+        </Grid>
+
         <!-- Top menu -->
-        <Border Padding="10" Grid.Row="1">
+        <Border Visibility="Collapsed" Padding="10" Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <!-- Export/Print column -->
