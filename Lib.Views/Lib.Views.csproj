@@ -111,6 +111,9 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\Windows\WindowService.cs" />
+    <Compile Include="UserControls\Badge.xaml.cs">
+      <DependentUpon>Badge.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CollectionBox.xaml.cs">
       <DependentUpon>CollectionBox.xaml</DependentUpon>
     </Compile>
@@ -173,6 +176,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\Badge.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\CollectionBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -188,6 +195,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\ArticleDatabase.Styles\Lib.Styles.csproj">
+      <Project>{57dda4cd-7e62-43a4-8a67-9c9a16154e69}</Project>
+      <Name>Lib.Styles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lib.ViewModels\Lib.ViewModels.csproj">
       <Project>{22197010-2cc9-4f4b-b22c-c39ed33f91b7}</Project>
       <Name>Lib.ViewModels</Name>

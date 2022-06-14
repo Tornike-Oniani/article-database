@@ -34,6 +34,15 @@ namespace Lib.Views.UserControls
     /// </summary>
     public partial class CollectionBox : UserControl, INotifyPropertyChanged
     {
+        private static readonly DependencyProperty TitleProperty =
+    DependencyProperty.Register("Title", typeof(string), typeof(CollectionBox), new PropertyMetadata(null));
+
+        public string Title
+        {
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
+        }
+
         private static readonly DependencyProperty TextProperty =
     DependencyProperty.Register("Text", typeof(string), typeof(CollectionBox), new PropertyMetadata(null));
 

@@ -10,6 +10,7 @@
         xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
         xmlns:localConverters="clr-namespace:MainLib.Views.Converters"
         xmlns:attachedProperties="clr-namespace:Lib.ViewModels.AttachedProperties;assembly=Lib.ViewModels"         
+        xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -112,24 +113,18 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Border Padding="7"
-                                CornerRadius="6"
-                                Margin="0 0 8 0"
-                                Background="#6c757d">
-                            
-                            <materialDesign:PackIcon Kind="Account" 
-                                             Foreground="#ffffff" 
-                                             Width="25" 
-                                             Height="25" 
-                                             VerticalAlignment="Center" 
-                                             Grid.Column="0" />
-                        </Border>                                
+                        
+                        <usercontrols:Badge 
+                            Icon="{x:Static materialDesign:PackIconKind.Account}"
+                            Background="#6c757d"
+                            Foreground="#ffffff"
+                            Margin="0 0 8 0"
+                            Grid.Column="0" />
+
                         <TextBox x:Name="txbUsername" 
                                  Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" 
-                                 Tag="Username"
+                                 ap:TextBoxHelper.Watermark="Username"
                                  Style="{StaticResource WatermarkTextBox}"
-                                 materialDesign:HintAssist.Hint="Username" 
-                                 materialDesign:HintAssist.IsFloating="True"
                                  attachedProperties:FocusExtension.IsFocused="{Binding LoginFocus}"
                                  Grid.Column="1" />
                     </Grid>
@@ -140,23 +135,19 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Border Padding="7"
-                                CornerRadius="6"
-                                Margin="0 0 8 0"
-                                Background="#6c757d">
-
-                            <materialDesign:PackIcon Kind="Key" 
-                                             Foreground="#ffffff" 
-                                             Width="25" 
-                                             Height="25" 
-                                             VerticalAlignment="Center" 
-                                             Grid.Column="0" />
-                        </Border>
+                        
+                        <usercontrols:Badge 
+                            Icon="{x:Static materialDesign:PackIconKind.Key}"
+                            Background="#6c757d"
+                            Foreground="#ffffff"
+                            Margin="0 0 8 0" 
+                            />
+                        
                         <PasswordBox 
                             x:Name="txbPassword"
-                            Tag="Password"
+                            PasswordChanged="txbPassword_PasswordChanged"
+                            ap:TextBoxHelper.Watermark="Password"
                             Style="{StaticResource WatermarkPasswordBox}"
-                            GotFocus="txbPassword_PasswordChanged"
                             Grid.Column="1" 
                             />
                     </Grid>
@@ -172,7 +163,7 @@
                                 Command="{Binding LoginCommand}" 
                                 CommandParameter="{Binding ElementName=txbPassword}" 
                                 Style="{StaticResource PrimaryButton}"
-                                Margin="0 0 5 0" 
+                                Margin="0 0 5 0"
                                 Grid.Column="0">
                         </Button>
                         <Button Content="Register" 
@@ -217,16 +208,15 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <materialDesign:PackIcon Kind="Account" 
-                                         Foreground="Gray" 
-                                         Width="25" 
-                                         Height="25" 
-                                         VerticalAlignment="Bottom" 
-                                         Margin="0 0 8 0" 
-                                         Grid.Column="0" />
+                        <usercontrols:Badge
+                            Icon="{x:Static materialDesign:PackIconKind.Account}"
+                            Background="#6c757d"
+                            Foreground="#ffffff"
+                            Margin="0 0 8 0" 
+                            />
                         <TextBox x:Name="txbRegisterUsername"
                                  Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
-                                 Tag="Username"
+                                 ap:TextBoxHelper.Watermark="Username"
                                  Style="{StaticResource WatermarkTextBox}"
                                  attachedProperties:FocusExtension.IsFocused="{Binding RegisterFocus}"
                                  Grid.Column="1" />
@@ -239,16 +229,15 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <materialDesign:PackIcon Kind="Key" 
-                                         Foreground="Gray"
-                                         Width="25" 
-                                         Height="25" 
-                                         VerticalAlignment="Bottom" 
-                                         Margin="0 0 8 0" 
-                                         Grid.Column="0" />
+                        <usercontrols:Badge
+                            Icon="{x:Static materialDesign:PackIconKind.Key}"
+                            Background="#6c757d"
+                            Foreground="#ffffff"
+                            Margin="0 0 8 0" 
+                            />
 
                         <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
-                                 Tag="Password"
+                                 ap:TextBoxHelper.Watermark="Password"
                                  Style="{StaticResource WatermarkTextBox}"
                                  Grid.Column="1" />
                     </Grid>
@@ -260,16 +249,15 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <materialDesign:PackIcon Kind="KeyAdd"
-                                         Foreground="Gray"
-                                         Width="25" 
-                                         Height="25" 
-                                         VerticalAlignment="Bottom" 
-                                         Margin="0 0 8 0" 
-                                         Grid.Column="0" />
+                        <usercontrols:Badge
+                            Icon="{x:Static materialDesign:PackIconKind.KeyAdd}"
+                            Background="#6c757d"
+                            Foreground="#ffffff"
+                            Margin="0 0 8 0" 
+                            />
 
                         <TextBox Text="{Binding PasswordConfirm, UpdateSourceTrigger=PropertyChanged}"
-                                 Tag="Confirm Password"
+                                 ap:TextBoxHelper.Watermark="Confirm Password"
                                  Style="{StaticResource WatermarkTextBox}"
                                  Grid.Column="1" />
                     </Grid>

@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                    xmlns:local="clr-namespace:Lib.Styles">
+                    xmlns:local="clr-namespace:Lib.Styles"
+                    xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties">
 
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
         <Setter Property="FontSize" Value="16" />
@@ -62,7 +63,7 @@
                             </Border.RenderTransform>
                             <TextBlock
                                 x:Name="watermark__text"
-                                Text="{TemplateBinding Tag}"
+                                Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
                                 Foreground="#212529"
                                 FontSize="17"
                                 />
@@ -188,12 +189,82 @@
                             </Border.RenderTransform>
                             <TextBlock
                                 x:Name="watermark__text"
-                                Text="{TemplateBinding Tag}"
+                                Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
                                 Foreground="#212529"
                                 FontSize="17"
                                 />
                         </Border>
                     </Grid>
+
+                    <!-- Triggers on template level -->
+                    <ControlTemplate.Triggers>
+                        <!-- Watermark animation -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsFocused" Value="False" />
+                                <Condition Property="Tag" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="watermark" Property="Background" Value="Transparent" />
+                            <!-- Return watermark on original position (We inversed animation to enter and exit actions 
+                                 because I don't know how to check for NOT null in text condition -->
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="watermark"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                            From="-24" 
+                                            To="0"
+                                            Duration="0:0:0"
+                                            />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                            <!-- Psuh watermark to top -->
+                            <MultiTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="watermark"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                            From="0" 
+                                            To="-24"
+                                            Duration="0:0:0.1"
+                                            />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.ExitActions>
+                        </MultiTrigger>
+                        <!-- Focused styling-->
+                        <Trigger Property="IsFocused" Value="True">
+                            <!-- Color watermark blue -->
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="watermark__text"
+                                            Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                                            To="#86b7fe"
+                                            Duration="0:0:0.1"
+                                            />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <!-- Return watermark color on original color -->
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation 
+                                            Storyboard.TargetName="watermark__text"
+                                            Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
+                                            To="#212529"
+                                            Duration="0:0:0"
+                                            />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

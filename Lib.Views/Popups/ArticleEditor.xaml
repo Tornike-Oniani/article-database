@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:Lib.Views.Popups"
              xmlns:converters="clr-namespace:Lib.Views.Converters"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls"
+             xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -40,25 +41,34 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Authors -->
-                <usercontrols:CollectionBox Text="Author" 
-                                            ItemsSource="{Binding Article.AuthorsCollection}" 
-                                            Restriction="Author"
-                                            Margin="0 0 10 0" 
-                                            Grid.Column="0" />
+                <usercontrols:CollectionBox 
+                    Title="Authors"
+                    Text="Author" 
+                    ItemsSource="{Binding Article.AuthorsCollection}" 
+                    Restriction="Author"
+                    Margin="0 0 10 0" 
+                    Grid.Column="0" />
 
                 <!-- Keywords -->
-                <usercontrols:CollectionBox Text="Keyword" 
-                                            ItemsSource="{Binding Article.KeywordsCollection}" 
-                                            Restriction="Keyword"
-                                            Margin="10 0 0 0" 
-                                            Grid.Column="1"/>
+                <usercontrols:CollectionBox 
+                    Title="Keywords"
+                    Text="Keyword" 
+                    ItemsSource="{Binding Article.KeywordsCollection}" 
+                    Restriction="Keyword"
+                    Margin="10 0 0 0" 
+                    Grid.Column="1"/>
             </Grid>
 
             <!-- Year and SIC -->
             <StackPanel Orientation="Horizontal" Margin="0 10 0 15">
                 <!-- Year -->
                 <AdornerDecorator>
-                    <TextBox Text="{Binding Article.Year, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Year" Width="200" materialDesign:HintAssist.IsFloating="True" />
+                    <TextBox 
+                        Text="{Binding Article.Year, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
+                        ap:TextBoxHelper.Watermark="Year"
+                        Style="{StaticResource WatermarkTextBox}"
+                        Width="200" 
+                        />
                 </AdornerDecorator>
                 <StackPanel Orientation="Horizontal" Margin="30 0 0 0" VerticalAlignment="Bottom">
                     <Viewbox Height="20">
@@ -70,10 +80,12 @@
             </StackPanel>
 
             <!-- Personal Comment -->
-            <TextBox Text="{Binding Article.PersonalComment}" 
-                     FontFamily="Verdana"
-                     materialDesign:HintAssist.Hint="Personal comment" 
-                     materialDesign:HintAssist.IsFloating="True" />
+            <TextBox 
+                Text="{Binding Article.PersonalComment}" 
+                ap:TextBoxHelper.Watermark="Personal comment"
+                Style="{StaticResource WatermarkTextBox}"
+                FontFamily="Verdana"
+                />
 
             <!-- File -->
             <StackPanel Orientation="Horizontal" Margin="0 15 0 0">

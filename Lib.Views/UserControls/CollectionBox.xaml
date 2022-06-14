@@ -5,9 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:Lib.Views.UserControls"
+             xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
              mc:Ignorable="d" 
              x:Name="CollBox"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             MinHeight="200">
     <UserControl.Resources>
         <!-- Remove button styling -->
         <ControlTemplate x:Key="RemoveButtonTemplate" TargetType="{x:Type Button}">
@@ -122,30 +124,62 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <TextBox 
-            materialDesign:HintAssist.Hint="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-            materialDesign:HintAssist.IsFloating="True"
-            Text="{Binding Item, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-            FontFamily="Verdana"
-            Margin="0 0 0 10"
-            Grid.Row="0"
-            >
-            <TextBox.InputBindings>
-                <KeyBinding Key="Enter" Command="{Binding AddItemToListCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
-            </TextBox.InputBindings>
-        </TextBox>
-        <!-- Height="{Binding BoxHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" -->
-        <ListBox 
-            Style="{StaticResource CollectionListBox}"
-            ItemsSource="{Binding Path=ItemsSource, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-            MaxHeight="{Binding BoxHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-            Grid.Row="1"
-            />
+    <Border
+        BorderBrush="#f0f0f0"
+        BorderThickness="2 1 2 2"
+        CornerRadius="6"
+        >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!-- Card title -->
+            <Border 
+                Background="#f0f0f0"
+                BorderBrush="#f0f0f0"
+                BorderThickness="0 0 0 1"
+                Grid.Row="0"
+                >
+                <TextBlock 
+                    Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    />
+            </Border>
 
-    </Grid>
+            <!-- Card content -->
+            <Grid Margin="10" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBox 
+                    Text="{Binding Item, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                    ap:TextBoxHelper.Watermark="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Style="{StaticResource WatermarkTextBox}"
+                    FontFamily="Verdana"
+                    Margin="0 0 0 10"
+                    Grid.Row="0"
+                    >
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding AddItemToListCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+                    </TextBox.InputBindings>
+                </TextBox>
+                <!-- Height="{Binding BoxHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" -->
+                <ListBox 
+                    Style="{StaticResource CollectionListBox}"
+                    ItemsSource="{Binding Path=ItemsSource, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                    MaxHeight="{Binding BoxHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Grid.Row="1"
+                    />
+            </Grid>
+        </Grid>
+        
+        
+        
+    </Border>
+    
 </UserControl>

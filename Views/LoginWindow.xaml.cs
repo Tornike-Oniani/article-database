@@ -32,20 +32,21 @@ namespace Main
             _viewModel.Window = this;
             this.DataContext = _viewModel;
             txbUsername.Focus();
+            // We have to set initial tag to make it work
+            txbPassword.Tag = (!string.IsNullOrEmpty(txbPassword.Password)).ToString();
+
 
             ConfigurationManager.AppSettings["Attach"] = "ATTACH DATABASE \'" + Environment.CurrentDirectory.ToString() + "\\" + "User.sqlite3\'" + "AS user;";
         }
 
-        // Animate watermark when password is changed
-        // we do this in code behind because we can't 
-        // check if password is empty in XAML
+        // Since PasswordBox Password property can't be checked in XAML
+        // we set Tag property to True or False base on if Password is
+        // empty or not and then we use Tag property to check for it
+        // in XAML triggers
         private void txbPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            PasswordBox passBox = sender as PasswordBox;
-
-            DoubleAnimation moveAnimation = new DoubleAnimation(0, -24, new Duration(TimeSpan.FromSeconds(0.1)));
-            Border watermark = (Border)passBox.Template.FindName("watermark", passBox);
-            watermark.BeginAnimation(TranslateTransform.YProperty, moveAnimation);
+            PasswordBox passwordBox = sender as PasswordBox;
+            passwordBox.Tag = (!string.IsNullOrEmpty(passwordBox.Password)).ToString();
         }
     }
 }
