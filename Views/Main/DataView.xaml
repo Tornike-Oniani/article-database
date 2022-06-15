@@ -146,12 +146,14 @@
             </ToggleButton>
 
             <!-- Search options content -->
-            <Border
-                x:Name="accordion__dropdown"
-                Visibility="{
+            <!--
+            Visibility="{
                     Binding IsChecked, 
                     ElementName=accordion, 
-                    Converter={StaticResource BoolToVisibility}}"
+                    Converter={StaticResource BoolToVisibility}}" 
+            -->
+            <Border
+                x:Name="accordion__dropdown"
                 BorderThickness="1 0 1 1"
                 BorderBrush="#f0f0f0"
                 Height="0"

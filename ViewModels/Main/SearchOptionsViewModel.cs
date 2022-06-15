@@ -115,22 +115,6 @@ namespace MainLib.ViewModels.Main
 
         public RelayCommand ClearCommand { get; set; }
 
-        public DataViewViewModel()
-        {   
-            // 1. Initialize collections and fields
-            FilterAuthors = new ObservableCollection<string>();
-            FilterKeywords = new ObservableCollection<string>();
-
-            this.AuthorPairings = new List<string>() { "AND", "OR" };
-            this.KeywordPairings = new List<string>() { "AND", "OR" };
-            if (String.IsNullOrWhiteSpace(SelectedAuthorPairing))
-                this.SelectedAuthorPairing = AuthorPairings[0];
-            if (String.IsNullOrWhiteSpace(SelectedKeywordPairing))
-                this.SelectedKeywordPairing = KeywordPairings[0];
-
-            this.ClearCommand = new RelayCommand(Clear, CanClear);
-        }
-
         public void Clear(object input = null)
         {
             FilterTitle = null;
@@ -155,6 +139,22 @@ namespace MainLib.ViewModels.Main
                 return false;
 
             return true;
+        }
+
+        private void InitializeSearchOptions()
+        {
+            // 1. Initialize collections and fields
+            FilterAuthors = new ObservableCollection<string>();
+            FilterKeywords = new ObservableCollection<string>();
+
+            this.AuthorPairings = new List<string>() { "AND", "OR" };
+            this.KeywordPairings = new List<string>() { "AND", "OR" };
+            if (String.IsNullOrWhiteSpace(SelectedAuthorPairing))
+                this.SelectedAuthorPairing = AuthorPairings[0];
+            if (String.IsNullOrWhiteSpace(SelectedKeywordPairing))
+                this.SelectedKeywordPairing = KeywordPairings[0];
+
+            this.ClearCommand = new RelayCommand(Clear, CanClear);
         }
     }
 }

@@ -202,6 +202,8 @@ namespace MainLib.ViewModels.Main
             OpenMassBookmarkManagerCommand = new RelayCommand(OpenMassBookmarkManager, CanOpenMassBookmarkManager);
             OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager, IsArticleSelected);
 
+            InitializeSearchOptions();
+
             // Set up section selector
             this.FinishCommand = new RelayCommand(Finish);
 

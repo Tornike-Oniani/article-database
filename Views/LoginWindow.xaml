@@ -180,7 +180,10 @@
         
         <!-- Register-->
         <Grid Style="{StaticResource SlideGrid}" 
-              Visibility="{Binding CurrentPage, Converter={StaticResource CurrentPageToVisibility}, ConverterParameter=Register}">
+              Visibility="{
+                Binding CurrentPage, 
+                Converter={StaticResource CurrentPageToVisibility}, 
+                ConverterParameter=Register}">
             <Grid.RenderTransform>
                 <TranslateTransform X="490" Y="0" />
             </Grid.RenderTransform>
