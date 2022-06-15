@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Lib.DataAccessLayer.Utils
 {
@@ -13,7 +9,7 @@ namespace Lib.DataAccessLayer.Utils
 
         public Filter()
         {
-            this.FilterQuery = new StringBuilder(" WHERE ");
+            this.FilterQuery = new StringBuilder("");
         }
 
         public string GetFilterString()

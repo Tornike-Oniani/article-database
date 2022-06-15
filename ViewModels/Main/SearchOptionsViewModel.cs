@@ -2,14 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MainLib.ViewModels.Main
 {
     public partial class DataViewViewModel
     {
+        private string _simpleSearch;
         private bool _searchOptionsIsChecked;
         private string _filterTitle;
         private string _filterAuthor;
@@ -22,6 +20,12 @@ namespace MainLib.ViewModels.Main
         private string _idFilter;
 
 
+
+        public string SimpleSearch
+        {
+            get { return _simpleSearch; }
+            set { _simpleSearch = value; OnPropertyChanged("SimpleSearch"); }
+        }
         public bool SearchOptionsIsChecked
         {
             get { return _searchOptionsIsChecked; }

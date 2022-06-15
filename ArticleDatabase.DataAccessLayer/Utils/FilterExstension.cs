@@ -1,9 +1,6 @@
-﻿using Lib.DataAccessLayer.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lib.DataAccessLayer.Utils
 {
@@ -11,11 +8,22 @@ namespace Lib.DataAccessLayer.Utils
     {
         public static Filter FilterTitle(this Filter filter, string title, bool wordBreak)
         {
+            // If title is blank return
+            if (String.IsNullOrEmpty(title))
+            {
+                return filter;
+            }
+
+            // Double single quotes (') to avoid conflict with SQL query
+            string formatedTitle = title.Replace("'", "''");
+
             AppendModifed(filter);
 
+            // Append each word as wildcard
+            filter.FilterQuery.Append("(");
             if (wordBreak)
             {
-                string[] words = title.Split(' ');
+                string[] words = formatedTitle.Split(' ');
                 for (int i = 0; i < words.Length; i++)
                 {
                     filter.FilterQuery.Append("final.Title LIKE " + ToWildCard(words[i]));
@@ -25,19 +33,27 @@ namespace Lib.DataAccessLayer.Utils
                         filter.FilterQuery.Append(" AND ");
                     }
                 }
-                return filter;
             }
+            // Append as whole substring
             else
             {
-                filter.FilterQuery.Append("final.Title LIKE " + ToWildCard(title));
-                filter.Modified = true;
-                return filter;
+                filter.FilterQuery.Append("final.Title LIKE " + ToWildCard(formatedTitle));
             }
+
+            filter.FilterQuery.Append(")");
+
+            filter.Modified = true;
+            filter.FilterQuery.Append(" ");
+            return filter;
         }
         public static Filter FilterAuthors(this Filter filter, List<string> authors, string pairing)
         {
+            // If there are no author filters return
+            if (authors.Count == 0) { return filter; }
+
             AppendModifed(filter);
 
+            filter.FilterQuery.Append("(");
             foreach (string author in authors)
             {
                 filter.FilterQuery.Append("final.Authors LIKE " + ToWildCard(author));
@@ -47,11 +63,19 @@ namespace Lib.DataAccessLayer.Utils
                     filter.FilterQuery.Append($" {pairing} ");
             }
 
+            filter.FilterQuery.Append(")");
+
+            filter.FilterQuery.Append(" ");
+            filter.Modified = true;
             return filter;
         }
         public static Filter FilterKeywords(this Filter filter, List<string> keywords, string pairing)
         {
+            if (keywords.Count == 0) { return filter; }
+
             AppendModifed(filter);
+
+            filter.FilterQuery.Append("(");
 
             foreach (string keyword in keywords)
             {
@@ -62,11 +86,19 @@ namespace Lib.DataAccessLayer.Utils
                     filter.FilterQuery.Append($" {pairing} ");
             }
 
+            filter.FilterQuery.Append(")");
+
+            filter.FilterQuery.Append(" ");
+            filter.Modified = true;
             return filter;
         }
         public static Filter FilterYear(this Filter filter, string year)
         {
+            if (String.IsNullOrEmpty(year)) { return filter; }
+
             AppendModifed(filter);
+
+            filter.FilterQuery.Append("(");
 
             if (year.Contains("-"))
             {
@@ -81,37 +113,63 @@ namespace Lib.DataAccessLayer.Utils
                 filter.FilterQuery.Append($" final.year = {year}");
             }
 
+            filter.FilterQuery.Append(")");
+
+            filter.FilterQuery.Append(" ");
+            filter.Modified = true;
             return filter;
         }
         public static Filter FilterPersonalComment(this Filter filter, string personalComment)
         {
+            if (String.IsNullOrEmpty(personalComment)) { return filter; }
+
             AppendModifed(filter);
+
+            filter.FilterQuery.Append("(");
 
             filter.FilterQuery.Append($" final.PersonalComment LIKE {ToWildCard(personalComment)}");
 
+            filter.FilterQuery.Append(")");
+
+            filter.FilterQuery.Append(" ");
+            filter.Modified = true;
             return filter;
         }
         public static Filter FilterIds(this Filter filter, int[] idFilters)
         {
+            if (idFilters == null) { return filter; }
+
             AppendModifed(filter);
+
+            filter.FilterQuery.Append("(");
 
             filter.FilterQuery.Append($" ID >= {idFilters[0]} AND ID <= {idFilters[1]}");
 
+            filter.FilterQuery.Append(")");
+
+            filter.FilterQuery.Append(" ");
+            filter.Modified = true;
             return filter;
         }
-        public static Filter Sort(this Filter filter, string sort)
+        public static Filter Sort(this Filter filter, string sort = "Title ASC")
         {
-            AppendModifed(filter);
-
             filter.FilterQuery.Append($" ORDER BY {sort}");
 
+            filter.FilterQuery.Append(" ");
+            filter.Modified = true;
             return filter;
+        }
+        // This doesn't return Filter because this should be the last filter to add
+        public static void Paginate(this Filter filter, int itemsPerPage, int offset)
+        {
+            filter.Modified = true;
+            filter.FilterQuery.Append(" LIMIT " + itemsPerPage.ToString() + " OFFSET " + offset.ToString() + ";");
         }
 
         // Checks if filter was already modifed, if it was we have to add AND
         private static void AppendModifed(Filter filter)
         {
-            filter.FilterQuery.Append(filter.Modified ? " AND " : "");
+            filter.FilterQuery.Append(filter.Modified ? " AND " : " WHERE ");
         }
         private static string ToWildCard(string input)
         {

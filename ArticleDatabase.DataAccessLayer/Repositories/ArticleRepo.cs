@@ -1,17 +1,16 @@
-﻿using Lib.DataAccessLayer.Models;
+﻿using Dapper;
+using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories.Base;
-using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Dapper;
 
 namespace Lib.DataAccessLayer.Repositories
 {
     public class ArticleRepo : BaseRepo
     {
+        // CREATE
         // Save article to database
         public void SaveArticle(Article article, User user)
         {
@@ -51,6 +50,8 @@ namespace Lib.DataAccessLayer.Repositories
                 }
             }
         }
+
+        // UPDATE
         // Update article fields in database
         public void UpdateArticle(Article article, User user)
         {
@@ -177,6 +178,8 @@ namespace Lib.DataAccessLayer.Repositories
                 }
             }
         }
+
+        // DELTETE
         // Delete article from database
         public void DeleteArticle(Article article)
         {
@@ -219,6 +222,112 @@ namespace Lib.DataAccessLayer.Repositories
 
             // Remove any leftofer authors and keywords which have no relationships
             ConsolidateReferences();
+        }
+
+        // READ
+        public List<Article> LoadArticles(User user, string filter)
+        {
+            // Results
+            List<Article> results;
+
+            // Template query
+            StringBuilder queryBuilder = new StringBuilder(@"
+SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC
+FROM
+(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
+FROM
+(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
+FROM
+(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
+FROM tblArticle AS art
+LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
+LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
+GROUP BY art.Title) AS art_ath
+JOIN
+(SELECT art.Title AS Article, group_concat(kwd.Keyword, "", "") AS Keywords
+FROM tblArticle AS art
+LEFT JOIN jntArticleKeyword AS ak ON art.ID = ak.Article_ID
+LEFT JOIN tblKeyword AS kwd ON ak.Keyword_ID = kwd.ID
+GROUP BY art.Title) AS art_kwd
+ON art_ath.Article = art_kwd.Article) AS cmp
+LEFT JOIN
+(SELECT ArticleID, PersonalComment, SIC
+FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final 
+");
+            // 1. Add user id for comments and sic
+            queryBuilder.Replace("#UserID", user.ID.ToString());
+
+            // 2. Add filters to template query
+            queryBuilder.Append(filter);
+
+
+            string query = queryBuilder.ToString();
+            System.Console.WriteLine(query);
+
+            // 4. Fetch articles
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    conn.Query(AttachUser(), transaction);
+
+                    results = conn.Query<Article>(query, transaction: transaction).ToList();
+
+                    transaction.Commit();
+                }
+            }
+
+            return results;
+        }
+        public int GetRecordCount(User user, string filter)
+        {
+            int result = 1;
+
+            // Template query
+            StringBuilder queryBuilder = new StringBuilder(@"
+SELECT COUNT(final.ID)
+FROM
+(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
+FROM
+(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
+FROM
+(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
+FROM tblArticle AS art
+LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
+LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
+GROUP BY art.Title) AS art_ath
+JOIN
+(SELECT art.Title AS Article, group_concat(kwd.Keyword, "", "") AS Keywords
+FROM tblArticle AS art
+LEFT JOIN jntArticleKeyword AS ak ON art.ID = ak.Article_ID
+LEFT JOIN tblKeyword AS kwd ON ak.Keyword_ID = kwd.ID
+GROUP BY art.Title) AS art_kwd
+ON art_ath.Article = art_kwd.Article) AS cmp
+LEFT JOIN
+(SELECT ArticleID, PersonalComment, SIC
+FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
+");
+
+            queryBuilder.Append(filter);
+
+            string query = queryBuilder.ToString();
+
+            // 3. Fetch count
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    conn.Query(AttachUser(), transaction);
+
+                    result = conn.QuerySingleOrDefault<int>(query, transaction: transaction);
+
+                    transaction.Commit();
+                }
+            }
+
+            return result;
         }
         // Check if article exists and return the file
         public bool Exists(string title, out string file)
@@ -299,150 +408,6 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             return results;
         }
         // Fetch list of articles from database
-        public List<Article> LoadArticles(
-            User user, 
-            string title, 
-            List<string> authors,
-            string authorPairing,
-            List<string> keywords, 
-            string keywordPairing,
-            string year, 
-            string personalComment, 
-            int offset, 
-            int itemsPerPage, 
-            string section,
-            bool wordBreak,
-            int[] idFilters,
-            string order = "Title ASC")
-        {
-            // Results
-            List<Article> results;
-
-            // Template query
-            StringBuilder queryBuilder = new StringBuilder(@"
-SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC
-FROM
-(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
-FROM
-(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
-FROM
-(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
-FROM tblArticle AS art
-LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
-LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
-GROUP BY art.Title) AS art_ath
-JOIN
-(SELECT art.Title AS Article, group_concat(kwd.Keyword, "", "") AS Keywords
-FROM tblArticle AS art
-LEFT JOIN jntArticleKeyword AS ak ON art.ID = ak.Article_ID
-LEFT JOIN tblKeyword AS kwd ON ak.Keyword_ID = kwd.ID
-GROUP BY art.Title) AS art_kwd
-ON art_ath.Article = art_kwd.Article) AS cmp
-LEFT JOIN
-(SELECT ArticleID, PersonalComment, SIC
-FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
-");
-            bool wasSection = false;
-            // 1. Add Section
-            if (section != "None")
-            {
-                queryBuilder.Append($"JOIN tblPending AS p ON final.ID = p.Article_ID WHERE Section = \"{section}\"");
-                wasSection = true;
-            }
-
-            // 2. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, authorPairing, keywords, keywordPairing, year, personalComment, wasSection, wordBreak, idFilters, order);
-
-            // 3. Add Pagination
-            query += " LIMIT " + itemsPerPage.ToString() + " OFFSET " + offset.ToString() + ";";
-
-            //Console.WriteLine(query);
-
-            // 4. Fetch articles
-            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
-            {
-                conn.Open();
-                using (SQLiteTransaction transaction = conn.BeginTransaction())
-                {
-                    conn.Query(AttachUser(), transaction);
-
-                    results = conn.Query<Article>(query, transaction: transaction).ToList();
-
-                    transaction.Commit();
-                }
-            }
-
-            return results;
-        }
-        // Get count of fetched articles
-        public int GetRecordCount(
-            User user, 
-            string title, 
-            List<string> authors,
-            string authorPairing,
-            List<string> keywords, 
-            string keywordPairing,
-            string year, 
-            string personalComment, 
-            string section,
-            bool wordBreak,
-            int[] idFilters)
-        {
-
-            int result = 1;
-
-            // Template query
-            StringBuilder queryBuilder = new StringBuilder(@"
-SELECT COUNT(final.ID)
-FROM
-(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
-FROM
-(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
-FROM
-(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
-FROM tblArticle AS art
-LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
-LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
-GROUP BY art.Title) AS art_ath
-JOIN
-(SELECT art.Title AS Article, group_concat(kwd.Keyword, "", "") AS Keywords
-FROM tblArticle AS art
-LEFT JOIN jntArticleKeyword AS ak ON art.ID = ak.Article_ID
-LEFT JOIN tblKeyword AS kwd ON ak.Keyword_ID = kwd.ID
-GROUP BY art.Title) AS art_kwd
-ON art_ath.Article = art_kwd.Article) AS cmp
-LEFT JOIN
-(SELECT ArticleID, PersonalComment, SIC
-FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
-");
-            bool wasSection = false;
-            // 1. Add Section
-            if (section != "None")
-            {
-                queryBuilder.Append("JOIN tblPending AS p ON final.ID = p.Article_ID");
-                wasSection = true;
-            }
-
-            // 2. Add filters to template query
-            string query = AddFilter(queryBuilder, user, title, authors, authorPairing, keywords, keywordPairing, year, personalComment, wasSection, wordBreak, idFilters);
-            //Console.WriteLine(query);
-
-            // 3. Fetch count
-            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
-            {
-                conn.Open();
-                using (SQLiteTransaction transaction = conn.BeginTransaction())
-                {
-                    conn.Query(AttachUser(), transaction);
-
-                    result = conn.QuerySingleOrDefault<int>(query, transaction: transaction);
-
-                    transaction.Commit();
-                }
-            }
-
-            return result;
-        }
         public Article GetArticleWithId(int? id)
         {
             // Null escape
@@ -602,6 +567,7 @@ WHERE Title = @Title
             return result;
         }
 
+        // Private helpers
         private void AddAuthors(SQLiteConnection conn, SQLiteTransaction transaction, Article article)
         {
             long author_id;
@@ -667,6 +633,188 @@ WHERE Title = @Title
                 }
             }
         }
+
+        private string ToWildCard(string input)
+        {
+            return "'%" + input + "%'";
+        }
+        private void ConsolidateReferences()
+        {
+            string sql;
+
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    // 1. Authors check
+                    sql = @"
+DELETE FROM tblAuthor WHERE ID IN
+(SELECT ath.ID
+FROM tblAuthor AS ath
+LEFT JOIN jntArticleAuthor AS aa ON ath.ID = aa.Author_ID
+WHERE aa.Author_ID IS NULL);
+";
+                    conn.Execute(sql, transaction);
+
+                    // 2. Keywords check
+                    sql = @"
+DELETE FROM tblKeyword WHERE ID IN
+(SELECT kwd.ID
+FROM tblKeyword AS kwd
+LEFT JOIN jntArticleKeyword AS ak ON kwd.ID = ak.Keyword_ID
+WHERE ak.Keyword_ID IS NULL);
+";
+                    conn.Execute(sql, transaction);
+                    transaction.Commit();
+                }
+            }
+        }
+
+        #region BackupMethods
+        public List<Article> LoadArticles(
+            User user,
+            string title,
+            List<string> authors,
+            string authorPairing,
+            List<string> keywords,
+            string keywordPairing,
+            string year,
+            string personalComment,
+            int offset,
+            int itemsPerPage,
+            string section,
+            bool wordBreak,
+            int[] idFilters,
+            string order = "Title ASC")
+        {
+            // Results
+            List<Article> results;
+
+            // Template query
+            StringBuilder queryBuilder = new StringBuilder(@"
+SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC
+FROM
+(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
+FROM
+(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
+FROM
+(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
+FROM tblArticle AS art
+LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
+LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
+GROUP BY art.Title) AS art_ath
+JOIN
+(SELECT art.Title AS Article, group_concat(kwd.Keyword, "", "") AS Keywords
+FROM tblArticle AS art
+LEFT JOIN jntArticleKeyword AS ak ON art.ID = ak.Article_ID
+LEFT JOIN tblKeyword AS kwd ON ak.Keyword_ID = kwd.ID
+GROUP BY art.Title) AS art_kwd
+ON art_ath.Article = art_kwd.Article) AS cmp
+LEFT JOIN
+(SELECT ArticleID, PersonalComment, SIC
+FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
+");
+            bool wasSection = false;
+            // 1. Add Section
+            if (section != "None")
+            {
+                queryBuilder.Append($"JOIN tblPending AS p ON final.ID = p.Article_ID WHERE Section = \"{section}\"");
+                wasSection = true;
+            }
+
+            // 2. Add filters to template query
+            string query = AddFilter(queryBuilder, user, title, authors, authorPairing, keywords, keywordPairing, year, personalComment, wasSection, wordBreak, idFilters, order);
+
+            // 3. Add Pagination
+            query += " LIMIT " + itemsPerPage.ToString() + " OFFSET " + offset.ToString() + ";";
+
+            //Console.WriteLine(query);
+
+            // 4. Fetch articles
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    conn.Query(AttachUser(), transaction);
+
+                    results = conn.Query<Article>(query, transaction: transaction).ToList();
+
+                    transaction.Commit();
+                }
+            }
+
+            return results;
+        }
+        // Get count of fetched articles
+        public int GetRecordCount(
+            User user,
+            string title,
+            List<string> authors,
+            string authorPairing,
+            List<string> keywords,
+            string keywordPairing,
+            string year,
+            string personalComment,
+            string section,
+            bool wordBreak,
+            int[] idFilters)
+        {
+            int result = 1;
+
+            // Template query
+            StringBuilder queryBuilder = new StringBuilder(@"
+SELECT COUNT(final.ID)
+FROM
+(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
+FROM
+(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
+FROM
+(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
+FROM tblArticle AS art
+LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
+LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
+GROUP BY art.Title) AS art_ath
+JOIN
+(SELECT art.Title AS Article, group_concat(kwd.Keyword, "", "") AS Keywords
+FROM tblArticle AS art
+LEFT JOIN jntArticleKeyword AS ak ON art.ID = ak.Article_ID
+LEFT JOIN tblKeyword AS kwd ON ak.Keyword_ID = kwd.ID
+GROUP BY art.Title) AS art_kwd
+ON art_ath.Article = art_kwd.Article) AS cmp
+LEFT JOIN
+(SELECT ArticleID, PersonalComment, SIC
+FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
+");
+            bool wasSection = false;
+            // 1. Add Section
+            if (section != "None")
+            {
+                queryBuilder.Append("JOIN tblPending AS p ON final.ID = p.Article_ID");
+                wasSection = true;
+            }
+
+            // 2. Add filters to template query
+            string query = AddFilter(queryBuilder, user, title, authors, authorPairing, keywords, keywordPairing, year, personalComment, wasSection, wordBreak, idFilters);
+            //Console.WriteLine(query);
+
+            // 3. Fetch count
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    conn.Query(AttachUser(), transaction);
+
+                    result = conn.QuerySingleOrDefault<int>(query, transaction: transaction);
+
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
         private string AddFilter(
             StringBuilder queryBuilder,
             User user,
@@ -717,7 +865,7 @@ WHERE Title = @Title
                     }
                 }
             }
-                
+
             // 3. Add WHERE clause if title was null but authors or keywords aren't (or Id filters)
             if ((authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(year) || !string.IsNullOrEmpty(personalCommnet) || idFilters != null) && string.IsNullOrEmpty(title) && !section)
                 result.Append(" WHERE ");
@@ -783,7 +931,7 @@ WHERE Title = @Title
             if (!string.IsNullOrWhiteSpace(personalCommnet))
             {
                 // Determine if we need to add "AND"
-                if (authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(year) || !string.IsNullOrEmpty(title) )
+                if (authors.Count > 0 || keywords.Count > 0 || !string.IsNullOrEmpty(year) || !string.IsNullOrEmpty(title))
                     queryBuilder.Append(" AND ");
 
                 queryBuilder.Append($" final.PersonalComment LIKE {ToWildCard(personalCommnet)}");
@@ -804,41 +952,6 @@ WHERE Title = @Title
             // 9. Return the result
             return result.ToString();
         }
-        private string ToWildCard(string input)
-        {
-            return "'%" + input + "%'";
-        }
-        private void ConsolidateReferences()
-        {
-            string sql;
-
-            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
-            {
-                conn.Open();
-                using (SQLiteTransaction transaction = conn.BeginTransaction())
-                {
-                    // 1. Authors check
-                    sql = @"
-DELETE FROM tblAuthor WHERE ID IN
-(SELECT ath.ID
-FROM tblAuthor AS ath
-LEFT JOIN jntArticleAuthor AS aa ON ath.ID = aa.Author_ID
-WHERE aa.Author_ID IS NULL);
-";
-                    conn.Execute(sql, transaction);
-
-                    // 2. Keywords check
-                    sql = @"
-DELETE FROM tblKeyword WHERE ID IN
-(SELECT kwd.ID
-FROM tblKeyword AS kwd
-LEFT JOIN jntArticleKeyword AS ak ON kwd.ID = ak.Keyword_ID
-WHERE ak.Keyword_ID IS NULL);
-";
-                    conn.Execute(sql, transaction);
-                    transaction.Commit();
-                }
-            }
-        }
+        #endregion
     }
 }

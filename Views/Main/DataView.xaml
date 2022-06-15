@@ -46,6 +46,7 @@
             <Setter Property="Background" Value="#dee2e6" />
             <Setter Property="Foreground" Value="#212529" />
             <Setter Property="Padding" Value="15 10 15 10" />
+            <Setter Property="Cursor" Value="Hand" />
             <!-- Template -->
             <Setter Property="Template">
                 <Setter.Value>
@@ -129,21 +130,34 @@
             </Grid.RowDefinitions>
 
             <!-- Search options header -->
-            <ToggleButton
-                x:Name="accordion"
-                Content="Detailed search"
-                IsChecked="{Binding SearchOptionsIsChecked}"
-                Style="{StaticResource Accordion}"
-                Grid.Row="0">
-                <ToggleButton.Triggers>
-                    <EventTrigger RoutedEvent="ToggleButton.Checked">
-                        <BeginStoryboard Storyboard="{StaticResource openDropdown}" />
-                    </EventTrigger>
-                    <EventTrigger RoutedEvent="ToggleButton.Unchecked">
-                        <BeginStoryboard Storyboard="{StaticResource closeDropdown}" />
-                    </EventTrigger>
-                </ToggleButton.Triggers>
-            </ToggleButton>
+            <Grid>
+                <ToggleButton
+                    x:Name="accordion"
+                    Content="Open detailed search"
+                    IsChecked="{Binding SearchOptionsIsChecked}"
+                    Style="{StaticResource Accordion}"
+                    Grid.Row="0"
+                    >
+                    <ToggleButton.Triggers>
+                        <EventTrigger RoutedEvent="ToggleButton.Checked">
+                            <BeginStoryboard Storyboard="{StaticResource openDropdown}" />
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                            <BeginStoryboard Storyboard="{StaticResource closeDropdown}" />
+                        </EventTrigger>
+                    </ToggleButton.Triggers>
+                </ToggleButton>
+
+                <TextBox
+                    Text="{Binding SimpleSearch, UpdateSourceTrigger=PropertyChanged}"
+                    aps:TextBoxHelper.Watermark="Simple search"
+                    Style="{StaticResource WatermarkTextBoxSmall}"
+                    Width="270"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0 0 15 0"
+                    />
+            </Grid>
 
             <!-- Search options content -->
             <!--

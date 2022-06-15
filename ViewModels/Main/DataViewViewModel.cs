@@ -1,24 +1,23 @@
 ﻿using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
+using Lib.DataAccessLayer.Utils;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Browser;
+using Lib.ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Windows;
+using MainLib.ViewModels.Popups;
+using MainLib.ViewModels.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Lib.ViewModels.Base;
-using Lib.ViewModels.Commands;
-using MainLib.ViewModels.Popups;
-using Lib.ViewModels.Services.Browser;
-using Lib.ViewModels.Services.Dialogs;
-using Lib.ViewModels.Services.Windows;
-using Lib.ViewModels.Popups;
-using MainLib.ViewModels.Utils;
 using System.Windows.Input;
-using Newtonsoft.Json;
 
 namespace MainLib.ViewModels.Main
 {
@@ -141,10 +140,10 @@ namespace MainLib.ViewModels.Main
 
         // Constructor
         public DataViewViewModel(
-            User user, 
-            Action<bool> workStatus, 
-            IDialogService dialogService, 
-            IWindowService windowService, 
+            User user,
+            Action<bool> workStatus,
+            IDialogService dialogService,
+            IWindowService windowService,
             IBrowserService browserService)
         {
             this.User = user;
@@ -165,7 +164,7 @@ namespace MainLib.ViewModels.Main
             if (User.IsAdmin) { Columns.Add("FileName"); }
 
             // Initialize sections collection
-            this.Sections = new ObservableCollection<string>() {};
+            this.Sections = new ObservableCollection<string>() { };
 
             // 2. Initialize articles collection and paging
             Users = new ObservableCollection<User>(new UserRepo().GetUsers());
@@ -454,7 +453,7 @@ namespace MainLib.ViewModels.Main
                     LoadArticlesCommand.Execute(null);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Delete Article", e.Message, e.StackTrace);
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
@@ -512,7 +511,7 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenBookmarkManager(object input = null)
         {
-            _windowService.OpenWindow(new BookmarkManagerViewModel(User, ViewType.DataView, _dialogService,input as Article));
+            _windowService.OpenWindow(new BookmarkManagerViewModel(User, ViewType.DataView, _dialogService, input as Article));
         }
         public void OpenEditDialog(object input = null)
         {
@@ -609,6 +608,18 @@ namespace MainLib.ViewModels.Main
         // Private helpers
         private async Task PopulateArticles()
         {
+            Filter filter = new Filter();
+            filter
+                .FilterTitle(_filterTitle, WordBreakMode)
+                .FilterAuthors(FilterAuthors.ToList(), SelectedAuthorPairing)
+                .FilterKeywords(FilterKeywords.ToList(), SelectedKeywordPairing)
+                .FilterYear(FilterYear)
+                .FilterPersonalComment(FilterPersonalComment)
+                .FilterIds(GetFilterIds(IdFilter))
+                .Sort(_currentSort)
+                .Paginate(ItemsPerPage, _offset);
+
+
             // 1. Clear existing data grid source
             Articles.Clear();
 
@@ -622,24 +633,28 @@ namespace MainLib.ViewModels.Main
                     _filterTitle = _filterTitle.Replace("'", "''");
 
                 // 2. Fetch artilces from database
-                foreach (Article article in new ArticleRepo().LoadArticles(
-                    Users[UserIndex],
-                    _filterTitle,
-                    FilterAuthors.ToList(),
-                    SelectedAuthorPairing,
-                    FilterKeywords.ToList(),
-                    SelectedKeywordPairing,
-                    FilterYear,
-                    FilterPersonalComment,
-                    _offset,
-                    ItemsPerPage,
-                    SelectedSection,
-                    WordBreakMode,
-                    GetFilterIds(IdFilter),
-                    _currentSort))
+                foreach (Article article in new ArticleRepo().LoadArticles(Users[UserIndex], filter.GetFilterString()))
                 {
                     articles.Add(article);
                 }
+                //foreach (Article article in new ArticleRepo().LoadArticles(
+                //    Users[UserIndex],
+                //    _filterTitle,
+                //    FilterAuthors.ToList(),
+                //    SelectedAuthorPairing,
+                //    FilterKeywords.ToList(),
+                //    SelectedKeywordPairing,
+                //    FilterYear,
+                //    FilterPersonalComment,
+                //    _offset,
+                //    ItemsPerPage,
+                //    SelectedSection,
+                //    WordBreakMode,
+                //    GetFilterIds(IdFilter),
+                //    _currentSort))
+                //{
+                //    articles.Add(article);
+                //}
             });
 
             // 3. Populate article collection
@@ -655,7 +670,7 @@ namespace MainLib.ViewModels.Main
                 List<string> sections = new List<string>();
 
                 _workStatus(true);
-                
+
                 await Task.Run(() =>
                 {
                     string info = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "sections.json"));
@@ -675,7 +690,7 @@ namespace MainLib.ViewModels.Main
                 });
                 this.SelectedSection = this.Sections.First();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong", "Error", DialogType.Error));
                 new BugTracker().Track("Data View", "Reading sections from json", e.Message, e.StackTrace);
