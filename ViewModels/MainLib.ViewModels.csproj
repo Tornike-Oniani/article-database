@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Commands\UpdateViewCommand.cs" />
     <Compile Include="LoginViewModel.cs" />
+    <Compile Include="Main\SearchOptionsViewModel.cs" />
     <Compile Include="NavigationViewModel.cs" />
     <Compile Include="Main\BookmarksViewModel.cs" />
     <Compile Include="Main\DataEntryViewModel.cs" />

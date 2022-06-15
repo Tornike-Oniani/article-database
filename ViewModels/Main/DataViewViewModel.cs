@@ -22,7 +22,7 @@ using Newtonsoft.Json;
 
 namespace MainLib.ViewModels.Main
 {
-    public class DataViewViewModel : BaseViewModel
+    public partial class DataViewViewModel : BaseViewModel
     {
         #region Private members
         private List<string> _columns;
@@ -168,10 +168,10 @@ namespace MainLib.ViewModels.Main
             this.Sections = new ObservableCollection<string>() {};
 
             // 2. Initialize articles collection and paging
-            Users = new ObservableCollection<User>((new UserRepo()).GetUsers());
+            Users = new ObservableCollection<User>(new UserRepo().GetUsers());
             Articles = new ObservableCollection<Article>();
             CurrentPage = 1;
-            ItemsPerPage = 25;
+            ItemsPerPage = 35;
 
             // 3. Get the index of the logged in user and set it as selected index for combobox
             int index = 0;
@@ -201,15 +201,6 @@ namespace MainLib.ViewModels.Main
             OpenBookmarkManagerCommand = new RelayCommand(OpenBookmarkManager, IsArticleSelected);
             OpenMassBookmarkManagerCommand = new RelayCommand(OpenMassBookmarkManager, CanOpenMassBookmarkManager);
             OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager, IsArticleSelected);
-
-            // Set up filter dialog window
-
-            // 1. Initialize collections and fields
-            FilterAuthors = new ObservableCollection<string>();
-            FilterKeywords = new ObservableCollection<string>();
-
-            // 2. Set up commands
-            ClearCommand = new RelayCommand(Clear, CanClear);
 
             // Set up section selector
             this.FinishCommand = new RelayCommand(Finish);
@@ -301,6 +292,10 @@ namespace MainLib.ViewModels.Main
             OnPropertyChanged("FilterTitle");
             try
             {
+                // This property is in SearchOptionsViewModel (partial class)
+                // causes search options accordion to collapse on UI
+                SearchOptionsIsChecked = false;
+
                 string _filterTitle = FilterTitle;
 
                 if (!string.IsNullOrWhiteSpace(_filterTitle))
@@ -546,129 +541,6 @@ namespace MainLib.ViewModels.Main
 
             return BMCheckedArticles.Count > 0;
         }
-        #endregion
-
-        #region Filter dialog setup
-
-        // We bind dialog datacontext to this (DataViewViewModel) because copying columns list with reference didn't work on UI)
-        // NOT ANYMORE, we just pass this datacontext as parent
-
-        private string _filterTitle;
-        private string _filterAuthor;
-        private string _filterKeyword;
-        private string _filterYear;
-        private string _filterPersonalComment;
-        private bool _wordBreakMode;
-        private string _selectedAuthorPairing;
-        private string _selectedKeywordPairing;
-        private string _idFilter;
-
-        public string FilterTitle
-        {
-            get
-            {
-                if (String.IsNullOrWhiteSpace(_filterTitle))
-                    return null;
-
-                return _filterTitle;
-            }
-            set { _filterTitle = value; 
-                //OnPropertyChanged("FilterTitle"); 
-            }
-        }
-        public string FilterAuthor
-        {
-            get { return _filterAuthor; }
-            set { _filterAuthor = value; OnPropertyChanged("FilterAuthor"); 
-            }
-        }
-        public string FilterKeyword
-        {
-            get { return _filterKeyword; }
-            set { _filterKeyword = value; OnPropertyChanged("FilterKeyword"); 
-            }
-        }
-        public string FilterYear
-        {
-            get { return _filterYear; }
-            set { _filterYear = value; OnPropertyChanged("FilterYear"); }
-        }
-        public string FilterPersonalComment
-        {
-            get { return _filterPersonalComment; }
-            set { _filterPersonalComment = value; OnPropertyChanged("FilterPersonalComment"); }
-        }
-        public ObservableCollection<string> FilterAuthors { get; set; }
-        public ObservableCollection<string> FilterKeywords { get; set; }
-        public string SelectedAuthorPairing
-        {
-            get { return _selectedAuthorPairing; }
-            set { _selectedAuthorPairing = value; OnPropertyChanged("SelectedAuthorPairing"); }
-        }
-        public string SelectedKeywordPairing
-        {
-            get { return _selectedKeywordPairing; }
-            set { _selectedKeywordPairing = value; OnPropertyChanged("SelectedKeywordPairing"); }
-        }
-        public string IdFilter
-        {
-            get { return _idFilter; }
-            set { _idFilter = value; OnPropertyChanged("IdFilter"); }
-        }
-
-        // Temporary authors and keywords highlighter
-        public string AuthorHighlight 
-        {
-            get 
-            {
-                if (FilterAuthors.Count > 0) { return String.Join(" ", FilterAuthors); }
-
-                return "";
-            }
-        }
-        public string KeywordHighlight
-        {
-            get
-            {
-                if (FilterKeywords.Count > 0) { return String.Join(" ", FilterKeywords); }
-
-                return "";
-            }
-        }
-        public bool WordBreakMode
-        {
-            get { return _wordBreakMode; }
-            set { _wordBreakMode = value; }
-        }
-
-        public RelayCommand ClearCommand { get; set; }
-
-        public void Clear(object input = null)
-        {
-            FilterTitle = null;
-            FilterAuthors.Clear();
-            FilterKeywords.Clear();
-            FilterYear = null;
-            FilterPersonalComment = null;
-            IdFilter = null;
-            Articles.Clear();
-            OnPropertyChanged("FilterTitle");
-        }
-        public bool CanClear(object input = null)
-        {
-            if (
-                string.IsNullOrEmpty(FilterTitle) && 
-                FilterAuthors.Count == 0 && 
-                FilterKeywords.Count == 0 && 
-                string.IsNullOrEmpty(FilterYear) && 
-                string.IsNullOrEmpty(FilterPersonalComment) &&
-                string.IsNullOrEmpty(IdFilter)
-                )
-                return false;
-
-            return true;
-        }
-
         #endregion
 
         #region Section selector setup
