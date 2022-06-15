@@ -30,6 +30,7 @@
         <!-- Generic styling -->
         <Setter Property="BorderThickness" Value="1 1 1 1" />
         <Setter Property="BorderBrush" Value="#ced4da" />
+        <Setter Property="Background" Value="#ffffff" />
         <Setter Property="Padding" Value="6 6 6 6" />
         <Setter Property="FontSize" Value="16" />
         <!-- Template -->
@@ -41,6 +42,7 @@
                         <Border
                             BorderThickness="{TemplateBinding BorderThickness}"
                             BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
                             CornerRadius="6"
                             Padding="{TemplateBinding Padding}"
                             >
@@ -63,6 +65,7 @@
                             </Border.RenderTransform>
                             <TextBlock
                                 x:Name="watermark__text"
+                                IsHitTestVisible="False"
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
                                 Foreground="#212529"
                                 FontSize="{TemplateBinding FontSize}"
@@ -155,6 +158,7 @@
         <!-- Generic styling -->
         <Setter Property="BorderThickness" Value="1 1 1 1" />
         <Setter Property="BorderBrush" Value="#ced4da" />
+        <Setter Property="Background" Value="#ffffff" />
         <Setter Property="Padding" Value="3 3 3 3" />
         <Setter Property="FontSize" Value="14" />
         <!-- Template -->
@@ -166,6 +170,7 @@
                         <Border
                             BorderThickness="{TemplateBinding BorderThickness}"
                             BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
                             CornerRadius="6"
                             Padding="{TemplateBinding Padding}"
                             >
@@ -189,6 +194,7 @@
                             <TextBlock
                                 x:Name="watermark__text"
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
+                                IsHitTestVisible="False"
                                 Foreground="#212529"
                                 FontSize="{TemplateBinding FontSize}"
                                 />
@@ -280,6 +286,7 @@
         <!-- Generic styling -->
         <Setter Property="BorderThickness" Value="1 1 1 1" />
         <Setter Property="BorderBrush" Value="#ced4da" />
+        <Setter Property="Background" Value="#ffffff" />
         <Setter Property="Padding" Value="6 6 6 6" />
         <Setter Property="FontSize" Value="16" />
         <!-- Template -->
@@ -289,15 +296,16 @@
                     <Grid>
                         <!-- Textbox area -->
                         <Border
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        CornerRadius="6"
-                        Padding="{TemplateBinding Padding}"
-                        >
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}"
+                            >
                             <ScrollViewer 
-                            x:Name="PART_ContentHost"
-                            VerticalAlignment="Center"
-                            />
+                                x:Name="PART_ContentHost"
+                                VerticalAlignment="Center"
+                                />
                         </Border>
                         <!-- Watermark -->
                         <Border 
@@ -314,6 +322,7 @@
                             <TextBlock
                                 x:Name="watermark__text"
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
+                                IsHitTestVisible="False"
                                 Foreground="#212529"
                                 FontSize="17"
                                 />

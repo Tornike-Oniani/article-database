@@ -43,7 +43,7 @@ namespace MainLib.ViewModels.Main
             set
             {
                 _filterTitle = value;
-                //OnPropertyChanged("FilterTitle"); 
+                OnPropertyChanged("FilterTitle");
             }
         }
         public string FilterAuthor

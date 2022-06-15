@@ -309,9 +309,13 @@ LEFT JOIN
 FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
 ");
 
+            // 1. Add user id for comments and sic
+            queryBuilder.Replace("#UserID", user.ID.ToString());
+
             queryBuilder.Append(filter);
 
             string query = queryBuilder.ToString();
+
 
             // 3. Fetch count
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))

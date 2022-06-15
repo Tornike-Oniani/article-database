@@ -39,6 +39,9 @@ namespace MainLib.ViewModels.Main
         private IBrowserService _browserService;
 
         private int _offset { get { return (CurrentPage - 1) * ItemsPerPage; } }
+        // Check if fetched data was done by simple search, so that pagination commands will work
+        // correctly both on detailed and simple searches
+        private bool _isSearchSimple = false;
         #endregion
 
         public User User { get; set; }
@@ -124,11 +127,13 @@ namespace MainLib.ViewModels.Main
         public RelayCommand NextPageCommand { get; set; }
         public RelayCommand PreviousPageCommand { get; set; }
         public RelayCommand LoadArticlesCommand { get; set; }
+        public ICommand LoadArticlesSimpleCommand { get; set; }
         public ICommand EnableExportCommand { get; set; }
         public RelayCommand ExportCommand { get; set; }
         public RelayCommand DeleteArticleCommand { get; set; }
         public RelayCommand MassBookmarkCommand { get; set; }
         public RelayCommand SortCommand { get; set; }
+        public ICommand SwitchToDetailedSearchCommand { get; set; }
 
         public RelayCommand OpenSearchDialogCommand { get; set; }
         public RelayCommand OpenAddPersonalCommand { get; set; }
@@ -188,11 +193,13 @@ namespace MainLib.ViewModels.Main
             NextPageCommand = new RelayCommand(NextPage);
             PreviousPageCommand = new RelayCommand(PreviousPage);
             LoadArticlesCommand = new RelayCommand(LoadArticles);
+            LoadArticlesSimpleCommand = new RelayCommand(LoadArticlesSimple);
             EnableExportCommand = new RelayCommand(EnableExport);
             ExportCommand = new RelayCommand(Export, CanExport);
             DeleteArticleCommand = new RelayCommand(DeleteArticle, CanDeleteArticle);
             MassBookmarkCommand = new RelayCommand(MassBookmark);
             SortCommand = new RelayCommand(Sort);
+            SwitchToDetailedSearchCommand = new RelayCommand(SwitchToDetailedSearch);
 
             OpenSearchDialogCommand = new RelayCommand(OpenSearchDialog);
             OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
@@ -246,7 +253,10 @@ namespace MainLib.ViewModels.Main
                 _workStatus(true);
 
                 // 3. Populate article collection
-                await PopulateArticles();
+                if (_isSearchSimple)
+                    await PopulateArticlesSimple();
+                else
+                    await PopulateArticles();
 
                 _workStatus(false);
             }
@@ -274,7 +284,10 @@ namespace MainLib.ViewModels.Main
                 _workStatus(true);
 
                 // 3. Populate articles collection
-                await PopulateArticles();
+                if (_isSearchSimple)
+                    await PopulateArticlesSimple();
+                else
+                    await PopulateArticles();
 
                 _workStatus(false);
             }
@@ -290,6 +303,10 @@ namespace MainLib.ViewModels.Main
         }
         public async void LoadArticles(object input = null)
         {
+            // Notify state that articles were fetched by detailed options
+            _isSearchSimple = false;
+            SimpleSearch = "";
+
             OnPropertyChanged("FilterTitle");
             try
             {
@@ -299,8 +316,16 @@ namespace MainLib.ViewModels.Main
 
                 string _filterTitle = FilterTitle;
 
-                if (!string.IsNullOrWhiteSpace(_filterTitle))
-                    _filterTitle = _filterTitle.Replace("'", "''");
+                FilterExstension.SetGlobalPairing(isLoose: false);
+
+                Filter filter = new Filter();
+                filter
+                    .FilterTitle(_filterTitle, WordBreakMode)
+                    .FilterAuthors(FilterAuthors.ToList(), SelectedAuthorPairing)
+                    .FilterKeywords(FilterKeywords.ToList(), SelectedKeywordPairing)
+                    .FilterYear(FilterYear)
+                    .FilterPersonalComment(FilterPersonalComment)
+                    .FilterIds(GetFilterIds(IdFilter));
 
                 _workStatus(true);
 
@@ -308,18 +333,7 @@ namespace MainLib.ViewModels.Main
                 await Task.Run(() =>
                 {
                     // 2. Calculate total pages
-                    int record_count = new ArticleRepo().GetRecordCount(
-                        Users[UserIndex],
-                        _filterTitle,
-                        FilterAuthors.ToList(),
-                        SelectedAuthorPairing,
-                        FilterKeywords.ToList(),
-                        SelectedKeywordPairing,
-                        FilterYear,
-                        FilterPersonalComment,
-                        SelectedSection,
-                        WordBreakMode,
-                        GetFilterIds(IdFilter));
+                    int record_count = new ArticleRepo().GetRecordCount(Users[UserIndex], filter.GetFilterString());
                     if ((record_count % ItemsPerPage) == 0)
                         TotalPages = record_count / ItemsPerPage;
                     else
@@ -329,6 +343,65 @@ namespace MainLib.ViewModels.Main
                 });
 
                 await PopulateArticles();
+
+                if (!string.IsNullOrEmpty(SelectedSection) && SelectedSection != "None")
+                    this.IsSectionSelected = true;
+                else
+                    this.IsSectionSelected = false;
+
+                _workStatus(false);
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Data View", "Load Articles", e.Message, e.StackTrace);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
+        }
+        public async void LoadArticlesSimple(object input = null)
+        {
+            // Notify state that articles were fetched by simple search options
+            _isSearchSimple = true;
+            Clear();
+            try
+            {
+                FilterExstension.SetGlobalPairing(isLoose: true);
+                Filter filter = new Filter();
+                if (!String.IsNullOrEmpty(SimpleSearch))
+                {
+                    // We set this for highlights
+                    FilterTitle = SimpleSearch;
+                    foreach (string word in SimpleSearch.Split(' '))
+                    {
+                        FilterAuthors.Add(word);
+                        FilterKeywords.Add(word);
+                    }
+
+                    filter
+                        .FilterTitle(SimpleSearch, true)
+                        .FilterAuthors(SimpleSearch.Split(' ').ToList(), "OR")
+                        .FilterKeywords(SimpleSearch.Split(' ').ToList(), "OR");
+                }
+
+                _workStatus(true);
+
+                List<Article> articles = new List<Article>();
+                await Task.Run(() =>
+                {
+                    // 2. Calculate total pages
+                    int record_count = new ArticleRepo().GetRecordCount(Users[UserIndex], filter.GetFilterString());
+                    if ((record_count % ItemsPerPage) == 0)
+                        TotalPages = record_count / ItemsPerPage;
+                    else
+                        TotalPages = (record_count / ItemsPerPage) + 1;
+
+                    CurrentPage = 1;
+                });
+
+                await PopulateArticlesSimple();
 
                 if (!string.IsNullOrEmpty(SelectedSection) && SelectedSection != "None")
                     this.IsSectionSelected = true;
@@ -499,6 +572,16 @@ namespace MainLib.ViewModels.Main
 
             _workStatus(false);
         }
+        public void SwitchToDetailedSearch(object input = null)
+        {
+            if (_isSearchSimple && !String.IsNullOrEmpty(SimpleSearch))
+            {
+                FilterTitle = null;
+                FilterAuthors.Clear();
+                FilterKeywords.Clear();
+                OnPropertyChanged("FilterTitle");
+            }
+        }
 
         // Window open commands
         public void OpenSearchDialog(object input = null)
@@ -608,6 +691,7 @@ namespace MainLib.ViewModels.Main
         // Private helpers
         private async Task PopulateArticles()
         {
+            FilterExstension.SetGlobalPairing(isLoose: false);
             Filter filter = new Filter();
             filter
                 .FilterTitle(_filterTitle, WordBreakMode)
@@ -655,6 +739,46 @@ namespace MainLib.ViewModels.Main
                 //{
                 //    articles.Add(article);
                 //}
+            });
+
+            // 3. Populate article collection
+            foreach (Article article in articles)
+                this.Articles.Add(article);
+        }
+        private async Task PopulateArticlesSimple()
+        {
+            FilterExstension.SetGlobalPairing(isLoose: true);
+            Filter filter = new Filter();
+            if (!String.IsNullOrEmpty(SimpleSearch))
+            {
+                filter
+                .FilterTitle(SimpleSearch, true)
+                .FilterAuthors(SimpleSearch.Split(' ').ToList(), "OR")
+                .FilterKeywords(SimpleSearch.Split(' ').ToList(), "OR");
+            }
+
+            filter
+                .Sort(_currentSort)
+                .Paginate(ItemsPerPage, _offset);
+
+
+            // 1. Clear existing data grid source
+            Articles.Clear();
+
+            List<Article> articles = new List<Article>();
+
+            await Task.Run(() =>
+            {
+                string _filterTitle = FilterTitle;
+
+                if (!string.IsNullOrWhiteSpace(_filterTitle))
+                    _filterTitle = _filterTitle.Replace("'", "''");
+
+                // 2. Fetch artilces from database
+                foreach (Article article in new ArticleRepo().LoadArticles(Users[UserIndex], filter.GetFilterString()))
+                {
+                    articles.Add(article);
+                }
             });
 
             // 3. Populate article collection

@@ -6,6 +6,19 @@ namespace Lib.DataAccessLayer.Utils
 {
     public static class FilterExstension
     {
+        // Usually pairing between different criterias is AND, so for example
+        // when we set both title and author, we want the pairing to be AND 
+        // between them, but in simple search we want to change it to OR
+        private static string GlobalPairing = " AND ";
+        public static void SetGlobalPairing(bool isLoose)
+        {
+            if (isLoose)
+                GlobalPairing = " OR ";
+            else
+                GlobalPairing = " AND ";
+
+        }
+
         public static Filter FilterTitle(this Filter filter, string title, bool wordBreak)
         {
             // If title is blank return
@@ -169,7 +182,7 @@ namespace Lib.DataAccessLayer.Utils
         // Checks if filter was already modifed, if it was we have to add AND
         private static void AppendModifed(Filter filter)
         {
-            filter.FilterQuery.Append(filter.Modified ? " AND " : " WHERE ");
+            filter.FilterQuery.Append(filter.Modified ? GlobalPairing : " WHERE ");
         }
         private static string ToWildCard(string input)
         {

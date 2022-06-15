@@ -135,6 +135,7 @@
                     x:Name="accordion"
                     Content="Open detailed search"
                     IsChecked="{Binding SearchOptionsIsChecked}"
+                    Command="{Binding SwitchToDetailedSearchCommand}"
                     Style="{StaticResource Accordion}"
                     Grid.Row="0"
                     >
@@ -151,12 +152,38 @@
                 <TextBox
                     Text="{Binding SimpleSearch, UpdateSourceTrigger=PropertyChanged}"
                     aps:TextBoxHelper.Watermark="Simple search"
+                    Visibility="{
+                        Binding IsChecked, 
+                        ElementName=accordion, 
+                        Converter={StaticResource InverseBoolToVisConverter}}"
                     Style="{StaticResource WatermarkTextBoxSmall}"
-                    Width="270"
+                    Width="300"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
+                    Margin="0 0 55 0"
+                    >
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding LoadArticlesSimpleCommand}" />
+                    </TextBox.InputBindings>
+                </TextBox>
+                <Button
+                    Command="{Binding LoadArticlesSimpleCommand}"
+                    Visibility="{
+                        Binding IsChecked, 
+                        ElementName=accordion, 
+                        Converter={StaticResource InverseBoolToVisConverter}}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Padding="5 0 5 0"
                     Margin="0 0 15 0"
-                    />
+                    >
+                    <Button.Content>
+                        <materialDesign:PackIcon 
+                            Kind="Search"
+                            Width="25"
+                            />
+                    </Button.Content>
+                </Button>
             </Grid>
 
             <!-- Search options content -->
@@ -654,12 +681,14 @@
                 </StackPanel>
 
                 <!-- Filter button -->
-                <Button Content="Filter" 
-                        Width="100" 
-                        HorizontalAlignment="Right" 
-                        Command="{Binding OpenSearchDialogCommand}" 
-                        CommandParameter="{Binding Columns}"
-                        Grid.Column="3"/>
+                <Button 
+                    Visibility="Collapsed"
+                    Content="Filter" 
+                    Width="100" 
+                    HorizontalAlignment="Right" 
+                    Command="{Binding OpenSearchDialogCommand}" 
+                    CommandParameter="{Binding Columns}"
+                    Grid.Column="3"/>
             </Grid>
         </Border>
     </Grid>
