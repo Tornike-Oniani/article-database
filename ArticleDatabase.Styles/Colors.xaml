@@ -4,7 +4,7 @@
 
 
     <!-- Primary color -->
-    <Color x:Key="PrimaryColor">#3094C0</Color>
+    <Color x:Key="PrimaryColor">#17a2b8</Color>
     <SolidColorBrush x:Key="PrimaryColorBrush" Color="{StaticResource PrimaryColor}" />
 
     <!-- Secondary color -->

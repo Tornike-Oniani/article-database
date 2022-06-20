@@ -139,7 +139,6 @@
                         </AdornerDecorator>
                         <Button 
                             Content="Select File"
-                            Style="{StaticResource PrimaryButton}"
                             Margin="10 0 0 0" 
                             Command="{Binding SelectFileCommand}" 
                             />
@@ -152,14 +151,12 @@
                         <Button 
                             Content="Bookmarks"
                             Command="{Binding OpenBookmarkManagerCommand}" 
-                            Style="{StaticResource PrimaryButton}"
                             Margin="0 0 10 0"
                             />
                         <!-- Reference -->
                         <Button 
                             Content="References"
                             Command="{Binding OpenReferenceManagerCommand}" 
-                            Style="{StaticResource PrimaryButton}"
                             />
                     </StackPanel>
 
@@ -179,15 +176,13 @@
                         <Button 
                             Content="Add" 
                             Command="{Binding SaveArticleCommand}" 
-                            Style="{StaticResource PrimaryButton}"
                             Click="Button_Click" 
                             Margin="0 0 5 0" 
                             Grid.Column="1"
                             />
                         <Button 
                             Content="Clear" 
-                            Command="{Binding ClearArticleAttributesCommand}" 
-                            Style="{StaticResource PrimaryButton}"
+                            Command="{Binding ClearArticleAttributesCommand}"
                             Click="Button_Click" 
                             Margin="5 0 0 0" 
                             Grid.Column="2"

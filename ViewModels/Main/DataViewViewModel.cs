@@ -24,6 +24,7 @@ namespace MainLib.ViewModels.Main
     public partial class DataViewViewModel : BaseViewModel
     {
         #region Private members
+        // Property attributes
         private List<string> _columns;
         private int _itemsPerPage;
         private int _totalPages;
@@ -379,6 +380,7 @@ namespace MainLib.ViewModels.Main
                         FilterAuthors.Add(word);
                         FilterKeywords.Add(word);
                     }
+                    WordBreakMode = true;
 
                     filter
                         .FilterTitle(SimpleSearch, true)
@@ -568,7 +570,14 @@ namespace MainLib.ViewModels.Main
 
             _workStatus(true);
 
-            await PopulateArticles();
+            if (_isSearchSimple)
+            {
+                await PopulateArticlesSimple();
+            }
+            else
+            {
+                await PopulateArticles();
+            }            
 
             _workStatus(false);
         }
@@ -579,6 +588,7 @@ namespace MainLib.ViewModels.Main
                 FilterTitle = null;
                 FilterAuthors.Clear();
                 FilterKeywords.Clear();
+                WordBreakMode = false;
                 OnPropertyChanged("FilterTitle");
             }
         }
@@ -640,7 +650,6 @@ namespace MainLib.ViewModels.Main
 
             // 3. Refresh articles collection
         }
-
         public async void Finish(object input = null)
         {
             if (
@@ -721,24 +730,6 @@ namespace MainLib.ViewModels.Main
                 {
                     articles.Add(article);
                 }
-                //foreach (Article article in new ArticleRepo().LoadArticles(
-                //    Users[UserIndex],
-                //    _filterTitle,
-                //    FilterAuthors.ToList(),
-                //    SelectedAuthorPairing,
-                //    FilterKeywords.ToList(),
-                //    SelectedKeywordPairing,
-                //    FilterYear,
-                //    FilterPersonalComment,
-                //    _offset,
-                //    ItemsPerPage,
-                //    SelectedSection,
-                //    WordBreakMode,
-                //    GetFilterIds(IdFilter),
-                //    _currentSort))
-                //{
-                //    articles.Add(article);
-                //}
             });
 
             // 3. Populate article collection

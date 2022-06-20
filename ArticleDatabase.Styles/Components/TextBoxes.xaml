@@ -67,7 +67,7 @@
                                 x:Name="watermark__text"
                                 IsHitTestVisible="False"
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
-                                Foreground="#212529"
+                                Foreground="#6d7a8a"
                                 FontSize="{TemplateBinding FontSize}"
                                 />
                         </Border>
@@ -134,7 +134,7 @@
                                         <ColorAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                            To="#212529"
+                                            To="#6d7a8a"
                                             Duration="0:0:0"
                                             />
                                     </Storyboard>
@@ -195,7 +195,7 @@
                                 x:Name="watermark__text"
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
                                 IsHitTestVisible="False"
-                                Foreground="#212529"
+                                Foreground="#6d7a8a"
                                 FontSize="{TemplateBinding FontSize}"
                                 />
                         </Border>
@@ -262,7 +262,7 @@
                                         <ColorAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                            To="#212529"
+                                            To="#6d7a8a"
                                             Duration="0:0:0"
                                             />
                                     </Storyboard>
@@ -323,7 +323,7 @@
                                 x:Name="watermark__text"
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
                                 IsHitTestVisible="False"
-                                Foreground="#212529"
+                                Foreground="#6d7a8a"
                                 FontSize="17"
                                 />
                         </Border>
@@ -390,7 +390,7 @@
                                         <ColorAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                            To="#212529"
+                                            To="#6d7a8a"
                                             Duration="0:0:0"
                                             />
                                     </Storyboard>

@@ -114,7 +114,7 @@ namespace MainLib.ViewModels.Main
         public bool WordBreakMode
         {
             get { return _wordBreakMode; }
-            set { _wordBreakMode = value; }
+            set { _wordBreakMode = value; OnPropertyChanged("WordBreakMode"); }
         }
 
         public RelayCommand ClearCommand { get; set; }

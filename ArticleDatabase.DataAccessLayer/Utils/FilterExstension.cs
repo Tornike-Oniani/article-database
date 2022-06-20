@@ -6,7 +6,7 @@ namespace Lib.DataAccessLayer.Utils
 {
     public static class FilterExstension
     {
-        // Usually pairing between different criterias is AND, so for example
+        // Usually pairing between different criterias is AND, for example
         // when we set both title and author, we want the pairing to be AND 
         // between them, but in simple search we want to change it to OR
         private static string GlobalPairing = " AND ";
@@ -39,7 +39,14 @@ namespace Lib.DataAccessLayer.Utils
                 string[] words = formatedTitle.Split(' ');
                 for (int i = 0; i < words.Length; i++)
                 {
-                    filter.FilterQuery.Append("final.Title LIKE " + ToWildCard(words[i]));
+                    if (IsAllUpper(words[i]))
+                    {
+                        filter.FilterQuery.Append("final.Title LIKE " + ToWildCardUpper(words[i]));
+                    }
+                    else
+                    {
+                        filter.FilterQuery.Append("final.Title LIKE " + ToWildCard(words[i]));
+                    }
 
                     if (i < words.Length - 1)
                     {
@@ -187,6 +194,20 @@ namespace Lib.DataAccessLayer.Utils
         private static string ToWildCard(string input)
         {
             return "'%" + input + "%'";
+        }
+        private static string ToWildCardUpper(string input)
+        {
+            return "'% " + input + " %'";
+        }
+        private static bool IsAllUpper(string input)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (!Char.IsUpper(input[i]))
+                    return false;
+            }
+
+            return true;
         }
     }
 }

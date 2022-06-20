@@ -58,13 +58,62 @@
                             CornerRadius="6 6 0 0"
                             Padding="{TemplateBinding Padding}"
                             >
-                            <TextBlock 
-                                x:Name="text"
-                                Text="{TemplateBinding Content}"
-                                Foreground="{TemplateBinding Foreground}"
-                                FontSize="20"
-                                />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock 
+                                    x:Name="text"
+                                    Text="{TemplateBinding Content}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    FontSize="18"
+                                    VerticalAlignment="Center"
+                                    Margin="0 0 6 0"
+                                    />
+                                <materialDesign:PackIcon 
+                                    x:Name="arrow"
+                                    Kind="KeyboardArrowDown"
+                                    Width="32"
+                                    Height="32"
+                                    >
+                                    <materialDesign:PackIcon.RenderTransform>
+                                        <RotateTransform 
+                                            Angle="0" 
+                                            CenterX="16" 
+                                            CenterY="16" />
+                                    </materialDesign:PackIcon.RenderTransform>
+                                </materialDesign:PackIcon>
+                            </StackPanel>
                         </Border>
+                        
+                        <!-- Triggers on template level -->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                Storyboard.TargetName="arrow"
+                                                Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
+                                                From="0"
+                                                To="180"
+                                                Duration="0:0:0.15"
+                                                />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                Storyboard.TargetName="arrow"
+                                                Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
+                                                From="180"
+                                                To="0"
+                                                Duration="0:0:0.15"
+                                                />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -130,14 +179,14 @@
             </Grid.RowDefinitions>
 
             <!-- Search options header -->
-            <Grid>
+            <Grid Grid.Row="0">
                 <ToggleButton
                     x:Name="accordion"
                     Content="Open detailed search"
                     IsChecked="{Binding SearchOptionsIsChecked}"
                     Command="{Binding SwitchToDetailedSearchCommand}"
                     Style="{StaticResource Accordion}"
-                    Grid.Row="0"
+                    Grid.Column="0"
                     >
                     <ToggleButton.Triggers>
                         <EventTrigger RoutedEvent="ToggleButton.Checked">
@@ -149,41 +198,46 @@
                     </ToggleButton.Triggers>
                 </ToggleButton>
 
-                <TextBox
-                    Text="{Binding SimpleSearch, UpdateSourceTrigger=PropertyChanged}"
-                    aps:TextBoxHelper.Watermark="Simple search"
-                    Visibility="{
-                        Binding IsChecked, 
-                        ElementName=accordion, 
-                        Converter={StaticResource InverseBoolToVisConverter}}"
-                    Style="{StaticResource WatermarkTextBoxSmall}"
-                    Width="300"
+                <!-- Simple search -->
+                <Grid 
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Margin="0 0 55 0"
-                    >
-                    <TextBox.InputBindings>
-                        <KeyBinding Key="Enter" Command="{Binding LoadArticlesSimpleCommand}" />
-                    </TextBox.InputBindings>
-                </TextBox>
-                <Button
-                    Command="{Binding LoadArticlesSimpleCommand}"
-                    Visibility="{
-                        Binding IsChecked, 
-                        ElementName=accordion, 
-                        Converter={StaticResource InverseBoolToVisConverter}}"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Padding="5 0 5 0"
                     Margin="0 0 15 0"
+                    Background="Transparent"
                     >
-                    <Button.Content>
-                        <materialDesign:PackIcon 
-                            Kind="Search"
-                            Width="25"
-                            />
-                    </Button.Content>
-                </Button>
+                    <TextBox
+                        Text="{Binding SimpleSearch, UpdateSourceTrigger=PropertyChanged}"
+                        aps:TextBoxHelper.Watermark="Simple search"
+                        Visibility="{
+                            Binding IsChecked, 
+                            ElementName=accordion, 
+                            Converter={StaticResource InverseBoolToVisConverter}}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        Width="300"
+                        VerticalAlignment="Center"
+                        >
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding LoadArticlesSimpleCommand}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <Button
+                        Command="{Binding LoadArticlesSimpleCommand}"
+                        Visibility="{
+                            Binding IsChecked, 
+                            ElementName=accordion, 
+                            Converter={StaticResource InverseBoolToVisConverter}}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Padding="5 0 5 0"
+                        Grid.Column="1"
+                        >
+                        <Button.Content>
+                            <materialDesign:PackIcon 
+                                Kind="Search"
+                                Width="25"
+                                />
+                        </Button.Content>
+                    </Button>
+                </Grid>
             </Grid>
 
             <!-- Search options content -->
@@ -299,7 +353,8 @@
                                     Text="Author pairing:" 
                                     Foreground="{StaticResource LabelColorBrush}"
                                     FontSize="15" 
-                                    FontWeight="SemiBold" 
+                                    FontWeight="SemiBold"
+                                    VerticalAlignment="Center"
                                     Margin="0 0 5 0" 
                                     />
                                 <ComboBox 
@@ -335,6 +390,7 @@
                                     Foreground="{StaticResource LabelColorBrush}"
                                     FontSize="15" 
                                     FontWeight="SemiBold" 
+                                    VerticalAlignment="Center"
                                     Margin="0 0 5 0" 
                                     />
                                 <ComboBox 
@@ -467,6 +523,7 @@
         </Border>
 
         <!-- Datagrid -->
+        <!-- Each column is bound to command from ArticleGrid style for sorting -->
         <DataGrid Style="{StaticResource ArticleGrid}"
                   FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
                   ItemsSource="{Binding Articles}"
@@ -560,8 +617,6 @@
                                        ap:TextBlockHighlighter.WordBreakMode="True"
                                        ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
                                        ap:TextBlockHighlighter.Forecolor="#000000" />
-                            <!--<TextBlock Text="{Binding Authors}" 
-                                       TextWrapping="Wrap" />-->
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -579,7 +634,16 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!-- Year column -->
-                <DataGridTemplateColumn Header="Year" SortMemberPath="Year" MinWidth="80" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Year'}">
+                <DataGridTemplateColumn 
+                    Header="Year" 
+                    SortMemberPath="Year" 
+                    MinWidth="80" 
+                    Width="Auto" 
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='Year'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Year}" TextWrapping="Wrap" />
