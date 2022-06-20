@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ViewModels.UIStructs;
 
 namespace MainLib.ViewModels.Main
 {
@@ -122,6 +123,8 @@ namespace MainLib.ViewModels.Main
             get { return _isSectionSelected; }
             set { _isSectionSelected = value; OnPropertyChanged("IsSectionSelected"); }
         }
+        // Pagination
+        public ObservableCollection<PageButtonModel> PageButtons { get; set; }
 
         #region Commands
         public RelayCommand OpenFileCommand { get; set; }
@@ -158,6 +161,9 @@ namespace MainLib.ViewModels.Main
             this._dialogService = dialogService;
             this._windowService = windowService;
             this._browserService = browserService;
+
+            this.PageButtons = new ObservableCollection<PageButtonModel>();
+            GenerateButtons();
 
             // 1. Set neccessary columns to show on datagrid
             Columns = new List<string>()
@@ -831,6 +837,13 @@ namespace MainLib.ViewModels.Main
             }
 
             return idFilters;
+        }
+        private void GenerateButtons()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                PageButtons.Add(new PageButtonModel(i + 1, i + 1 == 5));
+            }
         }
     }
 }

@@ -61,6 +61,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\ActiveStatusToStyleConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CurrentPageToBoolVisibilityConverter.cs" />
     <Compile Include="Converters\IntToFontWeightConverter.cs" />

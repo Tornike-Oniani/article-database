@@ -12,7 +12,10 @@
         MinWidth="{Binding WindowMinimumWidth, RelativeSource={RelativeSource Self}}"
         MinHeight="{Binding WindowMinimumHeight, RelativeSource={RelativeSource Self}}" 
         WindowStartupLocation="CenterScreen"
-        Title="{Binding Title}" Height="Auto" Width="Auto">
+        Title="{Binding Title}" 
+        Height="Auto" 
+        Width="Auto"
+        WindowState="Maximized">
 
     <WindowChrome.WindowChrome>
         <WindowChrome 

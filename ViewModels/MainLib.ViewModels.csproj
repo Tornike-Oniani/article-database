@@ -83,6 +83,7 @@
     <Compile Include="Utils\BugTracker.cs" />
     <Compile Include="Utils\LogConverter.cs" />
     <Compile Include="Utils\LogReader.cs" />
+    <Compile Include="UIStructs\PageButtonModel.cs" />
     <Compile Include="Utils\SyncInformationManager.cs" />
     <Compile Include="Utils\Tracker.cs" />
   </ItemGroup>

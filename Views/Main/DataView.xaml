@@ -19,6 +19,7 @@
         <commonConverters:ListToVisibilityConverter x:Key="ListToVisibility" />
         <commonConverters:NumberToSICConverter x:Key="NumberToSIC" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:ActiveStatusToStyleConverter x:Key="ActiveStatusToStyle" />
 
         <Storyboard x:Key="openDropdown">
             <DoubleAnimation              
@@ -157,6 +158,8 @@
             <RowDefinition Height="*" />
             <!-- Pagination column -->
             <RowDefinition Height="Auto" />
+            <!-- Pagination column -->
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Proxy element to change datagrid columns' DataContext -->
@@ -239,14 +242,7 @@
                     </Button>
                 </Grid>
             </Grid>
-
             <!-- Search options content -->
-            <!--
-            Visibility="{
-                    Binding IsChecked, 
-                    ElementName=accordion, 
-                    Converter={StaticResource BoolToVisibility}}" 
-            -->
             <Border
                 x:Name="accordion__dropdown"
                 BorderThickness="1 0 1 1"
@@ -469,7 +465,6 @@
                 </ScrollViewer>
             </Border>
         </Grid>
-
         <!-- Top menu -->
         <Border Visibility="Collapsed" Padding="10" Grid.Row="1">
             <Grid>
@@ -521,7 +516,6 @@
                 </StackPanel>
             </Grid>
         </Border>
-
         <!-- Datagrid -->
         <!-- Each column is bound to command from ArticleGrid style for sorting -->
         <DataGrid Style="{StaticResource ArticleGrid}"
@@ -693,7 +687,6 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-
         <!-- Pagination -->
         <Border Padding="10" Grid.Row="3">
             <Grid>
@@ -755,5 +748,26 @@
                     Grid.Column="3"/>
             </Grid>
         </Border>
+        <ItemsControl Grid.Row="4"
+            ItemsSource="{Binding PageButtons}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel 
+                        IsItemsHost="True"
+                        Orientation="Horizontal"
+                        />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button 
+                        Style="{
+                            Binding IsActive, 
+                            Converter={StaticResource ActiveStatusToStyle}}"
+                        Content="{Binding Page}" 
+                        />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>
