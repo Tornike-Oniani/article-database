@@ -168,7 +168,6 @@
                         <Button Content="Register" 
                                 Command="{Binding ShowRegisterCommand}"
                                 CommandParameter="{Binding ElementName=txbPassword}"
-                                Style="{StaticResource MaterialDesignOutlinedButton}"
                                 Margin="5 0 0 0" 
                                 Grid.Column="2" />
                     </Grid>

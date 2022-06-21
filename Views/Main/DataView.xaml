@@ -247,6 +247,37 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <!-- Export -->
+        <Style x:Key="ExportButton" TargetType="{x:Type ToggleButton}" BasedOn="{x:Null}">
+            <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+            <Setter Property="BorderThickness" Value="0 0 0 0" />
+            <Setter Property="Foreground" Value="#ffffff" />
+            <Setter Property="Padding" Value="12 6 12 6" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border 
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding Padding}"
+                            CornerRadius="6 6 6 6"
+                            >
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            
+            <!-- Style triggers -->
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <UserControl.InputBindings>
@@ -320,7 +351,6 @@
                         </EventTrigger>
                     </ToggleButton.Triggers>
                 </ToggleButton>
-
                 <!-- Simple search -->
                 <Grid 
                     HorizontalAlignment="Right"
@@ -388,7 +418,8 @@
                                 Grid.Column="0"
                                 >
                                 <CheckBox 
-                                    Content="Authors" 
+                                    Content="Authors"
+                                    FontSize="16" 
                                     Margin="0 0 5 0" 
                                     IsChecked="{
                                         Binding Columns, 
@@ -396,7 +427,8 @@
                                         ConverterParameter='Authors'}" 
                                     />
                                 <CheckBox 
-                                    Content="Keywords" 
+                                    Content="Keywords"
+                                    FontSize="16" 
                                     Margin="0 0 5 0" 
                                     IsChecked="{
                                         Binding Columns, 
@@ -405,11 +437,28 @@
                                     />
                                 <CheckBox 
                                     Content="Year" 
-                                    Margin="0 0 0 0" 
+                                    Margin="0 0 5 0" 
                                     IsChecked="{
                                         Binding Columns, 
                                         Converter={StaticResource CheckToList}, 
                                         ConverterParameter='Year'}" 
+                                    />
+                                <CheckBox 
+                                    Content="Comment" 
+                                    FontSize="16" 
+                                    Margin="0 0 5 0" 
+                                    IsChecked="{
+                                        Binding Columns, 
+                                        Converter={StaticResource CheckToList}, 
+                                        ConverterParameter='PersonalComment'}" 
+                                    />
+                                <CheckBox 
+                                    Content="SIC" 
+                                    FontSize="16" 
+                                    IsChecked="{
+                                        Binding Columns, 
+                                        Converter={StaticResource CheckToList}, 
+                                        ConverterParameter='SIC'}" 
                                     />
                             </StackPanel>
                         </StackPanel>
@@ -612,8 +661,6 @@
                 <!-- Comment/SIC -->
                 <StackPanel Orientation="Horizontal" Grid.Column="1" >
                     <Rectangle Width="2" Fill="{StaticResource PrimaryColorBrush}" Margin="15 0 15 0" />
-                    <CheckBox Content="Comment" FontSize="16" Margin="0 0 5 0" IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='PersonalComment'}" />
-                    <CheckBox Content="SIC" FontSize="16" IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='SIC'}" />
                     <ComboBox ItemsSource="{Binding Users}" DisplayMemberPath="Username" SelectedIndex="{Binding UserIndex}" Width="120" Margin="10 0 0 0" />
                 </StackPanel>
 
@@ -808,7 +855,11 @@
             </DataGrid.Columns>
         </DataGrid>
         <!-- Pagination -->
-        <Border Padding="10" Grid.Row="3">
+        <Border 
+            Visibility="Collapsed"
+            Padding="10" 
+            Grid.Row="3"
+            >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <!-- Pagination buttons column -->
@@ -859,7 +910,6 @@
 
                 <!-- Filter button -->
                 <Button 
-                    Visibility="Collapsed"
                     Content="Filter" 
                     Width="100" 
                     HorizontalAlignment="Right" 
@@ -868,30 +918,41 @@
                     Grid.Column="3"/>
             </Grid>
         </Border>
-        <StackPanel
-            Visibility="{
-                Binding IsThereAnyPages, 
-                Converter={StaticResource BoolToVisibility}}"
-            Orientation="Horizontal"
-            HorizontalAlignment="Left"
-            Margin="10 5 0 5"
+        <!-- Bottom menu -->        
+        <Grid 
+            Margin="12 6 12 6"
             Grid.Row="4"
             >
-            <Button 
-                Content="Previous" 
-                Command="{Binding PreviousPageCommand}"
-                Style="{StaticResource PaginationButton__Left}"
-                />
-            <ListBox
-                ItemsSource="{Binding PageButtons}"
-                SelectedItem="{Binding SelectedPage}"
-                Style="{StaticResource PaginationWrapper}"
-                />
-            <Button 
-                Content="Next" 
-                Command="{Binding NextPageCommand}"
-                Style="{StaticResource PaginationButton__Right}"
-                />
-        </StackPanel>
+            <!-- Pagination -->
+            <StackPanel
+                Visibility="{
+                    Binding IsThereAnyPages, 
+                    Converter={StaticResource BoolToVisibility}}"
+                Orientation="Horizontal"
+                HorizontalAlignment="Left"
+                >
+                <Button 
+                    Content="Previous" 
+                    Command="{Binding PreviousPageCommand}"
+                    Style="{StaticResource PaginationButton__Left}"
+                    />
+                <ListBox
+                    ItemsSource="{Binding PageButtons}"
+                    SelectedItem="{Binding SelectedPage}"
+                    Style="{StaticResource PaginationWrapper}"
+                    />
+                <Button 
+                    Content="Next" 
+                    Command="{Binding NextPageCommand}"
+                    Style="{StaticResource PaginationButton__Right}"
+                    />
+            </StackPanel>
+            <!-- Export -->
+            <ToggleButton 
+                Content="Export Article PDFs"
+                Style="{StaticResource ExportButton}"
+                HorizontalAlignment="Right" />
+        </Grid>
+        
     </Grid>
 </UserControl>
