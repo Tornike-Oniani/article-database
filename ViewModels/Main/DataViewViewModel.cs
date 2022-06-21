@@ -44,6 +44,12 @@ namespace MainLib.ViewModels.Main
         // Check if fetched data was done by simple search, so that pagination commands will work
         // correctly both on detailed and simple searches
         private bool _isSearchSimple = false;
+
+        // Pagination
+        private string _selectedPage;
+        private bool _isThereAnyPages;
+        private int _startPageIndex = 1;
+        private int _endPageIndex = 1;
         #endregion
 
         public User User { get; set; }
@@ -103,13 +109,7 @@ namespace MainLib.ViewModels.Main
         }
         public int TotalPages
         {
-            get
-            {
-                if (_totalPages == 0)
-                    return 1;
-
-                return _totalPages;
-            }
+            get { return _totalPages; }
             set { _totalPages = value; OnPropertyChanged("TotalPages"); }
         }
         public ObservableCollection<string> Sections { get; set; }
@@ -124,7 +124,25 @@ namespace MainLib.ViewModels.Main
             set { _isSectionSelected = value; OnPropertyChanged("IsSectionSelected"); }
         }
         // Pagination
-        public ObservableCollection<PageButtonModel> PageButtons { get; set; }
+        public ObservableCollection<string> PageButtons { get; set; }
+        public string SelectedPage
+        {
+            get { return _selectedPage; }
+            set 
+            {
+                _selectedPage = value;
+                if (value != null && int.Parse(value) != CurrentPage)
+                {
+                    MoveToPage(int.Parse(value));
+                }
+                OnPropertyChanged("SelectedPage"); 
+            }
+        }
+        public bool IsThereAnyPages
+        {
+            get { return _isThereAnyPages; }
+            set { _isThereAnyPages = value; OnPropertyChanged("IsThereAnyPages"); }
+        }
 
         #region Commands
         public RelayCommand OpenFileCommand { get; set; }
@@ -162,8 +180,7 @@ namespace MainLib.ViewModels.Main
             this._windowService = windowService;
             this._browserService = browserService;
 
-            this.PageButtons = new ObservableCollection<PageButtonModel>();
-            GenerateButtons();
+            this.PageButtons = new ObservableCollection<string>();
 
             // 1. Set neccessary columns to show on datagrid
             Columns = new List<string>()
@@ -183,6 +200,8 @@ namespace MainLib.ViewModels.Main
             Articles = new ObservableCollection<Article>();
             CurrentPage = 1;
             ItemsPerPage = 35;
+            SelectedPage = "1";
+            GenerateButtons();
 
             // 3. Get the index of the logged in user and set it as selected index for combobox
             int index = 0;
@@ -197,8 +216,8 @@ namespace MainLib.ViewModels.Main
 
             // 4. Set up commands
             OpenFileCommand = new RelayCommand(OpenFile);
-            NextPageCommand = new RelayCommand(NextPage);
-            PreviousPageCommand = new RelayCommand(PreviousPage);
+            NextPageCommand = new RelayCommand(NextPage, CanNextPage);
+            PreviousPageCommand = new RelayCommand(PreviousPage, CanPreviousPage);
             LoadArticlesCommand = new RelayCommand(LoadArticles);
             LoadArticlesSimpleCommand = new RelayCommand(LoadArticlesSimple);
             EnableExportCommand = new RelayCommand(EnableExport);
@@ -246,67 +265,23 @@ namespace MainLib.ViewModels.Main
                 _dialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
-        public async void NextPage(object input = null)
+        public void NextPage(object input = null)
         {
-            try
-            {
-                // 1. Check if next page is avaliable
-                if (CurrentPage >= TotalPages)
-                    return;
-
-                // 2. Increment current page
-                CurrentPage++;
-
-                _workStatus(true);
-
-                // 3. Populate article collection
-                if (_isSearchSimple)
-                    await PopulateArticlesSimple();
-                else
-                    await PopulateArticles();
-
-                _workStatus(false);
-            }
-            catch (Exception e)
-            {
-                new BugTracker().Track("Data View", "Next Page", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
-            }
-            finally
-            {
-                _workStatus(false);
-            }
+            CurrentPage++;
+            MoveToPage(CurrentPage);
         }
-        public async void PreviousPage(object input = null)
+        public bool CanNextPage(object input = null)
         {
-            try
-            {
-                // 1. Check if previous page is avaliable
-                if (CurrentPage <= 1)
-                    return;
-
-                // 2. Decrement current page
-                CurrentPage--;
-
-                _workStatus(true);
-
-                // 3. Populate articles collection
-                if (_isSearchSimple)
-                    await PopulateArticlesSimple();
-                else
-                    await PopulateArticles();
-
-                _workStatus(false);
-            }
-            catch (Exception e)
-            {
-                new BugTracker().Track("Data View", "Previous Page", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
-            }
-            finally
-            {
-                _workStatus(false);
-            }
+            return CurrentPage < TotalPages;
+        }
+        public void PreviousPage(object input = null)
+        {
+            CurrentPage--;
+            MoveToPage(CurrentPage);
+        }
+        public bool CanPreviousPage(object input = null)
+        {
+            return CurrentPage > 1;
         }
         public async void LoadArticles(object input = null)
         {
@@ -343,13 +318,19 @@ namespace MainLib.ViewModels.Main
                     int record_count = new ArticleRepo().GetRecordCount(Users[UserIndex], filter.GetFilterString());
                     if ((record_count % ItemsPerPage) == 0)
                         TotalPages = record_count / ItemsPerPage;
+                    else if (record_count == 0)
+                        TotalPages = 0;
                     else
                         TotalPages = (record_count / ItemsPerPage) + 1;
+
+                    IsThereAnyPages = TotalPages != 0;
 
                     CurrentPage = 1;
                 });
 
                 await PopulateArticles();
+
+                GenerateButtons();
 
                 if (!string.IsNullOrEmpty(SelectedSection) && SelectedSection != "None")
                     this.IsSectionSelected = true;
@@ -403,13 +384,19 @@ namespace MainLib.ViewModels.Main
                     int record_count = new ArticleRepo().GetRecordCount(Users[UserIndex], filter.GetFilterString());
                     if ((record_count % ItemsPerPage) == 0)
                         TotalPages = record_count / ItemsPerPage;
+                    else if (record_count == 0)
+                        TotalPages = 0;
                     else
                         TotalPages = (record_count / ItemsPerPage) + 1;
+
+                    IsThereAnyPages = TotalPages != 0;
 
                     CurrentPage = 1;
                 });
 
                 await PopulateArticlesSimple();
+
+                GenerateButtons();
 
                 if (!string.IsNullOrEmpty(SelectedSection) && SelectedSection != "None")
                     this.IsSectionSelected = true;
@@ -838,12 +825,70 @@ namespace MainLib.ViewModels.Main
 
             return idFilters;
         }
+
+        // Pagination
+        private async void MoveToPage(int page)
+        {
+            try
+            {
+                CurrentPage = page;
+
+                // 1. Check if next page is avaliable
+                if (CurrentPage > TotalPages)
+                    return;
+
+                _workStatus(true);
+
+                // 3. Populate article collection
+                if (_isSearchSimple)
+                    await PopulateArticlesSimple();
+                else
+                    await PopulateArticles();
+
+                GenerateButtons();
+
+                _workStatus(false);
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Data View", "Move to page", e.Message, e.StackTrace);
+                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                _workStatus(false);
+            }
+        }
         private void GenerateButtons()
         {
-            for (int i = 0; i < 10; i++)
+            PageButtons.Clear();
+            if (TotalPages == 0) { return; }
+
+            // Default scenarion
+            _startPageIndex = CurrentPage - 4;
+            // Don't generate negative buttons
+            if (_startPageIndex < 1) { _startPageIndex = 1; }
+            // If we are reaching final page and the span is less than 10
+            if (TotalPages - 9 > 1 && _startPageIndex > TotalPages - 9) { _startPageIndex = TotalPages - 9; }
+            // If there is less than or exactly 10 pages to render don't slide the window cut
+            if (TotalPages <= 10) { _startPageIndex = 1; }
+            // Default scenario
+            _endPageIndex = CurrentPage + 6;
+            // If we are at start and span is less than 10
+            if (_endPageIndex < 11 && TotalPages >= _endPageIndex)
             {
-                PageButtons.Add(new PageButtonModel(i + 1, i + 1 == 5));
+                if (TotalPages >=10) { _endPageIndex = 11; }
+                else { _endPageIndex = TotalPages + 1; }
             }
+            // Don't go beyond total pages
+            if (_endPageIndex > TotalPages) { _endPageIndex = TotalPages + 1; }
+
+            for (int i = _startPageIndex; i < _endPageIndex; i++)
+            {
+                PageButtons.Add(i.ToString());
+            }
+
+            SelectedPage = PageButtons.FirstOrDefault(p => p == CurrentPage.ToString());
         }
     }
 }
