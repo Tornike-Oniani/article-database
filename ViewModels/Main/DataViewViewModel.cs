@@ -50,6 +50,9 @@ namespace MainLib.ViewModels.Main
         private bool _isThereAnyPages;
         private int _startPageIndex = 1;
         private int _endPageIndex = 1;
+
+        // Export
+        private bool _canExportP;
         #endregion
 
         public User User { get; set; }
@@ -143,6 +146,13 @@ namespace MainLib.ViewModels.Main
             get { return _isThereAnyPages; }
             set { _isThereAnyPages = value; OnPropertyChanged("IsThereAnyPages"); }
         }
+        // Export
+        public bool CanExportP
+        {
+            get { return _canExportP; }
+            set { _canExportP = value; OnPropertyChanged("CanExportP"); }
+        }
+
 
         #region Commands
         public RelayCommand OpenFileCommand { get; set; }
@@ -156,6 +166,7 @@ namespace MainLib.ViewModels.Main
         public RelayCommand MassBookmarkCommand { get; set; }
         public RelayCommand SortCommand { get; set; }
         public ICommand SwitchToDetailedSearchCommand { get; set; }
+        public ICommand UpdateExportStatusCommand { get; set; }
 
         public RelayCommand OpenSearchDialogCommand { get; set; }
         public RelayCommand OpenAddPersonalCommand { get; set; }
@@ -226,6 +237,7 @@ namespace MainLib.ViewModels.Main
             MassBookmarkCommand = new RelayCommand(MassBookmark);
             SortCommand = new RelayCommand(Sort);
             SwitchToDetailedSearchCommand = new RelayCommand(SwitchToDetailedSearch);
+            UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
 
             OpenSearchDialogCommand = new RelayCommand(OpenSearchDialog);
             OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
@@ -265,6 +277,7 @@ namespace MainLib.ViewModels.Main
                 _dialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
+        // Pagination
         public void NextPage(object input = null)
         {
             CurrentPage++;
@@ -283,6 +296,7 @@ namespace MainLib.ViewModels.Main
         {
             return CurrentPage > 1;
         }
+        // Fetching articles
         public async void LoadArticles(object input = null)
         {
             // Notify state that articles were fetched by detailed options
@@ -415,10 +429,12 @@ namespace MainLib.ViewModels.Main
                 _workStatus(false);
             }
         }
+        // Export
         public void EnableExport(object input = null)
         {
             foreach (Article article in Articles)
                 article.Checked = false;
+            UpdateExportStatus();
         }
         public async void Export(object input = null)
         {
@@ -489,6 +505,11 @@ namespace MainLib.ViewModels.Main
                 return true;
 
             return false;
+        }
+        public void UpdateExportStatus(object input = null)
+        {
+            int checkedArtilces = Articles.Where(article => article.Checked == true).ToList().Count;
+            CanExportP = checkedArtilces != 0;
         }
         public void DeleteArticle(object input = null)
         {

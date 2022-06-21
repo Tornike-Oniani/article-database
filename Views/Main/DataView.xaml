@@ -248,7 +248,7 @@
             </Setter>
         </Style>
         
-        <!-- Export -->
+        <!-- Export button style -->
         <Style x:Key="ExportButton" TargetType="{x:Type ToggleButton}" BasedOn="{x:Null}">
             <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
             <Setter Property="BorderThickness" Value="0 0 0 0" />
@@ -836,10 +836,24 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!-- Export column -->
-                <DataGridTemplateColumn Header="Export" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Export'}">
+                <DataGridTemplateColumn 
+                    Header="Export"
+                    MinWidth="78"
+                    Width="Auto" 
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='Export'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox 
+                                IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" 
+                                Command="{
+                                    Binding DataContext.UpdateExportStatusCommand,
+                                    RelativeSource={RelativeSource FindAncestor, 
+                                    AncestorType={x:Type UserControl}}}" 
+                                />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -930,6 +944,7 @@
                     Converter={StaticResource BoolToVisibility}}"
                 Orientation="Horizontal"
                 HorizontalAlignment="Left"
+                VerticalAlignment="Center"
                 >
                 <Button 
                     Content="Previous" 
@@ -947,11 +962,74 @@
                     Style="{StaticResource PaginationButton__Right}"
                     />
             </StackPanel>
-            <!-- Export -->
-            <ToggleButton 
+            <!-- Start export -->
+            <ToggleButton
+                x:Name="StartExport"
+                IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='Export'}"
+                Command="{Binding EnableExportCommand}"
                 Content="Export Article PDFs"
                 Style="{StaticResource ExportButton}"
-                HorizontalAlignment="Right" />
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center" 
+                />
+            <!-- Pending export -->
+            <Grid 
+                Visibility="{
+                    Binding IsChecked, 
+                    ElementName=StartExport, 
+                    Converter={StaticResource BoolToVisibility}}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!-- Pending label -->
+                <Border
+                    Visibility="{
+                        Binding CanExportP, 
+                        Converter={StaticResource InverseBoolToVisConverter}}"
+                    Background="#ffffff"
+                    BorderThickness="1 1 1 1"
+                    BorderBrush="{StaticResource PrimaryColorBrush}"
+                    Padding="12 6 12 6"
+                    CornerRadius="6 6 6 6"
+                    Opacity="0.8"
+                    VerticalAlignment="Center"
+                    Margin="0 0 5 0"
+                    Grid.Column="0"
+                    >
+                    <TextBlock
+                        Text="Check articles you want to export..."
+                        FontSize="16"
+                        Foreground="{StaticResource PrimaryColorBrush}"
+                        />
+                </Border>
+                <!-- Export button -->
+                <Button
+                    Content="Export selected"
+                    Command="{Binding ExportCommand}"
+                    Visibility="{
+                        Binding CanExportP, 
+                        Converter={StaticResource BoolToVisibility}}"
+                    HorizontalAlignment="Right"
+                    Margin="0 0 12 0"
+                    Grid.Column="0"
+                    />
+                <!-- Cancel export button-->
+                <ToggleButton 
+                    IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='Export'}"
+                    Command="{Binding EnableExportCommand}"
+                    Style="{StaticResource MaterialDesignIconButton}"
+                    Padding="0"
+                    VerticalAlignment="Center"
+                    Grid.Column="1">
+                    <ToggleButton.Content>
+                        <materialDesign:PackIcon Kind="Cancel" />
+                    </ToggleButton.Content>
+                </ToggleButton>
+            </Grid>
         </Grid>
         
     </Grid>
