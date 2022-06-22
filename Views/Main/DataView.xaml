@@ -20,6 +20,7 @@
         <commonConverters:NumberToSICConverter x:Key="NumberToSIC" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:ActiveStatusToStyleConverter x:Key="ActiveStatusToStyle" />
+        <converters:IsIntToBoolConverter x:Key="IsIntToBool" />
 
         <!-- Accordion -->
         <Storyboard x:Key="openDropdown">
@@ -164,6 +165,7 @@
                         <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
                         <Setter Property="FontSize" Value="16" />
                         <Setter Property="Cursor" Value="Hand" />
+                        <Setter Property="IsEnabled" Value="{Binding Converter={StaticResource IsIntToBool}}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -189,6 +191,9 @@
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
                                 <Setter Property="Foreground" Value="#ffffff" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#000000" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -941,7 +946,8 @@
             <StackPanel
                 Visibility="{
                     Binding IsThereAnyPages, 
-                    Converter={StaticResource BoolToVisibility}}"
+                    Converter={StaticResource BoolToVisibility}, 
+                    ConverterParameter=Soft}"
                 Orientation="Horizontal"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
@@ -962,6 +968,7 @@
                     Style="{StaticResource PaginationButton__Right}"
                     />
             </StackPanel>
+            
             <!-- Start export -->
             <ToggleButton
                 x:Name="StartExport"
@@ -1014,17 +1021,21 @@
                         Binding CanExportP, 
                         Converter={StaticResource BoolToVisibility}}"
                     HorizontalAlignment="Right"
-                    Margin="0 0 12 0"
+                    Margin="0 0 5 0"
                     Grid.Column="0"
                     />
                 <!-- Cancel export button-->
                 <ToggleButton 
-                    IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='Export'}"
+                    IsChecked="{
+                        Binding Columns, 
+                        Converter={StaticResource CheckToList}, 
+                        ConverterParameter='Export'}"
                     Command="{Binding EnableExportCommand}"
                     Style="{StaticResource MaterialDesignIconButton}"
                     Padding="0"
                     VerticalAlignment="Center"
-                    Grid.Column="1">
+                    Grid.Column="1"
+                    >
                     <ToggleButton.Content>
                         <materialDesign:PackIcon Kind="Cancel" />
                     </ToggleButton.Content>

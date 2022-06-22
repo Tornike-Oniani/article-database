@@ -50,9 +50,6 @@ namespace MainLib.ViewModels.Main
         private bool _isThereAnyPages;
         private int _startPageIndex = 1;
         private int _endPageIndex = 1;
-
-        // Export
-        private bool _canExportP;
         #endregion
 
         public User User { get; set; }
@@ -149,8 +146,7 @@ namespace MainLib.ViewModels.Main
         // Export
         public bool CanExportP
         {
-            get { return _canExportP; }
-            set { _canExportP = value; OnPropertyChanged("CanExportP"); }
+            get { return Articles.Where(article => article.Checked == true).ToList().Count != 0; }
         }
 
 
@@ -385,8 +381,8 @@ namespace MainLib.ViewModels.Main
 
                     filter
                         .FilterTitle(SimpleSearch, true)
-                        .FilterAuthors(SimpleSearch.Split(' ').ToList(), "OR")
-                        .FilterKeywords(SimpleSearch.Split(' ').ToList(), "OR");
+                        .FilterAuthors(SimpleSearch.Split(' ').ToList(), "AND")
+                        .FilterKeywords(SimpleSearch.Split(' ').ToList(), "AND");
                 }
 
                 _workStatus(true);
@@ -508,8 +504,7 @@ namespace MainLib.ViewModels.Main
         }
         public void UpdateExportStatus(object input = null)
         {
-            int checkedArtilces = Articles.Where(article => article.Checked == true).ToList().Count;
-            CanExportP = checkedArtilces != 0;
+            OnPropertyChanged("CanExportP");
         }
         public void DeleteArticle(object input = null)
         {
@@ -749,6 +744,8 @@ namespace MainLib.ViewModels.Main
             // 3. Populate article collection
             foreach (Article article in articles)
                 this.Articles.Add(article);
+
+            OnPropertyChanged("CanExportP");
         }
         private async Task PopulateArticlesSimple()
         {
@@ -758,8 +755,8 @@ namespace MainLib.ViewModels.Main
             {
                 filter
                 .FilterTitle(SimpleSearch, true)
-                .FilterAuthors(SimpleSearch.Split(' ').ToList(), "OR")
-                .FilterKeywords(SimpleSearch.Split(' ').ToList(), "OR");
+                .FilterAuthors(SimpleSearch.Split(' ').ToList(), "AND")
+                .FilterKeywords(SimpleSearch.Split(' ').ToList(), "AND");
             }
 
             filter
@@ -789,6 +786,8 @@ namespace MainLib.ViewModels.Main
             // 3. Populate article collection
             foreach (Article article in articles)
                 this.Articles.Add(article);
+
+            OnPropertyChanged("CanExportP");
         }
         private async Task PopulateSections()
         {
@@ -907,6 +906,12 @@ namespace MainLib.ViewModels.Main
             for (int i = _startPageIndex; i < _endPageIndex; i++)
             {
                 PageButtons.Add(i.ToString());
+            }
+
+            if (_endPageIndex <= TotalPages)
+            {
+                PageButtons.Add("...");
+                PageButtons.Add(TotalPages.ToString());
             }
 
             SelectedPage = PageButtons.FirstOrDefault(p => p == CurrentPage.ToString());

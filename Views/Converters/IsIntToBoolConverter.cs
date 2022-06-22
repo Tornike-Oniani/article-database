@@ -4,22 +4,15 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 
-namespace Lib.Views.Converters
+namespace MainLib.Views.Converters
 {
-    public class BoolToVisibilityConverter : IValueConverter
+    public class IsIntToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((bool)value)
-                return Visibility.Visible;
-
-            if (parameter != null && !String.IsNullOrEmpty(parameter.ToString()) && parameter.ToString() == "Soft")
-                return Visibility.Hidden;
-            else
-                return Visibility.Collapsed;
+            return int.TryParse((string)value, out _);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
