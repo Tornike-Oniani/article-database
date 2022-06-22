@@ -908,6 +908,7 @@ namespace MainLib.ViewModels.Main
                 PageButtons.Add(i.ToString());
             }
 
+            // Add last page button if necessary
             if (_endPageIndex <= TotalPages)
             {
                 PageButtons.Add("...");
