@@ -22,12 +22,14 @@
             <FrameworkElement x:Key="ProxyElement" DataContext="{Binding}" />
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <!-- Proxy element column -->
+            <!-- Proxy element row -->
             <RowDefinition Height="Auto" />
-            <!-- Header column -->
+            <!-- Header row -->
             <RowDefinition Height="Auto" />
-            <!-- Data grid column-->
+            <!-- Data grid row -->
             <RowDefinition Height="*" />
+            <!-- Bottom menu row -->
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Proxy element to change datagrid columns' DataContext -->
@@ -42,24 +44,6 @@
                    FontSize="18" 
                    Margin="0 0 0 10"
                    Grid.Row="0" />
-
-            <!-- Export button -->
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Right">
-                <CheckBox Content="Export" 
-                          FontSize="16"
-                          Margin="0 0 10 0"
-                          IsChecked="{Binding Columns, 
-                                              Converter={StaticResource CheckToList}, 
-                                              ConverterParameter='Export'}"
-                          Command="{Binding EnableExportCommand}" />
-                <Button Content="Export"
-                        Margin="0 0 10 0"
-                        Command="{Binding ExportCommand}"/>
-                <Button Content="Export All"
-                        Command="{Binding ExportBookmarkCommand}"/>
-            </StackPanel>
         </Grid>
 
         <!-- Data grid -->
@@ -77,7 +61,7 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type DataGridCell}">
                                 <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter VerticalAlignment="Center" />
+                                    <ContentPresenter VerticalAlignment="Stretch" />
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
@@ -186,12 +170,15 @@
                 </DataGridTemplateColumn>
 
                 <!-- Export column -->
-                <DataGridTemplateColumn Header="Export" 
-                                    Width="Auto" 
-                                    Visibility="{Binding DataContext.Columns, 
-                                                         Source={StaticResource ProxyElement}, 
-                                                         Converter={StaticResource ListToVisibility}, 
-                                                         ConverterParameter='Export'}">
+                <DataGridTemplateColumn 
+                    Header="Export" 
+                    Width="Auto" 
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='Export'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" />
@@ -200,5 +187,40 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <!-- Bottom menu -->
+        <Border
+            BorderThickness="0 1 0 0"
+            BorderBrush="#FFC5C1C1"
+            Padding="12 6 12 6"
+            Grid.Row="3"
+            >
+            <!-- Export button -->
+            <StackPanel 
+                Orientation="Horizontal"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                >
+                <CheckBox 
+                    Content="Export" 
+                    FontSize="16"
+                    IsChecked="{
+                        Binding Columns, 
+                        Converter={StaticResource CheckToList}, 
+                        ConverterParameter='Export'}"
+                    Command="{Binding EnableExportCommand}" 
+                    Margin="0 0 10 0"
+                    />
+                <Button 
+                    Content="Export"
+                    Command="{Binding ExportCommand}"
+                    Margin="0 0 10 0"
+                    />
+                <Button 
+                    Content="Export All"
+                    Command="{Binding ExportBookmarkCommand}"
+                    />
+            </StackPanel>
+        </Border>
     </Grid>
 </Page>

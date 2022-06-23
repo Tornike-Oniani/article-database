@@ -69,7 +69,7 @@
                 <Setter Property="Background" Value="#ffffff" />
             </Trigger>
             <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
-                <Setter Property="Background" Value="#f7f7f7" />
+                <Setter Property="Background" Value="#fcfafa" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource LightHighlightColorBrush}" />
