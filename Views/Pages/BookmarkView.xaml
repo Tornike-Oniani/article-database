@@ -38,12 +38,16 @@
         <!-- Header -->
         <Grid Margin="0 0 0 10" Grid.Row="1">
             <!-- Bookmark name -->
-            <TextBlock Text="{Binding Bookmark.Name,FallbackValue=BindingWentWrong}" 
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
-                   FontSize="18" 
-                   Margin="0 0 0 10"
-                   Grid.Row="0" />
+            <TextBlock 
+                Text="{Binding Bookmark.Name,FallbackValue=BindingWentWrong}" 
+                FontSize="18" 
+                FontWeight="Bold"
+                FontFamily="Verdana"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Margin="0 0 0 10"
+                Grid.Row="0" 
+                />
         </Grid>
 
         <!-- Data grid -->
@@ -192,7 +196,7 @@
         <Border
             BorderThickness="0 1 0 0"
             BorderBrush="#FFC5C1C1"
-            Padding="12 6 12 6"
+            Padding="12 12 12 12"
             Grid.Row="3"
             >
             <!-- Export button -->

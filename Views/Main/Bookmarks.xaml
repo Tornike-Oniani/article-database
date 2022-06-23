@@ -10,9 +10,9 @@
     <UserControl.Resources>
         <ControlTemplate TargetType="Frame" x:Key="myFrame">
             <!-- Main wrapper -->
-            <DockPanel Margin="7">
+            <DockPanel>
                 <!-- Buttons wrapper -->
-                <StackPanel Margin="7"
+                <StackPanel Margin="12 12 12 12"
                             Orientation="Horizontal"
                             DockPanel.Dock="Top">
                     <!-- Back button -->
@@ -29,14 +29,14 @@
                 </StackPanel>
 
                 <!-- Content wrapper -->
-                <Border Padding="7">
+                <Border Padding="10 10 10 0">
                     <!-- Content -->
                     <ContentPresenter />
                 </Border>
             </DockPanel>
         </ControlTemplate>
     </UserControl.Resources>
-    <Border Padding="10">
+    <Border>
         <Grid>
             <Frame x:Name="_mainFrame"
                    Template="{StaticResource myFrame}" />

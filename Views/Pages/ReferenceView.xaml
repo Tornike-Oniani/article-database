@@ -49,12 +49,16 @@
             </Grid.RowDefinitions>
             
             <!-- Bookmark name -->
-            <TextBlock Text="{Binding Reference.Name,FallbackValue=BindingWentWrong}" 
-                   VerticalAlignment="Center"
-                   FontSize="18" 
-                   Margin="0 0 0 10"
-                   Grid.Column="0"
-                   Grid.Row="0" />
+            <TextBlock 
+                Text="{Binding Reference.Name,FallbackValue=BindingWentWrong}"
+                FontSize="18" 
+                FontWeight="Bold"
+                FontFamily="Verdana"
+                VerticalAlignment="Center"
+                Margin="0 0 0 10"
+                Grid.Column="0"
+                Grid.Row="0" 
+                />
             <!-- Main article title -->
             <Border BorderThickness="0 0 0 1" 
                     BorderBrush="{StaticResource SecondaryColorBrush}" 
@@ -203,7 +207,7 @@
         <Border
             BorderThickness="0 1 0 0"
             BorderBrush="#FFC5C1C1"
-            Padding="12 6 12 6"
+            Padding="12 12 12 12"
             Grid.Row="2">
             <!-- Export button -->
             <StackPanel 
