@@ -55,7 +55,7 @@
                     <LinearGradientBrush StartPoint="0 1" EndPoint="0 0">
                         <LinearGradientBrush.GradientStops>
                             <GradientStop Offset="0" Color="#3a0647" />
-                            <GradientStop Offset="0.2" Color="#3a0647" />
+                            <GradientStop Offset="0.3" Color="#3a0647" />
                             <GradientStop Offset="1" Color="#052767" />
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
