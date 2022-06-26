@@ -120,6 +120,9 @@
     <Compile Include="UserControls\LoadingControl.xaml.cs">
       <DependentUpon>LoadingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PendingButton.xaml.cs">
+      <DependentUpon>PendingButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Widget.xaml.cs">
       <DependentUpon>Widget.xaml</DependentUpon>
     </Compile>
@@ -187,6 +190,10 @@
     <Page Include="UserControls\LoadingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\PendingButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\Widget.xaml">
       <Generator>MSBuild:Compile</Generator>

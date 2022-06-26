@@ -971,10 +971,28 @@
                         />
                 </StackPanel>
 
+                <usercontrols:PendingButton
+                    StartText="Export article PDFs"
+                    PendingText="Check articles you want to export..."
+                    ActionText="Export selected"
+                    IsPending="{
+                        Binding Columns,
+                        Converter={StaticResource CheckToList},
+                        ConverterParameter='Export'}"
+                    CanRunAction="{Binding CanExportP}"
+                    InitialCommand="{Binding EnableExportCommand}"
+                    ActionCommand="{Binding ExportCommand}"
+                    CancelCommand="{Binding EnableExportCommand}"
+                    HorizontalAlignment="Right"
+                    />
+
                 <!-- Start export -->
                 <ToggleButton
                     x:Name="StartExport"
-                    IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='Export'}"
+                    IsChecked="{
+                        Binding Columns, 
+                        Converter={StaticResource CheckToList}, 
+                        ConverterParameter='Export'}"
                     Command="{Binding EnableExportCommand}"
                     Content="Export Article PDFs"
                     Style="{StaticResource ExportButton}"
