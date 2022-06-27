@@ -28,9 +28,7 @@ namespace MainLib.ViewModels.Pages
         private User _user;
         private bool _modifyRights;
         private List<string> _columns;
-        private Action<bool> _workStatus;
-        private IDialogService _dialogService;
-        private IBrowserService _browserService;
+        private Shared services;
 
         /**
          * Public properties:
@@ -76,16 +74,14 @@ namespace MainLib.ViewModels.Pages
         public ICommand UpdateExportStatusCommand { get; set; }
 
         // Constructor
-        public BookmarkViewViewModel(Bookmark bookmark, User user, Action<bool> workStatus, IDialogService dialogService, IBrowserService browserService, bool modifyRights = true)
+        public BookmarkViewViewModel(Bookmark bookmark, bool modifyRights = true)
         {
+            this.services = Shared.GetInstance();
             this.Columns = new List<string>();
             this.Bookmark = bookmark;
-            this._user = user;
+            this._user = services.User;
             this.Articles = new ObservableCollection<Article>();
             this.ModifyRights = modifyRights;
-            this._workStatus = workStatus;
-            this._dialogService = dialogService;
-            this._browserService = browserService;
 
             // Initialize commands
             OpenFileCommand = new RelayCommand(OpenFile);
@@ -104,7 +100,7 @@ namespace MainLib.ViewModels.Pages
         {
             try
             {
-                _workStatus(true);
+                services.IsWorking(true);
 
                 Articles.Clear();
 
@@ -119,16 +115,16 @@ namespace MainLib.ViewModels.Pages
                 foreach (Article article in articles)
                     Articles.Add(article);
 
-                _workStatus(false);
+                services.IsWorking(false);
             }
             catch (Exception e)
             {
                 new BugTracker().Track("Bookmark View", "Populate bookmark articles", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
         public void OpenFile(object input = null)
@@ -149,7 +145,7 @@ namespace MainLib.ViewModels.Pages
             // 4. Catch if file doesn't exist physically
             catch
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
         public void EnableExport(object input)
@@ -164,12 +160,12 @@ namespace MainLib.ViewModels.Pages
                 // Destination will be the path chosen from dialog box (Where files should be exported)
                 string destination = null;
 
-                destination = _browserService.OpenFolderDialog();
+                destination = services.BrowserService.OpenFolderDialog();
 
                 // If path was chosen from the dialog box
                 if (destination != null)
                 {
-                    _workStatus(true);
+                    services.IsWorking(true);
 
                     await Task.Run(() =>
                     {
@@ -203,19 +199,19 @@ namespace MainLib.ViewModels.Pages
                     foreach (Article article in Articles)
                         article.Checked = false;
 
-                    _workStatus(false);
+                    services.IsWorking(false);
 
-                    _dialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
                 }
             }
             catch(Exception e)
             {
                 new BugTracker().Track("Bookmark View", "Export", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
         public async void ExportBookmark(object input = null)
@@ -225,12 +221,12 @@ namespace MainLib.ViewModels.Pages
                 // Destination will be the path chosen from dialog box (Where files should be exported)
                 string destination = null;
 
-                destination = _browserService.OpenFolderDialog();
+                destination = services.BrowserService.OpenFolderDialog();
 
                 // If path was chosen from the dialog box
                 if (destination != null)
                 {
-                    _workStatus(true);
+                    services.IsWorking(true);
 
                     await Task.Run(() =>
                     {
@@ -258,19 +254,19 @@ namespace MainLib.ViewModels.Pages
                         }
                     });
 
-                    _workStatus(false);
+                    services.IsWorking(false);
 
-                    _dialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
                 }
             }
             catch(Exception e)
             {
                 new BugTracker().Track("Bookmark View", "Export Bookmark", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
 
         }
@@ -291,7 +287,7 @@ namespace MainLib.ViewModels.Pages
             catch (Exception e)
             {
                 new BugTracker().Track("Bookmark View", "Remove article", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public void Copy(object input = null)

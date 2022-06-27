@@ -1,6 +1,7 @@
 ﻿using Lib.DataAccessLayer.Models;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
+using MainLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +32,9 @@ namespace MainLib.ViewModels.Popups
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
-        public SettingsViewModel(User user)
+        public SettingsViewModel()
         {
-            this.User = user;
+            this.User = Shared.GetInstance().User;
             this.Title = "Settings...";
             this.FontSize = Properties.Settings.Default.FontSize;
             this.SyncName = Properties.Settings.Default.SyncName;

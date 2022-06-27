@@ -16,7 +16,6 @@ namespace MainLib.ViewModels.Popups
 {
     public class AddPersonalDialogViewModel : BaseViewModel
     {
-        private IDialogService _dialogService;
 
         public Article SelectedArticle { get; set; }
         public User User { get; set; }
@@ -25,14 +24,13 @@ namespace MainLib.ViewModels.Popups
 
         public RelayCommand AddPersonalCommand { get; set; }
 
-        public AddPersonalDialogViewModel(Article selectedArticle, User user, IDialogService dialogService)
+        public AddPersonalDialogViewModel(Article selectedArticle)
         {
             this.Title = "Add comment & SIC";
-            this._dialogService = dialogService;
 
             // 1. Set attributes from parent
             this.SelectedArticle = selectedArticle;
-            this.User = user;
+            this.User = Shared.GetInstance().User;
             PersonalComment = selectedArticle.PersonalComment;
             SIC = selectedArticle.SIC;
 
@@ -66,7 +64,7 @@ namespace MainLib.ViewModels.Popups
             catch(Exception e)
             {
                 new BugTracker().Track("Data View (sub window)", "Add Personal", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
     }

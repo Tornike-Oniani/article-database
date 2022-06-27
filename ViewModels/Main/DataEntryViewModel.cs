@@ -81,10 +81,7 @@ namespace MainLib.ViewModels.Main
         private string _author;
         private string _keyword;
         private string _selectedFile;
-        private Action<bool> _workingStatus;
-        private IDialogService _dialogService;
-        private IWindowService _windowService;
-        private IBrowserService _browserService;
+        private Shared services;
 
         // TEST
         private Random rnd = new Random();
@@ -122,17 +119,14 @@ namespace MainLib.ViewModels.Main
         public ObservableCollection<string> ItemsCollection { get; set; }
 
         // Constructor
-        public DataEntryViewModel(User user, Action<bool> workingStatus, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public DataEntryViewModel()
         {
             // 1. Initialize article and User
+            this.services = Shared.GetInstance();
             this.Article = new Article();
-            this.User = user;
-            this._workingStatus = workingStatus;
+            this.User = services.User;
             this.Bookmarks = new List<Bookmark>();
             this.References = new List<Reference>();
-            this._dialogService = dialogService;
-            this._windowService = windowService;
-            this._browserService = browserService;
 
             // 2. Initialize commands
             SelectFileCommand = new RelayCommand(SelectFile);
@@ -152,7 +146,7 @@ namespace MainLib.ViewModels.Main
         {
             try
             {
-                string result = _browserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
+                string result = services.BrowserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
 
                 // Get the selected file
                 SelectedFile = result;
@@ -160,14 +154,14 @@ namespace MainLib.ViewModels.Main
             catch(Exception e)
             {
                 new BugTracker().Track("Data Entry", "Select file", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public async void SaveArticle(object input = null)
         {
             try
             {
-                _workingStatus(true);
+                services.IsWorking(true);
 
                 await Task.Run(() =>
                 {
@@ -215,16 +209,16 @@ namespace MainLib.ViewModels.Main
                 Bookmarks.Clear();
                 References.Clear();
 
-                _workingStatus(false);
+                services.IsWorking(false);
             }
             catch (Exception e)
             {
                 new BugTracker().Track("Data Entry", "Add article", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workingStatus(false);
+                services.IsWorking(false);
             }
         }
         public void ClearArticleAttributes(object input = null)
@@ -239,7 +233,7 @@ namespace MainLib.ViewModels.Main
             catch(Exception e)
             {
                 new BugTracker().Track("Data Entry", "Clear Article Attributes", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public void ClearTitle(object input = null)
@@ -248,20 +242,11 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenBookmarkManager(object input = null)
         {
-            _windowService.OpenWindow(new BookmarkManagerViewModel(
-                User,
-                ViewType.DataEntry,
-                _dialogService,
-                bookmarks: Bookmarks
-                ));
+            services.WindowService.OpenWindow(new BookmarkManagerViewModel(ViewType.DataEntry, bookmarks: Bookmarks));
         }
         public void OpenReferenceManager(object input = null)
         {
-            _windowService.OpenWindow(new ReferenceManagerViewModel(
-                ViewType.DataEntry,
-                _dialogService,
-                references: References
-                ));
+            services.WindowService.OpenWindow(new ReferenceManagerViewModel(ViewType.DataEntry, references: References));
         }
         public bool CanSaveArticle(object input = null)
         {
@@ -278,7 +263,7 @@ namespace MainLib.ViewModels.Main
             Article random_article;
             string prevTitle = "";
 
-            _workingStatus(true);
+            services.IsWorking(true);
 
             await Task.Run(() =>
             {
@@ -314,7 +299,7 @@ namespace MainLib.ViewModels.Main
 
             });
 
-            _workingStatus(false);
+            services.IsWorking(false);
 
             Console.WriteLine("Done");
         }

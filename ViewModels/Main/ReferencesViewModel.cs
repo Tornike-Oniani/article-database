@@ -5,18 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lib.ViewModels.Base;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Main
 {
     public class ReferencesViewModel : BaseViewModel
     {
         public User User { get; set; }
-        public Action<bool> WorkStatus { get; set; }
 
-        public ReferencesViewModel(User user, Action<bool> workStatus)
+        public ReferencesViewModel()
         {
-            this.User = user;
-            this.WorkStatus = workStatus;
+            this.User = Shared.GetInstance().User;
         }
     }
 }

@@ -22,8 +22,7 @@ namespace MainLib.ViewModels.Popups
         private string _author;
         private string _keyword;
         private string _selectedFile;
-        private IDialogService _dialogService;
-        private IBrowserService _browserService;
+        private Shared services;
 
         public Article SelectedArticle { get; set; }
         public User User { get; set; }
@@ -47,15 +46,14 @@ namespace MainLib.ViewModels.Popups
         public RelayCommand SelectFileCommand { get; set; }
         public RelayCommand UpdateArticleCommand { get; set; }
 
-        public ArticleEditorViewModel(Article selectedArticle, User user, IDialogService dialogService, IBrowserService browserService)
+        public ArticleEditorViewModel(Article selectedArticle)
         {
+            this.services = Shared.GetInstance();
             this.Title = "Edit Article";
-            this._dialogService = dialogService;
-            this._browserService = browserService;
 
             // 1. Set parent view model
             this.SelectedArticle = selectedArticle;
-            this.User = user;
+            this.User = services.User;
 
             // 2. Create article instance
             Article = new Article();
@@ -70,7 +68,7 @@ namespace MainLib.ViewModels.Popups
 
         public void SelectFile(object input = null)
         {
-            string result = _browserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
+            string result = services.BrowserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
 
             // Get the selected file
             SelectedFile = result;
@@ -106,13 +104,13 @@ namespace MainLib.ViewModels.Popups
                 // Message = "constraint failed\r\nUNIQUE constraint failed: tblArticle.Title"
                 if (e.Message.Contains("UNIQUE") && e.Message.Contains("Title"))
                 {
-                    _dialogService.OpenDialog(new DialogOkViewModel("Article with that name already exists", "Duplicate", DialogType.Warning));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Article with that name already exists", "Duplicate", DialogType.Warning));
 
                 }
                 else
                 {
                     new BugTracker().Track("Data View (sub window)", "Update Article", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
 

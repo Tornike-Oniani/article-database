@@ -19,7 +19,6 @@ namespace MainLib.ViewModels.Popups
     {
         // Private members
         private ReferenceListViewModel _parent;
-        private IDialogService _dialogService;
         private string _name;
 
         // Public properties
@@ -30,10 +29,9 @@ namespace MainLib.ViewModels.Popups
         public RelayCommand SaveReferenceCommand { get; set; }
 
         // Constructor
-        public ReferenceEditorViewModel(Reference reference, ReferenceListViewModel parent, IDialogService dialogService)
+        public ReferenceEditorViewModel(Reference reference, ReferenceListViewModel parent)
         {
             this.Title = "Save as...";
-            this._dialogService = dialogService;
 
             this.Reference = new Reference();
             this.Reference.CopyByValue(reference);
@@ -75,7 +73,7 @@ namespace MainLib.ViewModels.Popups
                 if (e.Message.Contains("UNIQUE"))
                 {
                     if (
-                        _dialogService.OpenDialog(new DialogYesNoViewModel("Reference with that name already exists, do you want to merge?", "Merge reference", DialogType.Question))
+                        Shared.GetInstance().DialogService.OpenDialog(new DialogYesNoViewModel("Reference with that name already exists, do you want to merge?", "Merge reference", DialogType.Question))
                        )
                     {
                         ReferenceRepo repo = new ReferenceRepo();
@@ -98,7 +96,7 @@ namespace MainLib.ViewModels.Popups
                 else
                 {
                     new BugTracker().Track("Refernce Editor", "Save Reference", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
             finally

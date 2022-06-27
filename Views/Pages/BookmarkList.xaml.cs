@@ -48,7 +48,7 @@ namespace MainLib.Views.Pages
             if (sent_bookmark.Global == 1 && !vm.User.IsAdmin)
                 modify_rights = false;
 
-            _bookmarkView.DataContext = new BookmarkViewViewModel(sent_bookmark, vm.User, vm.WorkStatus, new DialogService(), new BrowserService(), modify_rights);
+            _bookmarkView.DataContext = new BookmarkViewViewModel(sent_bookmark, modify_rights);
             NavigationService.Navigate(_bookmarkView);
         }
 

@@ -21,8 +21,7 @@ namespace MainLib.ViewModels.Popups
     {
         private User _user;
         private List<Article> _articles;
-        private Action<bool> _workStatus;
-        private IDialogService _dialogService;
+        private Shared services;
 
         public ObservableCollection<Bookmark> Bookmarks { get; set; }
         public CollectionViewSource _bookmarkBoxesCollection { get; set; }
@@ -34,15 +33,14 @@ namespace MainLib.ViewModels.Popups
 
         public RelayCommand AddArticlesToBookmarkCommand { get; set; }
 
-        public MassBookmarkManagerViewModel(User user, Action<bool> workStatus, List<Article> articles, IDialogService dialogService)
+        public MassBookmarkManagerViewModel(List<Article> articles)
         {
+            this.services = Shared.GetInstance();
             this.Title = "Save to...";
-            this._dialogService = dialogService;
 
             // 1. Set starting state
-            this._user = user;
+            this._user = services.User;
             this._articles = articles;
-            this._workStatus = workStatus;
             this.Bookmarks = new ObservableCollection<Bookmark>(PopulateBookmarks());
             _bookmarkBoxesCollection = new CollectionViewSource();
             _bookmarkBoxesCollection.Source = Bookmarks;
@@ -58,7 +56,7 @@ namespace MainLib.ViewModels.Popups
                 // Close window
                 (input as ICommand).Execute(null);
 
-                _workStatus(true);
+                services.IsWorking(true);
 
                 await Task.Run(() =>
                 {
@@ -75,18 +73,18 @@ namespace MainLib.ViewModels.Popups
                         }
                 });
 
-                _workStatus(false);
+                services.IsWorking(false);
 
-                _dialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
             }
             catch(Exception e)
             {
                 new BugTracker().Track("Mass Bookmark Manager", "Mass Bookmark", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
         public bool CanAddArticlesToBookmark(object input = null)

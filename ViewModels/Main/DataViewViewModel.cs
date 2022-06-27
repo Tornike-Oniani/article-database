@@ -34,11 +34,8 @@ namespace MainLib.ViewModels.Main
         private Article _selectedArticle;
         private string _selectedSection;
         private bool _isSectionSelected;
-        private Action<bool> _workStatus;
         private string _currentSort;
-        private IDialogService _dialogService;
-        private IWindowService _windowService;
-        private IBrowserService _browserService;
+        private Shared services;
 
         private int _offset { get { return (CurrentPage - 1) * ItemsPerPage; } }
         // Check if fetched data was done by simple search, so that pagination commands will work
@@ -173,19 +170,11 @@ namespace MainLib.ViewModels.Main
         #endregion
 
         // Constructor
-        public DataViewViewModel(
-            User user,
-            Action<bool> workStatus,
-            IDialogService dialogService,
-            IWindowService windowService,
-            IBrowserService browserService)
+        public DataViewViewModel()
         {
-            this.User = user;
+            this.services = Shared.GetInstance();
+            this.User = services.User;
             this._currentSort = "Title ASC";
-            this._workStatus = workStatus;
-            this._dialogService = dialogService;
-            this._windowService = windowService;
-            this._browserService = browserService;
 
             this.PageButtons = new ObservableCollection<string>();
 
@@ -270,7 +259,7 @@ namespace MainLib.ViewModels.Main
             // 4. Catch if file doesn't exist physically
             catch
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
         // Pagination
@@ -319,7 +308,7 @@ namespace MainLib.ViewModels.Main
                     .FilterPersonalComment(FilterPersonalComment)
                     .FilterIds(GetFilterIds(IdFilter));
 
-                _workStatus(true);
+                services.IsWorking(true);
 
                 List<Article> articles = new List<Article>();
                 await Task.Run(() =>
@@ -347,16 +336,16 @@ namespace MainLib.ViewModels.Main
                 else
                     this.IsSectionSelected = false;
 
-                _workStatus(false);
+                services.IsWorking(false);
             }
             catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Load Articles", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
         public async void LoadArticlesSimple(object input = null)
@@ -385,7 +374,7 @@ namespace MainLib.ViewModels.Main
                         .FilterKeywords(SimpleSearch.Split(' ').ToList(), "AND");
                 }
 
-                _workStatus(true);
+                services.IsWorking(true);
 
                 List<Article> articles = new List<Article>();
                 await Task.Run(() =>
@@ -413,16 +402,16 @@ namespace MainLib.ViewModels.Main
                 else
                     this.IsSectionSelected = false;
 
-                _workStatus(false);
+                services.IsWorking(false);
             }
             catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Load Articles", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
         // Export
@@ -439,12 +428,12 @@ namespace MainLib.ViewModels.Main
                 // Destination will be the path chosen from dialog box (Where files should be exported)
                 string destination = null;
 
-                destination = _browserService.OpenFolderDialog();
+                destination = services.BrowserService.OpenFolderDialog();
 
                 // If path was chosen from the dialog box
                 if (destination != null)
                 {
-                    _workStatus(true);
+                    services.IsWorking(true);
 
                     await Task.Run(() =>
                     {
@@ -478,19 +467,19 @@ namespace MainLib.ViewModels.Main
                     foreach (Article article in Articles)
                         article.Checked = false;
 
-                    _workStatus(false);
+                    services.IsWorking(false);
 
-                    _dialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
                 }
             }
             catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Export", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
 
         }
@@ -511,7 +500,7 @@ namespace MainLib.ViewModels.Main
             try
             {
                 // 1. Ask user if they are sure
-                if (_dialogService.OpenDialog(
+                if (services.DialogService.OpenDialog(
                     new DialogYesNoViewModel("Delete following record?\n" + SelectedArticle.Title, "Warning", DialogType.Question)
                    ))
                 {
@@ -529,7 +518,7 @@ namespace MainLib.ViewModels.Main
 
                     catch
                     {
-                        _dialogService.OpenDialog(
+                        services.DialogService.OpenDialog(
                             new DialogOkViewModel("The file is missing, validate your database.", "Error", DialogType.Error));
                     }
 
@@ -540,7 +529,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Delete Article", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public bool CanDeleteArticle(object input = null)
@@ -577,7 +566,7 @@ namespace MainLib.ViewModels.Main
                 _currentSort = $"{header} ASC";
             }
 
-            _workStatus(true);
+            services.IsWorking(true);
 
             if (_isSearchSimple)
             {
@@ -586,9 +575,9 @@ namespace MainLib.ViewModels.Main
             else
             {
                 await PopulateArticles();
-            }            
+            }
 
-            _workStatus(false);
+            services.IsWorking(false);
         }
         public void SwitchToDetailedSearch(object input = null)
         {
@@ -605,27 +594,27 @@ namespace MainLib.ViewModels.Main
         // Window open commands
         public void OpenSearchDialog(object input = null)
         {
-            _windowService.OpenWindow(new SearchDialogViewModel(this), passWindow: true);
+            services.WindowService.OpenWindow(new SearchDialogViewModel(this), passWindow: true);
         }
         public void OpenAddPersonal(object input)
         {
-            _windowService.OpenWindow(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle, User, _dialogService));
+            services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle));
         }
         public void OpenBookmarkManager(object input = null)
         {
-            _windowService.OpenWindow(new BookmarkManagerViewModel(User, ViewType.DataView, _dialogService, input as Article));
+            services.WindowService.OpenWindow(new BookmarkManagerViewModel(ViewType.DataView, input as Article));
         }
         public void OpenEditDialog(object input = null)
         {
-            _windowService.OpenWindow(new MainLib.ViewModels.Popups.ArticleEditorViewModel(SelectedArticle, User, _dialogService, _browserService));
+            services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.ArticleEditorViewModel(SelectedArticle));
         }
         public void OpenMassBookmarkManager(object input = null)
         {
-            _windowService.OpenWindow(new MassBookmarkManagerViewModel(User, _workStatus, BMCheckedArticles, _dialogService));
+            services.WindowService.OpenWindow(new MassBookmarkManagerViewModel(BMCheckedArticles));
         }
         public void OpenReferenceManager(object input)
         {
-            _windowService.OpenWindow(new ReferenceManagerViewModel(ViewType.DataView, _dialogService, input as Article));
+            services.WindowService.OpenWindow(new ReferenceManagerViewModel(ViewType.DataView, input as Article));
         }
 
         public bool IsArticleSelected(object input = null)
@@ -662,11 +651,11 @@ namespace MainLib.ViewModels.Main
         public async void Finish(object input = null)
         {
             if (
-                _dialogService.OpenDialog(new DialogYesNoViewModel("Are you sure you want to remove this section from pending?", "Finish Section", DialogType.Warning)))
+                services.DialogService.OpenDialog(new DialogYesNoViewModel("Are you sure you want to remove this section from pending?", "Finish Section", DialogType.Warning)))
             {
                 try
                 {
-                    _workStatus(true);
+                    services.IsWorking(true);
 
                     await Task.Run(() =>
                     {
@@ -685,7 +674,7 @@ namespace MainLib.ViewModels.Main
                         File.WriteAllText(path, info);
                     });
 
-                    _workStatus(false);
+                    services.IsWorking(false);
 
                     // 3. Clear articles collection
                     this.Sections.Remove(SelectedSection);
@@ -696,11 +685,11 @@ namespace MainLib.ViewModels.Main
                 catch (Exception e)
                 {
                     new BugTracker().Track("DataView", "Finish", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
                 finally
                 {
-                    _workStatus(false);
+                    services.IsWorking(false);
                 }
             }
         }
@@ -797,7 +786,7 @@ namespace MainLib.ViewModels.Main
             {
                 List<string> sections = new List<string>();
 
-                _workStatus(true);
+                services.IsWorking(true);
 
                 await Task.Run(() =>
                 {
@@ -809,7 +798,7 @@ namespace MainLib.ViewModels.Main
                     });
                 });
 
-                _workStatus(false);
+                services.IsWorking(false);
 
                 this.Sections.Add("None");
                 sections.ForEach((cur) =>
@@ -820,12 +809,12 @@ namespace MainLib.ViewModels.Main
             }
             catch (Exception e)
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong", "Error", DialogType.Error));
                 new BugTracker().Track("Data View", "Reading sections from json", e.Message, e.StackTrace);
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
         private int[] GetFilterIds(string filterId)
@@ -857,7 +846,7 @@ namespace MainLib.ViewModels.Main
                 if (CurrentPage > TotalPages)
                     return;
 
-                _workStatus(true);
+                services.IsWorking(true);
 
                 // 3. Populate article collection
                 if (_isSearchSimple)
@@ -867,16 +856,16 @@ namespace MainLib.ViewModels.Main
 
                 GenerateButtons();
 
-                _workStatus(false);
+                services.IsWorking(false);
             }
             catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Move to page", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
         private void GenerateButtons()

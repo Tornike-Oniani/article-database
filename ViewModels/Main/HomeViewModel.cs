@@ -24,10 +24,7 @@ namespace MainLib.ViewModels.Main
         private User _user;
         private string _exportedSync;
         private string _syncNameAndNumber;
-        private Action<bool> _workStatus;
-        private IDialogService _dialogService;
-        private IBrowserService _browserService;
-        private IWindowService _windowService;
+        private Shared services;
 
         // Public properties
         public User User
@@ -53,18 +50,10 @@ namespace MainLib.ViewModels.Main
         public RelayCommand ExportSyncCommand { get; set; }
 
         // Constructor
-        public HomeViewModel(
-            User user, 
-            Action<bool> workStatus, 
-            IDialogService dialogService, 
-            IWindowService windowService, 
-            IBrowserService browserService)
+        public HomeViewModel()
         {
-            this.User = user;
-            this._workStatus = workStatus;
-            this._dialogService = dialogService;
-            this._windowService= windowService;
-            this._browserService = browserService;
+            this.services = Shared.GetInstance();
+            this.User = services.User;
 
             ValidateCommand = new RelayCommand(Validate);
             ImportCommand = new RelayCommand(Import);
@@ -94,7 +83,7 @@ namespace MainLib.ViewModels.Main
                     // If any mismatch was found create log file and write mismatched files in there
                     if (mismatch.Length > 0)
                     {
-                        _workStatus(true);
+                        services.IsWorking(true);
 
                         await Task.Run(() =>
                         {
@@ -116,28 +105,28 @@ namespace MainLib.ViewModels.Main
                             }
                         });
 
-                        _workStatus(false);
+                        services.IsWorking(false);
 
-                        _dialogService.OpenDialog(new DialogOkViewModel("Some files are missing see Logs for more info...", "Result", DialogType.Warning));
+                        services.DialogService.OpenDialog(new DialogOkViewModel("Some files are missing see Logs for more info...", "Result", DialogType.Warning));
                     }
                     else
                     {
-                        _dialogService.OpenDialog(new DialogOkViewModel("No missing files were found!", "Result", DialogType.Success));
+                        services.DialogService.OpenDialog(new DialogOkViewModel("No missing files were found!", "Result", DialogType.Success));
                     }
                 }
                 else
                 {
-                    _dialogService.OpenDialog(new DialogOkViewModel("There are no records in database yet", "Result", DialogType.Information));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("There are no records in database yet", "Result", DialogType.Information));
                 }
             }
             catch (Exception e)
             {
                 new BugTracker().Track("App", "Validate", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
         public void Import(object input = null)
@@ -179,8 +168,8 @@ namespace MainLib.ViewModels.Main
                 fileManager.LogDuplicateFiles();
 
                 // Create progress bar and copy physical .pdf files
-                _windowService.OpenWindow(
-                    new ImportViewModel(fileManager.filesToCopy, destination, _dialogService),
+                services.WindowService.OpenWindow(
+                    new ImportViewModel(fileManager.filesToCopy, destination),
                     WindowType.Generic,
                     true,
                     true,
@@ -190,18 +179,18 @@ namespace MainLib.ViewModels.Main
             catch(Exception e)
             {
                 new BugTracker().Track("App", "Import", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
         public async void Sync(object input = null)
         {
             try
             {
-                string destination = _browserService.OpenFolderDialog();
+                string destination = services.BrowserService.OpenFolderDialog();
 
                 if (destination == null)
                     return;
@@ -212,11 +201,11 @@ namespace MainLib.ViewModels.Main
                     !File.Exists(Path.Combine(destination, "sync.json"))
                     )
                 {
-                    _dialogService.OpenDialog(new DialogOkViewModel("Please select a valid folder", "Sync", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Please select a valid folder", "Sync", DialogType.Error));
                     return;
                 }
 
-                _workStatus(true);
+                services.IsWorking(true);
 
                 SyncInformationManager syncManager = new SyncInformationManager();
                 SyncInfo syncInfo = null;
@@ -230,7 +219,7 @@ namespace MainLib.ViewModels.Main
 
                 if (syncInfo.Syncs.FindIndex((el) => el.Name == sync.Name && el.Number == sync.Number) >= 0)
                 {
-                    _dialogService.OpenDialog(new DialogOkViewModel("This synchronisation was already imported", "Synchronisation", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("This synchronisation was already imported", "Synchronisation", DialogType.Error));
                     return;
                 }
 
@@ -251,34 +240,34 @@ namespace MainLib.ViewModels.Main
                 {
                     syncManager.Write(syncInfo);
                 });
-                
 
 
-                _workStatus(false);
+
+                services.IsWorking(false);
 
 
                 // Show messagebox regarding errors
                 if (reader.NoErrors)
-                    _dialogService.OpenDialog(new DialogOkViewModel("Synchronisation successful", "Synchronisation", DialogType.Success));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Synchronisation successful", "Synchronisation", DialogType.Success));
                 else
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong, see logs for more information", "Synchronisation", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong, see logs for more information", "Synchronisation", DialogType.Error));
             }
             catch(Exception e)
             {
                 new BugTracker().Track("App", "Sync", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
                 UpdateSyncInformationDisplay();
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
         public async void ExportSync(object input = null)
         {
             try
             {
-                string destination = _browserService.OpenFolderDialog();
+                string destination = services.BrowserService.OpenFolderDialog();
 
                 if (destination == null)
                     return;
@@ -286,7 +275,7 @@ namespace MainLib.ViewModels.Main
                 // If sync is already exported in destination
                 if (Directory.Exists(Path.Combine(destination, "Sync")))
                 {
-                    _dialogService.OpenDialog(
+                    services.DialogService.OpenDialog(
                         new DialogOkViewModel(
                             "This folder already contains sync information. Please choose different path",
                             "Export Sync",
@@ -303,7 +292,7 @@ namespace MainLib.ViewModels.Main
                 // There is no sync folder in root
                 if (!Directory.Exists(syncPath))
                 {
-                    _dialogService.OpenDialog(
+                    services.DialogService.OpenDialog(
                         new DialogOkViewModel(
                             "No information to export, please restart application.",
                             "Export Sync",
@@ -312,7 +301,7 @@ namespace MainLib.ViewModels.Main
                     return;
                 }
 
-                _workStatus(true);
+                services.IsWorking(true);
 
                 await Task.Run(() =>
                 {
@@ -375,18 +364,18 @@ namespace MainLib.ViewModels.Main
 
                 UpdateSyncInformationDisplay();
 
-                _workStatus(false);
+                services.IsWorking(false);
 
-                _dialogService.OpenDialog(new DialogOkViewModel("Sync information exported successfully.", "Sync export", DialogType.Success));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Sync information exported successfully.", "Sync export", DialogType.Success));
             }
             catch (Exception e)
             {
                 new BugTracker().Track("App", "Export Sync", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                _workStatus(false);
+                services.IsWorking(false);
             }
         }
 
@@ -422,7 +411,7 @@ namespace MainLib.ViewModels.Main
             string destination = null;
 
             // 1. Using winforms dialog box select a folder
-            destination = _browserService.OpenFolderDialog();
+            destination = services.BrowserService.OpenFolderDialog();
 
             result = destination;
 
@@ -433,7 +422,7 @@ namespace MainLib.ViewModels.Main
             // 3. If the wrong folder was selected return with an error messagebox
             if (IsFolderCorrupt(destination))
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("Please select a correct folder.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Please select a correct folder.", "Error", DialogType.Error));
                 return false;
             }
 

@@ -35,9 +35,7 @@ namespace MainLib.ViewModels
         private bool _isVisible;
         private bool _loginFocus;
         private bool _registerFocus;
-        private IDialogService _dialogService;
-        private IWindowService _windowService;
-        private IBrowserService _browserService;
+        private Shared services;
 
         public User CurrentUser { get; set; }
         public string Username
@@ -81,8 +79,6 @@ namespace MainLib.ViewModels
             set { _registerFocus = value; OnPropertyChanged("RegisterFocus"); }
         }
 
-
-
         public RelayCommand LoginCommand { get; set; }
         public RelayCommand ShowRegisterCommand { get; set; }
         public RelayCommand RegisterCommand { get; set; }
@@ -90,11 +86,9 @@ namespace MainLib.ViewModels
 
         public LoginViewModel(IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
         {
-            this._dialogService = dialogService;
-            this._windowService = windowService;
-            this._browserService = browserService;
             this.IsBusy = false;
-
+            this.services = Shared.GetInstance();
+            services.SetServices(dialogService, windowService, browserService);
             CurrentUser = new User();
             LoginCommand = new RelayCommand(Login);
             ShowRegisterCommand = new RelayCommand(ShowRegister);
@@ -114,7 +108,8 @@ namespace MainLib.ViewModels
             });
             if (login)
             {
-                _windowService.OpenWindow(new NavigationViewModel(CurrentUser, _dialogService, _windowService, _browserService), WindowType.MainWindow, false, false);
+                services.SetLoggedInUser(CurrentUser);
+                services.WindowService.OpenWindow(new NavigationViewModel(), WindowType.MainWindow, false, false);
                 // Initialize tracker if user is admin
                 await Task.Run(() =>
                 {
@@ -127,7 +122,7 @@ namespace MainLib.ViewModels
             }
             else
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("Invalid username or password", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Invalid username or password", "Error", DialogType.Error));
                 passwordBox.Password = null;
             }
 
@@ -149,7 +144,7 @@ namespace MainLib.ViewModels
         {
             if (Password != PasswordConfirm)
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("Passwords do not match!", "Registration", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Passwords do not match!", "Registration", DialogType.Error));
                 return;
             }
 
@@ -167,11 +162,11 @@ namespace MainLib.ViewModels
 
             if (register)
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("New user created successfuly", "Registration", DialogType.Success));
+                services.DialogService.OpenDialog(new DialogOkViewModel("New user created successfuly", "Registration", DialogType.Success));
             }
             else
             {
-                _dialogService.OpenDialog(new DialogOkViewModel("Username is already taken", "Registration", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Username is already taken", "Registration", DialogType.Error));
             }
 
             IsBusy = false;

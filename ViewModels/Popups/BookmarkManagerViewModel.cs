@@ -32,7 +32,7 @@ namespace MainLib.ViewModels.Popups
         private Article _article;
         private List<Bookmark> _bookmarks;
         private Tracker _tracker;
-        private IDialogService _dialogService;
+        private Shared services;
 
         // Public properties
         public Visibility NewBookmarkVisibility
@@ -73,22 +73,17 @@ namespace MainLib.ViewModels.Popups
         public RelayCommand CheckChangedCommand { get; set; }
 
         // Constructor
-        public BookmarkManagerViewModel(
-            User user, 
-            ViewType parent, 
-            IDialogService dialogService, 
-            Article article = null, 
-            List<Bookmark> bookmarks = null)
+        public BookmarkManagerViewModel(ViewType parent, Article article = null, List<Bookmark> bookmarks = null)
         {
+            this.services = Shared.GetInstance();
             this.Title = "Save to...";
             this._parent = parent;
-            this._dialogService = dialogService;
-            this._tracker = new Tracker(user);
+            this._tracker = new Tracker(User);
 
             // 1. Initialize starting state
             NewBookmarkVisibility = Visibility.Visible;
             CreateVisibility = Visibility.Collapsed;
-            this.User = user;
+            this.User = services.User;
             this._article = article;
             this._bookmarks = bookmarks;
             BookmarkBoxes = new ObservableCollection<BookmarkBox>();
@@ -147,12 +142,12 @@ namespace MainLib.ViewModels.Popups
                 Global = 0;
 
                 if (!duplicate_check)
-                    _dialogService.OpenDialog(new DialogOkViewModel("This bookmark already exists.", "Warning", DialogType.Warning));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("This bookmark already exists.", "Warning", DialogType.Warning));
             }
             catch(Exception e)
             {
                 new BugTracker().Track("Bookmark Manager", "Create Bookmark", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public bool CanCreate(object input = null)
@@ -177,7 +172,7 @@ namespace MainLib.ViewModels.Popups
                 catch(Exception e)
                 {
                     new BugTracker().Track("Bookmark Manager", "Add article to bookmark", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
             // 2. If user unchecked remove article from bookmark
@@ -194,7 +189,7 @@ namespace MainLib.ViewModels.Popups
                 catch (Exception e)
                 {
                     new BugTracker().Track("Bookmark Manager", "Remove article from bookmark", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
         }
@@ -213,7 +208,7 @@ namespace MainLib.ViewModels.Popups
                 catch(Exception e)
                 {
                     new BugTracker().Track("Bookmark Manager (Data Entry)", "Remove article from bookmark", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
             // If Bookmarks doesn't contain the input add it
@@ -226,7 +221,7 @@ namespace MainLib.ViewModels.Popups
                 catch(Exception e)
                 {
                     new BugTracker().Track("Bookmark Manager (Data Entry)", "Add article to bookmark", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
         }

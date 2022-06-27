@@ -24,7 +24,7 @@ namespace MainLib.ViewModels
         private BaseViewModel _selectedViewModel;
         private User _user;
         private bool _isBusy;
-        private IWindowService _windowService;
+        private Shared services;
 
         public BaseViewModel SelectedViewModel
         {
@@ -42,20 +42,22 @@ namespace MainLib.ViewModels
             set { _isBusy = value; OnPropertyChanged("IsBusy"); }
         }
 
-
         public ICommand UpdateViewCommand { get; set; }
         public ICommand OpenSettingsCommand { get; set; }
 
-        public NavigationViewModel(User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public NavigationViewModel()
         {
-            _windowService = windowService;
-            UpdateViewCommand = new UpdateViewCommand(Navigate, WorkStatus, user, dialogService, windowService, browserService);
+            this.services = Shared.GetInstance();
+            services.SetWorkingStatusAction(WorkStatus);
+            this.User = services.User;
+
+            UpdateViewCommand = new UpdateViewCommand(Navigate);
             UpdateViewCommand.Execute(ViewType.Home);
             OpenSettingsCommand = new RelayCommand(OpenSettings);
-            this.Title = user.Username;
             // Set admin/user status
-            user.Admin = new UserRepo().IsAdmin(user);
-            this.User = user;
+            User.Admin = new UserRepo().IsAdmin(User);
+            OnPropertyChanged("User");
+            this.Title = User.Username;
         }
 
         public void Navigate(BaseViewModel viewModel)
@@ -64,7 +66,7 @@ namespace MainLib.ViewModels
         }
         public void OpenSettings(object input = null)
         {
-            _windowService.OpenWindow(new SettingsViewModel(User), passWindow: true);
+            services.WindowService.OpenWindow(new SettingsViewModel(), passWindow: true);
         }
 
         public void WorkStatus(bool isWorking)

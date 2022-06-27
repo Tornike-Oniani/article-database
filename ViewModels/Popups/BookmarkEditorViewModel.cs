@@ -23,7 +23,6 @@ namespace MainLib.ViewModels.Popups
          */
         private BookmarkListViewModel _parent;
         private User _user;
-        private IDialogService _dialogService;
         private string _name;
 
         /**
@@ -45,10 +44,9 @@ namespace MainLib.ViewModels.Popups
         public RelayCommand SaveBookmarkCommand { get; set; }
 
         // Constructor
-        public BookmarkEditorViewModel(Bookmark bookmark, BookmarkListViewModel parent, IDialogService dialogService)
+        public BookmarkEditorViewModel(Bookmark bookmark, BookmarkListViewModel parent)
         {
             this.Title = "Save as...";
-            this._dialogService = dialogService;
 
             // 1. Copy sent bookmark values and set the parent
             Bookmark = new Bookmark();
@@ -85,7 +83,7 @@ namespace MainLib.ViewModels.Popups
                 if (e.Message.Contains("UNIQUE"))
                 {
                     if (
-                        _dialogService.OpenDialog(new DialogYesNoViewModel("Bookmark with that name already exists, do you want to merge?", "Merge reference", DialogType.Question))
+                        Shared.GetInstance().DialogService.OpenDialog(new DialogYesNoViewModel("Bookmark with that name already exists, do you want to merge?", "Merge reference", DialogType.Question))
                        )
                     {
                         BookmarkRepo repo = new BookmarkRepo();
@@ -107,7 +105,7 @@ namespace MainLib.ViewModels.Popups
                 else
                 {
                     new BugTracker().Track("Bookmark Editor", "Save Bookmark", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
             finally

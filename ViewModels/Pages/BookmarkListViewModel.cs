@@ -20,8 +20,7 @@ namespace MainLib.ViewModels.Pages
     public class BookmarkListViewModel : BaseViewModel
     {
         // Private members
-        IDialogService _dialogService;
-        IWindowService _windowService;
+        private Shared services;
 
         /**
          * Public properties
@@ -35,7 +34,6 @@ namespace MainLib.ViewModels.Pages
         // Container of global bookmarks
         public ObservableCollection<Bookmark> GlobalBookmarks { get; set; }
         public ICollectionView GlobalBookmarksCollection { get { return _globalBookmarksCollection.View; } }
-        public Action<bool> WorkStatus { get; set; }
 
         /**
          * Commands:
@@ -48,12 +46,10 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand DeleteBookmarkCommand { get; set; }
 
         // Constructor
-        public BookmarkListViewModel(User user, Action<bool> workStatus, IDialogService dialogService, IWindowService windowService)
+        public BookmarkListViewModel()
         {
-            this.User = user;
-            this.WorkStatus = workStatus;
-            this._dialogService = dialogService;
-            this._windowService = windowService;
+            this.services = Shared.GetInstance();
+            this.User = services.User;
             Bookmarks = new ObservableCollection<Bookmark>();
             _bookmarksCollection = new CollectionViewSource();
             _bookmarksCollection.Source = Bookmarks;
@@ -78,7 +74,7 @@ namespace MainLib.ViewModels.Pages
                 Bookmark selected_bookmark = input as Bookmark;
 
                 // 2. Ask user if they are sure
-                if (_dialogService.OpenDialog(new DialogYesNoViewModel("Delete following bookmark?\n" + selected_bookmark.Name, "Check", DialogType.Question)))
+                if (services.DialogService.OpenDialog(new DialogYesNoViewModel("Delete following bookmark?\n" + selected_bookmark.Name, "Check", DialogType.Question)))
                 {
                     // 3. Delete bookmark record from database
                     new BookmarkRepo().DeleteBookmark(selected_bookmark);
@@ -93,12 +89,12 @@ namespace MainLib.ViewModels.Pages
             catch (Exception e)
             {
                 new BugTracker().Track("Bookmark List", "Delete bookmark", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public void EditBookmark(object input)
         {
-            _windowService.OpenWindow(new BookmarkEditorViewModel(input as Bookmark, this, _dialogService));
+            services.WindowService.OpenWindow(new BookmarkEditorViewModel(input as Bookmark, this));
         }
 
         /**
@@ -108,7 +104,7 @@ namespace MainLib.ViewModels.Pages
         {
             try
             {
-                WorkStatus(true);
+                services.IsWorking(true);
 
                 // 1. Clear bookmarks
                 Bookmarks.Clear();
@@ -120,16 +116,16 @@ namespace MainLib.ViewModels.Pages
                 // 3. Populate global bookmarks
                 await Populate(true);
 
-                WorkStatus(false);
+                services.IsWorking(false);
             }
             catch(Exception e)
             {
                 new BugTracker().Track("Bookmark List", "Populate Bookmarks", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                WorkStatus(false);
+                services.IsWorking(false);
             }
         }
 

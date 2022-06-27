@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Utils;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -15,7 +16,6 @@ namespace MainLib.ViewModels.Popups
         private int _progressPercent;
         private string destination;
         private Dictionary<string, string> _filesToCopy;
-        private IDialogService _dialogService;
 
         public int ProgressPercent
         {
@@ -23,14 +23,13 @@ namespace MainLib.ViewModels.Popups
             set { _progressPercent = value; OnPropertyChanged("ProgressPercent"); }
         }
 
-        public ImportViewModel(Dictionary<string, string> filesToCopy, string destination, IDialogService dialogService)
+        public ImportViewModel(Dictionary<string, string> filesToCopy, string destination)
         {
             // 1. Initialize starting fields
             Title = "Importing section...";
             ProgressPercent = 0;
             _filesToCopy = filesToCopy;
             this.destination = destination;
-            this._dialogService = dialogService;
 
             Import();
         }
@@ -69,7 +68,7 @@ namespace MainLib.ViewModels.Popups
             // Delete the temp query file
             File.Delete(Environment.CurrentDirectory + "\\" + "temp_query.txt");
 
-            _dialogService.OpenDialog(new DialogOkViewModel("Imported successfully", "Result", DialogType.Success));
+            Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Imported successfully", "Result", DialogType.Success));
 
             // Close progress window
             Window.Close();

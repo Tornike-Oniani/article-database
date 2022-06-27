@@ -44,7 +44,7 @@ namespace MainLib.Views.Pages
             Reference sent_reference = input as Reference;
             Page _referenceView = new ReferenceView();
 
-            _referenceView.DataContext = new ReferenceViewViewModel(sent_reference, vm.User, vm.WorkStatus, new DialogService(), new BrowserService());
+            _referenceView.DataContext = new ReferenceViewViewModel(sent_reference);
             NavigationService.Navigate(_referenceView);
         }
     }

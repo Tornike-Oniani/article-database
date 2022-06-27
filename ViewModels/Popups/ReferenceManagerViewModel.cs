@@ -28,8 +28,8 @@ namespace MainLib.ViewModels.Popups
         private Article _article;
         private string _name;
         private List<Reference> _references;
-        Tracker _tracker;
-        private IDialogService _dialogService;
+        private Tracker _tracker;
+        private Shared services;
 
         public Visibility NewReferenceVisibility
         {
@@ -60,15 +60,14 @@ namespace MainLib.ViewModels.Popups
         // Constructor
         public ReferenceManagerViewModel(
             ViewType parent, 
-            IDialogService dialogService, 
             Article article = null, 
             List<Reference> references = null)
         {
+            this.services = Shared.GetInstance();
             this._parent = parent;
             this.Title = "Save to...";
             this._references = references;
             this._tracker = new Tracker(new User());
-            this._dialogService = dialogService;
 
             // 1. Initialize starting state
             this._article = article;
@@ -128,12 +127,12 @@ namespace MainLib.ViewModels.Popups
                 CheckReferenceBoxes();
 
                 if (!duplicate_check)
-                    _dialogService.OpenDialog(new DialogOkViewModel("This reference already exists.", "Warning", DialogType.Warning));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("This reference already exists.", "Warning", DialogType.Warning));
             }
             catch(Exception e)
             {
                 new BugTracker().Track("Reference Manager", "Create reference", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public bool CanCreate(object input = null)
@@ -158,7 +157,7 @@ namespace MainLib.ViewModels.Popups
                 catch(Exception e)
                 {
                     new BugTracker().Track("Reference Manager", "Add article to reference", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
             // 2. If user unchecked remove article from bookmark
@@ -175,7 +174,7 @@ namespace MainLib.ViewModels.Popups
                 catch(Exception e)
                 {
                     new BugTracker().Track("Reference Manager", "Remove article from reference", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
         }
@@ -194,7 +193,7 @@ namespace MainLib.ViewModels.Popups
                 catch(Exception e)
                 {
                     new BugTracker().Track("Reference Manager (Data Entry)", "Remove article from reference", e.Message, e.StackTrace);
-                    _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
             // If Bookmarks doesn't contain the input add it

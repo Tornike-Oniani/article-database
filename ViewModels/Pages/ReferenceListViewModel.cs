@@ -20,8 +20,7 @@ namespace MainLib.ViewModels.Pages
     public class ReferenceListViewModel : BaseViewModel
     {
         private User _user;
-        private IWindowService _windowService;
-        private IDialogService _dialogService;
+        private Shared services;
 
         public CollectionViewSource _referencesCollection { get; set; }
         public ObservableCollection<Reference> References { get; set; }
@@ -31,7 +30,6 @@ namespace MainLib.ViewModels.Pages
             get { return _user; }
             set { _user = value; OnPropertyChanged("User"); }
         }
-        public Action<bool> WorkStatus { get; set; }
 
 
         /**
@@ -45,12 +43,10 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand DeleteReferenceCommand { get; set; }
 
         // Constructor
-        public ReferenceListViewModel(User user, Action<bool> workStatus, IDialogService dialogService, IWindowService windowService)
+        public ReferenceListViewModel()
         {
-            this.User = user;
-            this.WorkStatus = workStatus;
-            this._dialogService = dialogService;
-            this._windowService = windowService;
+            this.services = Shared.GetInstance();
+            this.User = services.User;
             References = new ObservableCollection<Reference>();
             _referencesCollection = new CollectionViewSource();
             _referencesCollection.Source = References;
@@ -66,7 +62,7 @@ namespace MainLib.ViewModels.Pages
          */
         public void EditReference(object input)
         {
-            _windowService.OpenWindow(new ReferenceEditorViewModel(input as Reference, this, _dialogService));
+            services.WindowService.OpenWindow(new ReferenceEditorViewModel(input as Reference, this));
         }
         public void DeleteReference(object input)
         {
@@ -76,7 +72,7 @@ namespace MainLib.ViewModels.Pages
                 Reference selected_reference = input as Reference;
 
                 // 2. Ask user if they are sure
-                if (_dialogService.OpenDialog(new DialogYesNoViewModel("Delete following reference?\n" + selected_reference.Name, "Check", DialogType.Question)))
+                if (services.DialogService.OpenDialog(new DialogYesNoViewModel("Delete following reference?\n" + selected_reference.Name, "Check", DialogType.Question)))
                 {
                     // 3. Delete reference record from database
                     new ReferenceRepo().DeleteReference(selected_reference);
@@ -91,7 +87,7 @@ namespace MainLib.ViewModels.Pages
             catch(Exception e)
             {
                 new BugTracker().Track("Reference List", "Delete reference", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
 
@@ -102,7 +98,7 @@ namespace MainLib.ViewModels.Pages
         {
             try
             {
-                WorkStatus(true);
+                services.IsWorking(true);
 
                 // 1. Clear bookmarks
                 References.Clear();
@@ -110,16 +106,16 @@ namespace MainLib.ViewModels.Pages
                 // 2. Populate references
                 await Populate();
 
-                WorkStatus(false);
+                services.IsWorking(false);
             }
             catch (Exception e)
             {
                 new BugTracker().Track("Reference List", "Populate references", e.Message, e.StackTrace);
-                _dialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                WorkStatus(false);
+                services.IsWorking(false);
             }
         }
 

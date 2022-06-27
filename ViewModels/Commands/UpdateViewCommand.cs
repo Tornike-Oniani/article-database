@@ -16,23 +16,11 @@ namespace MainLib.ViewModels.Commands
 {
     public class UpdateViewCommand : ICommand
     {
-        //private NavigationViewModel _mainViewModel;
         private Action<BaseViewModel> _navigate;
-        private Action<bool> _workStatus;
-        private User _user;
-        private IDialogService _dialogService;
-        private IWindowService _windowService;
-        private IBrowserService _browserService;
 
-        public UpdateViewCommand(Action<BaseViewModel> navigate, Action<bool> workStatus, User user, IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public UpdateViewCommand(Action<BaseViewModel> navigate)
         {
-            //_mainViewModel = mainViewModel;
             this._navigate = navigate;
-            this._workStatus = workStatus;
-            this._user = user;
-            this._dialogService = dialogService;
-            this._windowService = windowService;
-            this._browserService = browserService;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -47,19 +35,19 @@ namespace MainLib.ViewModels.Commands
             switch ((ViewType)parameter)
             {
                 case ViewType.Home:
-                    _navigate(new HomeViewModel(_user, _workStatus, _dialogService, _windowService, _browserService));
+                    _navigate(new HomeViewModel());
                     break;
                 case ViewType.DataEntry:
-                    _navigate(new DataEntryViewModel(_user, _workStatus, _dialogService, _windowService, _browserService));
+                    _navigate(new DataEntryViewModel());
                     break;
                 case ViewType.DataView:
-                    _navigate(new DataViewViewModel(_user, _workStatus, _dialogService, _windowService, _browserService));
+                    _navigate(new DataViewViewModel());
                     break;
                 case ViewType.Bookmarks:
-                    _navigate(new BookmarksViewModel(_user, _workStatus));
+                    _navigate(new BookmarksViewModel());
                     break;
                 case ViewType.References:
-                    _navigate(new ReferencesViewModel(_user, _workStatus));
+                    _navigate(new ReferencesViewModel());
                     break;
             }
         }
