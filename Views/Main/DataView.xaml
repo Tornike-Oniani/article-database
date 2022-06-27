@@ -286,10 +286,10 @@
     </UserControl.Resources>
 
     <UserControl.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="F" 
+        <!--<KeyBinding Modifiers="Ctrl" Key="F" 
                     Command="{Binding DataContext.OpenSearchDialogCommand, 
                     RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
-                    CommandParameter="{Binding Columns}" />
+                    CommandParameter="{Binding Columns}" />-->
         <KeyBinding Modifiers="Ctrl" Key="B" 
                     Command="{Binding DataContext.OpenBookmarkManagerCommand, 
                     RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
@@ -879,7 +879,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <!-- Pagination -->
+        <!-- Pagination (deprecated) -->
         <Border 
             Visibility="Collapsed"
             Padding="10" 
@@ -948,8 +948,17 @@
             BorderThickness="0 1 0 0"
             BorderBrush="#FFC5C1C1"
             Padding="12 6 12 6"
-            Grid.Row="4">
+            Grid.Row="4"
+            >
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <!-- Pagination column -->
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Items per page column -->
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Export column -->
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
                 <!-- Pagination -->
                 <StackPanel
                     Visibility="{
@@ -959,6 +968,7 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
+                    Grid.Column="0"
                     >
                     <Button 
                         Content="Previous" 
@@ -977,6 +987,26 @@
                         />
                 </StackPanel>
 
+                <!-- Items per page -->
+                <StackPanel 
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    Margin="12 0 0 0"
+                    Grid.Column="1"
+                    >
+                    <TextBlock
+                        Text="Items per page:"
+                        FontSize="14"
+                        VerticalAlignment="Center"
+                        Margin="0 0 6 0"
+                        />
+                    <TextBox
+                        Text="{Binding ItemsPerPage}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        Width="45"                        
+                        />
+                </StackPanel>
+
                 <!-- Export -->
                 <usercontrols:PendingButton
                     StartText="Export article PDFs"
@@ -992,6 +1022,7 @@
                     CancelCommand="{Binding EnableExportCommand}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
+                    Grid.Column="2"
                     />
             </Grid>
         </Border>
