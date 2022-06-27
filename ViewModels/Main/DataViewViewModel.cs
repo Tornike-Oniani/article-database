@@ -428,11 +428,13 @@ namespace MainLib.ViewModels.Main
                 // Destination will be the path chosen from dialog box (Where files should be exported)
                 string destination = null;
 
-                destination = services.BrowserService.OpenFolderDialog();
+                destination = services.BrowserService.OpenFolderDialog(services.LastExportFolderPath);
 
                 // If path was chosen from the dialog box
                 if (destination != null)
                 {
+                    services.SaveExportPath(destination);
+
                     services.IsWorking(true);
 
                     await Task.Run(() =>

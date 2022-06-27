@@ -190,10 +190,12 @@ namespace MainLib.ViewModels.Main
         {
             try
             {
-                string destination = services.BrowserService.OpenFolderDialog();
+                string destination = services.BrowserService.OpenFolderDialog(services.LastSyncFolderPath);
 
                 if (destination == null)
                     return;
+
+                services.SaveSyncPath(destination);
 
                 if (
                     !Directory.Exists(Path.Combine(destination, "Files")) ||
@@ -241,10 +243,7 @@ namespace MainLib.ViewModels.Main
                     syncManager.Write(syncInfo);
                 });
 
-
-
                 services.IsWorking(false);
-
 
                 // Show messagebox regarding errors
                 if (reader.NoErrors)
@@ -267,10 +266,12 @@ namespace MainLib.ViewModels.Main
         {
             try
             {
-                string destination = services.BrowserService.OpenFolderDialog();
+                string destination = services.BrowserService.OpenFolderDialog(services.LastSyncFolderPath);
 
                 if (destination == null)
                     return;
+
+                services.SaveSyncPath(destination);
 
                 // If sync is already exported in destination
                 if (Directory.Exists(Path.Combine(destination, "Sync")))
@@ -411,7 +412,7 @@ namespace MainLib.ViewModels.Main
             string destination = null;
 
             // 1. Using winforms dialog box select a folder
-            destination = services.BrowserService.OpenFolderDialog();
+            destination = services.BrowserService.OpenFolderDialog(null);
 
             result = destination;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,13 +30,16 @@ namespace Lib.Views.Services.Browser
                 return null;
         }
 
-        public string OpenFolderDialog()
+        public string OpenFolderDialog(string savedPath)
         {
             string destination = null;
 
             // 1. Open forms folder dialog box
             using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
             {
+                fbd.RootFolder = Environment.SpecialFolder.Desktop;
+                if (!String.IsNullOrEmpty(savedPath))
+                    fbd.SelectedPath = savedPath;
                 System.Windows.Forms.DialogResult result = fbd.ShowDialog();
 
                 if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))

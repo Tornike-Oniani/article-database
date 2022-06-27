@@ -9,6 +9,6 @@ namespace Lib.ViewModels.Services.Browser
     public interface IBrowserService
     {
         string OpenFileDialog(string defaultEx, string filter);
-        string OpenFolderDialog();
+        string OpenFolderDialog(string savedPath);
     }
 }
