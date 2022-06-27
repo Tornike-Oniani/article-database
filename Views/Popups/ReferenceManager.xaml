@@ -27,7 +27,7 @@
 
         <!-- Filter box column -->
         <usercontrols:FilterBox ItemsSource="{Binding _referenceBoxesCollection}"
-                                Margin="0 0 0 5" />
+                                Margin="6 6 6 6" />
 
         <!-- References list -->
         <ListView ItemsSource="{Binding ReferenceBoxesCollection}" 

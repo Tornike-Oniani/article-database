@@ -33,7 +33,7 @@
 
         <!-- Filter box -->
         <usercontrols:FilterBox ItemsSource="{Binding _bookmarkBoxesCollection}"
-                                Margin="0 0 0 5"
+                                Margin="6 6 6 6"
                                 Grid.Row="0" />
 
         <!-- Bookmarks list -->
