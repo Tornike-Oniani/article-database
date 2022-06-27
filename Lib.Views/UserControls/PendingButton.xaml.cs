@@ -42,7 +42,7 @@ namespace Lib.Views.UserControls
 
         // Is pending (we use this to add column to datagrid, since we use list to map columns)
         private static readonly DependencyProperty IsPendingProperty =
-            DependencyProperty.Register("IsPending", typeof(bool), typeof(PendingButton), new PropertyMetadata(null));
+            DependencyProperty.Register("IsPending", typeof(bool), typeof(PendingButton), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public bool IsPending
         {

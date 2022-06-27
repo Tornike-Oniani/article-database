@@ -764,12 +764,14 @@
                 <DataGridTemplateColumn Header="Title" Width="*" SortMemberPath="Title">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Title}" 
-                                       TextWrapping="Wrap"
-                                       ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                       ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
-                                       ap:TextBlockHighlighter.Forecolor="#000000" />
+                            <TextBlock 
+                                Text="{Binding Title}" 
+                                TextWrapping="Wrap"
+                                ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
+                                ap:TextBlockHighlighter.Forecolor="#000000" 
+                                />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -777,12 +779,14 @@
                 <DataGridTemplateColumn Header="Authors" Width="0.5*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Authors'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Authors}" 
-                                       TextWrapping="Wrap"
-                                       ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                       ap:TextBlockHighlighter.WordBreakMode="True"
-                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
-                                       ap:TextBlockHighlighter.Forecolor="#000000" />
+                            <TextBlock 
+                                Text="{Binding Authors}" 
+                                TextWrapping="Wrap"
+                                ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                ap:TextBlockHighlighter.WordBreakMode="True"
+                                ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
+                                ap:TextBlockHighlighter.Forecolor="#000000" 
+                                />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -790,12 +794,14 @@
                 <DataGridTemplateColumn Header="Keywords" Width="0.5*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Keywords'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Keywords}" 
-                                       TextWrapping="Wrap"
-                                       ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                       ap:TextBlockHighlighter.WordBreakMode="True"
-                                       ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
-                                       ap:TextBlockHighlighter.Forecolor="#000000" />
+                            <TextBlock 
+                                Text="{Binding Keywords}" 
+                                TextWrapping="Wrap"
+                                ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                ap:TextBlockHighlighter.WordBreakMode="True"
+                                ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
+                                ap:TextBlockHighlighter.Forecolor="#000000" 
+                                />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -971,6 +977,7 @@
                         />
                 </StackPanel>
 
+                <!-- Export -->
                 <usercontrols:PendingButton
                     StartText="Export article PDFs"
                     PendingText="Check articles you want to export..."
@@ -984,85 +991,8 @@
                     ActionCommand="{Binding ExportCommand}"
                     CancelCommand="{Binding EnableExportCommand}"
                     HorizontalAlignment="Right"
-                    />
-
-                <!-- Start export -->
-                <ToggleButton
-                    x:Name="StartExport"
-                    IsChecked="{
-                        Binding Columns, 
-                        Converter={StaticResource CheckToList}, 
-                        ConverterParameter='Export'}"
-                    Command="{Binding EnableExportCommand}"
-                    Content="Export Article PDFs"
-                    Style="{StaticResource ExportButton}"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center" 
-                    />
-                <!-- Pending export -->
-                <Grid 
-                    Visibility="{
-                        Binding IsChecked, 
-                        ElementName=StartExport, 
-                        Converter={StaticResource BoolToVisibility}, 
-                        ConverterParameter=Soft}"
-                    HorizontalAlignment="Right"
                     VerticalAlignment="Center"
-                    >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <!-- Pending label -->
-                    <Border
-                        Visibility="{
-                            Binding CanExportP, 
-                            Converter={StaticResource InverseBoolToVisConverter}}"
-                        Background="#ffffff"
-                        BorderThickness="1 1 1 1"
-                        BorderBrush="{StaticResource PrimaryColorBrush}"
-                        Padding="12 6 12 6"
-                        CornerRadius="6 6 6 6"
-                        Opacity="0.8"
-                        VerticalAlignment="Center"
-                        Margin="0 0 5 0"
-                        Grid.Column="0"
-                        >
-                        <TextBlock
-                            Text="Check articles you want to export..."
-                            FontSize="16"
-                            Foreground="{StaticResource PrimaryColorBrush}"
-                            />
-                    </Border>
-                    <!-- Export button -->
-                    <Button
-                        Content="Export selected"
-                        Command="{Binding ExportCommand}"
-                        Visibility="{
-                            Binding CanExportP, 
-                            Converter={StaticResource BoolToVisibility}}"
-                        HorizontalAlignment="Right"
-                        Margin="0 0 5 0"
-                        Grid.Column="0"
-                        />
-                    <!-- Cancel export button-->
-                    <ToggleButton 
-                        IsChecked="{
-                            Binding Columns, 
-                            Converter={StaticResource CheckToList}, 
-                            ConverterParameter='Export'}"
-                        Command="{Binding EnableExportCommand}"
-                        Foreground="#e45649"
-                        Style="{StaticResource MaterialDesignIconButton}"
-                        Padding="0"
-                        VerticalAlignment="Center"
-                        Grid.Column="1"
-                        >
-                        <ToggleButton.Content>
-                            <materialDesign:PackIcon Kind="Cancel" />
-                        </ToggleButton.Content>
-                    </ToggleButton>
-                </Grid>
+                    />
             </Grid>
         </Border>
     </Grid>

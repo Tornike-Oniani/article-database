@@ -64,26 +64,21 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid 
+        DataContext="{
+            Binding RelativeSource={
+                RelativeSource FindAncestor, 
+                AncestorType={x:Type UserControl}}}"
+        >
         <!-- Start button -->
         <ToggleButton
             x:Name="StartExport"            
-            Content="{
-                Binding StartText,
-                    RelativeSource={
-                    RelativeSource FindAncestor,
-                    AncestorType={x:Type UserControl}}}"
-            IsChecked="{
-                Binding IsPending, 
-                    RelativeSource={
-                    RelativeSource FindAncestor, 
-                    AncestorType={x:Type UserControl}}}"
-            Command="{
-                Binding InitialCommand, 
-                    RelativeSource={
-                    RelativeSource FindAncestor, 
-                    AncestorType={x:Type UserControl}}}"
+            Content="{Binding StartText}"
+            IsChecked="{Binding IsPending}"
+            Command="{Binding InitialCommand}"
             Style="{StaticResource PendingStartButton}"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Right"
             />
         <Grid
             Visibility="{
@@ -100,52 +95,27 @@
             </Grid.ColumnDefinitions>
             <!-- Pending Label-->
             <Label
-                Content="{
-                    Binding PendingText, 
-                        RelativeSource={
-                        RelativeSource FindAncestor, 
-                        AncestorType={x:Type UserControl}}}"
-                Style="{StaticResource PendingLabel}"
+                Content="{Binding PendingText}"
                 Visibility="{
                     Binding CanRunAction, 
-                        RelativeSource={
-                        RelativeSource FindAncestor, 
-                        AncestorType={x:Type UserControl}}, 
                     Converter={StaticResource InverseBoolToVisConverter}}"
+                Style="{StaticResource PendingLabel}"
+                VerticalAlignment="Center"
                 Grid.Column="0"
                 />
             <!-- Action button -->
             <Button
-                Content="{
-                    Binding ActionText,
-                        RelativeSource={
-                        RelativeSource FindAncestor, 
-                        AncestorType={x:Type UserControl}}}"
-                Command="{
-                    Binding ActionCommand, 
-                        RelativeSource={
-                        RelativeSource FindAncestor, 
-                        AncestorType={x:Type UserControl}}}"
+                Content="{Binding ActionText}"
+                Command="{Binding ActionCommand}"
                 Visibility="{
                     Binding CanRunAction, 
-                        RelativeSource={
-                        RelativeSource FindAncestor, 
-                        AncestorType={x:Type UserControl}}, 
-                Converter={StaticResource BoolToVisibility}}"
+                    Converter={StaticResource BoolToVisibility}}"
                 Grid.Column="0"
                 />
             <!-- Cancel button -->
             <ToggleButton
-                IsChecked="{
-                    Binding IsPending, 
-                        RelativeSource={
-                        RelativeSource FindAncestor, 
-                        AncestorType={x:Type UserControl}}}"
-                Command="{
-                    Binding CancelCommand, 
-                        RelativeSource={
-                        RelativeSource FindAncestor, 
-                        AncestorType={x:Type UserControl}}}"
+                IsChecked="{Binding IsPending}"
+                Command="{Binding CancelCommand}"
                 Style="{StaticResource MaterialDesignIconButton}"
                 Foreground="#e45649"
                 Grid.Column="1"
