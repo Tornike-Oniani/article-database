@@ -18,6 +18,7 @@ using Lib.DataAccessLayer.Info;
 using Lib.ViewModels.Services.Browser;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Windows.Input;
 
 namespace MainLib.ViewModels.Pages
 {
@@ -48,7 +49,10 @@ namespace MainLib.ViewModels.Pages
             get { return _columns; }
             set { _columns = value; OnPropertyChanged("Columns"); }
         }
-
+        public bool CanExportP
+        {
+            get { return Articles.Where(article => article.Checked == true).ToList().Count != 0; }
+        }
 
         /**
          * Commands:
@@ -68,6 +72,7 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand ExportCommand { get; set; }
         public RelayCommand ExportReferenceCommand { get; set; }
         public RelayCommand EnableExportCommand { get; set; }
+        public ICommand UpdateExportStatusCommand { get; set; }
 
         // Constructor
         public ReferenceViewViewModel(Reference reference, User user, Action<bool> workStatus, IDialogService dialogService, IBrowserService browserService)
@@ -88,6 +93,7 @@ namespace MainLib.ViewModels.Pages
             ExportCommand = new RelayCommand(Export, CanExport);
             ExportReferenceCommand = new RelayCommand(ExportReference, CanExportReference);
             EnableExportCommand = new RelayCommand(EnableExport);
+            UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
         }
 
         /**
@@ -327,6 +333,10 @@ namespace MainLib.ViewModels.Pages
         public bool CanExportReference(object input = null)
         {
             return Articles.Count > 0;
+        }
+        public void UpdateExportStatus(object input = null)
+        {
+            OnPropertyChanged("CanExportP");
         }
     }
 }

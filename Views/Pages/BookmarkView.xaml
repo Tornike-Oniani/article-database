@@ -7,6 +7,7 @@
       xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
       xmlns:converters="clr-namespace:MainLib.Views.Converters"
       xmlns:commonConverters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
+      xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BookmarkView">
@@ -185,7 +186,13 @@
                     >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox 
+                                IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" 
+                                Command="{
+                                    Binding DataContext.UpdateExportStatusCommand,
+                                    RelativeSource={RelativeSource FindAncestor, 
+                                    AncestorType={x:Type Page}}}" 
+                                />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -199,32 +206,23 @@
             Padding="12 12 12 12"
             Grid.Row="3"
             >
+            
             <!-- Export button -->
-            <StackPanel 
-                Orientation="Horizontal"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Right"
-                >
-                <CheckBox 
-                    Content="Export" 
-                    FontSize="16"
-                    IsChecked="{
-                        Binding Columns, 
-                        Converter={StaticResource CheckToList}, 
+            <usercontrols:PendingButton
+                    StartText="Export article PDFs"
+                    PendingText="Check articles you want to export..."
+                    ActionText="Export selected"
+                    IsPending="{
+                        Binding Columns,
+                        Converter={StaticResource CheckToList},
                         ConverterParameter='Export'}"
-                    Command="{Binding EnableExportCommand}" 
-                    Margin="0 0 10 0"
+                    CanRunAction="{Binding CanExportP}"
+                    InitialCommand="{Binding EnableExportCommand}"
+                    ActionCommand="{Binding ExportCommand}"
+                    CancelCommand="{Binding EnableExportCommand}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
                     />
-                <Button 
-                    Content="Export"
-                    Command="{Binding ExportCommand}"
-                    Margin="0 0 10 0"
-                    />
-                <Button 
-                    Content="Export All"
-                    Command="{Binding ExportBookmarkCommand}"
-                    />
-            </StackPanel>
         </Border>
     </Grid>
 </Page>

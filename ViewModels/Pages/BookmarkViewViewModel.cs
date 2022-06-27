@@ -51,7 +51,10 @@ namespace MainLib.ViewModels.Pages
             get { return _modifyRights; }
             set { _modifyRights = value; OnPropertyChanged("ModifyRights"); }
         }
-
+        public bool CanExportP
+        {
+            get { return Articles.Where(article => article.Checked == true).ToList().Count != 0; }
+        }
 
         /**
          * Commands:
@@ -62,7 +65,7 @@ namespace MainLib.ViewModels.Pages
          *  - Remove article
          *  [Removes article from bookmark]
          *  - Copy
-         *  [Copy's article name to clipboar]
+         *  [Copy's article name to clipboard]
          */
         public RelayCommand OpenFileCommand { get; set; }
         public RelayCommand ExportCommand { get; set; }
@@ -70,6 +73,7 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand RemoveArticleCommand { get; set; }
         public RelayCommand CopyCommand { get; set; }
         public ICommand EnableExportCommand { get; set; }
+        public ICommand UpdateExportStatusCommand { get; set; }
 
         // Constructor
         public BookmarkViewViewModel(Bookmark bookmark, User user, Action<bool> workStatus, IDialogService dialogService, IBrowserService browserService, bool modifyRights = true)
@@ -90,6 +94,7 @@ namespace MainLib.ViewModels.Pages
             RemoveArticleCommand = new RelayCommand(RemoveArticle, CanOnSelectedArticle);
             CopyCommand = new RelayCommand(Copy, CanOnSelectedArticle);
             EnableExportCommand = new RelayCommand(EnableExport);
+            UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
         }
 
         /**
@@ -308,6 +313,10 @@ namespace MainLib.ViewModels.Pages
         public bool CanOnSelectedArticle(object input = null)
         {
             return SelectedArticle != null;
+        }
+        public void UpdateExportStatus(object input = null)
+        {
+            OnPropertyChanged("CanExportP");
         }
     }
 }

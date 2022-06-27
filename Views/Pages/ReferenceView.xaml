@@ -7,6 +7,7 @@
       xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
       xmlns:converters="clr-namespace:MainLib.Views.Converters"
       xmlns:commonConverters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
+      xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ReferenceView">
@@ -196,7 +197,14 @@
                         >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox 
+                                IsChecked="{Binding Path=Checked, 
+                                    UpdateSourceTrigger=PropertyChanged}" 
+                                Command="{                                    
+                                    Binding DataContext.UpdateExportStatusCommand,
+                                    RelativeSource={RelativeSource FindAncestor, 
+                                    AncestorType={x:Type Page}}}" 
+                                />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -210,7 +218,22 @@
             Padding="12 12 12 12"
             Grid.Row="2">
             <!-- Export button -->
-            <StackPanel 
+            <usercontrols:PendingButton
+                    StartText="Export article PDFs"
+                    PendingText="Check articles you want to export..."
+                    ActionText="Export selected"
+                    IsPending="{
+                        Binding Columns,
+                        Converter={StaticResource CheckToList},
+                        ConverterParameter='Export'}"
+                    CanRunAction="{Binding CanExportP}"
+                    InitialCommand="{Binding EnableExportCommand}"
+                    ActionCommand="{Binding ExportCommand}"
+                    CancelCommand="{Binding EnableExportCommand}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    />
+            <!--<StackPanel 
                 Orientation="Horizontal"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
@@ -235,7 +258,7 @@
                     Content="Export All"
                     Command="{Binding ExportReferenceCommand}"
                     />
-            </StackPanel>
+            </StackPanel>-->
         </Border>
     </Grid>
 </Page>
