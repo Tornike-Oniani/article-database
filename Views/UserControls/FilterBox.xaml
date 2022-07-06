@@ -15,6 +15,10 @@
                         AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}" 
                  Style="{StaticResource WatermarkTextBox}"
                  ap:TextBoxHelper.Watermark="Search"
-                 />
+                 >
+            <TextBox.InputBindings>
+                <KeyBinding Key="Esc" Command="{Binding ClearCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+            </TextBox.InputBindings>
+        </TextBox>
     </Grid>
 </UserControl>

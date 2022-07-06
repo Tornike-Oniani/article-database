@@ -14,7 +14,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
     </Page.Resources>
 
-    <Grid>
+    <Grid Margin="0 0 0 24">
         <Grid.ColumnDefinitions>
             <!-- My bookmarks column -->
             <ColumnDefinition Width="*" />

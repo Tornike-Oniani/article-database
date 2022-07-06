@@ -1,4 +1,5 @@
 ﻿using Lib.DataAccessLayer.Models;
+using Lib.ViewModels.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,7 +37,6 @@ namespace MainLib.Views.UserControls
         // Private members
         private string _filterText;
 
-
         // Public properties
         public string FilterText
         {
@@ -49,17 +49,30 @@ namespace MainLib.Views.UserControls
             }
         }
 
+        public ICommand ClearCommand { get; set; }
+
         // Constructor
         public FilterBox()
         {
             InitializeComponent();
 
+            this.ClearCommand = new RelayCommand(Clear);
+
             // Hook filter event on load
             this.Loaded += (s, e) =>
             {
-                ItemsSource.Filter += ItemsSource_Filter;
-                searchBox.Focus();
+                if (ItemsSource != null)
+                {
+                    ItemsSource.Filter += ItemsSource_Filter;
+                    searchBox.Focus();
+                }
+                
             };
+        }
+
+        public void Clear(object input = null)
+        {
+            FilterText = String.Empty;
         }
 
         private void ItemsSource_Filter(object sender, FilterEventArgs e)
