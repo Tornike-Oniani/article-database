@@ -406,236 +406,278 @@
                 Grid.Row="1"
                 >
                 <ScrollViewer Padding="15 10 15 10">
-                    <StackPanel 
-                        Width="550"
-                        HorizontalAlignment="Left"
-                        >
-                        <!-- Checkboxes -->
-                        <StackPanel Margin="0 0 0 15">
-                            <TextBlock 
-                                Text="Columns:" 
-                                FontSize="16" 
-                                Margin="0 0 0 5" 
-                                />
-                            <!-- Column checkboxes -->
-                            <StackPanel 
-                                Orientation="Horizontal" 
-                                Grid.Column="0"
-                                >
-                                <CheckBox 
-                                    Content="Authors"
-                                    FontSize="16" 
-                                    Margin="0 0 5 0" 
-                                    IsChecked="{
-                                        Binding Columns, 
-                                        Converter={StaticResource CheckToList}, 
-                                        ConverterParameter='Authors'}" 
-                                    />
-                                <CheckBox 
-                                    Content="Keywords"
-                                    FontSize="16" 
-                                    Margin="0 0 5 0" 
-                                    IsChecked="{
-                                        Binding Columns, 
-                                        Converter={StaticResource CheckToList}, 
-                                        ConverterParameter='Keywords'}" 
-                                    />
-                                <CheckBox 
-                                    Content="Year" 
-                                    Margin="0 0 5 0" 
-                                    IsChecked="{
-                                        Binding Columns, 
-                                        Converter={StaticResource CheckToList}, 
-                                        ConverterParameter='Year'}" 
-                                    />
-                                <CheckBox 
-                                    Content="Comment" 
-                                    FontSize="16" 
-                                    Margin="0 0 5 0" 
-                                    IsChecked="{
-                                        Binding Columns, 
-                                        Converter={StaticResource CheckToList}, 
-                                        ConverterParameter='PersonalComment'}" 
-                                    />
-                                <CheckBox 
-                                    Content="SIC" 
-                                    FontSize="16" 
-                                    IsChecked="{
-                                        Binding Columns, 
-                                        Converter={StaticResource CheckToList}, 
-                                        ConverterParameter='SIC'}" 
-                                    />
-                            </StackPanel>
-                        </StackPanel>
-                        <!-- Title search-->
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <!-- Title column-->
-                                <ColumnDefinition Width="*" />
-                                <!-- Search mode column -->
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <!-- Title -->
-                            <TextBox 
-                                x:Name="txbSearch"
-                                Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}" 
-                                SpellCheck.IsEnabled="True"
-                                materialDesign:HintAssist.Hint="Title" 
-                                materialDesign:HintAssist.IsFloating="True" 
-                                TextWrapping="Wrap" 
-                                FontFamily="Verdana"
-                                FontSize="15"
-                                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                                LostFocus="txbSearch_LostFocus"
-                                Margin="5 0 10 15"
-                                Grid.Column="0" 
-                                />
-                            <!-- Word break option -->
-                            <CheckBox 
-                                IsChecked="{Binding WordBreakMode}"
-                                Content="Word Break"
-                                IsTabStop="False"
-                                Grid.Column="1" 
-                                />
-                        </Grid>
-                        <!-- Authors & keywords -->
-                        <Grid Margin="0 0 0 15">
-                            <Grid.ColumnDefinitions>
-                                <!-- Authors column -->
-                                <ColumnDefinition Width="*" />
-                                <!-- Keywords column -->
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <!-- Pairing row -->
-                                <RowDefinition Height="Auto" />
-                                <!-- Collection box row -->
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <!-- Pairing -->
-                            <StackPanel 
-                                Orientation="Horizontal"
-                                Margin="0 0 0 10"
-                                Grid.Column="0"
-                                Grid.Row="0"
-                                >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <!-- Search parameters column -->
+                            <ColumnDefinition Width="Auto" />
+                            <!-- Separator column -->
+                            <ColumnDefinition Width="Auto" />
+                            <!-- Data grid parameters column -->
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <!-- Search parameters -->
+                        <StackPanel 
+                            Width="550"
+                            Grid.Column="0"
+                            >
+                            <!-- Checkboxes -->
+                            <StackPanel Margin="0 0 0 15">
                                 <TextBlock 
-                                    Text="Author pairing:" 
-                                    Foreground="{StaticResource LabelColorBrush}"
-                                    FontSize="15" 
-                                    FontWeight="SemiBold"
-                                    VerticalAlignment="Center"
-                                    Margin="0 0 5 0" 
+                                    Text="Columns:" 
+                                    FontSize="16" 
+                                    Margin="0 0 0 5" 
                                     />
-                                <ComboBox 
-                                    SelectedValuePath="Content" 
-                                    SelectedValue="{Binding SelectedAuthorPairing}"
-                                    IsTabStop="False"
+                                <!-- Column checkboxes -->
+                                <StackPanel 
+                                    Orientation="Horizontal" 
+                                    Grid.Column="0"
                                     >
-                                    <ComboBoxItem IsSelected="True">AND</ComboBoxItem>
-                                    <ComboBoxItem>OR</ComboBoxItem>
-                                </ComboBox>
+                                    <CheckBox 
+                                        Content="Authors"
+                                        FontSize="16" 
+                                        Margin="0 0 5 0" 
+                                        IsChecked="{
+                                            Binding Columns, 
+                                            Converter={StaticResource CheckToList}, 
+                                            ConverterParameter='Authors'}" 
+                                        />
+                                    <CheckBox 
+                                        Content="Keywords"
+                                        FontSize="16" 
+                                        Margin="0 0 5 0" 
+                                        IsChecked="{
+                                            Binding Columns, 
+                                            Converter={StaticResource CheckToList}, 
+                                            ConverterParameter='Keywords'}" 
+                                        />
+                                    <CheckBox 
+                                        Content="Year" 
+                                        Margin="0 0 5 0" 
+                                        IsChecked="{
+                                            Binding Columns, 
+                                            Converter={StaticResource CheckToList}, 
+                                            ConverterParameter='Year'}" 
+                                        />
+                                    <CheckBox 
+                                        Content="Comment" 
+                                        FontSize="16" 
+                                        Margin="0 0 5 0" 
+                                        IsChecked="{
+                                            Binding Columns, 
+                                            Converter={StaticResource CheckToList}, 
+                                            ConverterParameter='PersonalComment'}" 
+                                        />
+                                    <CheckBox 
+                                        Content="SIC" 
+                                        FontSize="16" 
+                                        IsChecked="{
+                                            Binding Columns, 
+                                            Converter={StaticResource CheckToList}, 
+                                            ConverterParameter='SIC'}" 
+                                        />
+                                </StackPanel>
                             </StackPanel>
-                            <!-- Authors -->
-                            <usercontrols:CollectionBox 
-                                Text="Author"
-                                Title="Authors"
-                                ItemsSource="{Binding FilterAuthors}" 
-                                Restriction="Author"
-                                BoxHeight="150"
-                                Margin="0 0 10 0" 
-                                Grid.Column="0"
-                                Grid.Row="1" 
-                                />
+                            <!-- Title search-->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <!-- Title column-->
+                                    <ColumnDefinition Width="*" />
+                                    <!-- Search mode column -->
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <!-- Title -->
+                                <TextBox 
+                                    x:Name="txbSearch"
+                                    Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}" 
+                                    SpellCheck.IsEnabled="True"
+                                    materialDesign:HintAssist.Hint="Title" 
+                                    materialDesign:HintAssist.IsFloating="True" 
+                                    TextWrapping="Wrap" 
+                                    FontFamily="Verdana"
+                                    FontSize="15"
+                                    Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                                    LostFocus="txbSearch_LostFocus"
+                                    Margin="5 0 10 15"
+                                    Grid.Column="0" 
+                                    />
+                                <!-- Word break option -->
+                                <CheckBox 
+                                    IsChecked="{Binding WordBreakMode}"
+                                    Content="Word Break"
+                                    IsTabStop="False"
+                                    Grid.Column="1" 
+                                    />
+                            </Grid>
+                            <!-- Authors & keywords -->
+                            <Grid Margin="0 0 0 15">
+                                <Grid.ColumnDefinitions>
+                                    <!-- Authors column -->
+                                    <ColumnDefinition Width="*" />
+                                    <!-- Keywords column -->
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <!-- Pairing row -->
+                                    <RowDefinition Height="Auto" />
+                                    <!-- Collection box row -->
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <!-- Pairing -->
+                                <StackPanel 
+                                    Orientation="Horizontal"
+                                    Margin="0 0 0 10"
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    >
+                                    <TextBlock 
+                                        Text="Author pairing:" 
+                                        Foreground="{StaticResource LabelColorBrush}"
+                                        FontSize="15" 
+                                        FontWeight="SemiBold"
+                                        VerticalAlignment="Center"
+                                        Margin="0 0 5 0" 
+                                        />
+                                    <ComboBox 
+                                        SelectedValuePath="Content" 
+                                        SelectedValue="{Binding SelectedAuthorPairing}"
+                                        IsTabStop="False"
+                                        >
+                                        <ComboBoxItem IsSelected="True">AND</ComboBoxItem>
+                                        <ComboBoxItem>OR</ComboBoxItem>
+                                    </ComboBox>
+                                </StackPanel>
+                                <!-- Authors -->
+                                <usercontrols:CollectionBox 
+                                    Text="Author"
+                                    Title="Authors"
+                                    ItemsSource="{Binding FilterAuthors}" 
+                                    Restriction="Author"
+                                    BoxHeight="150"
+                                    Margin="0 0 10 0" 
+                                    Grid.Column="0"
+                                    Grid.Row="1" 
+                                    />
 
-                            <!-- Pairing -->
+                                <!-- Pairing -->
+                                <StackPanel 
+                                    Orientation="Horizontal"
+                                    Margin="0 0 0 10"
+                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    >
+                                    <TextBlock 
+                                        Text="Keyword pairing:" 
+                                        Foreground="{StaticResource LabelColorBrush}"
+                                        FontSize="15" 
+                                        FontWeight="SemiBold" 
+                                        VerticalAlignment="Center"
+                                        Margin="0 0 5 0" 
+                                        />
+                                    <ComboBox 
+                                        SelectedValuePath="Content" 
+                                        SelectedValue="{Binding SelectedKeywordPairing}" 
+                                        IsTabStop="False"
+                                        >
+                                        <ComboBoxItem IsSelected="True">AND</ComboBoxItem>
+                                        <ComboBoxItem>OR</ComboBoxItem>
+                                    </ComboBox>
+                                </StackPanel>
+                                <!-- Keywords -->
+                                <usercontrols:CollectionBox 
+                                    Text="Keyword"
+                                    Title="Keywords"
+                                    ItemsSource="{Binding FilterKeywords}" 
+                                    Restriction="Keyword"
+                                    BoxHeight="150"
+                                    Margin="10 0 0 0" 
+                                    Grid.Column="1"
+                                    Grid.Row="1" 
+                                    />
+                            </Grid>
+                            <!-- Year -->
+                            <TextBox 
+                                Text="{Binding FilterYear, UpdateSourceTrigger=PropertyChanged}"
+                                aps:TextBoxHelper.Watermark="Year"
+                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                Width="130"
+                                HorizontalAlignment="Left"
+                                Margin="0 0 0 15"
+                                />
+                            <!-- Personal comment -->
+                            <TextBox 
+                                Text="{Binding FilterPersonalComment, UpdateSourceTrigger=PropertyChanged}" 
+                                aps:TextBoxHelper.Watermark="Personal comment"
+                                Style="{StaticResource WatermarkTextBox}"
+                                FontFamily="Verdana"
+                                Margin="0 0 0 15"
+                                />
+                            <!-- Id filter admin only -->
+                            <TextBox 
+                                Text="{Binding IdFilter, UpdateSourceTrigger=PropertyChanged}"
+                                Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                                aps:TextBoxHelper.Watermark="Id ex. 1-400"
+                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                FontFamily="Verdana"
+                                Width="130"
+                                HorizontalAlignment="Left"
+                                Margin="0 0 0 15"
+                                />
+                            <!-- Buttons -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <!-- Search button column -->
+                                    <ColumnDefinition Width="*" />
+                                    <!-- Clear button column -->
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <!-- Search button -->
+                                <Button 
+                                    Content="Search" 
+                                    Command="{Binding LoadArticlesCommand}"
+                                    Margin="0 0 5 0" 
+                                    Grid.Column="0" 
+                                    />
+                                <!-- Clear button -->
+                                <Button 
+                                    Content="Clear" 
+                                    Command="{Binding ClearCommand}"
+                                    Margin="5 0 0 0" 
+                                    Grid.Column="1" 
+                                    />
+                            </Grid>
+                    </StackPanel>
+                        <!-- Separator -->
+                        <Rectangle
+                            Fill="{StaticResource PrimaryColorBrush}"
+                            Opacity="0.7"
+                            Width="6"
+                            Margin="12 0 12 0"
+                            Grid.Column="1"
+                            />
+                        <!-- Datagrid parameters -->
+                        <Grid 
+                            
+                            Grid.Column="2"
+                            >
+                            <!-- Items per page -->
                             <StackPanel 
                                 Orientation="Horizontal"
-                                Margin="0 0 0 10"
-                                Grid.Column="1"
-                                Grid.Row="0"
+                                VerticalAlignment="Top"
                                 >
-                                <TextBlock 
-                                    Text="Keyword pairing:" 
-                                    Foreground="{StaticResource LabelColorBrush}"
-                                    FontSize="15" 
-                                    FontWeight="SemiBold" 
+                                <TextBlock
+                                    Text="Items per page:"
+                                    FontSize="14"
                                     VerticalAlignment="Center"
-                                    Margin="0 0 5 0" 
+                                    Margin="0 0 6 0"
                                     />
-                                <ComboBox 
-                                    SelectedValuePath="Content" 
-                                    SelectedValue="{Binding SelectedKeywordPairing}" 
-                                    IsTabStop="False"
-                                    >
-                                    <ComboBoxItem IsSelected="True">AND</ComboBoxItem>
-                                    <ComboBoxItem>OR</ComboBoxItem>
-                                </ComboBox>
+                                <TextBox
+                                    Text="{Binding ItemsPerPage}"
+                                    Style="{StaticResource WatermarkTextBoxSmall}"
+                                    Width="45"                        
+                                    />
                             </StackPanel>
-                            <!-- Keywords -->
-                            <usercontrols:CollectionBox 
-                                Text="Keyword"
-                                Title="Keywords"
-                                ItemsSource="{Binding FilterKeywords}" 
-                                Restriction="Keyword"
-                                BoxHeight="150"
-                                Margin="10 0 0 0" 
-                                Grid.Column="1"
-                                Grid.Row="1" 
-                                />
                         </Grid>
-                        <!-- Year -->
-                        <TextBox 
-                            Text="{Binding FilterYear, UpdateSourceTrigger=PropertyChanged}"
-                            aps:TextBoxHelper.Watermark="Year"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
-                            Width="130"
-                            HorizontalAlignment="Left"
-                            Margin="0 0 0 15"
-                            />
-                        <!-- Personal comment -->
-                        <TextBox 
-                            Text="{Binding FilterPersonalComment, UpdateSourceTrigger=PropertyChanged}" 
-                            aps:TextBoxHelper.Watermark="Personal comment"
-                            Style="{StaticResource WatermarkTextBox}"
-                            FontFamily="Verdana"
-                            Margin="0 0 0 15"
-                            />
-                        <!-- Id filter admin only -->
-                        <TextBox 
-                            Text="{Binding IdFilter, UpdateSourceTrigger=PropertyChanged}"
-                            Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
-                            aps:TextBoxHelper.Watermark="Id ex. 1-400"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
-                            FontFamily="Verdana"
-                            Width="130"
-                            HorizontalAlignment="Left"
-                            Margin="0 0 0 15"
-                            />
-                        <!-- Buttons -->
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <!-- Search button column -->
-                                <ColumnDefinition Width="*" />
-                                <!-- Clear button column -->
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <!-- Search button -->
-                            <Button 
-                                Content="Search" 
-                                Command="{Binding LoadArticlesCommand}"
-                                Margin="0 0 5 0" 
-                                Grid.Column="0" 
-                                />
-                            <!-- Clear button -->
-                            <Button 
-                                Content="Clear" 
-                                Command="{Binding ClearCommand}"
-                                Margin="5 0 0 0" 
-                                Grid.Column="1" 
-                                />
-                        </Grid>
-                    </StackPanel>
+                    </Grid>
                 </ScrollViewer>
             </Border>
         </Grid>
@@ -984,26 +1026,6 @@
                         Content="Next" 
                         Command="{Binding NextPageCommand}"
                         Style="{StaticResource PaginationButton__Right}"
-                        />
-                </StackPanel>
-
-                <!-- Items per page -->
-                <StackPanel 
-                    Orientation="Horizontal"
-                    VerticalAlignment="Center"
-                    Margin="12 0 0 0"
-                    Grid.Column="1"
-                    >
-                    <TextBlock
-                        Text="Items per page:"
-                        FontSize="14"
-                        VerticalAlignment="Center"
-                        Margin="0 0 6 0"
-                        />
-                    <TextBox
-                        Text="{Binding ItemsPerPage}"
-                        Style="{StaticResource WatermarkTextBoxSmall}"
-                        Width="45"                        
                         />
                 </StackPanel>
 
