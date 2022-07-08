@@ -359,7 +359,7 @@
                 <!-- Simple search -->
                 <Grid 
                     HorizontalAlignment="Right"
-                    Margin="0 0 15 0"
+                    Margin="0 0 0 0"
                     Background="Transparent"
                     >
                     <TextBox
@@ -372,6 +372,7 @@
                         Style="{StaticResource WatermarkTextBoxSmall}"
                         Width="300"
                         VerticalAlignment="Center"
+                        Margin="0 0 50 0"
                         >
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding LoadArticlesSimpleCommand}" />
@@ -386,6 +387,7 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Padding="5 0 5 0"
+                        Margin="0 0 15 0"
                         Grid.Column="1"
                         >
                         <Button.Content>
@@ -898,6 +900,20 @@
                         Source={StaticResource ProxyElement}, 
                         Converter={StaticResource ListToVisibility}, 
                         ConverterParameter='Export'}">
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter Margin="10 0 0 0" VerticalAlignment="Stretch" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox
@@ -912,10 +928,27 @@
                 </DataGridTemplateColumn>
                 <!-- Mass bookmark column -->
                 <DataGridTemplateColumn Header="Bookmark" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Bookmark'}">
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter Margin="10 0 0 0" VerticalAlignment="Stretch" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Path=BMChecked, 
-                                                          UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox 
+                                IsChecked="{
+                                    Binding Path=BMChecked, 
+                                        UpdateSourceTrigger=PropertyChanged}" 
+                                />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
