@@ -72,6 +72,12 @@
                                             BorderBrush="{StaticResource GrayColorLightBrush}" 
                                             Grid.Column="1" 
                                             Grid.ColumnSpan="2">
+                                        <Border.InputBindings>
+                                            <MouseBinding 
+                                                Gesture="LeftDoubleClick" 
+                                                Command="{Binding MaximizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                                                />
+                                        </Border.InputBindings>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                             <Button Style="{StaticResource WindowControlButton}" 
                                                 Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}" 
