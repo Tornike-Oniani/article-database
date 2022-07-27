@@ -7,10 +7,18 @@
              xmlns:local="clr-namespace:MainLib.Views.Popups"
              xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             Focusable="True"
+             d:DesignHeight="450" 
+             d:DesignWidth="800">
+    
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding CreateCommand}" />
+    </UserControl.InputBindings>
+    
     <StackPanel Margin="12">
         <!-- Reference name -->
         <TextBox
+            x:Name="txbReferenceName"
             Text="{Binding ReferenceName}"
             Style="{StaticResource WatermarkTextBox}"
             ap:TextBoxHelper.Watermark="Reference name"

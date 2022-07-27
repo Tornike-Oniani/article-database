@@ -42,6 +42,13 @@ namespace MainLib.ViewModels.Popups
             ReferenceName = ReferenceName.Trim();
             MainArticleTitle = MainArticleTitle.Trim();
 
+            // Check if reference name or article is blank
+            if (String.IsNullOrEmpty(ReferenceName) || String.IsNullOrEmpty(MainArticleTitle))
+            {
+                _services.DialogService.OpenDialog(new DialogOkViewModel("Reference name and main article can't be blank.", "Error", DialogType.Error));
+                return;
+            }
+
             // 1. Check if main article exists
             if (!new ArticleRepo().Exists(MainArticleTitle, out _))
             {

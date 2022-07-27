@@ -23,6 +23,11 @@ namespace MainLib.Views.Popups
         public AddNewReference()
         {
             InitializeComponent();
+            this.Loaded += (s, e) =>
+            {
+                Keyboard.Focus(this);
+                txbReferenceName.Focus();
+            };
         }
     }
 }
