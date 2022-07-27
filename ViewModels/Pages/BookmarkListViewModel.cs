@@ -14,6 +14,7 @@ using MainLib.ViewModels.Popups;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
 using MainLib.ViewModels.Utils;
+using System.Windows.Input;
 
 namespace MainLib.ViewModels.Pages
 {
@@ -42,6 +43,7 @@ namespace MainLib.ViewModels.Pages
          *  - Delete bookmark
          */
         public RelayCommand OpenBookmarkCommand { get; set; }
+        public ICommand AddNewBookmarkCommand { get; set; }
         public RelayCommand EditBookmarkCommand { get; set; }
         public RelayCommand DeleteBookmarkCommand { get; set; }
 
@@ -59,6 +61,7 @@ namespace MainLib.ViewModels.Pages
             PopulateBookmarks();
 
             // Initialize commands
+            this.AddNewBookmarkCommand = new RelayCommand(AddNewBookmark);
             EditBookmarkCommand = new RelayCommand(EditBookmark);
             DeleteBookmarkCommand = new RelayCommand(DeleteBookmark);
         }
@@ -66,6 +69,14 @@ namespace MainLib.ViewModels.Pages
         /**
          * Command actions
          */
+        public void AddNewBookmark(object input = null)
+        {
+            services.WindowService.OpenWindow(new AddNewBookmarkViewModel(this), passWindow: true);
+        }
+        public void EditBookmark(object input)
+        {
+            services.WindowService.OpenWindow(new BookmarkEditorViewModel(input as Bookmark, this));
+        }
         public void DeleteBookmark(object input)
         {
             try
@@ -91,10 +102,6 @@ namespace MainLib.ViewModels.Pages
                 new BugTracker().Track("Bookmark List", "Delete bookmark", e.Message, e.StackTrace);
                 services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
-        }
-        public void EditBookmark(object input)
-        {
-            services.WindowService.OpenWindow(new BookmarkEditorViewModel(input as Bookmark, this));
         }
 
         /**

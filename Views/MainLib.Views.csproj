@@ -96,6 +96,9 @@
     <Compile Include="Pages\ReferenceView.xaml.cs">
       <DependentUpon>ReferenceView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Popups\AddNewBookmark.xaml.cs">
+      <DependentUpon>AddNewBookmark.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Popups\AddNewReference.xaml.cs">
       <DependentUpon>AddNewReference.xaml</DependentUpon>
     </Compile>
@@ -209,6 +212,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ReferenceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popups\AddNewBookmark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

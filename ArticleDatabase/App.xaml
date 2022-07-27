@@ -114,6 +114,11 @@
                         <popupV:MassBookmarkManager />
                     </DataTemplate>
 
+                    <!-- New bookmark -->
+                    <DataTemplate DataType="{x:Type popupVM:AddNewBookmarkViewModel}">
+                        <popupV:AddNewBookmark />
+                    </DataTemplate>
+
                     <!-- Bookmark editor -->
                     <DataTemplate DataType="{x:Type popupVM:BookmarkEditorViewModel}">
                         <popupV:BookmarkEditor />
