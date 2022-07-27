@@ -30,43 +30,61 @@
             <Grid.ColumnDefinitions>
                 <!-- Title column -->
                 <ColumnDefinition Width="Auto" />
+                <!-- Add column -->
+                <ColumnDefinition Width="Auto" />
                 <!-- Gap -->
                 <ColumnDefinition Width=".5*" />
                 <!-- Search column -->
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="References:"
-                       Style="{StaticResource Header}"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       Foreground="{StaticResource SecondaryColorBrush}" 
-                       Grid.Column="0"/>
+            <TextBlock 
+                Text="References:"
+                Style="{StaticResource Header}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Foreground="{StaticResource SecondaryColorBrush}" 
+                Grid.Column="0" 
+                />
+
+            <!-- Add new reference-->
+            <Button
+                Content="Create new"
+                Command="{Binding CreateNewReferenceCommand}"
+                Margin="10 0 0 0"
+                Grid.Column="1"
+                />
 
             <!-- Filter box -->
-            <usercontrols:FilterBox ItemsSource="{Binding _referencesCollection}"
-                                    Margin="0 0 0 5"
-                                    Grid.Column="2" />
+            <usercontrols:FilterBox 
+                ItemsSource="{Binding _referencesCollection}"
+                Margin="0 0 0 5"
+                Grid.Column="3" 
+                />
         </Grid>
 
         <Separator Margin="0 5 0 5"
                    Grid.Row="1" />
 
         <!-- Bookmarks list view -->
-        <ListView ItemsSource="{Binding ReferencesCollection}"
-                  ItemContainerStyle="{StaticResource CleanItem}"
-                  HorizontalContentAlignment="Stretch"
-                  AlternationCount="2"
-                  Grid.Row="2">
+        <ListView 
+            ItemsSource="{Binding ReferencesCollection}"
+            ItemContainerStyle="{StaticResource CleanItem}"
+            HorizontalContentAlignment="Stretch"
+            AlternationCount="2"
+            Grid.Row="2"
+            >
             <!-- Item template on how to show bound data-->
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <!-- Wrapper -->
-                    <Border x:Name="wrapper" 
-                            Padding="10" 
-                            Background="Transparent" 
-                            BorderThickness="0 0 0 1" 
-                            BorderBrush="LightGray">
+                    <Border 
+                        x:Name="wrapper" 
+                        Padding="10" 
+                        Background="Transparent" 
+                        BorderThickness="0 0 0 1" 
+                        BorderBrush="LightGray"
+                        >
                         <!-- Command binding to mouse double click -->
                         <Border.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.OpenReferenceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}" CommandParameter="{Binding}" />
@@ -83,38 +101,48 @@
 
                             <!-- Bookmark name -->
                             <StackPanel Grid.Column="0">
-                                <TextBlock x:Name="bookmarkName" 
-                                           Text="{Binding Name}"
-                                           FontSize="18"
-                                           Grid.Column="0" />
-                                <TextBlock x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
-                                           Foreground="Gray" 
-                                           FontSize="16" 
-                                           Visibility="Collapsed"
-                                           Opacity="0.0" />
+                                <TextBlock 
+                                    x:Name="bookmarkName" 
+                                    Text="{Binding Name}"
+                                    FontSize="18"
+                                    Grid.Column="0" 
+                                    />
+                                <TextBlock 
+                                    x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
+                                    Foreground="Gray" 
+                                    FontSize="16" 
+                                    Visibility="Collapsed"
+                                    Opacity="0.0" 
+                                    />
                             </StackPanel>
                             <!-- Buttons -->
-                            <StackPanel Orientation="Horizontal"
-                                        Visibility="{Binding DataContext.User.IsAdmin, Converter={StaticResource BoolToVisibility}, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
-                                        Grid.Column="2">
+                            <StackPanel 
+                                Orientation="Horizontal"
+                                Visibility="{Binding DataContext.User.IsAdmin, Converter={StaticResource BoolToVisibility}, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
+                                Grid.Column="2"
+                                >
                                 <!-- Edit button-->
-                                <Button x:Name="EditButton"
-                                        Style="{x:Null}"
-                                        Visibility="Hidden"
-                                        Opacity="0.0"
-                                        Cursor="Hand"
-                                        Margin="0 0 10 0"
-                                        Command="{Binding DataContext.EditReferenceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
-                                        CommandParameter="{Binding}">
+                                <Button 
+                                    x:Name="EditButton"
+                                    Style="{x:Null}"
+                                    Visibility="Hidden"
+                                    Opacity="0.0"
+                                    Cursor="Hand"
+                                    Margin="0 0 10 0"
+                                    Command="{Binding DataContext.EditReferenceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
+                                    CommandParameter="{Binding}"
+                                    >
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Border Background="Transparent">
-                                                <materialDesign:PackIcon x:Name="Icon" 
-                                                                     Kind="Edit"
-                                                                     Height="25"
-                                                                     Width="25"
-                                                                     VerticalAlignment="Center"
-                                                                     Foreground="#28B9B5" />
+                                                <materialDesign:PackIcon 
+                                                    x:Name="Icon" 
+                                                    Kind="Edit"
+                                                    Height="25"
+                                                    Width="25"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="#28B9B5" 
+                                                    />
                                             </Border>
 
                                             <ControlTemplate.Triggers>
@@ -126,22 +154,26 @@
                                     </Button.Template>
                                 </Button>
                                 <!-- Delete button -->
-                                <Button x:Name="DeleteButton"
-                                        Style="{x:Null}"
-                                        Visibility="Hidden" 
-                                        Opacity="0.0"
-                                        Cursor="Hand"
-                                        Command="{Binding DataContext.DeleteReferenceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
-                                        CommandParameter="{Binding}">
+                                <Button 
+                                    x:Name="DeleteButton"
+                                    Style="{x:Null}"
+                                    Visibility="Hidden" 
+                                    Opacity="0.0"
+                                    Cursor="Hand"
+                                    Command="{Binding DataContext.DeleteReferenceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
+                                    CommandParameter="{Binding}"
+                                    >
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Border Background="Transparent">
-                                                <materialDesign:PackIcon x:Name="DeleteIcon" 
-                                                                     Kind="MinusCircleOutline"
-                                                                     Height="25"
-                                                                     Width="25"
-                                                                     VerticalAlignment="Center"
-                                                                     Foreground="#FF5049" />
+                                                <materialDesign:PackIcon 
+                                                    x:Name="DeleteIcon" 
+                                                    Kind="MinusCircleOutline"
+                                                    Height="25"
+                                                    Width="25"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="#FF5049" 
+                                                    />
                                             </Border>
 
                                             <ControlTemplate.Triggers>
@@ -164,44 +196,60 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ThicknessAnimation Storyboard.TargetName="articlesCount"
-                                                            Storyboard.TargetProperty="Margin"
-                                                            To="0 5 10 5"
-                                                            Duration="0:0:0.3" />
-                                        <DoubleAnimation Storyboard.TargetName="EditButton"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0"
-                                                         Duration="0:0:0.3" />
-                                        <DoubleAnimation Storyboard.TargetName="DeleteButton"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0"
-                                                         Duration="0:0:0.3" />
-                                        <DoubleAnimation Storyboard.TargetName="articlesCount"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0"
-                                                         Duration="0:0:0.3" />
+                                        <ThicknessAnimation 
+                                            Storyboard.TargetName="articlesCount"
+                                            Storyboard.TargetProperty="Margin"
+                                            To="0 5 10 5"
+                                            Duration="0:0:0.3" 
+                                            />
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="EditButton"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1.0"
+                                            Duration="0:0:0.3" 
+                                            />
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="DeleteButton"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1.0"
+                                            Duration="0:0:0.3" 
+                                            />
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="articlesCount"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1.0"
+                                            Duration="0:0:0.3" 
+                                            />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ThicknessAnimation Storyboard.TargetName="articlesCount"
-                                                            Storyboard.TargetProperty="Margin"
-                                                            To="0"
-                                                            Duration="0:0:0" />
-                                        <DoubleAnimation Storyboard.TargetName="articlesCount"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0"
-                                                         Duration="0:0:0" />
-                                        <DoubleAnimation Storyboard.TargetName="EditButton"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0"
-                                                         Duration="0:0:0" />
-                                        <DoubleAnimation Storyboard.TargetName="DeleteButton"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0"
-                                                         Duration="0:0:0" />
+                                        <ThicknessAnimation 
+                                            Storyboard.TargetName="articlesCount"
+                                            Storyboard.TargetProperty="Margin"
+                                            To="0"
+                                            Duration="0:0:0" 
+                                            />
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="articlesCount"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.0"
+                                            Duration="0:0:0" 
+                                            />
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="EditButton"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.0"
+                                            Duration="0:0:0" 
+                                            />
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="DeleteButton"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.0"
+                                            Duration="0:0:0" 
+                                            />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>

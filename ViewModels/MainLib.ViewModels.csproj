@@ -61,6 +61,7 @@
     <Compile Include="Pages\BookmarkViewViewModel.cs" />
     <Compile Include="Pages\ReferenceListViewModel.cs" />
     <Compile Include="Pages\ReferenceViewViewModel.cs" />
+    <Compile Include="Popups\AddNewReferenceViewModel.cs" />
     <Compile Include="Popups\AddPersonalViewModel.cs" />
     <Compile Include="Popups\ArticleEditorViewModel.cs" />
     <Compile Include="Popups\BookmarkEditorViewModel.cs" />

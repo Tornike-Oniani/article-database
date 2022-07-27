@@ -124,6 +124,11 @@
                         <popupV:ReferenceManager />
                     </DataTemplate>
 
+                    <!-- New reference -->
+                    <DataTemplate DataType="{x:Type popupVM:AddNewReferenceViewModel}">
+                        <popupV:AddNewReference />
+                    </DataTemplate>
+                    
                     <!-- Reference editor -->
                     <DataTemplate DataType="{x:Type popupVM:ReferenceEditorViewModel}">
                         <popupV:ReferenceEditor />

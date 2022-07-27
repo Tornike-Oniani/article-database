@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="MainLib.Views.Popups.AddNewReference"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:MainLib.Views.Popups"
+             xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel Margin="12">
+        <!-- Reference name -->
+        <TextBox
+            Text="{Binding ReferenceName}"
+            Style="{StaticResource WatermarkTextBox}"
+            ap:TextBoxHelper.Watermark="Reference name"
+            Margin="0 0 0 12"
+            />
+        <!-- Main article title -->
+        <TextBox
+            Text="{Binding MainArticleTitle}"
+            Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+            materialDesign:HintAssist.Hint="Main article title" 
+            materialDesign:HintAssist.IsFloating="True"
+            AcceptsReturn="True" 
+            TextWrapping="Wrap" 
+            Margin="0 0 0 12"
+            />
+        <!-- Buttons -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Create column -->
+                <ColumnDefinition Width="*" />
+                <!-- Gap -->
+                <ColumnDefinition Width="12px" />
+                <!-- Cancel column -->
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <!-- Create button -->
+            <Button
+                Content="Create"
+                Command="{Binding CreateCommand}"
+                CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                Grid.Column="0"
+                />
+            <!-- Cancel button -->
+            <Button
+                Content="Cancel"
+                Command="{Binding CancelCommand}"
+                CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                Grid.Column="2"
+                />
+        </Grid>
+    </StackPanel>
+</UserControl>

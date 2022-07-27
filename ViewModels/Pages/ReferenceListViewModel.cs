@@ -14,6 +14,7 @@ using MainLib.ViewModels.Popups;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
 using MainLib.ViewModels.Utils;
+using System.Windows.Input;
 
 namespace MainLib.ViewModels.Pages
 {
@@ -39,6 +40,7 @@ namespace MainLib.ViewModels.Pages
          *  - Delete bookmark
          */
         public RelayCommand OpenReferenceCommand { get; set; }
+        public ICommand CreateNewReferenceCommand { get; set; }
         public RelayCommand EditReferenceCommand { get; set; }
         public RelayCommand DeleteReferenceCommand { get; set; }
 
@@ -53,6 +55,7 @@ namespace MainLib.ViewModels.Pages
             PopulateReferences();
 
             // Initialize commands
+            this.CreateNewReferenceCommand = new RelayCommand(CreateNewReference);
             EditReferenceCommand = new RelayCommand(EditReference);
             DeleteReferenceCommand = new RelayCommand(DeleteReference);
         }
@@ -60,6 +63,10 @@ namespace MainLib.ViewModels.Pages
         /**
          * Command actions
          */
+        public void CreateNewReference(object input = null)
+        {
+            services.WindowService.OpenWindow(new AddNewReferenceViewModel(this));
+        }
         public void EditReference(object input)
         {
             services.WindowService.OpenWindow(new ReferenceEditorViewModel(input as Reference, this));
