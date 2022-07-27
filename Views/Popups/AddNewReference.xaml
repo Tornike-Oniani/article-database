@@ -19,14 +19,14 @@
         <!-- Reference name -->
         <TextBox
             x:Name="txbReferenceName"
-            Text="{Binding ReferenceName}"
+            Text="{Binding ReferenceName, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource WatermarkTextBox}"
             ap:TextBoxHelper.Watermark="Reference name"
             Margin="0 0 0 12"
             />
         <!-- Main article title -->
         <TextBox
-            Text="{Binding MainArticleTitle}"
+            Text="{Binding MainArticleTitle, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
             materialDesign:HintAssist.Hint="Main article title" 
             materialDesign:HintAssist.IsFloating="True"

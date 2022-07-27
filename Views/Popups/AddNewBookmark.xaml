@@ -22,7 +22,7 @@
         <!-- Bookmark name -->
         <TextBox
             x:Name="txbBookmarkName"
-            Text="{Binding BookmarkName}"
+            Text="{Binding BookmarkName, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource WatermarkTextBox}"
             ap:TextBoxHelper.Watermark="Bookmark name"
             Margin="0 0 0 12"
