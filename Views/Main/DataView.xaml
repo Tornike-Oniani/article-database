@@ -795,11 +795,25 @@
                             </Grid>
                         </MenuItem.Header>
                     </MenuItem>
+                    <MenuItem x:Name="copyTitle" Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}">
+                        <MenuItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Copy Title" Grid.Column="0" />
+                                <TextBlock Text="Ctrl+C" Grid.Column="2" />
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
             <DataGrid.InputBindings>
                 <MouseBinding Gesture="LeftDoubleClick" Command="{Binding OpenFileCommand}" CommandParameter="{Binding SelectedArticle}" />
+                <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}" />
             </DataGrid.InputBindings>
 
             <!-- Data grid columns -->

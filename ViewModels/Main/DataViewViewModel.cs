@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using ViewModels.UIStructs;
 
@@ -160,6 +161,7 @@ namespace MainLib.ViewModels.Main
         public RelayCommand SortCommand { get; set; }
         public ICommand SwitchToDetailedSearchCommand { get; set; }
         public ICommand UpdateExportStatusCommand { get; set; }
+        public ICommand CopyTitleCommand { get; set; }
 
         public RelayCommand OpenSearchDialogCommand { get; set; }
         public RelayCommand OpenAddPersonalCommand { get; set; }
@@ -223,6 +225,7 @@ namespace MainLib.ViewModels.Main
             SortCommand = new RelayCommand(Sort);
             SwitchToDetailedSearchCommand = new RelayCommand(SwitchToDetailedSearch);
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
+            this.CopyTitleCommand = new RelayCommand(CopyTitle);
 
             OpenSearchDialogCommand = new RelayCommand(OpenSearchDialog);
             OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
@@ -591,6 +594,10 @@ namespace MainLib.ViewModels.Main
                 WordBreakMode = false;
                 OnPropertyChanged("FilterTitle");
             }
+        }
+        public void CopyTitle(object input)
+        {
+            Clipboard.SetText(((Article)input).Title);
         }
 
         // Window open commands
