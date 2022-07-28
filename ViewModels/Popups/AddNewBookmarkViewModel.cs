@@ -11,6 +11,7 @@ using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.DataAccessLayer.Repositories;
 using Lib.DataAccessLayer.Models;
+using Lib.DataAccessLayer.Info;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -45,6 +46,7 @@ namespace MainLib.ViewModels.Popups
         public void Create(object input = null)
         {
             BookmarkRepo repo = new BookmarkRepo();
+            BookmarkName = BookmarkName.Trim();
 
             // Check for blank bookmark title
             if (String.IsNullOrEmpty(BookmarkName))
@@ -62,6 +64,10 @@ namespace MainLib.ViewModels.Popups
 
             // Create bookmark
             repo.AddBookmark(BookmarkName, IsGlobal ? 1 : 0, _services.User);
+
+            // Track change
+            BookmarkInfo info = new BookmarkInfo(BookmarkName, User);
+            new Tracker(User).TrackCreate<BookmarkInfo>(info);
 
             // Refresh bookmark list and close dialog
             _parent.PopulateBookmarks();
