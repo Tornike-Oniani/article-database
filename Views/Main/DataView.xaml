@@ -21,6 +21,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:ActiveStatusToStyleConverter x:Key="ActiveStatusToStyle" />
         <converters:IsIntToBoolConverter x:Key="IsIntToBool" />
+        <converters:ListCountToBoolConverter x:Key="ListCountToBool" />
 
         <!-- Accordion -->
         <Storyboard x:Key="openDropdown">
@@ -286,10 +287,6 @@
     </UserControl.Resources>
 
     <UserControl.InputBindings>
-        <!--<KeyBinding Modifiers="Ctrl" Key="F" 
-                    Command="{Binding DataContext.OpenSearchDialogCommand, 
-                    RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
-                    CommandParameter="{Binding Columns}" />-->
         <KeyBinding Modifiers="Ctrl" Key="B" 
                     Command="{Binding DataContext.OpenBookmarkManagerCommand, 
                     RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
@@ -734,14 +731,16 @@
         </Border>
         <!-- Datagrid -->
         <!-- Each column is bound to command from ArticleGrid style for sorting -->
-        <DataGrid Style="{StaticResource ArticleGrid}"
-                  FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
-                  ItemsSource="{Binding Articles}"
-                  SelectedItem="{Binding SelectedArticle}"
-                  VirtualizingStackPanel.VirtualizationMode="Standard"
-                  x:Name="myGrid"
-                  Grid.Row="2">
-
+        <DataGrid 
+            Style="{StaticResource ArticleGrid}"
+            FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+            ItemsSource="{Binding Articles}"
+            SelectedItem="{Binding SelectedArticle}"
+            VirtualizingStackPanel.VirtualizationMode="Standard"
+            CanUserSortColumns="{Binding CanSortColumns}"
+            x:Name="myGrid"
+            Grid.Row="2"
+            >
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Setter Property="Padding" Value="10" />
@@ -762,7 +761,6 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.CellStyle>
-
             <DataGrid.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                     <!-- We set these items' commands from code behind -->
@@ -810,16 +808,18 @@
                     </MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
-
             <DataGrid.InputBindings>
                 <MouseBinding Gesture="LeftDoubleClick" Command="{Binding OpenFileCommand}" CommandParameter="{Binding SelectedArticle}" />
                 <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}" />
             </DataGrid.InputBindings>
-
             <!-- Data grid columns -->
             <DataGrid.Columns>
                 <!-- Title column -->
-                <DataGridTemplateColumn Header="Title" Width="*" SortMemberPath="Title">
+                <DataGridTemplateColumn 
+                    Header="Title" 
+                    Width="*" 
+                    SortMemberPath="Title"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock 

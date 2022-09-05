@@ -147,6 +147,13 @@ namespace MainLib.ViewModels.Main
             get { return Articles.Where(article => article.Checked == true).ToList().Count != 0; }
         }
 
+        private bool _canSortColumns;
+        public bool CanSortColumns
+        {
+            get { return _canSortColumns; }
+            set { _canSortColumns = value; OnPropertyChanged("CanSortColumns"); }
+        }
+
 
         #region Commands
         public RelayCommand OpenFileCommand { get; set; }
@@ -238,6 +245,8 @@ namespace MainLib.ViewModels.Main
 
             // Set up section selector
             this.FinishCommand = new RelayCommand(Finish);
+
+            CanSortColumns = false;
 
             // Populate sections collection from json file
             PopulateSections();
@@ -559,6 +568,9 @@ namespace MainLib.ViewModels.Main
                 return;
 
 
+            if (Articles.Count == 0)
+                return;
+
             if (_currentSort.Contains(header))
             {
                 if (_currentSort.Contains("ASC"))
@@ -743,6 +755,8 @@ namespace MainLib.ViewModels.Main
             foreach (Article article in articles)
                 this.Articles.Add(article);
 
+            CanSortColumns = this.Articles.Count != 0;
+
             OnPropertyChanged("CanExportP");
         }
         private async Task PopulateArticlesSimple()
@@ -784,6 +798,8 @@ namespace MainLib.ViewModels.Main
             // 3. Populate article collection
             foreach (Article article in articles)
                 this.Articles.Add(article);
+
+            CanSortColumns = this.Articles.Count != 0;
 
             OnPropertyChanged("CanExportP");
         }
