@@ -3,16 +3,10 @@ using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
-using Lib.ViewModels.Services.Browser;
 using Lib.ViewModels.Services.Dialogs;
 using MainLib.ViewModels.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace MainLib.ViewModels.Popups
@@ -86,13 +80,19 @@ namespace MainLib.ViewModels.Popups
 
                 // 1.1 Track article update
                 ArticleInfo info = new ArticleInfo(User, Article.Title);
-                new Tracker(User).TrackUpdate<ArticleInfo>(info, oldName);
+                Tracker tracker = new Tracker(User);
 
                 // 2. If new file was selected overwrite it to older one
                 if (SelectedFile != null)
                 {
                     File.Copy(SelectedFile, Path.Combine(Environment.CurrentDirectory, "Files\\") + Article.FileName + ".pdf", true);
+                    // If file was changed track it also
+                    string changedFileName = Article.FileName + "_new" + ".pdf";
+                    info.SetChangedFile(changedFileName);
+                    File.Copy(SelectedFile, tracker.GetFilesPath() + "\\" + changedFileName);
                 }
+
+                tracker.TrackUpdate<ArticleInfo>(info, oldName);
 
                 // 3. Copy new article properties to parent's selected article (so that the values will be updated on data grid)
                 SelectedArticle.CopyByValue(Article, false, true);

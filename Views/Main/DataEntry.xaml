@@ -15,13 +15,11 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width=".2*" />
             <ColumnDefinition MinWidth="500" MaxWidth="800" Width="*" />
-            <ColumnDefinition Width=".2*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ScrollViewer VerticalAlignment="Center" 
-                      Grid.Column="1">
-            <Border Padding="20 5 20 10">
+        <ScrollViewer Grid.Column="0">
+            <Border Padding="35 15 0 0">
                 <StackPanel>
                     <!-- Header -->
                     <TextBlock Text="Article:" Style="{StaticResource Header}" Margin="0 0 0 10" />

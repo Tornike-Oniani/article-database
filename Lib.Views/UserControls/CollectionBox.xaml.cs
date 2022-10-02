@@ -1,24 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Dialogs;
+using Lib.Views.Services.Dialogs;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Lib.ViewModels.Commands;
-using Lib.ViewModels.Services.Dialogs;
-using Lib.Views.Services.Dialogs;
-using Lib.Views.Services.Windows;
 
 namespace Lib.Views.UserControls
 {
@@ -139,7 +128,7 @@ DependencyProperty.Register("RestrictionProperty", typeof(InputRestriction), typ
             }
 
             // 3. Make sure the Listbox doesn't already contain the item
-            if (ItemsSource.Contains(Item))
+            if (ItemsSource.Contains(Item, StringComparer.InvariantCultureIgnoreCase))
                 return;
 
             // 4. Add item to collection

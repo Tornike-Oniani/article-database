@@ -2,9 +2,6 @@
 using Lib.DataAccessLayer.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lib.DataAccessLayer.Info
 {
@@ -25,13 +22,14 @@ namespace Lib.DataAccessLayer.Info
         public int SIC;
         public List<BookmarkInfo> Bookmarks;
         public List<ReferenceInfo> References;
+        public string ChangedFile;
 
         public ArticleInfo()
         {
             this.InfoType = "ArticleInfo";
         }
 
-        public ArticleInfo(User user, string title, List<Bookmark> bookmarks = null, List<Reference> references = null)
+        public ArticleInfo(User user, string title, List<Bookmark> bookmarks = null, List<Reference> references = null, string changedFile = null)
         {
             this.InfoType = "ArticleInfo";
             Article article = new ArticleRepo().GetFullArticleWithTitle(user, title);
@@ -45,6 +43,7 @@ namespace Lib.DataAccessLayer.Info
             this.SIC = article.SIC;
             this.Bookmarks = new List<BookmarkInfo>();
             this.References = new List<ReferenceInfo>();
+            this.ChangedFile = null;
 
             if (bookmarks != null)
             {
@@ -63,6 +62,11 @@ namespace Lib.DataAccessLayer.Info
                     this.References.Add(info);
                 });
             }
+        }
+
+        public void SetChangedFile(string changedFile)
+        {
+            this.ChangedFile = changedFile;
         }
     }
     public class BookmarkInfo : IInfo

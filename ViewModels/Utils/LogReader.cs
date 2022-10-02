@@ -1,14 +1,10 @@
 ﻿using Lib.DataAccessLayer.Info;
 using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
-using Lib.ViewModels.Services.Dialogs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MainLib.ViewModels.Utils
 {
@@ -142,6 +138,15 @@ namespace MainLib.ViewModels.Utils
                             Article newArticle = new Article(local_info);
                             newArticle.ID = existingArticle.ID;
                             repo.UpdateArticle(newArticle, user);
+
+                            // If file was changed during update switch the old file with the new one
+                            if (!String.IsNullOrEmpty(local_info.ChangedFile))
+                            {
+                                string fileName = repo.GetFileWithTitle(local_info.Title);
+                                File.Copy(
+                                    Path.Combine(_filesPath, local_info.ChangedFile),
+                                    Path.Combine(Path.Combine(Environment.CurrentDirectory, "Files"), fileName + ".pdf"));
+                            }
                         }
                         // Update bookmark
                         else if (log.Info.InfoType == "BookmarkInfo")
@@ -185,7 +190,7 @@ namespace MainLib.ViewModels.Utils
                                 newReference.ArticleID = (int)new ArticleRepo().GetArticleWithTitle(local_info.Title).ID;
                                 has = true;
                             }
-                                
+
                             repo.UpdateReference(newReference, has);
                         }
                         break;
