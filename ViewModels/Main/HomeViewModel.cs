@@ -1,20 +1,17 @@
 ﻿using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Dialogs;
+using Lib.ViewModels.Services.Windows;
+using MainLib.ViewModels.Popups;
+using MainLib.ViewModels.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Lib.ViewModels.Base;
-using Lib.ViewModels.Commands;
-using MainLib.ViewModels.Popups;
-using Lib.ViewModels.Services.Browser;
-using Lib.ViewModels.Services.Dialogs;
-using Lib.ViewModels.Services.Windows;
-using MainLib.ViewModels.Utils;
-using System.CodeDom;
-using Newtonsoft.Json;
 
 namespace MainLib.ViewModels.Main
 {
@@ -158,10 +155,10 @@ namespace MainLib.ViewModels.Main
                 // Import recrods to database, return list of files to copy and duplicates to log
                 FileManager fileManager = new FileManager();
                 fileManager.files = new GlobalRepo().ImportSection(
-                    queryManager.GetFullQuery(), 
-                    queryManager.pendingQuery, 
-                    queryManager.filesQuery, 
-                    queryManager.duplicatesQuery, 
+                    queryManager.GetFullQuery(),
+                    queryManager.pendingQuery,
+                    queryManager.filesQuery,
+                    queryManager.duplicatesQuery,
                     out fileManager.duplicates);
 
                 // Log duplicate files
@@ -176,7 +173,7 @@ namespace MainLib.ViewModels.Main
                     true
                     );
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 new BugTracker().Track("App", "Import", e.Message, e.StackTrace);
                 services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
@@ -241,6 +238,11 @@ namespace MainLib.ViewModels.Main
                 await Task.Run(() =>
                 {
                     syncManager.Write(syncInfo);
+                    // Write in history that this was synced in the database
+                    using (StreamWriter sw = File.AppendText(Path.Combine(destination, "history.txt")))
+                    {
+                        sw.WriteLine(Properties.Settings.Default.SyncName);
+                    }
                 });
 
                 services.IsWorking(false);
@@ -251,7 +253,7 @@ namespace MainLib.ViewModels.Main
                 else
                     services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong, see logs for more information", "Synchronisation", DialogType.Error));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 new BugTracker().Track("App", "Sync", e.Message, e.StackTrace);
                 services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
@@ -285,7 +287,7 @@ namespace MainLib.ViewModels.Main
                     return;
                 }
 
-                
+
 
                 // Root sync folder path
                 string syncPath = Path.Combine(Environment.CurrentDirectory, "Sync");
@@ -431,8 +433,8 @@ namespace MainLib.ViewModels.Main
         }
         private bool IsFolderCorrupt(string destination)
         {
-            return (!File.Exists(destination + "\\" + "NikasDB.sqlite3")) || 
-                   (!Directory.Exists(destination + @"\Files")) || 
+            return (!File.Exists(destination + "\\" + "NikasDB.sqlite3")) ||
+                   (!Directory.Exists(destination + @"\Files")) ||
                    (!File.Exists(destination + "\\" + "user.sqlite3"));
         }
 
@@ -532,7 +534,7 @@ ATTACH DATABASE '{destination}\user.sqlite3' AS db2user;
             public List<CompFile> files;
             public Dictionary<string, string> filesToCopy;
 
-            public FileManager() 
+            public FileManager()
             {
                 this.filesToCopy = new Dictionary<string, string>();
                 this.logs = new DirectoryInfo("." + @"\Logs\");
