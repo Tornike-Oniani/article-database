@@ -145,7 +145,7 @@ namespace MainLib.ViewModels.Utils
                                 string fileName = repo.GetFileWithTitle(local_info.Title);
                                 File.Copy(
                                     Path.Combine(_filesPath, local_info.ChangedFile),
-                                    Path.Combine(Path.Combine(Environment.CurrentDirectory, "Files"), fileName + ".pdf"));
+                                    Path.Combine(Path.Combine(Environment.CurrentDirectory, "Files"), fileName + ".pdf"), true);
                             }
                         }
                         // Update bookmark
