@@ -29,6 +29,7 @@ namespace Lib.DataAccessLayer.Utils
 
             // Double single quotes (') to avoid conflict with SQL query
             string formatedTitle = title.Replace("'", "''");
+            formatedTitle = formatedTitle.Trim();
 
             AppendModifed(filter);
 
@@ -41,7 +42,8 @@ namespace Lib.DataAccessLayer.Utils
                 {
                     if (IsAllUpper(words[i]))
                     {
-                        filter.FilterQuery.Append("final.Title LIKE " + ToWildCardUpper(words[i]));
+                        //filter.FilterQuery.Append("final.Title LIKE " + ToWildCardUpper(words[i]));
+                        filter.FilterQuery.Append("final.Title LIKE " + ToWildCard(words[i]));
                     }
                     else
                     {
