@@ -654,26 +654,25 @@
                             Grid.Column="1"
                             />
                         <!-- Datagrid parameters -->
-                        <Grid 
-                            
-                            Grid.Column="2"
-                            >
-                            <!-- Items per page -->
-                            <StackPanel 
-                                Orientation="Horizontal"
-                                VerticalAlignment="Top"
-                                >
-                                <TextBlock
-                                    Text="Items per page:"
-                                    FontSize="14"
-                                    VerticalAlignment="Center"
-                                    Margin="0 0 6 0"
-                                    />
-                                <TextBox
-                                    Text="{Binding ItemsPerPage}"
-                                    Style="{StaticResource WatermarkTextBoxSmall}"
-                                    Width="45"                        
-                                    />
+                        <Grid Grid.Column="2">
+                            <StackPanel>
+                                <!-- Items per page -->
+                                <StackPanel 
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Top"
+                                    >
+                                    <TextBlock
+                                        Text="Items per page:"
+                                        FontSize="14"
+                                        VerticalAlignment="Center"
+                                        Margin="0 0 6 0"
+                                        />
+                                    <TextBox
+                                        Text="{Binding ItemsPerPage}"
+                                        Style="{StaticResource WatermarkTextBoxSmall}"
+                                        Width="45"                        
+                                        />
+                                </StackPanel>
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -829,7 +828,18 @@
                                 ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                 ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
                                 ap:TextBlockHighlighter.Forecolor="#000000" 
-                                />
+                                >
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding AbstractOnly}" Value="1">
+                                                <!--<Setter Property="TextDecorations" Value="Underline" />-->
+                                                <Setter Property="Foreground" Value="#5a7ffa" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

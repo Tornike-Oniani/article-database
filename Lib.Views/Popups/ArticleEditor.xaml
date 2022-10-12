@@ -102,6 +102,11 @@
                     </AdornerDecorator>
                 </StackPanel>
                 <Button Content="Select File" Width="150" Margin="10 0 0 0" Command="{Binding SelectFileCommand}" />
+                <CheckBox
+                    IsChecked="{Binding Article.AbstractOnly}"
+                    Content="Abstract only"
+                    Margin="12 0 0 0"
+                    />
             </StackPanel>
 
             <!-- Buttons wrapper -->

@@ -6,10 +6,8 @@ using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
 using SectionLib.ViewModels.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SectionLib.ViewModels.Main
@@ -159,7 +157,7 @@ namespace SectionLib.ViewModels.Main
             string destination = null;
 
             // 1. Using winforms dialog box select a folder
-            destination = _browserService.OpenFolderDialog();
+            destination = _browserService.OpenFolderDialog("");
 
             // 2. If nothing was selected return
             if (destination == null)

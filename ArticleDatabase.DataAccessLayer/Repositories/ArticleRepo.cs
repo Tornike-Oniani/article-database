@@ -31,8 +31,8 @@ namespace Lib.DataAccessLayer.Repositories
                     article.FileName = final;
 
                     // Insert Article into tblArticle
-                    conn.Execute(@"INSERT INTO tblArticle (Title, Year, File) VALUES (@Title, @Year, @FileName);",
-                        new { Title = article.Title, Year = article.Year, FileName = article.FileName });
+                    conn.Execute(@"INSERT INTO tblArticle (Title, Year, File, AbstractOnly) VALUES (@Title, @Year, @FileName, @AbstractOnly);",
+                        new { Title = article.Title, Year = article.Year, FileName = article.FileName, AbstractOnly = article.AbstractOnly });
                     article.ID = conn.LastInsertRowId;
 
                     // Insert PersonalComment and SIC into tblUser
@@ -68,8 +68,8 @@ namespace Lib.DataAccessLayer.Repositories
                     long keyword_id;
 
                     // 1. Update article's direct attributes (title, year)
-                    conn.Execute(@"UPDATE tblArticle SET Title=@Title, Year=@Year WHERE ID=@ID;",
-                        new { Title = article.Title, Year = article.Year, ID = article.ID }, transaction);
+                    conn.Execute(@"UPDATE tblArticle SET Title=@Title, Year=@Year, AbstractOnly=@AbstractOnly WHERE ID=@ID;",
+                        new { Title = article.Title, Year = article.Year, AbstractOnly = article.AbstractOnly, ID = article.ID }, transaction);
 
                     // 2. Update or insert comment and SIC
                     int check = conn.QuerySingleOrDefault<int>(@"SELECT ID FROM user.tblUserPersonal WHERE UserID=@UserID AND ArticleID=@ArticleID;",
@@ -232,13 +232,13 @@ namespace Lib.DataAccessLayer.Repositories
 
             // Template query
             StringBuilder queryBuilder = new StringBuilder(@"
-SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC
+SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.AbstractOnly, final.PersonalComment, final.SIC
 FROM
-(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
+(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], cmp.AbstractOnly, per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
 FROM
-(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
+(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName, art_ath.AbstractOnly
 FROM
-(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
+(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName, art.AbstractOnly AS AbstractOnly
 FROM tblArticle AS art
 LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
 LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
@@ -370,13 +370,13 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
 
             // Template query
             StringBuilder queryBuilder = new StringBuilder(@"
-SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC
+SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.AbstractOnly, final.PersonalComment, final.SIC
 FROM
-(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
+(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], cmp.AbstractOnly AS AbstractOnly, per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
 FROM
-(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
+(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName, art_ath.AbstractOnly
 FROM
-(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
+(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName, art.AbstractOnly AS AbstractOnly
 FROM tblArticle AS art
 LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
 LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
@@ -421,11 +421,11 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             Article result;
 
             string query = @"
-SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName]
+SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], cmp.AbstractOnly
 FROM
-(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
+(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName, art_ath.AbstractOnly
 FROM
-(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
+(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName, art.AbstractOnly AS AbstractOnly
 FROM tblArticle AS art
 LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
 LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
@@ -500,13 +500,13 @@ WHERE cmp.ID = @ID;
                     conn.Query(AttachUser(), transaction);
 
                     string query = @"
-SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC
+SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.AbstractOnly, final.PersonalComment, final.SIC
 FROM
-(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
+(SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], cmp.AbstractOnly, per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
 FROM
-(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
+(SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName, art_ath.AbstractOnly
 FROM
-(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName
+(SELECT art.ID as ID, art.Title AS Article, group_concat(ath.Name, "", "") AS Authors, art.Year AS Year, art.File AS FileName, art.AbstractOnly
 FROM tblArticle AS art
 LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
 LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID

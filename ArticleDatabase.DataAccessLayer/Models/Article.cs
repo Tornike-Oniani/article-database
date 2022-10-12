@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lib.DataAccessLayer.Models
 {
@@ -78,6 +76,7 @@ namespace Lib.DataAccessLayer.Models
         private string _fileName;
         private string _personalComment;
         private int _sic;
+        private int _abstractOnly;
 
         public long? ID
         {
@@ -119,6 +118,12 @@ namespace Lib.DataAccessLayer.Models
             get { return _sic; }
             set { _sic = value; OnPropertyChanged("SIC"); }
         }
+        public int AbstractOnly
+        {
+            get { return _abstractOnly; }
+            set { _abstractOnly = value; OnPropertyChanged("AbstractOnly"); }
+        }
+
         public bool Checked { get; set; }
         public bool BMChecked { get; set; }
 
@@ -141,6 +146,7 @@ namespace Lib.DataAccessLayer.Models
             this.FileName = info.FileName;
             this.PersonalComment = info.PersonalComment;
             this.SIC = info.SIC;
+            this.AbstractOnly = info.AbstractOnly;
 
             AuthorsCollection = new ObservableCollection<string>();
             KeywordsCollection = new ObservableCollection<string>();
@@ -159,6 +165,7 @@ namespace Lib.DataAccessLayer.Models
             FileName = null;
             PersonalComment = null;
             SIC = 0;
+            AbstractOnly = 0;
             AuthorsCollection.Clear();
             KeywordsCollection.Clear();
         }
@@ -180,6 +187,7 @@ namespace Lib.DataAccessLayer.Models
             FileName = article.FileName;
             PersonalComment = article.PersonalComment;
             SIC = article.SIC;
+            this.AbstractOnly = article.AbstractOnly;
 
             // 3. If marked as true build collections from items strings
             if (collections)
@@ -202,7 +210,7 @@ namespace Lib.DataAccessLayer.Models
                     return;
 
                 // 3. Add each item from item string into collection
-                foreach(string author in Authors.Split(new string[] { ", "}, StringSplitOptions.None))
+                foreach (string author in Authors.Split(new string[] { ", " }, StringSplitOptions.None))
                 {
                     AuthorsCollection.Add(author);
                 }

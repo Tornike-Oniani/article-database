@@ -15,7 +15,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="500" MaxWidth="800" Width="*" />
+            <ColumnDefinition MinWidth="700" MaxWidth="800" Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0">
@@ -137,8 +137,13 @@
                         </AdornerDecorator>
                         <Button 
                             Content="Select File"
-                            Margin="10 0 0 0" 
+                            Margin="12 0 0 0" 
                             Command="{Binding SelectFileCommand}" 
+                            />
+                        <CheckBox
+                            IsChecked="{Binding Article.AbstractOnly}"
+                            Content="Abstract only"
+                            Margin="12 0 0 0"
                             />
                     </StackPanel>
 
