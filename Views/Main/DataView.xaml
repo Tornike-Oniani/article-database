@@ -22,6 +22,7 @@
         <converters:ActiveStatusToStyleConverter x:Key="ActiveStatusToStyle" />
         <converters:IsIntToBoolConverter x:Key="IsIntToBool" />
         <converters:ListCountToBoolConverter x:Key="ListCountToBool" />
+        <converters:IntToVisibilityConverter x:Key="IntToVisibility" />
 
         <!-- Accordion -->
         <Storyboard x:Key="openDropdown">
@@ -821,25 +822,41 @@
                     >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock 
-                                Text="{Binding Title}" 
-                                TextWrapping="Wrap"
-                                ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
-                                ap:TextBlockHighlighter.Forecolor="#000000" 
-                                >
-                                <TextBlock.Style>
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding AbstractOnly}" Value="1">
-                                                <!--<Setter Property="TextDecorations" Value="Underline" />-->
-                                                <Setter Property="Foreground" Value="#5a7ffa" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                            <Grid>
+                                <TextBlock 
+                                    Text="{Binding Title}" 
+                                    TextWrapping="Wrap"
+                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                    ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
+                                    ap:TextBlockHighlighter.Forecolor="#000000" 
+                                    >
+                                    <!--<TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding AbstractOnly}" Value="1">
+                                                    --><!--<Setter Property="TextDecorations" Value="Underline" />--><!--
+                                                    <Setter Property="Foreground" Value="#5a7ffa" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>-->
+                                </TextBlock>
+                                <Border
+                                    Visibility="{Binding AbstractOnly, Converter={StaticResource IntToVisibility}}"
+                                    Padding="3 3 3 3"
+                                    CornerRadius="6"
+                                    Background="{StaticResource PrimaryColorBrush}"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    Margin="0 0 -7 -7"
+                                    >
+                                    <TextBlock
+                                        Text="AO"                                        
+                                        Foreground="#ffffff"
+                                        />
+                                </Border>
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
