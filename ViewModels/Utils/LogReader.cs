@@ -35,10 +35,13 @@ namespace MainLib.ViewModels.Utils
         public void Sync()
         {
             // 1. Sync information
+            Shared.GetInstance().IsWorking(true, $"Syncing steps 1/{_logs.Count}");
+            int currentLogCount = 1;
             _logs.ForEach((log) =>
             {
+                if (currentLogCount % 10 == 0)
+                    Shared.GetInstance().IsWorking(true, $"Syncing steps {currentLogCount}/{_logs.Count}");
                 User user = new UserRepo().GetUserByName(log.Username);
-
                 switch (log.Type)
                 {
                     case "Create":
@@ -77,12 +80,11 @@ namespace MainLib.ViewModels.Utils
                             {
                                 // Get bookmark from database
                                 Bookmark dbBookmark = bookmarkRepo.GetBookmark(bookmarkInfo.Name, user);
-                                // Edge case: if there is no bookmark in database log mismatch
+                                // Edge case: if there is no bookmark in database create one
                                 if (dbBookmark == null)
                                 {
-                                    string mismatch = $"Can't couple article - '{article.Title}' with bookmark '{bookmarkInfo.Name}' because bookmark doesn't exist";
-                                    _mismatches.Add(mismatch);
-                                    continue;
+                                    bookmarkRepo.AddBookmark(bookmarkInfo.Name, bookmarkInfo.Global, user);
+                                    dbBookmark = bookmarkRepo.GetBookmark(bookmarkInfo.Name, user);
                                 }
                                 // Couple article with bookmark
                                 bookmarkRepo.AddArticleToBookmark(dbBookmark, dbArticle);
@@ -94,12 +96,13 @@ namespace MainLib.ViewModels.Utils
                                 // Get reference from database
                                 Reference dbReference = referenceRepo.GetReference(referenceInfo.Name);
 
-                                // Edge case: if there is no reference in database log mismatch
+                                // Edge case: if there is no reference in database create one and log mismatch for checking main article
                                 if (dbReference == null)
                                 {
-                                    string mismatch = $"Can't couple article - '{article.Title}' with reference '{referenceInfo.Name}' because reference doesn't exist";
+                                    referenceRepo.AddReference(referenceInfo.Name);
+                                    dbReference = referenceRepo.GetReference(referenceInfo.Name);
+                                    string mismatch = $"Reference - '{referenceInfo.Name}' was created automatically but main article needs to be set manually.";
                                     _mismatches.Add(mismatch);
-                                    continue;
                                 }
 
                                 // Couple artilce with reference
@@ -226,12 +229,14 @@ namespace MainLib.ViewModels.Utils
                             Bookmark bookmark = bookmarkRepo.GetBookmark(info.Name, user);
                             Article article = articleRepo.GetArticleWithTitle(info.Title);
 
-                            // Edge case: Article or bookmark doesn't exist or Article is already in bookmark
+                            // Edge case: Article or bookmark doesn't exist
                             if (bookmark == null)
                             {
-                                string mismatch = $"Can't couple article - '{info.Title}' with bookmark '{info.Name}' because bookmark doesn't exist";
+                                // Automatically add bookmark but log mismatch bevause we don't know if its global or nor
+                                bookmarkRepo.AddBookmark(info.Name, 0, user);
+                                bookmark = bookmarkRepo.GetBookmark(info.Name, user);
+                                string mismatch = $"Bookmark - '{info.Name}' was added automatically, but you need to set global status manually.";
                                 _mismatches.Add(mismatch);
-                                return;
                             }
                             else if (article == null)
                             {
@@ -400,6 +405,7 @@ namespace MainLib.ViewModels.Utils
                     default:
                         break;
                 }
+                currentLogCount++;
             });
 
             // 2. Write mismatches

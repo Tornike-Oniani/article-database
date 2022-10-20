@@ -1,21 +1,12 @@
 ﻿using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 using Lib.ViewModels.Base;
-using MainLib.ViewModels.Main;
-using MainLib.ViewModels.Commands;
-using Lib.ViewModels.Services.Dialogs;
-using Lib.ViewModels.Services.Windows;
-using Lib.ViewModels.Services.Browser;
-using MainLib.ViewModels.Utils;
-using MainLib.ViewModels.Popups;
 using Lib.ViewModels.Commands;
+using MainLib.ViewModels.Commands;
+using MainLib.ViewModels.Main;
+using MainLib.ViewModels.Popups;
+using MainLib.ViewModels.Utils;
+using System.Windows.Input;
 
 namespace MainLib.ViewModels
 {
@@ -25,6 +16,7 @@ namespace MainLib.ViewModels
         private User _user;
         private bool _isBusy;
         private Shared services;
+        private string _workLabel;
 
         public BaseViewModel SelectedViewModel
         {
@@ -41,6 +33,12 @@ namespace MainLib.ViewModels
             get { return _isBusy; }
             set { _isBusy = value; OnPropertyChanged("IsBusy"); }
         }
+        public string WorkLabel
+        {
+            get { return _workLabel; }
+            set { _workLabel = value; OnPropertyChanged("WorkLabel"); }
+        }
+
 
         public ICommand UpdateViewCommand { get; set; }
         public ICommand OpenSettingsCommand { get; set; }
@@ -69,9 +67,10 @@ namespace MainLib.ViewModels
             services.WindowService.OpenWindow(new SettingsViewModel(), passWindow: true);
         }
 
-        public void WorkStatus(bool isWorking)
+        public void WorkStatus(bool isWorking, string label = "Working...")
         {
             this.IsBusy = isWorking;
+            this.WorkLabel = label;
         }
     }
 }

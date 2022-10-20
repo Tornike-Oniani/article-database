@@ -21,7 +21,7 @@ namespace MainLib.ViewModels.Utils
             return _instance;
         }
 
-        private Action<bool> _isWorkingAction;
+        private Action<bool, string> _isWorkingAction;
 
         public IDialogService DialogService { get; private set; }
         public IWindowService WindowService { get; private set; }
@@ -39,7 +39,7 @@ namespace MainLib.ViewModels.Utils
 
             this.NotificationManager = new NotificationManager();
         }
-        public void SetWorkingStatusAction(Action<bool> isWorkingAction)
+        public void SetWorkingStatusAction(Action<bool, string> isWorkingAction)
         {
             this._isWorkingAction = isWorkingAction;
         }
@@ -56,9 +56,9 @@ namespace MainLib.ViewModels.Utils
             this.LastSyncFolderPath = path;
         }
 
-        public void IsWorking(bool isWorking)
+        public void IsWorking(bool isWorking, string label = "Working...")
         {
-            this._isWorkingAction.Invoke(isWorking);
+            this._isWorkingAction.Invoke(isWorking, label);
         }
     }
 }

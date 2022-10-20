@@ -251,7 +251,7 @@ namespace MainLib.ViewModels.Main
                 if (reader.NoErrors)
                     services.DialogService.OpenDialog(new DialogOkViewModel("Synchronisation successful", "Synchronisation", DialogType.Success));
                 else
-                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong, see logs for more information", "Synchronisation", DialogType.Error));
+                    services.DialogService.OpenDialog(new DialogOkViewModel("Some steps couldn't be reproduced, see logs for more information", "Synchronisation", DialogType.Warning));
             }
             catch (Exception e)
             {
