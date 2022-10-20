@@ -3,12 +3,11 @@ using Lib.DataAccessLayer.Repositories;
 using Lib.DataAccessLayer.Utils;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
-using Lib.ViewModels.Services.Browser;
 using Lib.ViewModels.Services.Dialogs;
-using Lib.ViewModels.Services.Windows;
 using MainLib.ViewModels.Popups;
 using MainLib.ViewModels.Utils;
 using Newtonsoft.Json;
+using NotificationService;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +18,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ViewModels.UIStructs;
 
 namespace MainLib.ViewModels.Main
 {
@@ -126,14 +124,14 @@ namespace MainLib.ViewModels.Main
         public string SelectedPage
         {
             get { return _selectedPage; }
-            set 
+            set
             {
                 _selectedPage = value;
                 if (value != null && int.Parse(value) != CurrentPage)
                 {
                     MoveToPage(int.Parse(value));
                 }
-                OnPropertyChanged("SelectedPage"); 
+                OnPropertyChanged("SelectedPage");
             }
         }
         public bool IsThereAnyPages
@@ -477,13 +475,21 @@ namespace MainLib.ViewModels.Main
                         }
                     });
 
+                    int exportedArticlesCount = 0;
+
                     // 3. Uncheck articles
                     foreach (Article article in Articles)
+                    {
                         article.Checked = false;
+                        exportedArticlesCount++;
+                    }
 
                     services.IsWorking(false);
 
-                    services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
+                    UpdateExportStatus();
+
+                    //services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
+                    services.NotificationManager.Show(new NotificationContent { Title = "Export", Message = $"Exported {exportedArticlesCount} files successfully.", Type = NotificationType.Success }, areaName: "NotificationArea", expirationTime: new TimeSpan(0, 0, 3));
                 }
             }
             catch (Exception e)
@@ -515,7 +521,7 @@ namespace MainLib.ViewModels.Main
             {
                 // 1. Ask user if they are sure
                 if (services.DialogService.OpenDialog(
-                    new DialogYesNoViewModel("Delete following record?\n" + SelectedArticle.Title, "Warning", DialogType.Question)
+                    new DialogYesNoViewModel("Are you sure you want to delete selected article?", "Warning", DialogType.Question)
                    ))
                 {
                     // 2. Delete article record from database
@@ -911,7 +917,7 @@ namespace MainLib.ViewModels.Main
             // If we are at start and span is less than 10
             if (_endPageIndex < 11 && TotalPages >= _endPageIndex)
             {
-                if (TotalPages >=10) { _endPageIndex = 11; }
+                if (TotalPages >= 10) { _endPageIndex = 11; }
                 else { _endPageIndex = TotalPages + 1; }
             }
             // Don't go beyond total pages

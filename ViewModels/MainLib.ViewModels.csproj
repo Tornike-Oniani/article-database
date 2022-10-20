@@ -107,6 +107,10 @@
       <Project>{22197010-2cc9-4f4b-b22c-c39ed33f91b7}</Project>
       <Name>Lib.ViewModels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NotificationService\NotificationService.csproj">
+      <Project>{4E4EFF8B-A063-4826-9007-B005A53872B6}</Project>
+      <Name>NotificationService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

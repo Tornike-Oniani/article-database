@@ -11,15 +11,19 @@
     <Style x:Key="BookmarkManagerList" TargetType="{x:Type ListView}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="Background" Value="#f2f2f2" />
+        <Setter Property="Padding" Value="6 6 9 0" />
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <CheckBox 
-                              FontWeight="{Binding Bookmark.Global, Converter={StaticResource IntToFontWeight}}"
-                              Padding="8"
-                              IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                              Command="{Binding DataContext.CheckChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
-                              CommandParameter="{Binding}">
+                    <CheckBox
+                        Padding="6 12 12 12"
+                        FontWeight="{Binding Bookmark.Global, Converter={StaticResource IntToFontWeight}}"
+                        IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                        Command="{Binding DataContext.CheckChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+                        CommandParameter="{Binding}"
+                        >
                         <TextBlock Text="{Binding Bookmark.Name}" TextWrapping="Wrap" />
                     </CheckBox>
                 </DataTemplate>
@@ -28,7 +32,27 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignListBoxItem}">
-                    <Setter Property="Padding" Value="8 0 0 0" />
+                    <Setter Property="Padding" Value="12 0 0 0" />
+                    <Setter Property="Background" Value="#ffffff" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border
+                                    Padding="{TemplateBinding Padding}"
+                                    CornerRadius="4"
+                                    Background="{TemplateBinding Background}"
+                                    Margin="0 0 0 6"
+                                    >
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FFC2D9EF" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </Setter.Value>
         </Setter>
@@ -40,10 +64,11 @@
             <Setter.Value>
                 <DataTemplate>
                     <CheckBox 
-                              Padding="8"
-                              IsChecked="{Binding IsChecked}"
-                              Command="{Binding DataContext.CheckChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
-                              CommandParameter="{Binding}">
+                        Padding="8"
+                        IsChecked="{Binding IsChecked}"
+                        Command="{Binding DataContext.CheckChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+                        CommandParameter="{Binding}"
+                        >
                         <TextBlock Text="{Binding Reference.Name}" TextWrapping="Wrap" />
                     </CheckBox>
                 </DataTemplate>

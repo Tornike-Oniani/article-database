@@ -8,6 +8,7 @@
              xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:type="clr-namespace:MainLib.ViewModels.Main;assembly=MainLib.ViewModels"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
+             xmlns:notifications="clr-namespace:NotificationService.Controls;assembly=NotificationService"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -48,9 +49,15 @@
                 <!-- Content column -->
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="70px" />
+            </Grid.RowDefinitions>
 
             <Border Padding="10"
-                    Grid.Column="0">
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Grid.RowSpan="2">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0 1" EndPoint="0 0">
                         <LinearGradientBrush.GradientStops>
@@ -60,27 +67,27 @@
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
                 </Border.Background>
-                
+
                 <Grid Style="{StaticResource NavigationWrapper}" 
                   Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50px" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50px" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                <!-- Navigation -->
-                <StackPanel Grid.Row="1">
-                    <!-- Home -->
-                    <RadioButton Style="{StaticResource NavigationButton}"
+                    <!-- Navigation -->
+                    <StackPanel Grid.Row="1">
+                        <!-- Home -->
+                        <RadioButton Style="{StaticResource NavigationButton}"
                          Content="Home" 
                          Tag="{x:Static materialDesign:PackIconKind.Home}" 
                          GroupName="Navigation" 
                          IsChecked="True" 
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.Home}" />
-                    <!-- Data entry -->
-                    <RadioButton Style="{StaticResource NavigationButton}" 
+                        <!-- Data entry -->
+                        <RadioButton Style="{StaticResource NavigationButton}" 
                          IsEnabled="{Binding User.IsAdmin}"
                          Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
                          Content="Data Entry" 
@@ -88,54 +95,54 @@
                          GroupName="Navigation" 
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.DataEntry}" />
-                    <!-- Data search -->
-                    <RadioButton Style="{StaticResource NavigationButton}" 
+                        <!-- Data search -->
+                        <RadioButton Style="{StaticResource NavigationButton}" 
                          Content="Data Search" 
                          Tag="{x:Static materialDesign:PackIconKind.Search}" 
                          GroupName="Navigation" 
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.DataView}" 
                          Click="RadioButton_Click" />
-                    <!-- Bookmark manager -->
-                    <RadioButton Style="{StaticResource NavigationButton}"
+                        <!-- Bookmark manager -->
+                        <RadioButton Style="{StaticResource NavigationButton}"
                          Content="Bookmarks"
                          Tag="{x:Static materialDesign:PackIconKind.Bookmark}"
                          GroupName="Navigation"
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.Bookmarks}" />
-                    <!-- Reference manager -->
-                    <RadioButton Style="{StaticResource NavigationButton}"
+                        <!-- Reference manager -->
+                        <RadioButton Style="{StaticResource NavigationButton}"
                          Content="References"
                          Tag="{x:Static materialDesign:PackIconKind.ArrowCollapse}"
                          GroupName="Navigation"
                          Command="{Binding UpdateViewCommand}" 
                          CommandParameter="{x:Static type:ViewType.References}" />
-                </StackPanel>
+                    </StackPanel>
 
-                <Border Grid.Row="2">
-                    <Button Style="{x:Null}"
+                    <Border Grid.Row="2">
+                        <Button Style="{x:Null}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Cursor="Hand"
                             Margin="10 0 0 10"
                             Command="{Binding OpenSettingsCommand}">
-                        <Button.Template>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <materialDesign:PackIcon Kind="Gear"
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <materialDesign:PackIcon Kind="Gear"
                                                          Width="25"
                                                          Height="25"
                                                          Foreground="#ffffff"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                </Button>
-                </Border>
-            </Grid>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Border>
+                </Grid>
             </Border>
 
-
             <!-- Content -->
-            <ContentControl Content="{Binding SelectedViewModel}" Grid.Column="1" />
-
+            <ContentControl Content="{Binding SelectedViewModel}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" />
+            <notifications:NotificationArea x:Name="NotificationArea" Position="BottomLeft" MaxItems="3" Margin="0 0 0 0" Grid.Column="1" Grid.Row="0"/>
+            
         </Grid>
     </Grid>
 </UserControl>

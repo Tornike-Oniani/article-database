@@ -12,7 +12,7 @@
         <converters:DialogTypeToIconConverter x:Key="DialogTypeToIcon" />
         <converters:DialogTypeToColorConverter x:Key="DialogTypeToColor" />
     </UserControl.Resources>
-    <Grid Margin="14">
+    <Grid Margin="12">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />

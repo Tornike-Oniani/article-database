@@ -25,7 +25,7 @@
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <!-- Title bar -->
-                                    <RowDefinition Height="40" />
+                                    <RowDefinition Height="32" />
                                     <!-- Drop shadow-->
                                     <RowDefinition Height="Auto" />
                                     <!-- Window Content -->
@@ -45,9 +45,9 @@
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue=DummyText}"
-                                                   FontSize="18"
+                                                   FontSize="16"
                                                    Foreground="#ffffff"
-                                                   Padding="10 10 10 10"
+                                                   Padding="12 12 12 12"
                                                    VerticalAlignment="Center"
                                                    Grid.Column="0" />
 

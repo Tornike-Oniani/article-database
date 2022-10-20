@@ -77,6 +77,7 @@ namespace Lib.DataAccessLayer.Models
         private string _personalComment;
         private int _sic;
         private int _abstractOnly;
+        private bool _checked;
 
         public long? ID
         {
@@ -124,7 +125,11 @@ namespace Lib.DataAccessLayer.Models
             set { _abstractOnly = value; OnPropertyChanged("AbstractOnly"); }
         }
 
-        public bool Checked { get; set; }
+        public bool Checked
+        {
+            get { return _checked; }
+            set { _checked = value; OnPropertyChanged("Checked"); }
+        }
         public bool BMChecked { get; set; }
 
         public ObservableCollection<string> AuthorsCollection { get; set; }

@@ -1,23 +1,20 @@
-﻿using Lib.DataAccessLayer.Models;
+﻿using Lib.DataAccessLayer.Info;
+using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
-using Lib.ViewModels.Services;
 using Lib.ViewModels.Services.Dialogs;
-using System.Collections.ObjectModel;
-using System.Windows.Navigation;
 using MainLib.ViewModels.Utils;
-using Lib.DataAccessLayer.Info;
-using Lib.ViewModels.Services.Browser;
-using System.Text.RegularExpressions;
+using NotificationService;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MainLib.ViewModels.Pages
@@ -116,7 +113,7 @@ namespace MainLib.ViewModels.Pages
 
                 services.IsWorking(false);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 new BugTracker().Track("Reference View", "Populate references", e.Message, e.StackTrace);
                 services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
@@ -245,13 +242,21 @@ namespace MainLib.ViewModels.Pages
                         }
                     });
 
+                    int exportedArticlesCount = 0;
+
                     // 3. Uncheck articles
                     foreach (Article article in Articles)
+                    {
                         article.Checked = false;
+                        exportedArticlesCount++;
+                    }
 
                     services.IsWorking(false);
 
-                    services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
+                    UpdateExportStatus();
+
+                    //services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
+                    services.NotificationManager.Show(new NotificationContent { Title = "Export", Message = $"Exported {exportedArticlesCount} files successfully.", Type = NotificationType.Success }, areaName: "NotificationArea", expirationTime: new TimeSpan(0, 0, 3));
                 }
             }
             catch (Exception e)

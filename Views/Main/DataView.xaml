@@ -844,7 +844,7 @@
                                 </TextBlock>
                                 <Border
                                     Visibility="{Binding AbstractOnly, Converter={StaticResource IntToVisibility}}"
-                                    Padding="3 3 3 3"
+                                    Padding="6 3 6 3"
                                     CornerRadius="6"
                                     Background="{StaticResource PrimaryColorBrush}"
                                     HorizontalAlignment="Right"
@@ -854,6 +854,7 @@
                                     <TextBlock
                                         Text="AO"                                        
                                         Foreground="#ffffff"
+                                        FontSize="12"
                                         />
                                 </Border>
                             </Grid>

@@ -171,6 +171,10 @@
       <Project>{6293c9d0-2fed-45b5-b143-ced8f086371a}</Project>
       <Name>Lib.Views</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NotificationService\NotificationService.csproj">
+      <Project>{4e4eff8b-a063-4826-9007-b005a53872b6}</Project>
+      <Name>NotificationService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ViewModels\MainLib.ViewModels.csproj">
       <Project>{4414eb2f-7ab3-46f4-92c3-c4ecbcbe7b35}</Project>
       <Name>MainLib.ViewModels</Name>

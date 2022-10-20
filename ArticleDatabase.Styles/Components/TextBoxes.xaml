@@ -118,10 +118,11 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
+                                        <!-- #86b7fe -->
                                         <ColorAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                            To="#86b7fe"
+                                            To="{StaticResource PrimaryColor}"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
@@ -150,7 +151,7 @@
         <Style.Triggers>
             <!-- Focused styling -->
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderBrush" Value="#86b7fe" />
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" /> <!-- #86b7fe -->
             </Trigger>
             <DataTrigger Binding="{Binding Path=HasError}" Value="True">
                 <Setter Property="BorderBrush" Value="Red" />
@@ -249,10 +250,11 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
+                                        <!-- #86b7fe-->
                                         <ColorAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                            To="#86b7fe"
+                                            To="{StaticResource PrimaryColor}"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
@@ -281,7 +283,7 @@
         <Style.Triggers>
             <!-- Focused styling -->
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderBrush" Value="#86b7fe" />
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" /> <!-- #86b7fe-->
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -377,10 +379,11 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
+                                        <!-- #86b7fe -->
                                         <ColorAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                            To="#86b7fe"
+                                            To="{StaticResource PrimaryColor}"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
@@ -409,7 +412,7 @@
         <Style.Triggers>
             <!-- Focused styling -->
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderBrush" Value="#86b7fe" />
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" /> <!-- #86b7fe-->
             </Trigger>
         </Style.Triggers>
     </Style>

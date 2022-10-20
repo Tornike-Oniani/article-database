@@ -10,7 +10,7 @@
         WindowStyle="None"
         Style="{StaticResource DialogWindowStyle1}"
         Title="{Binding Title, FallbackValue=SampleTitle}" 
-        MinHeight="150" 
+        MinHeight="130" 
         MinWidth="300"
         MaxWidth="350"
         ResizeMode="NoResize"
