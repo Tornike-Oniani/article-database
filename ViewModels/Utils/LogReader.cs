@@ -73,18 +73,39 @@ namespace MainLib.ViewModels.Utils
                             ReferenceRepo referenceRepo = new ReferenceRepo();
 
                             // Bookmarks
-                            local_info.Bookmarks.ForEach((bookmark) =>
+                            foreach (BookmarkInfo bookmarkInfo in local_info.Bookmarks)
                             {
-                                Bookmark dbBookmark = bookmarkRepo.GetBookmark(bookmark.Name, user);
+                                // Get bookmark from database
+                                Bookmark dbBookmark = bookmarkRepo.GetBookmark(bookmarkInfo.Name, user);
+                                // Edge case: if there is no bookmark in database log mismatch
+                                if (dbBookmark == null)
+                                {
+                                    string mismatch = $"Can't couple article - '{article.Title}' with bookmark '{bookmarkInfo.Name}' because bookmark doesn't exist";
+                                    _mismatches.Add(mismatch);
+                                    continue;
+                                }
+                                // Couple article with bookmark
                                 bookmarkRepo.AddArticleToBookmark(dbBookmark, dbArticle);
-                            });
+                            }
 
                             // References
-                            local_info.References.ForEach((reference) =>
+                            foreach (ReferenceInfo referenceInfo in local_info.References)
                             {
-                                Reference dbReference = referenceRepo.GetReference(reference.Name);
+                                // Get reference from database
+                                Reference dbReference = referenceRepo.GetReference(referenceInfo.Name);
+
+                                // Edge case: if there is no reference in database log mismatch
+                                if (dbReference == null)
+                                {
+                                    string mismatch = $"Can't couple article - '{article.Title}' with reference '{referenceInfo.Name}' because reference doesn't exist";
+                                    _mismatches.Add(mismatch);
+                                    continue;
+                                }
+
+                                // Couple artilce with reference
                                 referenceRepo.AddArticleToReference(dbReference, dbArticle);
-                            });
+                            }
+
                         }
                         // Create bookmark
                         else if (log.Info.InfoType == "BookmarkInfo")
