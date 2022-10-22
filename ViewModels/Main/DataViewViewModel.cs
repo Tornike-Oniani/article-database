@@ -489,7 +489,7 @@ namespace MainLib.ViewModels.Main
                     UpdateExportStatus();
 
                     //services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
-                    services.NotificationManager.Show(new NotificationContent { Title = "Export", Message = $"Exported {exportedArticlesCount} files successfully.", Type = NotificationType.Success }, areaName: "NotificationArea", expirationTime: new TimeSpan(0, 0, 3));
+                    services.ShowNotification("Export", $"Exported {exportedArticlesCount} files successfully.", NotificationType.Success, "DataViewNotificationArea", new TimeSpan(0, 0, 3));
                 }
             }
             catch (Exception e)

@@ -7,6 +7,7 @@ using Lib.ViewModels.Services.Windows;
 using MainLib.ViewModels.Popups;
 using MainLib.ViewModels.Utils;
 using Newtonsoft.Json;
+using NotificationService;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -105,6 +106,8 @@ namespace MainLib.ViewModels.Main
                         services.IsWorking(false);
 
                         services.DialogService.OpenDialog(new DialogOkViewModel("Some files are missing see Logs for more info...", "Result", DialogType.Warning));
+                        services.ShowNotification("Some files are missing see Logs for more info...", "Database validation", NotificationType.Error, "HomeNotificationArea", TimeSpan.MaxValue);
+
                     }
                     else
                     {
@@ -249,9 +252,15 @@ namespace MainLib.ViewModels.Main
 
                 // Show messagebox regarding errors
                 if (reader.NoErrors)
-                    services.DialogService.OpenDialog(new DialogOkViewModel("Synchronisation successful", "Synchronisation", DialogType.Success));
+                {
+                    //services.DialogService.OpenDialog(new DialogOkViewModel("Synchronisation successful", "Synchronisation", DialogType.Success));
+                    services.ShowNotification("Synchronisation successful", "Synchronisation", NotificationType.Success, "HomeNotificationArea", TimeSpan.MaxValue);
+                }
                 else
-                    services.DialogService.OpenDialog(new DialogOkViewModel("Some steps couldn't be reproduced, see logs for more information", "Synchronisation", DialogType.Warning));
+                {
+                    //services.DialogService.OpenDialog(new DialogOkViewModel("Some steps couldn't be reproduced, see logs for more information", "Synchronisation", DialogType.Warning));
+                    services.ShowNotification("Some steps couldn't be reproduced, see logs for more information.", "Synchronisation", NotificationType.Error, "HomeNotificationArea", TimeSpan.MaxValue);
+                }
             }
             catch (Exception e)
             {
@@ -278,12 +287,13 @@ namespace MainLib.ViewModels.Main
                 // If sync is already exported in destination
                 if (Directory.Exists(Path.Combine(destination, "Sync")))
                 {
-                    services.DialogService.OpenDialog(
-                        new DialogOkViewModel(
-                            "This folder already contains sync information. Please choose different path",
-                            "Export Sync",
-                            DialogType.Error)
-                        );
+                    //services.DialogService.OpenDialog(
+                    //    new DialogOkViewModel(
+                    //        "This folder already contains sync information. Please choose different path",
+                    //        "Export Sync",
+                    //        DialogType.Error)
+                    //    );
+                    services.ShowNotification("This folder already contains sync information. Please choose different path.", "Export Sync", NotificationType.Error, "HomeNotificationArea", TimeSpan.MaxValue);
                     return;
                 }
 
@@ -295,12 +305,13 @@ namespace MainLib.ViewModels.Main
                 // There is no sync folder in root
                 if (!Directory.Exists(syncPath))
                 {
-                    services.DialogService.OpenDialog(
-                        new DialogOkViewModel(
-                            "No information to export, please restart application.",
-                            "Export Sync",
-                            DialogType.Error)
-                        );
+                    //services.DialogService.OpenDialog(
+                    //    new DialogOkViewModel(
+                    //        "No information to export, please restart application.",
+                    //        "Export Sync",
+                    //        DialogType.Error)
+                    //    );
+                    services.ShowNotification("No information to export, please restart application.", "Export Sync", NotificationType.Error, "HomeNotificationArea", TimeSpan.MaxValue);
                     return;
                 }
 
@@ -369,7 +380,8 @@ namespace MainLib.ViewModels.Main
 
                 services.IsWorking(false);
 
-                services.DialogService.OpenDialog(new DialogOkViewModel("Sync information exported successfully.", "Sync export", DialogType.Success));
+                //services.DialogService.OpenDialog(new DialogOkViewModel("Sync information exported successfully.", "Sync export", DialogType.Success));
+                services.ShowNotification("Sync information exported successfully.", "Export Sync", NotificationType.Success, "HomeNotificationArea", new TimeSpan(0, 0, 10));
             }
             catch (Exception e)
             {

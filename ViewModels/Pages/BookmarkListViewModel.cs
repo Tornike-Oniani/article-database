@@ -1,19 +1,16 @@
 ﻿using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Popups;
+using MainLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using Lib.ViewModels.Base;
-using Lib.ViewModels.Commands;
-using MainLib.ViewModels.Popups;
-using Lib.ViewModels.Services.Dialogs;
-using Lib.ViewModels.Services.Windows;
-using MainLib.ViewModels.Utils;
 using System.Windows.Input;
 
 namespace MainLib.ViewModels.Pages
@@ -85,7 +82,7 @@ namespace MainLib.ViewModels.Pages
                 Bookmark selected_bookmark = input as Bookmark;
 
                 // 2. Ask user if they are sure
-                if (services.DialogService.OpenDialog(new DialogYesNoViewModel("Delete following bookmark?\n" + selected_bookmark.Name, "Check", DialogType.Question)))
+                if (services.DialogService.OpenDialog(new DialogYesNoViewModel("Delete selected bookmark?", "Check", DialogType.Question)))
                 {
                     // 3. Delete bookmark record from database
                     new BookmarkRepo().DeleteBookmark(selected_bookmark);
@@ -125,7 +122,7 @@ namespace MainLib.ViewModels.Pages
 
                 services.IsWorking(false);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 new BugTracker().Track("Bookmark List", "Populate Bookmarks", e.Message, e.StackTrace);
                 services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));

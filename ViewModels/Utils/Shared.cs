@@ -22,11 +22,11 @@ namespace MainLib.ViewModels.Utils
         }
 
         private Action<bool, string> _isWorkingAction;
+        private INotificationManager _notificationManager;
 
         public IDialogService DialogService { get; private set; }
         public IWindowService WindowService { get; private set; }
         public IBrowserService BrowserService { get; private set; }
-        public INotificationManager NotificationManager { get; private set; }
         public User User { get; private set; }
         public string LastExportFolderPath { get; private set; }
         public string LastSyncFolderPath { get; private set; }
@@ -37,7 +37,7 @@ namespace MainLib.ViewModels.Utils
             this.WindowService = windowService;
             this.BrowserService = browserService;
 
-            this.NotificationManager = new NotificationManager();
+            this._notificationManager = new NotificationManager();
         }
         public void SetWorkingStatusAction(Action<bool, string> isWorkingAction)
         {
@@ -47,6 +47,7 @@ namespace MainLib.ViewModels.Utils
         {
             this.User = user;
         }
+
         public void SaveExportPath(string path)
         {
             this.LastExportFolderPath = path;
@@ -55,10 +56,16 @@ namespace MainLib.ViewModels.Utils
         {
             this.LastSyncFolderPath = path;
         }
-
         public void IsWorking(bool isWorking, string label = "Working...")
         {
             this._isWorkingAction.Invoke(isWorking, label);
+        }
+        public void ShowNotification(string message, string title, NotificationType type, string areaName, TimeSpan? expirationTime = null)
+        {
+            // If expiration time was provided set it to default 5 seconds
+            TimeSpan? et = expirationTime == null ? new TimeSpan(0, 0, 5) : expirationTime;
+
+            _notificationManager.Show(new NotificationContent { Message = message, Title = title, Type = type }, areaName: areaName, expirationTime: expirationTime);
         }
     }
 }

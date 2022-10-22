@@ -1,19 +1,16 @@
 ﻿using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Popups;
+using MainLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using Lib.ViewModels.Commands;
-using Lib.ViewModels.Base;
-using MainLib.ViewModels.Popups;
-using Lib.ViewModels.Services.Dialogs;
-using Lib.ViewModels.Services.Windows;
-using MainLib.ViewModels.Utils;
 using System.Windows.Input;
 
 namespace MainLib.ViewModels.Pages
@@ -79,7 +76,7 @@ namespace MainLib.ViewModels.Pages
                 Reference selected_reference = input as Reference;
 
                 // 2. Ask user if they are sure
-                if (services.DialogService.OpenDialog(new DialogYesNoViewModel("Delete following reference?\n" + selected_reference.Name, "Check", DialogType.Question)))
+                if (services.DialogService.OpenDialog(new DialogYesNoViewModel("Delete selected reference?", "Check", DialogType.Question)))
                 {
                     // 3. Delete reference record from database
                     new ReferenceRepo().DeleteReference(selected_reference);
@@ -91,7 +88,7 @@ namespace MainLib.ViewModels.Pages
                     PopulateReferences();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 new BugTracker().Track("Reference List", "Delete reference", e.Message, e.StackTrace);
                 services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));

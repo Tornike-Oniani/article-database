@@ -14,11 +14,11 @@ namespace Lib.Views.Converters
             switch (type)
             {
                 case DialogType.Warning:
-                    return (SolidColorBrush)new BrushConverter().ConvertFrom("#eac85d");  //#ffbb34
+                    return (SolidColorBrush)new BrushConverter().ConvertFrom("#eac85d");  // #ffbb34
                 case DialogType.Question:
-                    return (SolidColorBrush)new BrushConverter().ConvertFrom("#3094C0");
+                    return (SolidColorBrush)new BrushConverter().ConvertFrom("#17a2b8");  // #3094C0
                 case DialogType.Error:
-                    return (SolidColorBrush)new BrushConverter().ConvertFrom("#ff3648");
+                    return (SolidColorBrush)new BrushConverter().ConvertFrom("#FFB94A69");
                 case DialogType.Information:
                     return (SolidColorBrush)new BrushConverter().ConvertFrom("#3094C0");
                 case DialogType.Success:

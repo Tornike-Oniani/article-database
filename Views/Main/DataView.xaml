@@ -11,6 +11,7 @@
              xmlns:ap="clr-namespace:Lib.Views.Attached_Properties;assembly=Lib.Views"
              xmlns:aps="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
+             xmlns:notifications="clr-namespace:NotificationService.Controls;assembly=NotificationService"
              mc:Ignorable="d" 
              Focusable="True"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -310,8 +311,6 @@
             <RowDefinition Height="Auto" />
             <!-- Data grid column -->
             <RowDefinition Height="*" />
-            <!-- Pagination column -->
-            <RowDefinition Height="Auto" />
             <!-- Pagination column -->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -680,55 +679,6 @@
                 </ScrollViewer>
             </Border>
         </Grid>
-        <!-- Top menu -->
-        <Border Visibility="Collapsed" Padding="10" Grid.Row="1">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <!-- Export/Print column -->
-                    <ColumnDefinition Width="Auto" />
-                    <!-- Comment/SIC column -->
-                    <ColumnDefinition Width="Auto" />
-                    <!-- Space -->
-                    <ColumnDefinition Width="*" />
-                    <!-- Mass bookmark column -->
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <!-- Export/Print -->
-                <StackPanel Orientation="Horizontal" Grid.Column="0">
-                    <CheckBox Content="Enable Export" 
-                              FontSize="16" 
-                              IsChecked="{Binding Columns, Converter={StaticResource CheckToList}, ConverterParameter='Export'}"
-                              Command="{Binding EnableExportCommand}" />
-                    <Button Name="btnExport" Content="Export" Width="80" Margin="10 0 10 0" Command="{Binding ExportCommand}" />
-                    <Button Name="btnPrint" Content="Print" Width="80" IsEnabled="False" Visibility="Collapsed" />
-                </StackPanel>
-
-                <!-- Comment/SIC -->
-                <StackPanel Orientation="Horizontal" Grid.Column="1" >
-                    <Rectangle Width="2" Fill="{StaticResource PrimaryColorBrush}" Margin="15 0 15 0" />
-                    <ComboBox ItemsSource="{Binding Users}" DisplayMemberPath="Username" SelectedIndex="{Binding UserIndex}" Width="120" Margin="10 0 0 0" />
-                </StackPanel>
-
-                <!-- Mass bookmark -->
-                <StackPanel Orientation="Horizontal" 
-                            Visibility="{Binding User.IsAdmin, 
-                            Converter={StaticResource BoolToVisibility}}"
-                            Grid.Column="3">
-                    <CheckBox Content="Mass bookmark" 
-                              FontSize="16" 
-                              IsChecked="{Binding Columns, 
-                              Converter={StaticResource CheckToList}, 
-                              ConverterParameter='Bookmark'}"
-                              Command="{Binding MassBookmarkCommand}"
-                              CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
-                    <Button Content="Bookmark" 
-                            Width="100" 
-                            Margin="10 0 10 0" 
-                            Command="{Binding OpenMassBookmarkManagerCommand}" />
-                </StackPanel>
-            </Grid>
-        </Border>
         <!-- Datagrid -->
         <!-- Each column is bound to command from ArticleGrid style for sorting -->
         <DataGrid 
@@ -996,76 +946,20 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <!-- Pagination (deprecated) -->
-        <Border 
-            Visibility="Collapsed"
-            Padding="10" 
-            Grid.Row="3"
-            >
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <!-- Pagination buttons column -->
-                    <ColumnDefinition Width="Auto" />
-                    <!-- Items per page column -->
-                    <ColumnDefinition Width="Auto" />
-                    <!-- Section colum -->
-                    <ColumnDefinition Width="Auto" />
-                    <!-- Dialog button colum -->
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <!-- Pagination buttons -->
-                <StackPanel Orientation="Horizontal" Grid.Column="0">
-                    <Button Margin="0 0 5 0" Command="{Binding PreviousPageCommand}">
-                        <materialDesign:PackIcon Kind="ArrowLeft" />
-                    </Button>
-                    <TextBlock VerticalAlignment="Center" FontSize="16"  Text="{Binding Path=CurrentPage, FallbackValue=1}" />
-                    <TextBlock VerticalAlignment="Center" FontSize="16"  Text="/" />
-                    <TextBlock VerticalAlignment="Center" FontSize="16"  Text="{Binding Path=TotalPages, FallbackValue=99}" />
-                    <Button Margin="5 0 0 0" Command="{Binding NextPageCommand}">
-                        <materialDesign:PackIcon Kind="ArrowRight" />
-                    </Button>
-                </StackPanel>
-
-                <!-- Items per page -->
-                <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="10 0 0 0">
-                    <TextBlock VerticalAlignment="Center" Text="Items per page:" FontSize="16" />
-                    <TextBox Text="{Binding ItemsPerPage}" Width="50" Margin="5 0 10 0"/>
-                    <Button Command="{Binding LoadArticlesCommand}">
-                        <materialDesign:PackIcon Kind="Refresh" />
-                    </Button>
-                </StackPanel>
-
-                <!-- Section selection -->
-                <StackPanel Orientation="Horizontal"
-                            Visibility="{Binding User.IsAdmin, 
-                                                 Converter={StaticResource BoolToVisibility}}"
-                            Grid.Column="2">
-                    <ComboBox ItemsSource="{Binding Sections}"
-                              SelectedItem="{Binding SelectedSection}"
-                              Width="100"
-                              Margin="10 0 10 0" />
-                    <Button Content="Finish"
-                            IsEnabled="{Binding IsSectionSelected}"
-                            Command="{Binding FinishCommand}" />
-                </StackPanel>
-
-                <!-- Filter button -->
-                <Button 
-                    Content="Filter" 
-                    Width="100" 
-                    HorizontalAlignment="Right" 
-                    Command="{Binding OpenSearchDialogCommand}" 
-                    CommandParameter="{Binding Columns}"
-                    Grid.Column="3"/>
-            </Grid>
-        </Border>
+        <notifications:NotificationArea 
+            x:Name="DataViewNotificationArea" 
+            Position="BottomRight" 
+            MaxItems="3"
+            Margin="0 0 0 6"
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            />
         <!-- Bottom menu -->
         <Border
             BorderThickness="0 1 0 0"
             BorderBrush="#FFC5C1C1"
             Padding="12 6 12 6"
-            Grid.Row="4"
+            Grid.Row="3"
             >
             <Grid>
                 <Grid.ColumnDefinitions>

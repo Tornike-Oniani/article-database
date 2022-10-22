@@ -137,15 +137,20 @@
 
                             <!-- Bookmark name -->
                             <StackPanel Grid.Column="0">
-                                <TextBlock x:Name="bookmarkName" 
-                                           Text="{Binding Name}"
-                                           TextWrapping="Wrap"
-                                           FontSize="18" />
-                                <TextBlock x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
-                                           Foreground="Gray" 
-                                           FontSize="16" 
-                                           Visibility="Collapsed"
-                                           Opacity="0.0" />
+                                <TextBlock 
+                                    x:Name="bookmarkName" 
+                                    Text="{Binding Name}"
+                                    TextWrapping="Wrap"
+                                    FontSize="18"
+                                    Foreground="{StaticResource LabelColorBrush}"
+                                    />
+                                <TextBlock 
+                                    x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
+                                    Foreground="{StaticResource LabelColorLightBrush}" 
+                                    FontSize="16" 
+                                    Visibility="Collapsed"
+                                    Opacity="0.0" 
+                                    />
                             </StackPanel>
                             <!-- Buttons -->
                             <StackPanel Orientation="Horizontal"
@@ -162,18 +167,48 @@
                                         CommandParameter="{Binding}">
                                     <Button.Template>
                                         <ControlTemplate>
-                                            <Border Background="Transparent">
-                                                <materialDesign:PackIcon x:Name="Icon" 
-                                                                     Kind="Edit"
-                                                                     Height="25"
-                                                                     Width="25"
-                                                                     VerticalAlignment="Center"
-                                                                     Foreground="#28B9B5" />
+                                            <Border
+                                                x:Name="outline"
+                                                Padding="6 6 6 6"
+                                                BorderThickness="1 1 1 1"
+                                                BorderBrush="{StaticResource LabelColorBrush}"
+                                                CornerRadius="4"
+                                                Background="#ffffff"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                >
+                                                <Border.BitmapEffect>
+                                                    <DropShadowBitmapEffect 
+                                                        Color="Black"
+                                                        Direction="-60"
+                                                        ShadowDepth="5"
+                                                        Softness="10"
+                                                        Opacity="0.1"                        
+                                                        />
+                                                </Border.BitmapEffect>
+                                                <materialDesign:PackIcon 
+                                                    x:Name="Icon" 
+                                                    Kind="Edit"
+                                                    Height="20"
+                                                    Width="20"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{StaticResource LabelColorBrush}" 
+                                                    />
                                             </Border>
 
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="Icon" Property="Foreground" Value="#FF62EE62" />
+                                                    <Setter TargetName="outline" Property="BitmapEffect">
+                                                        <Setter.Value>
+                                                            <DropShadowBitmapEffect 
+                                                                Color="Black"
+                                                                Direction="-60"
+                                                                ShadowDepth="5"
+                                                                Softness="10"
+                                                                Opacity="0.2" 
+                                                                />
+                                                        </Setter.Value>
+                                                    </Setter>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -189,18 +224,48 @@
                                         CommandParameter="{Binding}">
                                     <Button.Template>
                                         <ControlTemplate>
-                                            <Border Background="Transparent">
-                                                <materialDesign:PackIcon x:Name="DeleteIcon" 
-                                                                     Kind="MinusCircleOutline"
-                                                                     Height="25"
-                                                                     Width="25"
-                                                                     VerticalAlignment="Center"
-                                                                     Foreground="#FF5049" />
+                                            <Border
+                                                x:Name="outline"
+                                                Padding="6 6 6 6"
+                                                BorderThickness="1 1 1 1"
+                                                BorderBrush="{StaticResource LabelColorBrush}"
+                                                CornerRadius="4"
+                                                Background="#ffffff"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                >
+                                                <Border.BitmapEffect>
+                                                    <DropShadowBitmapEffect 
+                                                        Color="Black"
+                                                        Direction="-60"
+                                                        ShadowDepth="5"
+                                                        Softness="10"
+                                                        Opacity="0.1"                        
+                                                        />
+                                                </Border.BitmapEffect>
+                                                <materialDesign:PackIcon 
+                                                    x:Name="DeleteIcon" 
+                                                    Kind="MinusCircleOutline"
+                                                    Height="20"
+                                                    Width="20"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{StaticResource LabelColorBrush}" 
+                                                    />
                                             </Border>
 
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="DeleteIcon" Property="Foreground" Value="Red" />
+                                                    <Setter TargetName="outline" Property="BitmapEffect">
+                                                        <Setter.Value>
+                                                            <DropShadowBitmapEffect 
+                                                                Color="Black"
+                                                                Direction="-60"
+                                                                ShadowDepth="5"
+                                                                Softness="10"
+                                                                Opacity="0.2" 
+                                                                />
+                                                        </Setter.Value>
+                                                    </Setter>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -301,12 +366,13 @@
                                 <TextBlock x:Name="bookmarkName" 
                                            Text="{Binding Name}"
                                            TextWrapping="Wrap"
-                                           FontSize="18" />
+                                           FontSize="18"
+                                           Foreground="{StaticResource LabelColorBrush}" />
                                 <TextBlock x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
-                                           Foreground="Gray" 
                                            FontSize="16" 
                                            Visibility="Collapsed"
-                                           Opacity="0.0" />
+                                           Opacity="0.0" 
+                                           Foreground="{StaticResource LabelColorLightBrush}" />
                             </StackPanel>
                             <!-- Buttons -->
                             <StackPanel Orientation="Horizontal"
@@ -324,18 +390,48 @@
                                         CommandParameter="{Binding}">
                                     <Button.Template>
                                         <ControlTemplate>
-                                            <Border Background="Transparent">
-                                                <materialDesign:PackIcon x:Name="Icon" 
-                                                                     Kind="Edit"
-                                                                     Height="25"
-                                                                     Width="25"
-                                                                     VerticalAlignment="Center"
-                                                                     Foreground="#28B9B5" />
+                                            <Border
+                                                x:Name="outline"
+                                                Padding="6 6 6 6"
+                                                BorderThickness="1 1 1 1"
+                                                BorderBrush="{StaticResource LabelColorBrush}"
+                                                CornerRadius="4"
+                                                Background="#ffffff"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                >
+                                                <Border.BitmapEffect>
+                                                    <DropShadowBitmapEffect 
+                                                        Color="Black"
+                                                        Direction="-60"
+                                                        ShadowDepth="5"
+                                                        Softness="10"
+                                                        Opacity="0.1"                        
+                                                        />
+                                                </Border.BitmapEffect>
+                                                <materialDesign:PackIcon 
+                                                    x:Name="Icon" 
+                                                    Kind="Edit"
+                                                    Height="20"
+                                                    Width="20"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{StaticResource LabelColorBrush}" 
+                                                    />
                                             </Border>
 
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="Icon" Property="Foreground" Value="#FF62EE62" />
+                                                    <Setter TargetName="outline" Property="BitmapEffect">
+                                                        <Setter.Value>
+                                                            <DropShadowBitmapEffect 
+                                                                Color="Black"
+                                                                Direction="-60"
+                                                                ShadowDepth="5"
+                                                                Softness="10"
+                                                                Opacity="0.2" 
+                                                                />
+                                                        </Setter.Value>
+                                                    </Setter>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -351,18 +447,48 @@
                                         CommandParameter="{Binding}">
                                     <Button.Template>
                                         <ControlTemplate>
-                                            <Border Background="Transparent">
-                                                <materialDesign:PackIcon x:Name="DeleteIcon" 
-                                                                     Kind="MinusCircleOutline"
-                                                                     Height="25"
-                                                                     Width="25"
-                                                                     VerticalAlignment="Center"
-                                                                     Foreground="#FF5049" />
+                                            <Border
+                                                x:Name="outline"
+                                                Padding="6 6 6 6"
+                                                BorderThickness="1 1 1 1"
+                                                BorderBrush="{StaticResource LabelColorBrush}"
+                                                CornerRadius="4"
+                                                Background="#ffffff"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                >
+                                                <Border.BitmapEffect>
+                                                    <DropShadowBitmapEffect 
+                                                        Color="Black"
+                                                        Direction="-60"
+                                                        ShadowDepth="5"
+                                                        Softness="10"
+                                                        Opacity="0.1"                        
+                                                        />
+                                                </Border.BitmapEffect>
+                                                <materialDesign:PackIcon 
+                                                    x:Name="DeleteIcon" 
+                                                    Kind="MinusCircleOutline"
+                                                    Height="20"
+                                                    Width="20"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{StaticResource LabelColorBrush}" 
+                                                    />
                                             </Border>
 
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="DeleteIcon" Property="Foreground" Value="Red" />
+                                                    <Setter TargetName="outline" Property="BitmapEffect">
+                                                        <Setter.Value>
+                                                            <DropShadowBitmapEffect 
+                                                                Color="Black"
+                                                                Direction="-60"
+                                                                ShadowDepth="5"
+                                                                Softness="10"
+                                                                Opacity="0.2" 
+                                                                />
+                                                        </Setter.Value>
+                                                    </Setter>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>

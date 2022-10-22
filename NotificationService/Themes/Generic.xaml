@@ -13,7 +13,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <TextBlock Text="&#9932;" FontSize="12" />
+                    <TextBlock Text="&#9932;" FontSize="14" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -41,8 +41,8 @@
                             <ContentControl x:Name="Icon" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </ContentControl>
                         <DockPanel Grid.Column="1">
-                            <TextBlock DockPanel.Dock="Top" Text="{Binding Title}" FontWeight="Medium" TextTrimming="CharacterEllipsis" />
-                            <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Opacity=".8" Margin="0,0,12,0"/>
+                            <TextBlock x:Name="Title" DockPanel.Dock="Top" Text="{Binding Title}" FontSize="16" FontWeight="Medium" TextTrimming="CharacterEllipsis" />
+                            <TextBlock x:Name="Message" Text="{Binding Message}" FontSize="16" TextWrapping="Wrap" Opacity="1" Margin="0,0,12,0"/>
                         </DockPanel>
                     </Grid>
                 </Border>
@@ -53,15 +53,15 @@
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Type}" Value="Success">
                         <Setter TargetName="Icon" Property="Content" Value="{StaticResource SuccessIcon}"/>
-                        <Setter TargetName="Border" Property="Background" Value="#3a0647"/>
+                        <Setter TargetName="Border" Property="Background" Value="#FF4A0B5A"/>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Type}" Value="Warning">
                         <Setter TargetName="Icon" Property="Content" Value="{StaticResource WarningIcon}"/>
-                        <Setter TargetName="Border" Property="Background" Value="Orange"/>
+                        <Setter TargetName="Border" Property="Background" Value="#FF4A0B5A"/>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Type}" Value="Error">
                         <Setter TargetName="Icon" Property="Content" Value="{StaticResource ErrorIcon}"/>
-                        <Setter TargetName="Border" Property="Background" Value="OrangeRed"/>
+                        <Setter TargetName="Border" Property="Background" Value="#FFB94A69"/>
                     </DataTrigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
