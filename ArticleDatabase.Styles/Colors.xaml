@@ -2,50 +2,58 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Lib.Styles">
 
-
     <!-- Primary color -->
     <Color x:Key="PrimaryColor">#17a2b8</Color>
     <SolidColorBrush x:Key="PrimaryColorBrush" Color="{StaticResource PrimaryColor}" />
-
     <!-- Secondary color -->
     <Color x:Key="SecondaryColor">#0575AC</Color>
     <SolidColorBrush x:Key="SecondaryColorBrush" Color="{StaticResource SecondaryColor}" />
-
     <!-- Complementary color -->
-    <Color x:Key="ComplementaryColor">#f07c41</Color>
+    <Color x:Key="ComplementaryColor">#3b1065</Color>
     <SolidColorBrush x:Key="ComplementaryColorBrush" Color="{StaticResource ComplementaryColor}" />
 
-    <!-- Highlight color -->
-    <Color x:Key="HighlightColor">#f0c748</Color>
-    <SolidColorBrush x:Key="HighlightColorBrush" Color="{StaticResource HighlightColor}" />
+    <!-- Text highlight color -->
+    <Color x:Key="TextHighlightColor">#f0c748</Color>
+    <SolidColorBrush x:Key="TextHighlightColorBrush" Color="{StaticResource TextHighlightColor}" />
 
-    <!-- Light highlight color -->
-    <Color x:Key="LightHighlightColor">#e5f3fb</Color>
-    <SolidColorBrush x:Key="LightHighlightColorBrush" Color="{StaticResource LightHighlightColor}" />
-    
     <!-- Light selection color -->
     <Color x:Key="LightSelectionColor">#cbe8f6</Color>
     <SolidColorBrush x:Key="LightSelectionColorBrush" Color="{StaticResource LightSelectionColor}" />
 
-    <!-- Control text color -->
-    <Color x:Key="ControlColor">#ffffff</Color>
-    <SolidColorBrush x:Key="ControlColorBrush" Color="{StaticResource ControlColor}" />
+    <!-- White color -->
+    <Color x:Key="WhiteColor">#ffffff</Color>
+    <SolidColorBrush x:Key="WhiteColorBrush" Color="{StaticResource WhiteColor}" />
+    <!-- Black alt color -->
+    <Color x:Key="BlackColorAlt">#212529</Color>
+    <SolidColorBrush x:Key="BlackColorAltBrush" Color="{StaticResource BlackColorAlt}" />
+    <!-- Blue color -->
+    <Color x:Key="BlueColor">#0c63e4</Color>
+    <SolidColorBrush x:Key="BlueColorBrush" Color="{StaticResource BlueColor}" />
+    <!-- Blue color light -->
+    <Color x:Key="BlueColorLight">#e7f1ff</Color>
+    <SolidColorBrush x:Key="BlueColorLightBrush" Color="{StaticResource BlueColorLight}" />
+    <!-- Red color -->
+    <Color x:Key="RedColor">#FFB94A69</Color>
+    <SolidColorBrush x:Key="RedColorBrush" Color="{StaticResource RedColor}" />
+    <!-- Lavender color -->
+    <Color x:Key="LavenderColor">#4a4893</Color>
+    <SolidColorBrush x:Key="LavenderColorBrush" Color="{StaticResource LavenderColor}" />
+    <!-- Lavender color dark -->
+    <Color x:Key="LavenderColorDark">#424184</Color>
+    <SolidColorBrush x:Key="LavenderColorDarkBrush" Color="{StaticResource LavenderColorDark}" />
 
-    <!-- Primary color new -->
-    <Color x:Key="PrimaryColorNew">#458dbd</Color>
-    <SolidColorBrush x:Key="PrimaryColorNewBrush" Color="{StaticResource PrimaryColorNew}" />
-    <!-- Primary color new dark -->
-    <Color x:Key="PrimaryColorNewDark">#2375af</Color>
-    <SolidColorBrush x:Key="PrimaryColorNewDarkBrush" Color="{StaticResource PrimaryColorNewDark}" />
-    <!-- Primary color new light -->
-    <Color x:Key="PrimaryColorNewLight">#509dd3</Color>
-    <SolidColorBrush x:Key="PrimaryColorNewLightBrush" Color="{StaticResource PrimaryColorNewLight}" />
     <!-- Gray color light -->
-    <Color x:Key="GrayColorLight">#dedfe1</Color>
+    <Color x:Key="GrayColor">#dee2e6</Color>
+    <SolidColorBrush x:Key="GrayColorBrush" Color="{StaticResource GrayColor}" />
+    <!-- Gray color light -->
+    <Color x:Key="GrayColorLight">#f0f2f5</Color>
     <SolidColorBrush x:Key="GrayColorLightBrush" Color="{StaticResource GrayColorLight}" />
-    <!-- Gray color light -->
-    <Color x:Key="GrayColorLight--1">#f0f2f5</Color>
-    <SolidColorBrush x:Key="GrayColorLightBrush--1" Color="{StaticResource GrayColorLight--1}" />
+    <!-- Gray color dark -->
+    <Color x:Key="GrayColorDark">#6c757d</Color>
+    <SolidColorBrush x:Key="GrayColorDarkBrush" Color="{StaticResource GrayColorDark}" />
+    <!-- Gray-blue color -->
+    <Color x:Key="Gray-BlueColorDark">#6d7a8a</Color>
+    <SolidColorBrush x:Key="Gray-BlueColorDarkBrush" Color="{StaticResource Gray-BlueColorDark}" />
     <!-- Label color -->
     <Color x:Key="LabelColor">#35495E</Color>
     <SolidColorBrush x:Key="LabelColorBrush" Color="{StaticResource LabelColor}" />
@@ -55,6 +63,5 @@
     <!-- Label color light -->
     <Color x:Key="LabelColorSemiLight">#35495E</Color>
     <SolidColorBrush x:Key="LabelColorSemiLightBrush" Color="{StaticResource LabelColorSemiLight}" Opacity="0.8" />
-
-
+    
 </ResourceDictionary>

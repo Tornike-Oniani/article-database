@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:MainLib.Views.Popups"
              xmlns:converters="clr-namespace:MainLib.Views.Converters"
              xmlns:usercontrols="clr-namespace:MainLib.Views.UserControls"
+             xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="800">
     
@@ -50,38 +51,59 @@
                 <ControlTemplate>
                     <Grid>
                         <StackPanel Visibility="{Binding NewBookmarkVisibility}">
-                            <Separator />
+                            <Separator Margin="0 0 0 1" />
                             <StackPanel Orientation="Horizontal" Margin="8">
-                                <materialDesign:PackIcon Kind="Plus" 
-                                             Margin="0 0 5 0"
-                                             Foreground="#909090"
-                                             VerticalAlignment="Center" 
-                                             Width="23"
-                                             Height="23"/>
-                                <TextBlock Text="Create new bookmark" 
-                               Foreground="#909090"
-                               FontSize="18"
-                               VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon 
+                                    Kind="Plus" 
+                                    Margin="0 0 5 0"
+                                    Foreground="{StaticResource GrayColorDarkBrush}"
+                                    VerticalAlignment="Center" 
+                                    Width="23"
+                                    Height="23" 
+                                    />
+                                <TextBlock 
+                                    Text="Create new bookmark" 
+                                    Foreground="{StaticResource GrayColorDarkBrush}"
+                                    FontSize="18"
+                                    VerticalAlignment="Center" 
+                                    />
                             </StackPanel>
                             <Separator />
                         </StackPanel>
                         <StackPanel Visibility="{Binding CreateVisibility}">
-                            <Separator />
-                            <StackPanel Margin="10">
-                                <TextBlock Text="Name:"
-                                           FontSize="17" />
-                                <TextBox x:Name="txbBookmarkName"
-                                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                         materialDesign:HintAssist.Hint="Enter bookmark name..." 
-                                         IsVisibleChanged="txbBookmarkName_IsVisibleChanged"/>
-                                <CheckBox Content="Global"
-                                          Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
-                                          Margin="0 10 0 0"
-                                          IsChecked="{Binding Global}" />
-                                <Button Content="Create" 
-                                        HorizontalAlignment="Right"
-                                        Margin="0 10 0 0"
-                                        Command="{Binding CreateCommand}"/>
+                            <Separator Margin="0 0 0 1" />
+                            <StackPanel Margin="12">
+                                <TextBox 
+                                    x:Name="txbBookmarkName"
+                                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                    Style="{StaticResource WatermarkTextBox}"
+                                    ap:TextBoxHelper.Watermark="Bookmark name"
+                                    IsVisibleChanged="txbBookmarkName_IsVisibleChanged" 
+                                    />
+                                <CheckBox 
+                                    Content="Global"
+                                    Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                                    IsChecked="{Binding Global}"
+                                    Style="{StaticResource FlatCheckbox}"
+                                    Margin="0 12 0 0"
+                                    />
+                                <!-- Buttons -->
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    Margin="0 12 0 0"
+                                    >
+                                    <Button 
+                                        Content="Create" 
+                                        Command="{Binding CreateCommand}" 
+                                        Margin="0 0 6 0"
+                                        />
+                                    <Button 
+                                        Content="Cancel" 
+                                        Command="{Binding CancelCommand}"                                        
+                                        />
+                                    
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
                     </Grid>

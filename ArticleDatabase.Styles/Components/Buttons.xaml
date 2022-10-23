@@ -10,7 +10,7 @@
         <Setter Property="Padding" Value="10" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="Gray" />
+        <Setter Property="Foreground" Value="{StaticResource GrayColorDarkBrush}" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -24,7 +24,7 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="icon" Property="Foreground" Value="#ffffff" />
+                            <Setter TargetName="icon" Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -36,21 +36,19 @@
                 <Setter Property="Background" Value="{StaticResource SecondaryColorBrush}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="LightGray" />
+                <Setter Property="Foreground" Value="{StaticResource GrayColorLightBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
-
-    <!-- Window close button -->
     <Style TargetType="{x:Type Button}" x:Key="WindowCloseButton" BasedOn="{StaticResource WindowControlButton}">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="Red" />
+                <Setter Property="Background" Value="{StaticResource RedColorBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
     <Style TargetType="{x:Type Button}" x:Key="WindowControlButtonAlt" BasedOn="{StaticResource WindowControlButton}">
-        <Setter Property="Foreground" Value="#ffffff" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
@@ -58,12 +56,12 @@
         </Style.Triggers>
     </Style>
     <Style TargetType="{x:Type Button}" x:Key="WindowCloseButtonAlt" BasedOn="{StaticResource WindowCloseButton}">
-        <Setter Property="Foreground" Value="#ffffff" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
     </Style>
 
     <!-- General button -->
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedButton}">
-        <Setter Property="Foreground" Value="{StaticResource ControlColorBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
     </Style>
     <!-- Hoverless Button -->
     <Style TargetType="{x:Type Button}" x:Key="Hoverless">
@@ -85,42 +83,261 @@
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
         <Setter Property="Padding" Value="5" />
     </Style>
-
-    <Style x:Key="PrimaryButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
-        <!-- Generic setters -->
-        <Setter Property="Background" Value="#17a2b8" />
+    <!-- Export button style -->
+    <Style x:Key="ExportButton" TargetType="{x:Type ToggleButton}" BasedOn="{x:Null}">
+        <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
         <Setter Property="Foreground" Value="#ffffff" />
         <Setter Property="Padding" Value="12 6 12 6" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="Cursor" Value="Hand" />
-        <!-- Custom template -->
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Background="{TemplateBinding Background}"
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border 
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                             Padding="{TemplateBinding Padding}"
-                            CornerRadius="6">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center" />
+                            CornerRadius="6 6 6 6"
+                            >
+                        <ContentPresenter />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
-        <!-- Triggers -->
+
+        <!-- Style triggers -->
         <Style.Triggers>
-            <!-- Hover styling -->
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#17a2b8" />
-            </Trigger>
-            <!-- Press styling -->
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="#17a2b8" />
-            </Trigger>
-            <!-- Not enabled styling -->
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="#7cc7d3" />
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Visibility" Value="Collapsed" />
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <!-- Accordion toggle button -->
+    <Storyboard x:Key="openDropdown">
+        <DoubleAnimation              
+                Storyboard.TargetName="accordion__dropdown"
+                Storyboard.TargetProperty="Height"
+                From="0"
+                To="540"
+                Duration="0:0:0.15"
+                />
+    </Storyboard>
+    <Storyboard x:Key="closeDropdown">
+        <DoubleAnimation
+                Storyboard.TargetName="accordion__dropdown"
+                Storyboard.TargetProperty="Height"
+                From="540"
+                To="0"
+                Duration="0:0:0.15"
+                />
+    </Storyboard>
+    <Style x:Key="Accordion" TargetType="{x:Type ToggleButton}">
+        <!-- Generic styling -->
+        <Setter Property="BorderThickness" Value="1 1 1 1" />
+        <Setter Property="BorderBrush" Value="{StaticResource GrayColorBrush}" />
+        <Setter Property="Background" Value="{StaticResource GrayColorLightBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+        <Setter Property="Padding" Value="15 10 15 10" />
+        <Setter Property="Cursor" Value="Hand" />
+        <!-- Template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border
+                            BorderThickness="1 1 1 1"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6 6 0 0"
+                            Padding="{TemplateBinding Padding}"
+                            >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock 
+                                    x:Name="text"
+                                    Text="{TemplateBinding Content}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    FontSize="18"
+                                    VerticalAlignment="Center"
+                                    Margin="0 0 6 0"
+                                    />
+                            <materialDesign:PackIcon 
+                                    x:Name="arrow"
+                                    Kind="KeyboardArrowDown"
+                                    Width="32"
+                                    Height="32"
+                                    >
+                                <materialDesign:PackIcon.RenderTransform>
+                                    <RotateTransform 
+                                            Angle="0" 
+                                            CenterX="16" 
+                                            CenterY="16" />
+                                </materialDesign:PackIcon.RenderTransform>
+                            </materialDesign:PackIcon>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Triggers on template level -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation 
+                                                Storyboard.TargetName="arrow"
+                                                Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
+                                                From="0"
+                                                To="180"
+                                                Duration="0:0:0.15"
+                                                />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation 
+                                                Storyboard.TargetName="arrow"
+                                                Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
+                                                From="180"
+                                                To="0"
+                                                Duration="0:0:0.15"
+                                                />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Triggers -->
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="{StaticResource BlueColorLightBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource BlueColorBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Pagination buttons -->
+    <Style x:Key="PaginationButton__Left" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+        <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
+        <Setter Property="BorderThickness" Value="1 1 0 1" />
+        <Setter Property="BorderBrush" Value="{StaticResource GrayColorBrush}" />
+        <Setter Property="Padding" Value="12 6 12 6" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding Padding}"
+                            CornerRadius="6 0 0 6"
+                            >
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Style Triggers -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource GrayColorLightBrush}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="PaginationButton__Right" TargetType="{x:Type Button}" BasedOn="{StaticResource PaginationButton__Left}">
+        <Setter Property="BorderThickness" Value="0 1 1 1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding Padding}"
+                            CornerRadius="0 6 6 0"
+                            >
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Item action button -->
+    <Style x:Key="ItemActionButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+        <Setter Property="Padding" Value="6 6 6 6" />
+        <Setter Property="BorderThickness" Value="1 1 1 1" />
+        <Setter Property="BorderBrush" Value="{StaticResource LabelColorBrush}" />
+        <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource LabelColorBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <!-- Outline border -->
+                    <Border
+                        x:Name="outline"
+                        Padding="{TemplateBinding Padding}"
+                        CornerRadius="4"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        Background="{TemplateBinding Background}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        >
+                        <!-- Shadow -->
+                        <Border.BitmapEffect>
+                            <DropShadowBitmapEffect 
+                                Color="Black"
+                                Direction="-60"
+                                ShadowDepth="5"
+                                Softness="10"
+                                Opacity="0.1"                        
+                                />
+                        </Border.BitmapEffect>
+                        <!-- Icon -->
+                        <materialDesign:PackIcon
+                            Kind="{TemplateBinding Tag}"
+                            Width="20"
+                            Height="20"
+                            VerticalAlignment="Center"
+                            Foreground="{TemplateBinding Foreground}" 
+                            />
+                    </Border>
+
+                    <!-- Control template triggers -->
+                    <ControlTemplate.Triggers>
+                        <!-- Mouse over darker shadow -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="outline" Property="BitmapEffect">
+                                <Setter.Value>
+                                    <DropShadowBitmapEffect 
+                                        Color="Black"
+                                        Direction="-60"
+                                        ShadowDepth="5"
+                                        Softness="10"
+                                        Opacity="0.2" 
+                                        />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

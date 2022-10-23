@@ -6,18 +6,20 @@
     
     <converters:IntToFontWeightConverter x:Key="IntToFontWeight" />
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+    <converters:IsIntToBoolConverter x:Key="IsIntToBool" />
 
     <!-- Bookmark manager -->
     <Style x:Key="BookmarkManagerList" TargetType="{x:Type ListView}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="BorderThickness" Value="0 0 0 0" />
-        <Setter Property="Background" Value="#f2f2f2" />
+        <Setter Property="Background" Value="{StaticResource GrayColorLightBrush}" />
         <Setter Property="Padding" Value="6 6 9 0" />
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <CheckBox
+                        Style="{StaticResource FlatCheckbox}"
                         Padding="6 12 12 12"
                         FontWeight="{Binding Bookmark.Global, Converter={StaticResource IntToFontWeight}}"
                         IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
@@ -33,7 +35,7 @@
             <Setter.Value>
                 <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                     <Setter Property="Padding" Value="12 0 0 0" />
-                    <Setter Property="Background" Value="#ffffff" />
+                    <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
@@ -50,14 +52,33 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#FFC2D9EF" />
+                            <Setter Property="Background" Value="{StaticResource BlueColorLightBrush}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </Setter.Value>
         </Setter>
-    </Style>
 
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource Self}}" Value="0">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListView}">
+                            <Grid Background="{TemplateBinding Background}">
+                                <TextBlock 
+                                    Style="{StaticResource Header}"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    >
+                                    No bookmarks found...
+                                </TextBlock>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
     <!-- Reference manager -->
     <Style x:Key="ReferenceManagerList" TargetType="{x:Type ListView}" BasedOn="{StaticResource BookmarkManagerList}">
         <Setter Property="ItemTemplate">
@@ -74,8 +95,27 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
 
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ItemsSource.Count, RelativeSource={RelativeSource Self}}" Value="0">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListView}">
+                            <Grid Background="{TemplateBinding Background}">
+                                <TextBlock 
+                                    Style="{StaticResource Header}"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    >
+                                    No references found...
+                                </TextBlock>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
     <Style x:Key="CleanItem" TargetType="{x:Type ListViewItem}">
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
@@ -91,20 +131,19 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
-                <Setter Property="Background" Value="#ffffff" />
+                <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
             </Trigger>
             <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
-                <Setter Property="Background" Value="#fcfafa" />
+                <Setter Property="Background" Value="{StaticResource GrayColorLightBrush}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource LightHighlightColorBrush}" />
+                <Setter Property="Background" Value="{StaticResource BlueColorLightBrush}" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource LightSelectionColorBrush}" />
+                <Setter Property="Background" Value="{StaticResource BlueColorLightBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
-
     <!-- Bookmark list -->
     <Style x:Key="BookmarkList" TargetType="{x:Type ListView}" BasedOn="{x:Null}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -118,11 +157,12 @@
             <Setter.Value>
                 <DataTemplate>
                     <!-- Wrapper -->
-                    <Border x:Name="wrapper" 
-                            Padding="10" 
-                            Background="Transparent" 
-                            BorderThickness="0 0 0 1" 
-                            BorderBrush="LightGray">
+                    <Border 
+                        Padding="12" 
+                        Background="Transparent" 
+                        BorderThickness="0 0 0 1" 
+                        BorderBrush="{StaticResource GrayColorBrush}"
+                        >
                         <!-- Command binding to mouse double click -->
                         <Border.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.OpenBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}" CommandParameter="{Binding}" />
@@ -138,7 +178,6 @@
                             <!-- Bookmark name -->
                             <StackPanel Grid.Column="0">
                                 <TextBlock 
-                                    x:Name="bookmarkName" 
                                     Text="{Binding Name}"
                                     TextWrapping="Wrap"
                                     FontSize="18"
@@ -153,132 +192,45 @@
                                     />
                             </StackPanel>
                             <!-- Buttons -->
-                            <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Right"
-                                        Grid.Column="1">
+                            <StackPanel
+                                x:Name="Buttons"
+                                Opacity="0.0"
+                                Visibility="Collapsed"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Grid.Column="1"
+                                >
                                 <!-- Edit button-->
-                                <Button x:Name="EditButton"
-                                        Style="{x:Null}"
-                                        Visibility="Hidden" 
-                                        Opacity="0.0"
-                                        Cursor="Hand"
-                                        Margin="0 0 10 0"
-                                        Command="{Binding DataContext.EditBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
-                                        CommandParameter="{Binding}">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <Border
-                                                x:Name="outline"
-                                                Padding="6 6 6 6"
-                                                BorderThickness="1 1 1 1"
-                                                BorderBrush="{StaticResource LabelColorBrush}"
-                                                CornerRadius="4"
-                                                Background="#ffffff"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                >
-                                                <Border.BitmapEffect>
-                                                    <DropShadowBitmapEffect 
-                                                        Color="Black"
-                                                        Direction="-60"
-                                                        ShadowDepth="5"
-                                                        Softness="10"
-                                                        Opacity="0.1"                        
-                                                        />
-                                                </Border.BitmapEffect>
-                                                <materialDesign:PackIcon 
-                                                    x:Name="Icon" 
-                                                    Kind="Edit"
-                                                    Height="20"
-                                                    Width="20"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{StaticResource LabelColorBrush}" 
-                                                    />
-                                            </Border>
-
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="outline" Property="BitmapEffect">
-                                                        <Setter.Value>
-                                                            <DropShadowBitmapEffect 
-                                                                Color="Black"
-                                                                Direction="-60"
-                                                                ShadowDepth="5"
-                                                                Softness="10"
-                                                                Opacity="0.2" 
-                                                                />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
+                                <Button
+                                    Style="{StaticResource ItemActionButton}"
+                                    Tag="{x:Static materialDesign:PackIconKind.Edit}"
+                                    Command="{
+                                        Binding DataContext.EditBookmarkCommand, 
+                                            RelativeSource={
+                                            RelativeSource FindAncestor, 
+                                            AncestorType=Page}}"
+                                    CommandParameter="{Binding}"
+                                    Margin="0 0 10 0"
+                                    />
                                 <!-- Delete button -->
-                                <Button x:Name="DeleteButton"
-                                        Style="{x:Null}"
-                                        Visibility="Hidden" 
-                                        Opacity="0.0"
-                                        Cursor="Hand"
-                                        Command="{Binding DataContext.DeleteBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
-                                        CommandParameter="{Binding}">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <Border
-                                                x:Name="outline"
-                                                Padding="6 6 6 6"
-                                                BorderThickness="1 1 1 1"
-                                                BorderBrush="{StaticResource LabelColorBrush}"
-                                                CornerRadius="4"
-                                                Background="#ffffff"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                >
-                                                <Border.BitmapEffect>
-                                                    <DropShadowBitmapEffect 
-                                                        Color="Black"
-                                                        Direction="-60"
-                                                        ShadowDepth="5"
-                                                        Softness="10"
-                                                        Opacity="0.1"                        
-                                                        />
-                                                </Border.BitmapEffect>
-                                                <materialDesign:PackIcon 
-                                                    x:Name="DeleteIcon" 
-                                                    Kind="MinusCircleOutline"
-                                                    Height="20"
-                                                    Width="20"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{StaticResource LabelColorBrush}" 
-                                                    />
-                                            </Border>
-
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="outline" Property="BitmapEffect">
-                                                        <Setter.Value>
-                                                            <DropShadowBitmapEffect 
-                                                                Color="Black"
-                                                                Direction="-60"
-                                                                ShadowDepth="5"
-                                                                Softness="10"
-                                                                Opacity="0.2" 
-                                                                />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
+                                <Button
+                                    Style="{StaticResource ItemActionButton}"
+                                    Tag="{x:Static materialDesign:PackIconKind.MinusCircleOutline}"
+                                    Command="{
+                                        Binding DataContext.DeleteBookmarkCommand, 
+                                            RelativeSource={
+                                            RelativeSource FindAncestor, 
+                                            AncestorType=Page}}"
+                                    CommandParameter="{Binding}"
+                                    />
                             </StackPanel>
                         </Grid>
                     </Border>
                     <!-- Trigger -->
                     <DataTemplate.Triggers>
+                        <!-- Mouse over show action buttons and article count -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="DeleteButton" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="EditButton" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Buttons" Property="Visibility" Value="Visible" />
                             <Setter TargetName="articlesCount" Property="Visibility" Value="Visible" />
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
@@ -287,11 +239,7 @@
                                                             Storyboard.TargetProperty="Margin"
                                                             To="0 5 10 5"
                                                             Duration="0:0:0.3" />
-                                        <DoubleAnimation Storyboard.TargetName="EditButton"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0"
-                                                         Duration="0:0:0.3" />
-                                        <DoubleAnimation Storyboard.TargetName="DeleteButton"
+                                        <DoubleAnimation Storyboard.TargetName="Buttons"
                                                          Storyboard.TargetProperty="Opacity"
                                                          To="1.0"
                                                          Duration="0:0:0.3" />
@@ -313,11 +261,7 @@
                                                          Storyboard.TargetProperty="Opacity"
                                                          To="0.0"
                                                          Duration="0:0:0" />
-                                        <DoubleAnimation Storyboard.TargetName="EditButton"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0"
-                                                         Duration="0:0:0" />
-                                        <DoubleAnimation Storyboard.TargetName="DeleteButton"
+                                        <DoubleAnimation Storyboard.TargetName="Buttons"
                                                          Storyboard.TargetProperty="Opacity"
                                                          To="0.0"
                                                          Duration="0:0:0" />
@@ -330,7 +274,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <!-- Global Bookmark list -->
     <Style x:Key="GlobalBookmarkList" TargetType="{x:Type ListView}" BasedOn="{x:Null}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -344,11 +287,12 @@
             <Setter.Value>
                 <DataTemplate>
                     <!-- Wrapper -->
-                    <Border x:Name="wrapper" 
-                            Padding="10" 
-                            Background="Transparent" 
-                            BorderThickness="0 0 0 1" 
-                            BorderBrush="LightGray">
+                    <Border 
+                        Padding="12" 
+                        Background="Transparent" 
+                        BorderThickness="0 0 0 1" 
+                        BorderBrush="LightGray"
+                        >
                         <!-- Command binding to mouse double click -->
                         <Border.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.OpenBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}" CommandParameter="{Binding}" />
@@ -363,136 +307,49 @@
 
                             <!-- Bookmark name -->
                             <StackPanel Grid.Column="0">
-                                <TextBlock x:Name="bookmarkName" 
-                                           Text="{Binding Name}"
-                                           TextWrapping="Wrap"
-                                           FontSize="18"
-                                           Foreground="{StaticResource LabelColorBrush}" />
-                                <TextBlock x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
-                                           FontSize="16" 
-                                           Visibility="Collapsed"
-                                           Opacity="0.0" 
-                                           Foreground="{StaticResource LabelColorLightBrush}" />
+                                <TextBlock 
+                                    Text="{Binding Name}"
+                                    TextWrapping="Wrap"
+                                    FontSize="18"
+                                    Foreground="{StaticResource LabelColorBrush}" 
+                                    />
+                                <TextBlock 
+                                    x:Name="articlesCount" 
+                                    Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
+                                    FontSize="16" 
+                                    Visibility="Collapsed"
+                                    Opacity="0.0" 
+                                    Foreground="{StaticResource LabelColorLightBrush}" 
+                                    />
                             </StackPanel>
                             <!-- Buttons -->
-                            <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Right"
-                                        Visibility="{Binding DataContext.User.IsAdmin, Converter={StaticResource BoolToVisibility}, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
-                                        Grid.Column="1">
+                            <StackPanel 
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Visibility="{Binding DataContext.User.IsAdmin, Converter={StaticResource BoolToVisibility}, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
+                                Grid.Column="1">
                                 <!-- Edit button-->
-                                <Button x:Name="EditButton"
-                                        Style="{x:Null}"
-                                        Visibility="Hidden" 
-                                        Opacity="0.0"
-                                        Cursor="Hand"
-                                        Margin="0 0 10 0"
-                                        Command="{Binding DataContext.EditBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
-                                        CommandParameter="{Binding}">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <Border
-                                                x:Name="outline"
-                                                Padding="6 6 6 6"
-                                                BorderThickness="1 1 1 1"
-                                                BorderBrush="{StaticResource LabelColorBrush}"
-                                                CornerRadius="4"
-                                                Background="#ffffff"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                >
-                                                <Border.BitmapEffect>
-                                                    <DropShadowBitmapEffect 
-                                                        Color="Black"
-                                                        Direction="-60"
-                                                        ShadowDepth="5"
-                                                        Softness="10"
-                                                        Opacity="0.1"                        
-                                                        />
-                                                </Border.BitmapEffect>
-                                                <materialDesign:PackIcon 
-                                                    x:Name="Icon" 
-                                                    Kind="Edit"
-                                                    Height="20"
-                                                    Width="20"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{StaticResource LabelColorBrush}" 
-                                                    />
-                                            </Border>
-
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="outline" Property="BitmapEffect">
-                                                        <Setter.Value>
-                                                            <DropShadowBitmapEffect 
-                                                                Color="Black"
-                                                                Direction="-60"
-                                                                ShadowDepth="5"
-                                                                Softness="10"
-                                                                Opacity="0.2" 
-                                                                />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Button.Template>
+                                <Button 
+                                    x:Name="EditButton"
+                                    Style="{StaticResource ItemActionButton}"
+                                    Tag="{x:Static materialDesign:PackIconKind.Edit}"
+                                    Opacity="0.0"
+                                    Visibility="Hidden"
+                                    Command="{Binding DataContext.EditBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
+                                    CommandParameter="{Binding}"
+                                    Margin="0 0 10 0"
+                                    >
                                 </Button>
                                 <!-- Delete button -->
-                                <Button x:Name="DeleteButton"
-                                        Style="{x:Null}"
-                                        Visibility="Hidden" 
-                                        Opacity="0.0"
-                                        Cursor="Hand"
-                                        Command="{Binding DataContext.DeleteBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
-                                        CommandParameter="{Binding}">
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <Border
-                                                x:Name="outline"
-                                                Padding="6 6 6 6"
-                                                BorderThickness="1 1 1 1"
-                                                BorderBrush="{StaticResource LabelColorBrush}"
-                                                CornerRadius="4"
-                                                Background="#ffffff"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                >
-                                                <Border.BitmapEffect>
-                                                    <DropShadowBitmapEffect 
-                                                        Color="Black"
-                                                        Direction="-60"
-                                                        ShadowDepth="5"
-                                                        Softness="10"
-                                                        Opacity="0.1"                        
-                                                        />
-                                                </Border.BitmapEffect>
-                                                <materialDesign:PackIcon 
-                                                    x:Name="DeleteIcon" 
-                                                    Kind="MinusCircleOutline"
-                                                    Height="20"
-                                                    Width="20"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{StaticResource LabelColorBrush}" 
-                                                    />
-                                            </Border>
-
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="outline" Property="BitmapEffect">
-                                                        <Setter.Value>
-                                                            <DropShadowBitmapEffect 
-                                                                Color="Black"
-                                                                Direction="-60"
-                                                                ShadowDepth="5"
-                                                                Softness="10"
-                                                                Opacity="0.2" 
-                                                                />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Button.Template>
+                                <Button 
+                                    x:Name="DeleteButton"
+                                    Style="{StaticResource ItemActionButton}"
+                                    Tag="{x:Static materialDesign:PackIconKind.MinusCircleOutline}"
+                                    Opacity="0.0"
+                                    Visibility="Hidden"
+                                    Command="{Binding DataContext.DeleteBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
+                                    CommandParameter="{Binding}"
+                                    >
                                 </Button>
                             </StackPanel>
                         </Grid>
@@ -553,5 +410,75 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!-- Pagination-->
+    <Style x:Key="PaginationWrapper" TargetType="{x:Type ListBox}">
+        <Setter Property="BorderThickness" Value="1 1 0 1" />
+        <Setter Property="BorderBrush" Value="{StaticResource GrayColorBrush}" />
+        <!-- Items host -->
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel 
+                            Orientation="Horizontal"
+                            IsItemsHost="True"
+                            />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- Items host styling -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Border
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            >
+                        <ItemsPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- Item styling -->
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="IsEnabled" Value="{Binding Converter={StaticResource IsIntToBool}}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <Border
+                                        Background="{TemplateBinding Background}"
+                                        BorderThickness="0 0 1 0"
+                                        BorderBrush="#dee2e6"
+                                        Padding="12 6 12 6">
+                                    <ContentPresenter
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
 
+                    <!-- Item triggers -->
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GrayColorLightBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+                            <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

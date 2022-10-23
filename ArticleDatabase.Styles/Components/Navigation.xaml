@@ -49,26 +49,26 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="wrapper" Property="Background">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="#ffffff" Opacity="0.1" />
+                                    <SolidColorBrush Color="{StaticResource WhiteColor}" Opacity="0.1" />
                                 </Setter.Value>
                             </Setter>
-                            <Setter TargetName="tbMain" Property="Foreground" Value="#ffffff" />
-                            <Setter TargetName="icon" Property="Foreground" Value="#ffffff" />
+                            <Setter TargetName="tbMain" Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+                            <Setter TargetName="icon" Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
                             <Setter TargetName="icon" Property="Margin" Value="0 0 10 0" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="wrapper" Property="Background">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="#ffffff" Opacity="0.25" />
+                                    <SolidColorBrush Color="{StaticResource WhiteColor}" Opacity="0.25" />
                                 </Setter.Value>
                             </Setter>
-                            <Setter TargetName="tbMain" Property="Foreground" Value="#ffffff" />
-                            <Setter TargetName="icon" Property="Foreground" Value="#ffffff" />
+                            <Setter TargetName="tbMain" Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+                            <Setter TargetName="icon" Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
                             <Setter TargetName="icon" Property="Margin" Value="0 0 10 0" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="tbMain" Property="Foreground" Value="LightGray" />
-                            <Setter TargetName="icon" Property="Foreground" Value="LightGray" />
+                            <Setter TargetName="tbMain" Property="Foreground" Value="{StaticResource GrayColorLightBrush}" />
+                            <Setter TargetName="icon" Property="Foreground" Value="{StaticResource GrayColorLightBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -76,45 +76,4 @@
         </Setter>
     </Style>
 
-    <!-- RadioButton as TabItem Home -->
-    <!-- Home RadioButton replaces it with One picture and Textblock -->
-    <Style x:Key="RadioButtonHome" TargetType="{x:Type RadioButton}">
-        <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Margin" Value="0 0 0 50" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type RadioButton}">
-                    <Border x:Name="wrapper" Padding="12 7 2 7" Background="Transparent">
-                        <!-- Body -->
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="/Lib.Styles;component/Images/Logo.png" 
-                                   RenderOptions.BitmapScalingMode="Fant" 
-                                   Width="45" 
-                                   Height="40" />
-                            <TextBlock x:Name="tbMain" 
-                                       Text="Home" 
-                                       FontSize="22" 
-                                       FontWeight="Bold" 
-                                       Foreground="#ffffff" 
-                                       VerticalAlignment="Center" 
-                                       Margin="10 0 0 0" />
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Triggers -->
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="wrapper" Property="Background" Value="#015e8d" />
-                            <Setter TargetName="tbMain" Property="Foreground" Value="#ffffff" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="wrapper" Property="Background" Value="#015e8d" />
-                            <Setter TargetName="tbMain" Property="Foreground" Value="#ffffff" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
 </ResourceDictionary>

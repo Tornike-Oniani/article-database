@@ -116,8 +116,8 @@
                         
                         <usercontrols:Badge 
                             Icon="{x:Static materialDesign:PackIconKind.Account}"
-                            Background="#6c757d"
-                            Foreground="#ffffff"
+                            Background="{StaticResource GrayColorDarkBrush}"
+                            Foreground="{StaticResource WhiteColorBrush}"
                             Margin="0 0 8 0"
                             Grid.Column="0" />
 
@@ -138,8 +138,8 @@
                         
                         <usercontrols:Badge 
                             Icon="{x:Static materialDesign:PackIconKind.Key}"
-                            Background="#6c757d"
-                            Foreground="#ffffff"
+                            Background="{StaticResource GrayColorDarkBrush}"
+                            Foreground="{StaticResource WhiteColorBrush}"
                             Margin="0 0 8 0" 
                             />
                         
@@ -211,8 +211,8 @@
 
                         <usercontrols:Badge
                             Icon="{x:Static materialDesign:PackIconKind.Account}"
-                            Background="#6c757d"
-                            Foreground="#ffffff"
+                            Background="{StaticResource GrayColorDarkBrush}"
+                            Foreground="{StaticResource WhiteColorBrush}"
                             Margin="0 0 8 0" 
                             />
                         <TextBox x:Name="txbRegisterUsername"
@@ -232,8 +232,8 @@
 
                         <usercontrols:Badge
                             Icon="{x:Static materialDesign:PackIconKind.Key}"
-                            Background="#6c757d"
-                            Foreground="#ffffff"
+                            Background="{StaticResource GrayColorDarkBrush}"
+                            Foreground="{StaticResource WhiteColorBrush}"
                             Margin="0 0 8 0" 
                             />
 
@@ -252,8 +252,8 @@
 
                         <usercontrols:Badge
                             Icon="{x:Static materialDesign:PackIconKind.KeyAdd}"
-                            Background="#6c757d"
-                            Foreground="#ffffff"
+                            Background="{StaticResource GrayColorDarkBrush}"
+                            Foreground="{StaticResource WhiteColorBrush}"
                             Margin="0 0 8 0" 
                             />
 

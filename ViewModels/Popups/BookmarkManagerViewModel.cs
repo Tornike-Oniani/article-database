@@ -1,22 +1,18 @@
-﻿using Lib.DataAccessLayer.Models;
+﻿using Lib.DataAccessLayer.Info;
+using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Main;
+using MainLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using Lib.ViewModels.Base;
-using Lib.ViewModels.Commands;
-using MainLib.ViewModels.Main;
-using Lib.ViewModels.Services.Dialogs;
 using ViewModels.UIStructs;
-using Lib.ViewModels.Services.Windows;
-using MainLib.ViewModels.Utils;
-using Lib.DataAccessLayer.Info;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -69,6 +65,7 @@ namespace MainLib.ViewModels.Popups
 
         // Commands
         public RelayCommand CreateNewBookmarkCommand { get; set; }
+        public RelayCommand CancelCommand { get; set; }
         public RelayCommand CreateCommand { get; set; }
         public RelayCommand CheckChangedCommand { get; set; }
 
@@ -94,6 +91,7 @@ namespace MainLib.ViewModels.Popups
 
             // 2. Set up actions
             CreateNewBookmarkCommand = new RelayCommand(CreateNewBookmark);
+            CancelCommand = new RelayCommand(Cancel);
             CreateCommand = new RelayCommand(Create, CanCreate);
 
             // Case 1: Bookmark manager was opened by DataEntry
@@ -113,6 +111,13 @@ namespace MainLib.ViewModels.Popups
             //Win.Height = _initialHeight + 40;
             NewBookmarkVisibility = Visibility.Collapsed;
             CreateVisibility = Visibility.Visible;
+        }
+        public void Cancel(object input = null)
+        {
+            Name = String.Empty;
+            Global = 0;
+            CreateVisibility = Visibility.Collapsed;
+            NewBookmarkVisibility = Visibility.Visible;
         }
         public void Create(object input = null)
         {
@@ -144,7 +149,7 @@ namespace MainLib.ViewModels.Popups
                 if (!duplicate_check)
                     services.DialogService.OpenDialog(new DialogOkViewModel("This bookmark already exists.", "Warning", DialogType.Warning));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 new BugTracker().Track("Bookmark Manager", "Create Bookmark", e.Message, e.StackTrace);
                 services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
@@ -169,7 +174,7 @@ namespace MainLib.ViewModels.Popups
                     Couple info = new Couple("Bookmark", "Add", _article.Title, current_bookmark_box.Bookmark.Name);
                     new Tracker(User).TrackCoupling<Couple>(info);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     new BugTracker().Track("Bookmark Manager", "Add article to bookmark", e.Message, e.StackTrace);
                     services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
@@ -205,7 +210,7 @@ namespace MainLib.ViewModels.Popups
                     int index = _bookmarks.FindIndex(el => el.Name == current_bookmark_box.Bookmark.Name);
                     _bookmarks.RemoveAt(index);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     new BugTracker().Track("Bookmark Manager (Data Entry)", "Remove article from bookmark", e.Message, e.StackTrace);
                     services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
@@ -218,7 +223,7 @@ namespace MainLib.ViewModels.Popups
                 {
                     _bookmarks.Add(current_bookmark_box.Bookmark);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     new BugTracker().Track("Bookmark Manager (Data Entry)", "Add article to bookmark", e.Message, e.StackTrace);
                     services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));

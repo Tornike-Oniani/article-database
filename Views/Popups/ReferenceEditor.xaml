@@ -13,6 +13,7 @@
             <!-- Name textbox -->
             <TextBox Text="{Binding Reference.Name, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="Name"
+                     materialDesign:HintAssist.IsFloating="True"
                      Margin="0 0 0 10"/>
 
             <!-- Main article textbox -->

@@ -24,268 +24,6 @@
         <converters:IsIntToBoolConverter x:Key="IsIntToBool" />
         <converters:ListCountToBoolConverter x:Key="ListCountToBool" />
         <converters:IntToVisibilityConverter x:Key="IntToVisibility" />
-
-        <!-- Accordion -->
-        <Storyboard x:Key="openDropdown">
-            <DoubleAnimation              
-                Storyboard.TargetName="accordion__dropdown"
-                Storyboard.TargetProperty="Height"
-                From="0"
-                To="540"
-                Duration="0:0:0.15"
-                />
-        </Storyboard>
-        <Storyboard x:Key="closeDropdown">
-            <DoubleAnimation
-                Storyboard.TargetName="accordion__dropdown"
-                Storyboard.TargetProperty="Height"
-                From="540"
-                To="0"
-                Duration="0:0:0.15"
-                />
-        </Storyboard>
-        <Style x:Key="Accordion" TargetType="{x:Type ToggleButton}">
-            <!-- Generic styling -->
-            <Setter Property="BorderThickness" Value="1 1 1 1" />
-            <Setter Property="BorderBrush" Value="#dee2e6" />
-            <Setter Property="Background" Value="#f2f2f2" />
-            <Setter Property="Foreground" Value="#212529" />
-            <Setter Property="Padding" Value="15 10 15 10" />
-            <Setter Property="Cursor" Value="Hand" />
-            <!-- Template -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border
-                            BorderThickness="1 1 1 1"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="6 6 0 0"
-                            Padding="{TemplateBinding Padding}"
-                            >
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock 
-                                    x:Name="text"
-                                    Text="{TemplateBinding Content}"
-                                    Foreground="{TemplateBinding Foreground}"
-                                    FontSize="18"
-                                    VerticalAlignment="Center"
-                                    Margin="0 0 6 0"
-                                    />
-                                <materialDesign:PackIcon 
-                                    x:Name="arrow"
-                                    Kind="KeyboardArrowDown"
-                                    Width="32"
-                                    Height="32"
-                                    >
-                                    <materialDesign:PackIcon.RenderTransform>
-                                        <RotateTransform 
-                                            Angle="0" 
-                                            CenterX="16" 
-                                            CenterY="16" />
-                                    </materialDesign:PackIcon.RenderTransform>
-                                </materialDesign:PackIcon>
-                            </StackPanel>
-                        </Border>
-                        
-                        <!-- Triggers on template level -->
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation 
-                                                Storyboard.TargetName="arrow"
-                                                Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
-                                                From="0"
-                                                To="180"
-                                                Duration="0:0:0.15"
-                                                />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation 
-                                                Storyboard.TargetName="arrow"
-                                                Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
-                                                From="180"
-                                                To="0"
-                                                Duration="0:0:0.15"
-                                                />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            
-            <!-- Triggers -->
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#e7f1ff" />
-                    <Setter Property="Foreground" Value="#0c63e4" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Pagination-->
-        <Style x:Key="PaginationWrapper" TargetType="{x:Type ListBox}">
-            <Setter Property="BorderThickness" Value="1 1 0 1" />
-            <Setter Property="BorderBrush" Value="#dee2e6" />
-            <!-- Items host -->
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <StackPanel 
-                            Orientation="Horizontal"
-                            IsItemsHost="True"
-                            />
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
-            <!-- Items host styling -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ListBox}">
-                        <Border
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            >
-                            <ItemsPresenter />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <!-- Item styling -->
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="Background" Value="#ffffff" />
-                        <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
-                        <Setter Property="FontSize" Value="16" />
-                        <Setter Property="Cursor" Value="Hand" />
-                        <Setter Property="IsEnabled" Value="{Binding Converter={StaticResource IsIntToBool}}" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border
-                                        Background="{TemplateBinding Background}"
-                                        BorderThickness="0 0 1 0"
-                                        BorderBrush="#dee2e6"
-                                        Padding="12 6 12 6">
-                                            <ContentPresenter
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                />
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        
-                        <!-- Item triggers -->
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#e9ecef" />
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
-                                <Setter Property="Foreground" Value="#ffffff" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="#000000" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="PaginationButton__Left" TargetType="{x:Type Button}" BasedOn="{x:Null}">
-            <Setter Property="Background" Value="#ffffff" />
-            <Setter Property="BorderThickness" Value="1 1 0 1" />
-            <Setter Property="BorderBrush" Value="#dee2e6" />
-            <Setter Property="Padding" Value="12 6 12 6" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Padding="{TemplateBinding Padding}"
-                            CornerRadius="6 0 0 6"
-                            >
-                            <ContentPresenter />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            
-            <!-- Style Triggers -->
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#e9ecef" />
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Foreground" Value="#212529" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="PaginationButton__Right" TargetType="{x:Type Button}" BasedOn="{StaticResource PaginationButton__Left}">
-            <Setter Property="BorderThickness" Value="0 1 1 1" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Padding="{TemplateBinding Padding}"
-                            CornerRadius="0 6 6 0"
-                            >
-                            <ContentPresenter />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <!-- Export button style -->
-        <Style x:Key="ExportButton" TargetType="{x:Type ToggleButton}" BasedOn="{x:Null}">
-            <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
-            <Setter Property="BorderThickness" Value="0 0 0 0" />
-            <Setter Property="Foreground" Value="#ffffff" />
-            <Setter Property="Padding" Value="12 6 12 6" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border 
-                            Background="{TemplateBinding Background}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Padding="{TemplateBinding Padding}"
-                            CornerRadius="6 6 6 6"
-                            >
-                            <ContentPresenter />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            
-            <!-- Style triggers -->
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
     </UserControl.Resources>
 
     <UserControl.InputBindings>
@@ -416,15 +154,16 @@
                         </Grid.ColumnDefinitions>
                         <!-- Search parameters -->
                         <StackPanel 
-                            Width="550"
+                            Width="750"
                             Grid.Column="0"
                             >
                             <!-- Checkboxes -->
                             <StackPanel Margin="0 0 0 15">
                                 <TextBlock 
-                                    Text="Columns:" 
+                                    Text="Columns:"
+                                    Style="{StaticResource Header}"
                                     FontSize="16" 
-                                    Margin="0 0 0 5" 
+                                    Margin="0 0 0 6" 
                                     />
                                 <!-- Column checkboxes -->
                                 <StackPanel 
@@ -433,8 +172,8 @@
                                     >
                                     <CheckBox 
                                         Content="Authors"
-                                        FontSize="16" 
-                                        Margin="0 0 5 0" 
+                                        Style="{StaticResource FlatCheckbox}"
+                                        Margin="0 0 6 0" 
                                         IsChecked="{
                                             Binding Columns, 
                                             Converter={StaticResource CheckToList}, 
@@ -442,8 +181,8 @@
                                         />
                                     <CheckBox 
                                         Content="Keywords"
-                                        FontSize="16" 
-                                        Margin="0 0 5 0" 
+                                        Style="{StaticResource FlatCheckbox}"
+                                        Margin="0 0 6 0" 
                                         IsChecked="{
                                             Binding Columns, 
                                             Converter={StaticResource CheckToList}, 
@@ -451,7 +190,8 @@
                                         />
                                     <CheckBox 
                                         Content="Year" 
-                                        Margin="0 0 5 0" 
+                                        Style="{StaticResource FlatCheckbox}" 
+                                        Margin="0 0 6 0" 
                                         IsChecked="{
                                             Binding Columns, 
                                             Converter={StaticResource CheckToList}, 
@@ -459,8 +199,8 @@
                                         />
                                     <CheckBox 
                                         Content="Comment" 
-                                        FontSize="16" 
-                                        Margin="0 0 5 0" 
+                                        Style="{StaticResource FlatCheckbox}"
+                                        Margin="0 0 6 0" 
                                         IsChecked="{
                                             Binding Columns, 
                                             Converter={StaticResource CheckToList}, 
@@ -468,7 +208,7 @@
                                         />
                                     <CheckBox 
                                         Content="SIC" 
-                                        FontSize="16" 
+                                        Style="{StaticResource FlatCheckbox}"
                                         IsChecked="{
                                             Binding Columns, 
                                             Converter={StaticResource CheckToList}, 
@@ -502,6 +242,7 @@
                                 <!-- Word break option -->
                                 <CheckBox 
                                     IsChecked="{Binding WordBreakMode}"
+                                    Style="{StaticResource FlatCheckbox}"
                                     Content="Word Break"
                                     IsTabStop="False"
                                     Grid.Column="1" 
@@ -606,7 +347,7 @@
                             <TextBox 
                                 Text="{Binding FilterPersonalComment, UpdateSourceTrigger=PropertyChanged}" 
                                 aps:TextBoxHelper.Watermark="Personal comment"
-                                Style="{StaticResource WatermarkTextBox}"
+                                Style="{StaticResource WatermarkTextBoxSmall}"
                                 FontFamily="Verdana"
                                 Margin="0 0 0 15"
                                 />
@@ -670,7 +411,7 @@
                                     <TextBox
                                         Text="{Binding ItemsPerPage}"
                                         Style="{StaticResource WatermarkTextBoxSmall}"
-                                        Width="45"                        
+                                        MinWidth="45" 
                                         />
                                 </StackPanel>
                             </StackPanel>
@@ -679,16 +420,17 @@
                 </ScrollViewer>
             </Border>
         </Grid>
+        
         <!-- Datagrid -->
         <!-- Each column is bound to command from ArticleGrid style for sorting -->
         <DataGrid 
+            x:Name="myGrid"
             Style="{StaticResource ArticleGrid}"
             FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
             ItemsSource="{Binding Articles}"
             SelectedItem="{Binding SelectedArticle}"
             VirtualizingStackPanel.VirtualizationMode="Standard"
             CanUserSortColumns="{Binding CanSortColumns}"
-            x:Name="myGrid"
             Grid.Row="2"
             >
             <DataGrid.CellStyle>
@@ -778,7 +520,7 @@
                                     TextWrapping="Wrap"
                                     ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                     ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
+                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
                                     ap:TextBlockHighlighter.Forecolor="#000000" 
                                     >
                                     <!--<TextBlock.Style>
@@ -820,7 +562,7 @@
                                 TextWrapping="Wrap"
                                 ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                 ap:TextBlockHighlighter.WordBreakMode="True"
-                                ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
+                                ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
                                 ap:TextBlockHighlighter.Forecolor="#000000" 
                                 />
                         </DataTemplate>
@@ -835,7 +577,7 @@
                                 TextWrapping="Wrap"
                                 ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                 ap:TextBlockHighlighter.WordBreakMode="True"
-                                ap:TextBlockHighlighter.HighlightColor="{StaticResource HighlightColorBrush}"
+                                ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
                                 ap:TextBlockHighlighter.Forecolor="#000000" 
                                 />
                         </DataTemplate>
@@ -946,6 +688,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        
         <notifications:NotificationArea 
             x:Name="DataViewNotificationArea" 
             Position="BottomRight" 
@@ -954,10 +697,11 @@
             Grid.Row="1"
             Grid.RowSpan="2"
             />
+        
         <!-- Bottom menu -->
         <Border
             BorderThickness="0 1 0 0"
-            BorderBrush="#FFC5C1C1"
+            BorderBrush="{StaticResource GrayColorBrush}"
             Padding="12 6 12 6"
             Grid.Row="3"
             >

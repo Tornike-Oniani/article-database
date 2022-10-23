@@ -17,7 +17,7 @@
 
     <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource MaterialDesignListBox}">
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="Gray" />
+        <Setter Property="BorderBrush" Value="{StaticResource GrayColorBrush}" />
     </Style>
 
     <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource MaterialDesignListBoxItem}">
@@ -29,8 +29,8 @@
     <Style x:Key="WatermarkTextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
         <!-- Generic styling -->
         <Setter Property="BorderThickness" Value="1 1 1 1" />
-        <Setter Property="BorderBrush" Value="#ced4da" />
-        <Setter Property="Background" Value="#ffffff" />
+        <Setter Property="BorderBrush" Value="{StaticResource Gray-BlueColorDarkBrush}" />
+        <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
         <Setter Property="Padding" Value="6 6 6 6" />
         <Setter Property="FontSize" Value="16" />
         <!-- Template -->
@@ -55,7 +55,7 @@
                         <Border 
                             x:Name="watermark"
                             Padding="4 0 4 0"
-                            Background="#ffffff"
+                            Background="{StaticResource WhiteColorBrush}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="8 0 0 0"
@@ -67,7 +67,7 @@
                                 x:Name="watermark__text"
                                 IsHitTestVisible="False"
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
-                                Foreground="#6d7a8a"
+                                Foreground="{StaticResource Gray-BlueColorDarkBrush}"
                                 FontSize="{TemplateBinding FontSize}"
                                 />
                         </Border>
@@ -135,7 +135,7 @@
                                         <ColorAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                            To="#6d7a8a"
+                                            To="{StaticResource Gray-BlueColorDark}"
                                             Duration="0:0:0"
                                             />
                                     </Storyboard>
@@ -154,15 +154,15 @@
                 <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" /> <!-- #86b7fe -->
             </Trigger>
             <DataTrigger Binding="{Binding Path=HasError}" Value="True">
-                <Setter Property="BorderBrush" Value="Red" />
+                <Setter Property="BorderBrush" Value="{StaticResource RedColorBrush}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
     <Style x:Key="WatermarkTextBoxSmall" TargetType="{x:Type TextBox}">
         <!-- Generic styling -->
         <Setter Property="BorderThickness" Value="1 1 1 1" />
-        <Setter Property="BorderBrush" Value="#ced4da" />
-        <Setter Property="Background" Value="#ffffff" />
+        <Setter Property="BorderBrush" Value="{StaticResource Gray-BlueColorDarkBrush}" />
+        <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
         <Setter Property="Padding" Value="3 3 3 3" />
         <Setter Property="FontSize" Value="14" />
         <!-- Template -->
@@ -187,7 +187,7 @@
                         <Border 
                             x:Name="watermark"
                             Padding="4 0 4 0"
-                            Background="#ffffff"
+                            Background="{StaticResource WhiteColorBrush}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="8 0 0 0"
@@ -199,7 +199,7 @@
                                 x:Name="watermark__text"
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
                                 IsHitTestVisible="False"
-                                Foreground="#6d7a8a"
+                                Foreground="{StaticResource Gray-BlueColorDarkBrush}"
                                 FontSize="{TemplateBinding FontSize}"
                                 />
                         </Border>
@@ -267,13 +267,16 @@
                                         <ColorAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                            To="#6d7a8a"
+                                            To="{StaticResource Gray-BlueColorDark}"
                                             Duration="0:0:0"
                                             />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
                         </Trigger>
+                        <DataTrigger Binding="{Binding Path=(ap:TextBoxHelper.Watermark), RelativeSource={RelativeSource Self}}" Value="">
+                            <Setter TargetName="watermark" Property="Height" Value="0" />
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -290,8 +293,8 @@
     <Style x:Key="WatermarkPasswordBox" TargetType="{x:Type PasswordBox}" BasedOn="{x:Null}">
         <!-- Generic styling -->
         <Setter Property="BorderThickness" Value="1 1 1 1" />
-        <Setter Property="BorderBrush" Value="#ced4da" />
-        <Setter Property="Background" Value="#ffffff" />
+        <Setter Property="BorderBrush" Value="{StaticResource Gray-BlueColorDarkBrush}" />
+        <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
         <Setter Property="Padding" Value="6 6 6 6" />
         <Setter Property="FontSize" Value="16" />
         <!-- Template -->
@@ -316,7 +319,7 @@
                         <Border 
                             x:Name="watermark"
                             Padding="4 0 4 0"
-                            Background="#ffffff"
+                            Background="{StaticResource WhiteColorBrush}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Margin="8 0 0 0"
@@ -328,7 +331,7 @@
                                 x:Name="watermark__text"
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
                                 IsHitTestVisible="False"
-                                Foreground="#6d7a8a"
+                                Foreground="{StaticResource Gray-BlueColorDarkBrush}"
                                 FontSize="17"
                                 />
                         </Border>
@@ -396,7 +399,7 @@
                                         <ColorAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="Foreground.(SolidColorBrush.Color)"
-                                            To="#6d7a8a"
+                                            To="{StaticResource Gray-BlueColorDark}"
                                             Duration="0:0:0"
                                             />
                                     </Storyboard>

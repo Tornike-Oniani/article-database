@@ -65,7 +65,7 @@
                 Padding="20 15 20 15"
                 Grid.Row="1">
             <StackPanel HorizontalAlignment="Left">
-                <Border Background="{StaticResource GrayColorLightBrush--1}"
+                <Border Background="{StaticResource GrayColorLightBrush}"
                         Width="400"
                         Padding="10"
                         CornerRadius="7"
@@ -85,7 +85,7 @@
                     </StackPanel>
                 </Border>
 
-                <Border Background="{StaticResource GrayColorLightBrush--1}"
+                <Border Background="{StaticResource GrayColorLightBrush}"
                         Padding="10"
                         CornerRadius="7">
                     <StackPanel Orientation="Horizontal">

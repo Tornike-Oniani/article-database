@@ -70,13 +70,15 @@
                         Width="200" 
                         />
                 </AdornerDecorator>
-                <StackPanel Orientation="Horizontal" Margin="30 0 0 0" VerticalAlignment="Bottom">
-                    <Viewbox Height="20">
-                        <CheckBox IsChecked="{Binding Article.SIC}" IsTabStop="False" />
-                    </Viewbox>
-                    <TextBlock Text="SIC" FontSize="18" Margin="3 0 0 0" />
-                </StackPanel>
                 <!-- SIC -->
+                <CheckBox 
+                    IsChecked="{Binding Article.SIC}" 
+                    Content="SIC"
+                    Style="{StaticResource FlatCheckbox}"
+                    IsTabStop="False"
+                    VerticalAlignment="Bottom"
+                    Margin="30 0 0 6" 
+                    />
             </StackPanel>
 
             <!-- Personal Comment -->
@@ -105,6 +107,7 @@
                 <CheckBox
                     IsChecked="{Binding Article.AbstractOnly}"
                     Content="Abstract only"
+                    Style="{StaticResource FlatCheckbox}"
                     Margin="12 0 0 0"
                     />
             </StackPanel>
