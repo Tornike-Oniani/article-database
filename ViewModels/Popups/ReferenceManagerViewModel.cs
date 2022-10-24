@@ -1,22 +1,18 @@
-﻿using Lib.DataAccessLayer.Models;
+﻿using Lib.DataAccessLayer.Info;
+using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Main;
+using MainLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using Lib.ViewModels.Base;
-using Lib.ViewModels.Commands;
-using Lib.ViewModels.Services.Dialogs;
 using ViewModels.UIStructs;
-using MainLib.ViewModels.Main;
-using MainLib.ViewModels.Utils;
-using System.Data.SqlTypes;
-using Lib.DataAccessLayer.Info;
 
 namespace MainLib.ViewModels.Popups
 {
@@ -55,12 +51,13 @@ namespace MainLib.ViewModels.Popups
 
         public RelayCommand CreateNewReferenceCommand { get; set; }
         public RelayCommand CreateCommand { get; set; }
+        public RelayCommand CancelCommand { get; set; }
         public RelayCommand CheckChangedCommand { get; set; }
 
         // Constructor
         public ReferenceManagerViewModel(
-            ViewType parent, 
-            Article article = null, 
+            ViewType parent,
+            Article article = null,
             List<Reference> references = null)
         {
             this.services = Shared.GetInstance();
@@ -82,6 +79,7 @@ namespace MainLib.ViewModels.Popups
             // 2. Set up actions
             CreateNewReferenceCommand = new RelayCommand(CreateNewReference);
             CreateCommand = new RelayCommand(Create, CanCreate);
+            CancelCommand = new RelayCommand(Cancel);
 
             // Case 1: Reference manager was opened by DataEntry
             if (_parent == ViewType.DataEntry)
@@ -129,11 +127,16 @@ namespace MainLib.ViewModels.Popups
                 if (!duplicate_check)
                     services.DialogService.OpenDialog(new DialogOkViewModel("This reference already exists.", "Warning", DialogType.Warning));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 new BugTracker().Track("Reference Manager", "Create reference", e.Message, e.StackTrace);
                 services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
+        }
+        public void Cancel(object input = null)
+        {
+            CreateVisibility = Visibility.Collapsed;
+            NewReferenceVisibility = Visibility.Visible;
         }
         public bool CanCreate(object input = null)
         {
@@ -154,7 +157,7 @@ namespace MainLib.ViewModels.Popups
                     Couple info = new Couple("Reference", "Add", _article.Title, current_reference_box.Reference.Name);
                     new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCoupling<Couple>(info);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     new BugTracker().Track("Reference Manager", "Add article to reference", e.Message, e.StackTrace);
                     services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
@@ -171,7 +174,7 @@ namespace MainLib.ViewModels.Popups
                     Couple info = new Couple("Reference", "Remove", _article.Title, current_reference_box.Reference.Name);
                     new Tracker(new User() { Username = "Nikoloz", Admin = 1 }).TrackCoupling<Couple>(info);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     new BugTracker().Track("Reference Manager", "Remove article from reference", e.Message, e.StackTrace);
                     services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
@@ -190,7 +193,7 @@ namespace MainLib.ViewModels.Popups
                     int index = _references.FindIndex(el => el.Name == current_reference_box.Reference.Name);
                     _references.RemoveAt(index);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     new BugTracker().Track("Reference Manager (Data Entry)", "Remove article from reference", e.Message, e.StackTrace);
                     services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
