@@ -57,6 +57,7 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Article '{local_info.Title}' already exists.";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -121,6 +122,7 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Bookmark '{local_info.Name}' already exists.";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -137,6 +139,7 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Reference '{local_info.Name}' already exists.";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -156,6 +159,7 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Article '{log.Changed}' doesn't exist and can't be updated.";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -184,6 +188,7 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Bookmark '{local_info.Name}' doesn't exist and can't be updated.";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -203,6 +208,7 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Reference '{local_info.Name}' doesn't exist and can't be updated.";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -242,6 +248,7 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Can't couple article - '{info.Title}' with bookmark '{info.Name}' because article doesn't exist";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -253,6 +260,7 @@ namespace MainLib.ViewModels.Utils
                                 {
                                     string mismatch = $"Article - '{info.Title}' is already in bookmark '{info.Name}'";
                                     _mismatches.Add(mismatch);
+                                    currentLogCount++;
                                     return;
                                 }
                                 bookmarkRepo.AddArticleToBookmark(bookmark, article);
@@ -265,6 +273,7 @@ namespace MainLib.ViewModels.Utils
                                 {
                                     string mismatch = $"Article - '{info.Title}' can not be removed from bookmark '{info.Name}' (Its not there)";
                                     _mismatches.Add(mismatch);
+                                    currentLogCount++;
                                     return;
                                 }
                                 bookmarkRepo.RemoveArticleFromBookmark(bookmark, article);
@@ -284,12 +293,14 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Can't couple article - '{info.Title}' with reference '{info.Name}' because reference doesn't exist";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
                             else if (article == null)
                             {
                                 string mismatch = $"Can't couple article - '{info.Title}' with reference '{info.Name}' because article doesn't exist";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -300,6 +311,7 @@ namespace MainLib.ViewModels.Utils
                                 {
                                     string mismatch = $"Article - '{info.Title}' is already in reference '{info.Name}'";
                                     _mismatches.Add(mismatch);
+                                    currentLogCount++;
                                     return;
                                 }
                                 referenceRepo.AddArticleToReference(reference, article);
@@ -311,6 +323,7 @@ namespace MainLib.ViewModels.Utils
                                 {
                                     string mismatch = $"Article - '{info.Title}' is already in bookmark '{info.Name}'";
                                     _mismatches.Add(mismatch);
+                                    currentLogCount++;
                                     return;
                                 }
                                 referenceRepo.RemoveArticleFromReference(reference, article);
@@ -330,6 +343,7 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Can't delete article '{local_info1.Name}' because it doesn't exist";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -348,6 +362,7 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Can't delete bookmark '{local_info1.Name}' because it doesn't exist";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -364,6 +379,7 @@ namespace MainLib.ViewModels.Utils
                             {
                                 string mismatch = $"Can't delete reference '{local_info1.Name}' because it doesn't exist";
                                 _mismatches.Add(mismatch);
+                                currentLogCount++;
                                 return;
                             }
 
@@ -380,6 +396,7 @@ namespace MainLib.ViewModels.Utils
                         {
                             string mismatch = $"Can't add personal to article '{local_info2.Title}' because it doesn't exist";
                             _mismatches.Add(mismatch);
+                            currentLogCount++;
                             return;
                         }
 

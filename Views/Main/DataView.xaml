@@ -655,7 +655,8 @@
                                 Command="{
                                     Binding DataContext.UpdateExportStatusCommand,
                                     RelativeSource={RelativeSource FindAncestor, 
-                                    AncestorType={x:Type UserControl}}}" 
+                                    AncestorType={x:Type UserControl}}}"
+                                Style="{StaticResource FlatCheckbox}"
                                 />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

@@ -105,18 +105,20 @@ namespace MainLib.ViewModels.Main
 
                         services.IsWorking(false);
 
-                        services.DialogService.OpenDialog(new DialogOkViewModel("Some files are missing see Logs for more info...", "Result", DialogType.Warning));
+                        //services.DialogService.OpenDialog(new DialogOkViewModel("Some files are missing see Logs for more info...", "Result", DialogType.Warning));
                         services.ShowNotification("Some files are missing see Logs for more info...", "Database validation", NotificationType.Error, "HomeNotificationArea", TimeSpan.MaxValue);
 
                     }
                     else
                     {
-                        services.DialogService.OpenDialog(new DialogOkViewModel("No missing files were found!", "Result", DialogType.Success));
+                        //services.DialogService.OpenDialog(new DialogOkViewModel("No missing files were found!", "Result", DialogType.Success));
+                        services.ShowNotification("No missing files were found!", "Database validation", NotificationType.Success, "HomeNotificationArea", TimeSpan.MaxValue);
                     }
                 }
                 else
                 {
-                    services.DialogService.OpenDialog(new DialogOkViewModel("There are no records in database yet", "Result", DialogType.Information));
+                    //services.DialogService.OpenDialog(new DialogOkViewModel("There are no records in database yet", "Result", DialogType.Information));
+                    services.ShowNotification("There are no records in database yet", "Database validation", NotificationType.Success, "HomeNotificationArea", TimeSpan.MaxValue);
                 }
             }
             catch (Exception e)

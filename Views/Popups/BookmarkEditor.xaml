@@ -27,6 +27,7 @@
             <CheckBox Content="Global"
                       Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
                       IsChecked="{Binding Bookmark.Global}"
+                      Style="{StaticResource FlatCheckbox}"
                       HorizontalAlignment="Left"
                       Margin="0 5 0 10" />
 

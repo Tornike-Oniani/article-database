@@ -31,12 +31,15 @@
                             HorizontalAlignment="Center">
                     <usercontrols:LoadingControl Diameter="50"
                                                  Color1="{StaticResource PrimaryColor}"
-                                                 Color2="Transparent" />
-                    <Label Content="{Binding WorkLabel, FallbackValue=Working...}" 
-                           FontSize="18" 
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="5 0 0 0" />
+                                                 Color2="{StaticResource LavenderColor}" />
+                    <Label 
+                        Content="{Binding WorkLabel, FallbackValue=Working...}" 
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Foreground="{StaticResource LabelColorBrush}"
+                        VerticalAlignment="Center"
+                        Margin="6 0 0 0" 
+                        />
                 </StackPanel>
             </Border>
         </Grid>
@@ -124,14 +127,21 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Cursor="Hand"
-                            Margin="10 0 0 10"
+                            Margin="4 0 0 4"
                             Command="{Binding OpenSettingsCommand}">
                             <Button.Template>
                                 <ControlTemplate TargetType="{x:Type Button}">
-                                    <materialDesign:PackIcon Kind="Gear"
-                                                         Width="25"
-                                                         Height="25"
-                                                         Foreground="#ffffff"/>
+                                    <Border 
+                                        Padding="6"
+                                        Background="Transparent"
+                                        >
+                                        <materialDesign:PackIcon 
+                                            Kind="Gear"
+                                            Width="25"
+                                            Height="25"
+                                            Foreground="{StaticResource WhiteColorBrush}" 
+                                            />
+                                    </Border>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>

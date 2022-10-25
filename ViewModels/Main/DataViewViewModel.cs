@@ -435,6 +435,9 @@ namespace MainLib.ViewModels.Main
         {
             try
             {
+                bool fileNotFound = false;
+                string fileRootPath = String.Empty;
+
                 // Destination will be the path chosen from dialog box (Where files should be exported)
                 string destination = null;
 
@@ -462,14 +465,26 @@ namespace MainLib.ViewModels.Main
                                     string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
                                     Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
                                     string validName = r.Replace(article.Title.Substring(0, 40), "");
-                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                    fileRootPath = Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf";
+                                    if (!File.Exists(fileRootPath))
+                                    {
+                                        fileNotFound = true;
+                                        continue;
+                                    }
+                                    File.Copy(fileRootPath, destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
                                 }
                                 else
                                 {
                                     string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
                                     Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
                                     string validName = r.Replace(article.Title, "");
-                                    File.Copy(Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf", destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                    fileRootPath = Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf";
+                                    if (!File.Exists(fileRootPath))
+                                    {
+                                        fileNotFound = true;
+                                        continue;
+                                    }
+                                    File.Copy(fileRootPath, destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
                                 }
                             }
                         }
@@ -489,7 +504,13 @@ namespace MainLib.ViewModels.Main
                     UpdateExportStatus();
 
                     //services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
-                    services.ShowNotification("Export", $"Exported {exportedArticlesCount} files successfully.", NotificationType.Success, "DataViewNotificationArea", new TimeSpan(0, 0, 3));
+                    if (fileNotFound)
+                    {
+                        services.ShowNotification($"Some files couldn't be found, validate the database.", "Export", NotificationType.Error, "DataViewNotificationArea", new TimeSpan(0, 0, 4));
+                        return;
+                    }
+
+                    services.ShowNotification($"Exported {exportedArticlesCount} files successfully.", "Export", NotificationType.Success, "DataViewNotificationArea", new TimeSpan(0, 0, 4));
                 }
             }
             catch (Exception e)

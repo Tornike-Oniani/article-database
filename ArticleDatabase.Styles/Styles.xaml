@@ -11,6 +11,7 @@
         <ResourceDictionary Source="/Lib.Styles;component/Components/Windows.xaml" />
         <ResourceDictionary Source="/Lib.Styles;component/Components/Datagrid.xaml" />
         <ResourceDictionary Source="/Lib.Styles;component/Components/ListView.xaml" />
+        <ResourceDictionary Source="/Lib.Styles;component/Components/Fonts.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
 </ResourceDictionary>
