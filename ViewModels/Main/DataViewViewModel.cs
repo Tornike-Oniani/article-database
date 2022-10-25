@@ -152,7 +152,6 @@ namespace MainLib.ViewModels.Main
             set { _canSortColumns = value; OnPropertyChanged("CanSortColumns"); }
         }
 
-
         #region Commands
         public RelayCommand OpenFileCommand { get; set; }
         public RelayCommand NextPageCommand { get; set; }

@@ -71,8 +71,8 @@ namespace Lib.Views.UserControls
 
         public ICommand Command
         {
-            get { return (ICommand)GetValue(DescriptionProperty); }
-            set { SetValue(DescriptionProperty, value); }
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
         }
 
         public Widget()
