@@ -494,8 +494,9 @@ namespace MainLib.ViewModels.Main
                     // 3. Uncheck articles
                     foreach (Article article in Articles)
                     {
+                        if (article.Checked == true)
+                            exportedArticlesCount++;
                         article.Checked = false;
-                        exportedArticlesCount++;
                     }
 
                     services.IsWorking(false);
