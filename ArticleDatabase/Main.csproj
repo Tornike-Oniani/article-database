@@ -42,6 +42,9 @@
   </PropertyGroup>
     <PropertyGroup>
 	    <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
+		<CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
+		<CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
+		<CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
     </PropertyGroup>
   <ItemGroup>
     <Reference Include="MaterialDesignColors, Version=1.2.6.1513, Culture=neutral, processorArchitecture=MSIL">
