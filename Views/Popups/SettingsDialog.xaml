@@ -12,7 +12,7 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
     </UserControl.Resources>
     
-    <Border Padding="15 15 15 15">
+    <Border Padding="12 12 12 12">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -24,23 +24,26 @@
                 
                 <!-- Font size -->
                 <StackPanel Orientation="Horizontal"
-                            Margin="0 0 0 10">
+                            Margin="0 0 0 6">
                     <TextBlock Text="Data font size:"
                            VerticalAlignment="Center"
-                           Style="{StaticResource MaterialDesignBody1TextBlock}"/>
+                           Style="{StaticResource MediumHeader}"/>
                     <TextBox Text="{Binding FontSize}"
                          Width="25"
-                         Margin="5 0 0 0"/>
+                         Margin="6 0 0 0"/>
                 </StackPanel>
 
                 <!-- Sync name -->
-                <StackPanel Orientation="Horizontal" Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}">
+                <StackPanel 
+                    Orientation="Horizontal" 
+                    Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                    Margin="0 0 0 6">
                     <TextBlock Text="Sync name:"
                            VerticalAlignment="Center"
-                           Style="{StaticResource MaterialDesignBody1TextBlock}"/>
+                           Style="{StaticResource MediumHeader}"/>
                     <TextBox Text="{Binding SyncName}"
-                             Width="75"
-                             Margin="5 0 0 0"/>
+                             Width="75" 
+                             />
                 </StackPanel>
             </StackPanel>
             

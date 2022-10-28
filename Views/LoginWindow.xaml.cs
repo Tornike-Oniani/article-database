@@ -3,6 +3,7 @@ using Lib.Views.Services.Browser;
 using Lib.Views.Services.Dialogs;
 using Lib.Views.Services.Windows;
 using MainLib.ViewModels;
+using MainLib.Views.Utils;
 using System;
 using System.Configuration;
 using System.Windows;
@@ -28,7 +29,7 @@ namespace Main
 
         private void LoginWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            _viewModel = new LoginViewModel(new DialogService(), new WindowService(), new BrowserService());
+            _viewModel = new LoginViewModel(new DialogService(), new WindowService(), new BrowserService(), new ThemeService());
             _viewModel.Window = this;
             this.DataContext = _viewModel;
             txbUsername.Focus();

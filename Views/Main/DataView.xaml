@@ -423,7 +423,7 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>

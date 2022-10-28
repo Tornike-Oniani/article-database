@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using NotificationService;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +24,9 @@ namespace MainLib.ViewModels.Main
         private string _exportedSync;
         private string _syncNameAndNumber;
         private Shared services;
+
+        private string _selectedTheme;
+        private IThemeService _themeService;        
 
         // Public properties
         public User User
@@ -40,6 +44,19 @@ namespace MainLib.ViewModels.Main
             get { return _syncNameAndNumber; }
             set { _syncNameAndNumber = value; OnPropertyChanged("SyncNameAndNumber"); }
         }
+        public string SelectedTheme
+        {
+            get { return _selectedTheme; }
+            set
+            {
+                _selectedTheme = value;
+                OnPropertyChanged("SelectedTheme");
+                Properties.Settings.Default.Theme = _selectedTheme;
+                Properties.Settings.Default.Save();
+                _themeService.ChangeTheme(_selectedTheme);
+            }
+        }
+        public ObservableCollection<string> Themes { get; set; }
 
         // Commands
         public RelayCommand ValidateCommand { get; set; }
@@ -52,6 +69,13 @@ namespace MainLib.ViewModels.Main
         {
             this.services = Shared.GetInstance();
             this.User = services.User;
+            this._themeService = Shared.GetInstance().ThemeService;
+            this.Themes = new ObservableCollection<string>()
+            {
+                "Standard",
+                "Bad Monitor"
+            };
+            this.SelectedTheme = Properties.Settings.Default.Theme;
 
             ValidateCommand = new RelayCommand(Validate);
             ImportCommand = new RelayCommand(Import);

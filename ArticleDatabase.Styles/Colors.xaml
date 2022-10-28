@@ -31,7 +31,8 @@
     <SolidColorBrush x:Key="BlueColorBrush" Color="{StaticResource BlueColor}" />
     <!-- Blue color light -->
     <Color x:Key="BlueColorLight">#e7f1ff</Color>
-    <SolidColorBrush x:Key="BlueColorLightBrush" Color="{StaticResource BlueColorLight}" />
+    <Color x:Key="BlueColorLightBM">#c5d3e6</Color>
+    <SolidColorBrush x:Key="BlueColorLightBrush" Color="{DynamicResource BlueColorLight}" />
     <!-- Red color -->
     <Color x:Key="RedColor">#FFB94A69</Color>
     <SolidColorBrush x:Key="RedColorBrush" Color="{StaticResource RedColor}" />
@@ -44,10 +45,12 @@
 
     <!-- Gray color light -->
     <Color x:Key="GrayColor">#dee2e6</Color>
-    <SolidColorBrush x:Key="GrayColorBrush" Color="{StaticResource GrayColor}" />
+    <Color x:Key="GrayColorBM">#ced2d6</Color>
+    <SolidColorBrush x:Key="GrayColorBrush" Color="{DynamicResource GrayColor}" />
     <!-- Gray color light -->
     <Color x:Key="GrayColorLight">#f0f2f5</Color>
-    <SolidColorBrush x:Key="GrayColorLightBrush" Color="{StaticResource GrayColorLight}" />
+    <Color x:Key="GrayColorLightBM">#e6e9ed</Color>
+    <SolidColorBrush x:Key="GrayColorLightBrush" Color="{DynamicResource GrayColorLight}" />
     <!-- Gray color dark -->
     <Color x:Key="GrayColorDark">#6c757d</Color>
     <SolidColorBrush x:Key="GrayColorDarkBrush" Color="{StaticResource GrayColorDark}" />

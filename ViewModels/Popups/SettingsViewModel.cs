@@ -4,6 +4,7 @@ using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,7 @@ namespace MainLib.ViewModels.Popups
             this.Title = "Settings...";
             this.FontSize = Properties.Settings.Default.FontSize;
             this.SyncName = Properties.Settings.Default.SyncName;
+
             SaveCommand = new RelayCommand(Save);
             CancelCommand = new RelayCommand(Cancel);
         }

@@ -27,15 +27,17 @@ namespace MainLib.ViewModels.Utils
         public IDialogService DialogService { get; private set; }
         public IWindowService WindowService { get; private set; }
         public IBrowserService BrowserService { get; private set; }
+        public IThemeService ThemeService { get; private set; }
         public User User { get; private set; }
         public string LastExportFolderPath { get; private set; }
         public string LastSyncFolderPath { get; private set; }
 
-        public void SetServices(IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public void SetServices(IDialogService dialogService, IWindowService windowService, IBrowserService browserService, IThemeService themeService)
         {
             this.DialogService = dialogService;
             this.WindowService = windowService;
             this.BrowserService = browserService;
+            this.ThemeService = themeService;
 
             this._notificationManager = new NotificationManager();
         }

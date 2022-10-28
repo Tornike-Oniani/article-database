@@ -84,11 +84,11 @@ namespace MainLib.ViewModels
         public RelayCommand RegisterCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
 
-        public LoginViewModel(IDialogService dialogService, IWindowService windowService, IBrowserService browserService)
+        public LoginViewModel(IDialogService dialogService, IWindowService windowService, IBrowserService browserService, IThemeService themeService)
         {
             this.IsBusy = false;
             this.services = Shared.GetInstance();
-            services.SetServices(dialogService, windowService, browserService);
+            services.SetServices(dialogService, windowService, browserService, themeService);
             CurrentUser = new User();
             LoginCommand = new RelayCommand(Login);
             ShowRegisterCommand = new RelayCommand(ShowRegister);

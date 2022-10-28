@@ -64,45 +64,65 @@
                 BorderBrush="{StaticResource GrayColorLightBrush}"
                 Padding="20 15 20 15"
                 Grid.Row="1">
-            <StackPanel HorizontalAlignment="Left">
-                <Border Background="{StaticResource GrayColorLightBrush}"
-                        Width="400"
-                        Padding="10"
-                        CornerRadius="7"
-                        Margin="0 0 0 5">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="ArrowLeft"
-                                             Foreground="{StaticResource LabelColorBrush}"
-                                             VerticalAlignment="Center"
-                                             Margin="0 0 5 0"/>
-                        <TextBlock Text="Last exported sync number: "
-                       Foreground="{StaticResource LabelColorBrush}"
-                       FontWeight="SemiBold"
-                       FontSize="16" />
-                        <TextBlock Text="{Binding ExportedSync, FallbackValue=LoremIpsum}"
-                       Foreground="{StaticResource LabelColorBrush}"
-                       FontSize="16" />
-                    </StackPanel>
-                </Border>
+            <Grid>
+                <StackPanel HorizontalAlignment="Left">
+                    <Border Background="{DynamicResource GrayColorLightBrush}"
+                            Width="400"
+                            Padding="10"
+                            CornerRadius="7"
+                            Margin="0 0 0 5">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ArrowLeft"
+                                                 Foreground="{StaticResource LabelColorBrush}"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0 0 5 0"/>
+                            <TextBlock Text="Last exported sync number: "
+                           Foreground="{StaticResource LabelColorBrush}"
+                           FontWeight="SemiBold"
+                           FontSize="16" />
+                            <TextBlock Text="{Binding ExportedSync, FallbackValue=LoremIpsum}"
+                           Foreground="{StaticResource LabelColorBrush}"
+                           FontSize="16" />
+                        </StackPanel>
+                    </Border>
 
-                <Border Background="{StaticResource GrayColorLightBrush}"
-                        Padding="10"
-                        CornerRadius="7">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="ArrowRight"
-                                             Foreground="{StaticResource LabelColorBrush}"
-                                             VerticalAlignment="Center"
-                                             Margin="0 0 5 0"/>
-                        <TextBlock Text="Last synced: "
-                       Foreground="{StaticResource LabelColorBrush}"
-                       FontWeight="SemiBold"
-                       FontSize="16" />
-                        <TextBlock Text="{Binding SyncNameAndNumber, FallbackValue=LoremIpsum}"
-                       Foreground="{StaticResource LabelColorBrush}"
-                       FontSize="16" />
-                    </StackPanel>
-                </Border>
-            </StackPanel>
+                    <Border Background="{DynamicResource GrayColorLightBrush}"
+                            Padding="10"
+                            CornerRadius="7">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ArrowRight"
+                                                 Foreground="{StaticResource LabelColorBrush}"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0 0 5 0"/>
+                            <TextBlock Text="Last synced: "
+                           Foreground="{StaticResource LabelColorBrush}"
+                           FontWeight="SemiBold"
+                           FontSize="16" />
+                            <TextBlock Text="{Binding SyncNameAndNumber, FallbackValue=LoremIpsum}"
+                           Foreground="{StaticResource LabelColorBrush}"
+                           FontSize="16" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Theme -->
+                <StackPanel 
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    >
+                    <TextBlock
+                        Text="Theme:"
+                        Style="{StaticResource MediumHeader}"
+                        />
+                    <ComboBox
+                        ItemsSource="{Binding Themes}"
+                        SelectedItem="{Binding SelectedTheme}"
+                        MinWidth="100"
+                        VerticalAlignment="Top"
+                        Margin="6 0 0 0"
+                        />
+                </StackPanel>
+            </Grid>
             
         </Border>
     </Grid>
