@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using NotificationService;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,10 +22,8 @@ namespace MainLib.ViewModels.Main
         private User _user;
         private string _exportedSync;
         private string _syncNameAndNumber;
+        private bool _isAnythingToExport;
         private Shared services;
-
-        private string _selectedTheme;
-        private IThemeService _themeService;        
 
         // Public properties
         public User User
@@ -44,19 +41,7 @@ namespace MainLib.ViewModels.Main
             get { return _syncNameAndNumber; }
             set { _syncNameAndNumber = value; OnPropertyChanged("SyncNameAndNumber"); }
         }
-        public string SelectedTheme
-        {
-            get { return _selectedTheme; }
-            set
-            {
-                _selectedTheme = value;
-                OnPropertyChanged("SelectedTheme");
-                Properties.Settings.Default.Theme = _selectedTheme;
-                Properties.Settings.Default.Save();
-                _themeService.ChangeTheme(_selectedTheme);
-            }
-        }
-        public ObservableCollection<string> Themes { get; set; }
+        public bool ExportSyncStatus { get { return User.IsAdmin && _isAnythingToExport; } }
 
         // Commands
         public RelayCommand ValidateCommand { get; set; }
@@ -69,13 +54,6 @@ namespace MainLib.ViewModels.Main
         {
             this.services = Shared.GetInstance();
             this.User = services.User;
-            this._themeService = Shared.GetInstance().ThemeService;
-            this.Themes = new ObservableCollection<string>()
-            {
-                "Standard",
-                "Bad Monitor"
-            };
-            this.SelectedTheme = Properties.Settings.Default.Theme;
 
             ValidateCommand = new RelayCommand(Validate);
             ImportCommand = new RelayCommand(Import);
@@ -83,6 +61,7 @@ namespace MainLib.ViewModels.Main
             ExportSyncCommand = new RelayCommand(ExportSync);
 
             UpdateSyncInformationDisplay();
+            SetExportSyncStatus();
         }
 
         // Command actions
@@ -403,6 +382,8 @@ namespace MainLib.ViewModels.Main
                 });
 
                 UpdateSyncInformationDisplay();
+                _isAnythingToExport = false;
+                OnPropertyChanged("ExportSyncStatus");
 
                 services.IsWorking(false);
 
@@ -481,6 +462,25 @@ namespace MainLib.ViewModels.Main
             SyncInfo syncInfo = new SyncInformationManager().Read();
             ExportedSync = syncInfo.LastSyncExportNumber.ToString();
             SyncNameAndNumber = $"{(String.IsNullOrEmpty(syncInfo.LastSyncedName) ? "none" : syncInfo.LastSyncedName)} [{syncInfo.LastSyncedNumber}]";
+        }
+
+        private async void SetExportSyncStatus()
+        {
+            string syncPath = Path.Combine(Environment.CurrentDirectory, @"Sync/log.json");
+            if (!File.Exists(syncPath))
+            {
+                _isAnythingToExport = false;
+                return;
+            }
+
+            services.IsWorking(true, "Checking sync status...");
+            await Task.Run(() =>
+            {
+                string syncLogs = File.ReadAllText(syncPath);
+                _isAnythingToExport = !String.IsNullOrEmpty(syncLogs);
+                OnPropertyChanged("ExportSyncStatus");
+            });
+            services.IsWorking(false, "Checking sync status...");
         }
 
         private class QueryManager

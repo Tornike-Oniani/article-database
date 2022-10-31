@@ -171,8 +171,7 @@
                             <ColumnDefinition Width="*" />
                             <!-- Clear button column -->
                             <ColumnDefinition Width="*" />
-                            <!--<ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />-->
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <Button 
@@ -189,8 +188,13 @@
                             Margin="5 0 0 0" 
                             Grid.Column="2"
                             />
-                        <!--<Button Content="Generate" Margin="5 0 0 0" Command="{Binding GenerateRandomArticlesCommand}" Grid.Column="3" />
-                        <Button Content="Testing" Margin="5 0 0 0" Command="{Binding TestCommand}" Grid.Column="4" />-->
+                        <Button 
+                            Content="Generate" 
+                            Command="{Binding GenerateRandomArticlesCommand}" 
+                            HorizontalAlignment="Left"
+                            Margin="5 0 0 0" 
+                            Grid.Column="3" 
+                            />
                     </Grid>
 
                 </StackPanel>

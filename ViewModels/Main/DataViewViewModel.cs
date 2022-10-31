@@ -151,6 +151,7 @@ namespace MainLib.ViewModels.Main
             get { return _canSortColumns; }
             set { _canSortColumns = value; OnPropertyChanged("CanSortColumns"); }
         }
+        public Shared Services { get; set; }
 
         #region Commands
         public RelayCommand OpenFileCommand { get; set; }
@@ -179,6 +180,7 @@ namespace MainLib.ViewModels.Main
         public DataViewViewModel()
         {
             this.services = Shared.GetInstance();
+            this.Services = Shared.GetInstance();
             this.User = services.User;
             this._currentSort = "Title ASC";
 
@@ -213,7 +215,6 @@ namespace MainLib.ViewModels.Main
                     break;
                 index++;
             }
-
             UserIndex = index;
 
             // 4. Set up commands

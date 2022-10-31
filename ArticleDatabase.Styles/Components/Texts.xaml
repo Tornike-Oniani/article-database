@@ -16,16 +16,23 @@
     <Style TargetType="{x:Type TextBlock}" x:Key="GenericWindowHeader" BasedOn="{StaticResource WindowHeader}">
         <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
     </Style>
-    
-    <!-- Generic header -->
-    <Style TargetType="{x:Type TextBlock}" x:Key="Header">
-        <Setter Property="FontSize" Value="20" />
+
+    <!-- Big header -->
+    <Style TargetType="{x:Type TextBlock}" x:Key="BigHeader">
         <Setter Property="Foreground" Value="{StaticResource LabelColorBrush}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="22" />
+    </Style>
+
+    <!-- Generic header -->
+    <Style TargetType="{x:Type TextBlock}" x:Key="Header" BasedOn="{StaticResource BigHeader}">
         <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="20" />
     </Style>
     
     <!-- Medium header -->
-    <Style TargetType="{x:Type TextBlock}" x:Key="MediumHeader" BasedOn="{StaticResource Header}">
+    <Style TargetType="{x:Type TextBlock}" x:Key="MediumHeader" BasedOn="{StaticResource BigHeader}">
+        <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FontSize" Value="16" />
     </Style>
 

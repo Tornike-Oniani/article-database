@@ -48,6 +48,7 @@ namespace MainLib.ViewModels
             this.services = Shared.GetInstance();
             services.SetWorkingStatusAction(WorkStatus);
             this.User = services.User;
+            services.ThemeService.ChangeTheme(Properties.Settings.Default.Theme);
 
             UpdateViewCommand = new UpdateViewCommand(Navigate);
             UpdateViewCommand.Execute(ViewType.Home);

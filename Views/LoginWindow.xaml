@@ -65,7 +65,7 @@
         <!-- Working overlay -->
         <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}, FallbackValue=Collapsed}"
               Panel.ZIndex="1">
-            <Rectangle Fill="#ffffff"
+            <Rectangle Fill="{StaticResource WhiteColorBrush}"
                        Opacity="0.7" />
             <Border BorderThickness="0 0 0 3"
                     BorderBrush="{StaticResource PrimaryColorBrush}"
@@ -95,16 +95,18 @@
             <!-- Login fields -->
             <Border Padding="30 20 30 10">
                 <StackPanel>
+                    <!-- Logo -->
                     <Image Source="/Lib.Styles;component/Images/logo.png" 
                        Width="70"
                        RenderOptions.BitmapScalingMode="Fant"
                        HorizontalAlignment="Left"/>
 
-                    <TextBlock Text="Sign in with your Account"
-                               Foreground="{StaticResource LabelColorBrush}"
-                               FontSize="22"
-                               FontWeight="Bold" 
-                               Margin="0 50 0 30"/>
+                    <!-- Title -->
+                    <TextBlock 
+                        Text="Sign in with your Account"
+                        Style="{StaticResource BigHeader}"
+                        Margin="0 50 0 30" 
+                        />
 
                     <!-- Username -->
                     <Grid Margin="0 0 0 15">
@@ -190,17 +192,22 @@
             </Grid.InputBindings>
             <Border Padding="30 15 30 10">
                 <StackPanel>
-                    <materialDesign:PackIcon Kind="UserAdd"
-                                             Width="70"
-                                             Height="70"
-                                             Margin="0"
-                                             Padding="0"
-                                             Foreground="{StaticResource PrimaryColorBrush}" />
+                    <!-- Register logo -->
+                    <materialDesign:PackIcon 
+                        Kind="UserAdd"
+                        Foreground="{StaticResource PrimaryColorBrush}" 
+                        Width="70"
+                        Height="70"
+                        Margin="0"
+                        Padding="0"
+                        />
 
-                    <TextBlock Text="Register new Account"
-                               FontSize="20"
-                               FontWeight="Bold" 
-                               Margin="0 10 0 25"/>
+                    <!-- Register title -->
+                    <TextBlock 
+                        Text="Register new Account"
+                        Style="{StaticResource BigHeader}"
+                        Margin="0 10 0 25"
+                        />
 
                     <!-- Username -->
                     <Grid Margin="0 0 0 15">

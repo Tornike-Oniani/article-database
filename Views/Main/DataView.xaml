@@ -201,11 +201,9 @@
                                             >
                                             <TextBlock 
                                                 Text="Author pairing:" 
-                                                Foreground="{StaticResource LabelColorBrush}"
-                                                FontSize="15" 
-                                                FontWeight="SemiBold"
+                                                Style="{StaticResource MediumHeader}"
                                                 VerticalAlignment="Center"
-                                                Margin="0 0 5 0" 
+                                                Margin="0 0 6 0" 
                                                 />
                                             <ComboBox 
                                                 SelectedValuePath="Content" 
@@ -237,9 +235,7 @@
                                             >
                                             <TextBlock 
                                                 Text="Keyword pairing:" 
-                                                Foreground="{StaticResource LabelColorBrush}"
-                                                FontSize="15" 
-                                                FontWeight="SemiBold" 
+                                                Style="{StaticResource MediumHeader}"
                                                 VerticalAlignment="Center"
                                                 Margin="0 0 5 0" 
                                                 />
@@ -497,18 +493,7 @@
                                     ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                     ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
                                     ap:TextBlockHighlighter.Forecolor="#000000" 
-                                    >
-                                    <!--<TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding AbstractOnly}" Value="1">
-                                                    --><!--<Setter Property="TextDecorations" Value="Underline" />--><!--
-                                                    <Setter Property="Foreground" Value="#5a7ffa" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>-->
-                                </TextBlock>
+                                    />
                                 <Border
                                     Visibility="{Binding AbstractOnly, Converter={StaticResource IntToVisibility}}"
                                     Padding="6 3 6 3"
@@ -520,7 +505,7 @@
                                     >
                                     <TextBlock
                                         Text="AO"                                        
-                                        Foreground="#ffffff"
+                                        Foreground="{StaticResource WhiteColorBrush}"
                                         FontSize="12"
                                         />
                                 </Border>

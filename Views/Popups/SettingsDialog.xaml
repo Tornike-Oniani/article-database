@@ -20,31 +20,64 @@
             </Grid.RowDefinitions>
             
             <!-- Settings -->
-            <StackPanel Grid.Row="0">
-                
+            <StackPanel 
+                HorizontalAlignment="Left"
+                Width="250"
+                Grid.Row="0"
+                >
                 <!-- Font size -->
-                <StackPanel Orientation="Horizontal"
-                            Margin="0 0 0 6">
-                    <TextBlock Text="Data font size:"
-                           VerticalAlignment="Center"
-                           Style="{StaticResource MediumHeader}"/>
-                    <TextBox Text="{Binding FontSize}"
-                         Width="25"
-                         Margin="6 0 0 0"/>
-                </StackPanel>
+                <Grid>
+                    <TextBlock 
+                        Text="Data font size:"
+                        Style="{StaticResource MediumHeader}"
+                        VerticalAlignment="Center"
+                        />
+                    <TextBox 
+                        Text="{Binding FontSize}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        HorizontalAlignment="Right"
+                        Width="35"
+                        Margin="6 0 0 0" 
+                        />
+                </Grid>
+
+                <Separator Margin="0 6 0 6" />
 
                 <!-- Sync name -->
-                <StackPanel 
-                    Orientation="Horizontal" 
-                    Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
-                    Margin="0 0 0 6">
-                    <TextBlock Text="Sync name:"
-                           VerticalAlignment="Center"
-                           Style="{StaticResource MediumHeader}"/>
-                    <TextBox Text="{Binding SyncName}"
-                             Width="75" 
-                             />
-                </StackPanel>
+                <Grid Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock 
+                        Text="Sync name:"
+                        Style="{StaticResource MediumHeader}" 
+                        VerticalAlignment="Center"
+                        />
+                    <TextBox 
+                        Text="{Binding SyncName}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        HorizontalAlignment="Right"
+                        Width="75" 
+                        />
+                </Grid>
+
+                <Separator Margin="0 6 0 6" />
+                
+                <!-- Theme -->
+                <Grid>
+                    <TextBlock
+                        Text="Theme:"
+                        Style="{StaticResource MediumHeader}"
+                        VerticalAlignment="Center"
+                        />
+                    <ComboBox
+                        ItemsSource="{Binding Themes}"
+                        SelectedItem="{Binding SelectedTheme}"
+                        MinWidth="100"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Margin="6 0 0 0"
+                        />
+                </Grid>
+
+                <Separator Margin="0 6 0 6" />
             </StackPanel>
             
             <!-- Buttons -->

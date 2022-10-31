@@ -13,7 +13,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="BorderThickness" Value="0 0 0 0" />
-        <Setter Property="Background" Value="{StaticResource GrayColorLightBrush}" />
+        <Setter Property="Background" Value="{DynamicResource GrayColorLightBrush}" />
         <Setter Property="Padding" Value="6 6 9 0" />
         <Setter Property="ItemTemplate">
             <Setter.Value>
@@ -52,7 +52,7 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource BlueColorLightBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource BlueColorLightBrush}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -134,13 +134,13 @@
                 <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
             </Trigger>
             <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
-                <Setter Property="Background" Value="{StaticResource GrayColorLightBrush}" />
+                <Setter Property="Background" Value="{DynamicResource GrayColorLightBrush}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource BlueColorLightBrush}" />
+                <Setter Property="Background" Value="{DynamicResource BlueColorLightBrush}" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource BlueColorLightBrush}" />
+                <Setter Property="Background" Value="{DynamicResource BlueColorLightBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -161,7 +161,7 @@
                         Padding="12" 
                         Background="Transparent" 
                         BorderThickness="0 0 0 1" 
-                        BorderBrush="{StaticResource GrayColorBrush}"
+                        BorderBrush="{DynamicResource GrayColorBrush}"
                         >
                         <!-- Command binding to mouse double click -->
                         <Border.InputBindings>
@@ -291,7 +291,7 @@
                         Padding="12" 
                         Background="Transparent" 
                         BorderThickness="0 0 0 1" 
-                        BorderBrush="LightGray"
+                        BorderBrush="{DynamicResource GrayColorBrush}"
                         >
                         <!-- Command binding to mouse double click -->
                         <Border.InputBindings>
@@ -413,7 +413,7 @@
     <!-- Pagination-->
     <Style x:Key="PaginationWrapper" TargetType="{x:Type ListBox}">
         <Setter Property="BorderThickness" Value="1 1 0 1" />
-        <Setter Property="BorderBrush" Value="{StaticResource GrayColorBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource GrayColorBrush}" />
         <!-- Items host -->
         <Setter Property="ItemsPanel">
             <Setter.Value>
@@ -453,7 +453,7 @@
                                 <Border
                                         Background="{TemplateBinding Background}"
                                         BorderThickness="0 0 1 0"
-                                        BorderBrush="#dee2e6"
+                                        BorderBrush="{DynamicResource GrayColorBrush}"
                                         Padding="12 6 12 6">
                                     <ContentPresenter
                                                 VerticalAlignment="Center"
@@ -467,7 +467,7 @@
                     <!-- Item triggers -->
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GrayColorLightBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource GrayColorLightBrush}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />

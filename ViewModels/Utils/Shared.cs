@@ -4,10 +4,11 @@ using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
 using NotificationService;
 using System;
+using System.ComponentModel;
 
 namespace MainLib.ViewModels.Utils
 {
-    internal sealed class Shared
+    public sealed class Shared : INotifyPropertyChanged
     {
         // Singleton implementaion
         private Shared() { }
@@ -17,9 +18,12 @@ namespace MainLib.ViewModels.Utils
             if (_instance == null)
             {
                 _instance = new Shared();
+                _instance.SelectedTheme = Properties.Settings.Default.Theme;
             }
             return _instance;
         }
+
+        private string _selectedTheme;
 
         private Action<bool, string> _isWorkingAction;
         private INotificationManager _notificationManager;
@@ -31,6 +35,12 @@ namespace MainLib.ViewModels.Utils
         public User User { get; private set; }
         public string LastExportFolderPath { get; private set; }
         public string LastSyncFolderPath { get; private set; }
+        public string SelectedTheme
+        {
+            get { return _selectedTheme; }
+            set { _selectedTheme = value; OnPropertyChanged("SelectedTheme"); }
+        }
+
 
         public void SetServices(IDialogService dialogService, IWindowService windowService, IBrowserService browserService, IThemeService themeService)
         {
@@ -68,6 +78,13 @@ namespace MainLib.ViewModels.Utils
             TimeSpan? et = expirationTime == null ? new TimeSpan(0, 0, 5) : expirationTime;
 
             _notificationManager.Show(new NotificationContent { Message = message, Title = title, Type = type }, areaName: areaName, expirationTime: expirationTime);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

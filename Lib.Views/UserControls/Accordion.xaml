@@ -30,8 +30,8 @@
         <Style x:Key="Accordion" TargetType="{x:Type ToggleButton}">
             <!-- Generic styling -->
             <Setter Property="BorderThickness" Value="1 1 1 1" />
-            <Setter Property="BorderBrush" Value="{StaticResource GrayColorBrush}" />
-            <Setter Property="Background" Value="{StaticResource GrayColorLightBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource GrayColorBrush}" />
+            <Setter Property="Background" Value="{DynamicResource GrayColorLightBrush}" />
             <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
             <Setter Property="Padding" Value="15 10 15 10" />
             <Setter Property="Cursor" Value="Hand" />
@@ -109,8 +109,8 @@
             <!-- Triggers -->
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="{StaticResource BlueColorLightBrush}" />
-                    <Setter Property="Foreground" Value="{StaticResource BlueColorBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource BlueColorLightBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource BlueColorBrush}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -145,7 +145,7 @@
         <Border
             x:Name="accordion__dropdown"
             BorderThickness="1 0 1 1"
-            BorderBrush="{StaticResource GrayColorBrush}"
+            BorderBrush="{DynamicResource GrayColorBrush}"
             Height="0"
             Grid.Row="1"
             >

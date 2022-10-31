@@ -16,10 +16,9 @@
     </UserControl.Resources>
     <Grid>
         <!-- Working overlay -->
-        <!-- Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}" -->
         <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}"
               Panel.ZIndex="1">
-            <Rectangle Fill="#ffffff"
+            <Rectangle Fill="{StaticResource WhiteColorBrush}"
                        Opacity="0.7" />
             <Border BorderThickness="0 0 0 3"
                     BorderBrush="{StaticResource PrimaryColorBrush}"
@@ -82,53 +81,65 @@
                     <!-- Navigation -->
                     <StackPanel Grid.Row="1">
                         <!-- Home -->
-                        <RadioButton Style="{StaticResource NavigationButton}"
-                         Content="Home" 
-                         Tag="{x:Static materialDesign:PackIconKind.Home}" 
-                         GroupName="Navigation" 
-                         IsChecked="True" 
-                         Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.Home}" />
+                        <RadioButton 
+                            Style="{StaticResource NavigationButton}"
+                            Content="Home" 
+                            Tag="{x:Static materialDesign:PackIconKind.Home}" 
+                            GroupName="Navigation" 
+                            IsChecked="True" 
+                            Command="{Binding UpdateViewCommand}" 
+                            CommandParameter="{x:Static type:ViewType.Home}" 
+                            />
                         <!-- Data entry -->
-                        <RadioButton Style="{StaticResource NavigationButton}" 
-                         IsEnabled="{Binding User.IsAdmin}"
-                         Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
-                         Content="Data Entry" 
-                         Tag="{x:Static materialDesign:PackIconKind.FilePlus}" 
-                         GroupName="Navigation" 
-                         Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.DataEntry}" />
+                        <RadioButton 
+                            Style="{StaticResource NavigationButton}" 
+                            IsEnabled="{Binding User.IsAdmin}"
+                            Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Content="Data Entry" 
+                            Tag="{x:Static materialDesign:PackIconKind.FilePlus}" 
+                            GroupName="Navigation" 
+                            Command="{Binding UpdateViewCommand}" 
+                            CommandParameter="{x:Static type:ViewType.DataEntry}" 
+                            />
                         <!-- Data search -->
-                        <RadioButton Style="{StaticResource NavigationButton}" 
-                         Content="Data Search" 
-                         Tag="{x:Static materialDesign:PackIconKind.Search}" 
-                         GroupName="Navigation" 
-                         Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.DataView}" 
-                         Click="RadioButton_Click" />
-                        <!-- Bookmark manager -->
-                        <RadioButton Style="{StaticResource NavigationButton}"
-                         Content="Bookmarks"
-                         Tag="{x:Static materialDesign:PackIconKind.Bookmark}"
-                         GroupName="Navigation"
-                         Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.Bookmarks}" />
-                        <!-- Reference manager -->
-                        <RadioButton Style="{StaticResource NavigationButton}"
-                         Content="References"
-                         Tag="{x:Static materialDesign:PackIconKind.ArrowCollapse}"
-                         GroupName="Navigation"
-                         Command="{Binding UpdateViewCommand}" 
-                         CommandParameter="{x:Static type:ViewType.References}" />
+                        <RadioButton 
+                            Style="{StaticResource NavigationButton}" 
+                            Content="Data Search" 
+                            Tag="{x:Static materialDesign:PackIconKind.Search}" 
+                            GroupName="Navigation" 
+                            Command="{Binding UpdateViewCommand}" 
+                            CommandParameter="{x:Static type:ViewType.DataView}" 
+                            Click="RadioButton_Click" 
+                            />
+                        <!-- Bookmarks -->
+                        <RadioButton 
+                            Style="{StaticResource NavigationButton}"
+                            Content="Bookmarks"
+                            Tag="{x:Static materialDesign:PackIconKind.Bookmark}"
+                            GroupName="Navigation"
+                            Command="{Binding UpdateViewCommand}" 
+                            CommandParameter="{x:Static type:ViewType.Bookmarks}" 
+                            />
+                        <!-- References -->
+                        <RadioButton 
+                            Style="{StaticResource NavigationButton}"
+                            Content="References"
+                            Tag="{x:Static materialDesign:PackIconKind.ArrowCollapse}"
+                            GroupName="Navigation"
+                            Command="{Binding UpdateViewCommand}" 
+                            CommandParameter="{x:Static type:ViewType.References}" 
+                            />
                     </StackPanel>
 
                     <Border Grid.Row="2">
-                        <Button Style="{x:Null}"
+                        <Button 
+                            Style="{x:Null}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             Cursor="Hand"
                             Margin="4 0 0 4"
-                            Command="{Binding OpenSettingsCommand}">
+                            Command="{Binding OpenSettingsCommand}"
+                            >
                             <Button.Template>
                                 <ControlTemplate TargetType="{x:Type Button}">
                                     <Border 

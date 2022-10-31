@@ -16,7 +16,7 @@
             <Border 
                 CornerRadius="100"
                 Padding="3 3 3 3" 
-                Background="#e1ecf4"
+                Background="{DynamicResource BlueColorLightBrush}"
                 >
                 <materialDesign:PackIcon 
                             x:Name="DeleteIcon" 
@@ -24,19 +24,19 @@
                             Height="15"
                             Width="15"
                             VerticalAlignment="Center"
-                            Foreground="DarkRed"
+                            Foreground="{StaticResource RedColorBrush}"
                             />
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="DeleteIcon" Property="Foreground" Value="Red" />
+                    <Setter TargetName="DeleteIcon" Property="Foreground" Value="{StaticResource RedColorLightBrush}" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
         <!-- Listbox item styling -->
         <Style x:Key="TagItem" TargetType="{x:Type ListBoxItem}">
-            <Setter Property="Background" Value="{StaticResource BlueColorLightBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource SecondaryColorBrush}" />
+            <Setter Property="Background" Value="{DynamicResource BlueColorLightBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource BlueColorBrush}" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="FontFamily" Value="Verdana" />
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -117,7 +117,7 @@
                         <ScrollViewer>
                             <Border 
                                 BorderThickness="1 1 1 1"
-                                BorderBrush="{StaticResource GrayColorBrush}"
+                                BorderBrush="{DynamicResource GrayColorBrush}"
                                 CornerRadius="6"
                                 >
                                 <Grid>
@@ -126,7 +126,7 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     <Border
-                                        Background="{StaticResource GrayColorLightBrush}"
+                                        Background="{DynamicResource GrayColorLightBrush}"
                                         Padding="0 6 0 6"
                                         Grid.Row="0"
                                         >

@@ -2,12 +2,7 @@
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Utils;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MainLib.ViewModels.Popups
@@ -17,6 +12,8 @@ namespace MainLib.ViewModels.Popups
 
         private int _fontSize;
         private string _syncName;
+        private string _selectedTheme;
+        private IThemeService _themeService;
 
         public int FontSize
         {
@@ -29,6 +26,16 @@ namespace MainLib.ViewModels.Popups
             set { _syncName = value; OnPropertyChanged("SyncName"); }
         }
         public User User { get; set; }
+        public string SelectedTheme
+        {
+            get { return _selectedTheme; }
+            set
+            {
+                _selectedTheme = value;
+                OnPropertyChanged("SelectedTheme");
+            }
+        }
+        public ObservableCollection<string> Themes { get; set; }
 
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }
@@ -39,6 +46,13 @@ namespace MainLib.ViewModels.Popups
             this.Title = "Settings...";
             this.FontSize = Properties.Settings.Default.FontSize;
             this.SyncName = Properties.Settings.Default.SyncName;
+            this._themeService = Shared.GetInstance().ThemeService;
+            this.Themes = new ObservableCollection<string>()
+            {
+                "Standard",
+                "Dim Monitor"
+            };
+            this.SelectedTheme = Properties.Settings.Default.Theme;
 
             SaveCommand = new RelayCommand(Save);
             CancelCommand = new RelayCommand(Cancel);
@@ -48,7 +62,10 @@ namespace MainLib.ViewModels.Popups
         {
             Properties.Settings.Default.FontSize = FontSize;
             Properties.Settings.Default.SyncName = SyncName;
+            Properties.Settings.Default.Theme = _selectedTheme;
             Properties.Settings.Default.Save();
+            _themeService.ChangeTheme(_selectedTheme);
+            Shared.GetInstance().SelectedTheme = _selectedTheme;
             this.Window.Close();
         }
         public void Cancel(object input = null)

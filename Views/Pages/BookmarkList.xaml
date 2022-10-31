@@ -46,9 +46,9 @@
 
             <!-- MY BOOKMARKS -->
             <Border
-                Background="{StaticResource GrayColorLightBrush}"
+                Background="{DynamicResource GrayColorLightBrush}"
                 BorderThickness="1 1 1 1"
-                BorderBrush="{StaticResource GrayColorBrush}"
+                BorderBrush="{DynamicResource GrayColorBrush}"
                 CornerRadius="6 6 6 6"
                 Grid.Column="0"
                 >
@@ -112,9 +112,9 @@
 
             <!-- GLOBAL BOOKMARKS -->
             <Border
-                Background="{StaticResource GrayColorLightBrush}"
+                Background="{DynamicResource GrayColorLightBrush}"
                 BorderThickness="1 1 1 1"
-                BorderBrush="{StaticResource GrayColorBrush}"
+                BorderBrush="{DynamicResource GrayColorBrush}"
                 CornerRadius="6 6 6 6"
                 Grid.Column="2"
                 >

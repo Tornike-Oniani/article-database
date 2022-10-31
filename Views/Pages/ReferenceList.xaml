@@ -85,7 +85,7 @@
                         Padding="10" 
                         Background="Transparent" 
                         BorderThickness="0 0 0 1" 
-                        BorderBrush="LightGray"
+                        BorderBrush="{DynamicResource GrayColorBrush}"
                         >
                         <!-- Command binding to mouse double click -->
                         <Border.InputBindings>
@@ -143,7 +143,7 @@
                                                 BorderThickness="1 1 1 1"
                                                 BorderBrush="{StaticResource LabelColorBrush}"
                                                 CornerRadius="4"
-                                                Background="#ffffff"
+                                                Background="{StaticResource WhiteColorBrush}"
                                                 VerticalAlignment="Center"
                                                 HorizontalAlignment="Center"
                                                 >
@@ -202,7 +202,7 @@
                                                 BorderThickness="1 1 1 1"
                                                 BorderBrush="{StaticResource LabelColorBrush}"
                                                 CornerRadius="4"
-                                                Background="#ffffff"
+                                                Background="{StaticResource WhiteColorBrush}"
                                                 VerticalAlignment="Center"
                                                 HorizontalAlignment="Center"
                                                 >
