@@ -52,6 +52,7 @@ namespace MainLib.ViewModels.Pages
         {
             get { return Articles.Where(article => article.Checked == true).ToList().Count != 0; }
         }
+        public Shared Services { get; set; }
 
         /**
          * Commands:
@@ -76,6 +77,7 @@ namespace MainLib.ViewModels.Pages
         public BookmarkViewViewModel(Bookmark bookmark, bool modifyRights = true)
         {
             this.services = Shared.GetInstance();
+            this.Services = Shared.GetInstance();
             this.Columns = new List<string>();
             this.Bookmark = bookmark;
             this._user = services.User;

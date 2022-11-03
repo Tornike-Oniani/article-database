@@ -77,7 +77,7 @@
         <Setter Property="RowStyle" Value="{DynamicResource ArticleRowStyle}" />
 
         <Style.Triggers>
-            <DataTrigger Binding="{Binding DataContext.Services.SelectedTheme, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Value="Dim Monitor">
+            <DataTrigger Binding="{Binding Services.SelectedTheme}" Value="Dim Monitor">
                 <Setter Property="RowStyle" Value="{DynamicResource ArticleRowStyleBM}" />
             </DataTrigger>
         </Style.Triggers>
