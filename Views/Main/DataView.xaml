@@ -427,10 +427,10 @@
             <DataGrid.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                     <!-- We set these items' commands from code behind -->
-                    <MenuItem x:Name="itemAddCommentSIC" Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" Command="{Binding OpenAddPersonalCommand}" />
-                    <MenuItem x:Name="itemEdit" Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
+                    <MenuItem Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" Command="{Binding OpenAddPersonalCommand}" />
+                    <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
                     <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding DeleteArticleCommand}" />
-                    <MenuItem x:Name="itemBookmark" Command="{Binding OpenBookmarkManagerCommand}" CommandParameter="{Binding SelectedArticle}">
+                    <MenuItem Command="{Binding OpenBookmarkManagerCommand}" CommandParameter="{Binding SelectedArticle}">
                         <MenuItem.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -443,7 +443,7 @@
                             </Grid>
                         </MenuItem.Header>
                     </MenuItem>
-                    <MenuItem x:Name="itemReference" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenReferenceManagerCommand}" CommandParameter="{Binding SelectedArticle}">
+                    <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenReferenceManagerCommand}" CommandParameter="{Binding SelectedArticle}">
                         <MenuItem.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -456,7 +456,7 @@
                             </Grid>
                         </MenuItem.Header>
                     </MenuItem>
-                    <MenuItem x:Name="copyTitle" Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}">
+                    <MenuItem Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}">
                         <MenuItem.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>

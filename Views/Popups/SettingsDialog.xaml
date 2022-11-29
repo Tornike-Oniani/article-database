@@ -58,7 +58,10 @@
                         />
                 </Grid>
 
-                <Separator Margin="0 6 0 6" />
+                <Separator  
+                    Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                    Margin="0 6 0 6" 
+                    />
                 
                 <!-- Theme -->
                 <Grid>

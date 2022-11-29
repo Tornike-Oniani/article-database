@@ -111,6 +111,8 @@
 
             <DataGrid.ContextMenu>
                 <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                    <MenuItem Header="Add comment/SIC" Command="{Binding OpenAddPersonalCommand}" />
+                    <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
                     <!-- Remove article -->
                     <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding RemoveArticleCommand}">
                         <MenuItem.Header>
@@ -182,6 +184,24 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Year}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Comment column -->
+                <DataGridTemplateColumn Header="Comment" SortMemberPath="PersonalComment" Width="0.4*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding PersonalComment}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- SIC column -->
+                <DataGridTemplateColumn Header="SIC" SortMemberPath="SIC" MinWidth="70" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding SIC, Converter={StaticResource NumberToSIC}}" TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

@@ -53,6 +53,7 @@ namespace MainLib.ViewModels.Pages
             get { return Articles.Where(article => article.Checked == true).ToList().Count != 0; }
         }
         public Shared Services { get; set; }
+        public User User { get; set; } 
 
         /**
          * Commands:
@@ -72,6 +73,8 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand CopyCommand { get; set; }
         public ICommand EnableExportCommand { get; set; }
         public ICommand UpdateExportStatusCommand { get; set; }
+        public RelayCommand OpenAddPersonalCommand { get; set; }
+        public RelayCommand OpenEditCommand { get; set; }
 
         // Constructor
         public BookmarkViewViewModel(Bookmark bookmark, bool modifyRights = true)
@@ -81,6 +84,7 @@ namespace MainLib.ViewModels.Pages
             this.Columns = new List<string>();
             this.Bookmark = bookmark;
             this._user = services.User;
+            this.User = services.User;
             this.Articles = new ObservableCollection<Article>();
             this.ModifyRights = modifyRights;
 
@@ -92,6 +96,9 @@ namespace MainLib.ViewModels.Pages
             CopyCommand = new RelayCommand(Copy, CanOnSelectedArticle);
             EnableExportCommand = new RelayCommand(EnableExport);
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
+            OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
+            OpenEditCommand = new RelayCommand(OpenEditDialog, IsArticleSelected);
+
         }
 
         /**
@@ -326,6 +333,21 @@ namespace MainLib.ViewModels.Pages
         public void UpdateExportStatus(object input = null)
         {
             OnPropertyChanged("CanExportP");
+        }
+        public void OpenEditDialog(object input = null)
+        {
+            services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.ArticleEditorViewModel(SelectedArticle));
+        }
+        public void OpenAddPersonal(object input)
+        {
+            services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle));
+        }
+        public bool IsArticleSelected(object input = null)
+        {
+            if (SelectedArticle != null)
+                return true;
+
+            return false;
         }
     }
 }

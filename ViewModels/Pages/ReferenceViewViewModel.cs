@@ -69,6 +69,8 @@ namespace MainLib.ViewModels.Pages
         public RelayCommand ExportReferenceCommand { get; set; }
         public RelayCommand EnableExportCommand { get; set; }
         public ICommand UpdateExportStatusCommand { get; set; }
+        public RelayCommand OpenAddPersonalCommand { get; set; }
+        public RelayCommand OpenEditCommand { get; set; }
 
         // Constructor
         public ReferenceViewViewModel(Reference reference)
@@ -89,6 +91,8 @@ namespace MainLib.ViewModels.Pages
             ExportReferenceCommand = new RelayCommand(ExportReference, CanExportReference);
             EnableExportCommand = new RelayCommand(EnableExport);
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
+            OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
+            OpenEditCommand = new RelayCommand(OpenEditDialog, IsArticleSelected);
         }
 
         /**
@@ -344,6 +348,21 @@ namespace MainLib.ViewModels.Pages
         public void UpdateExportStatus(object input = null)
         {
             OnPropertyChanged("CanExportP");
+        }
+        public void OpenEditDialog(object input = null)
+        {
+            services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.ArticleEditorViewModel(SelectedArticle));
+        }
+        public void OpenAddPersonal(object input)
+        {
+            services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle));
+        }
+        public bool IsArticleSelected(object input = null)
+        {
+            if (SelectedArticle != null)
+                return true;
+
+            return false;
         }
     }
 }
