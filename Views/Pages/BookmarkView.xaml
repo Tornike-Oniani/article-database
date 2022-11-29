@@ -166,7 +166,16 @@
                 </DataGridTemplateColumn>
 
                 <!-- Comment column -->
-                <DataGridTemplateColumn Header="Comment" SortMemberPath="PersonalComment" Width="0.4*">
+                <DataGridTemplateColumn 
+                    Header="Comment" 
+                    SortMemberPath="PersonalComment" 
+                    Width="0.4*"
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='PersonalComment'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding PersonalComment}" TextWrapping="Wrap" />
@@ -175,7 +184,17 @@
                 </DataGridTemplateColumn>
 
                 <!-- SIC column -->
-                <DataGridTemplateColumn Header="SIC" SortMemberPath="SIC" MinWidth="70" Width="Auto">
+                <DataGridTemplateColumn 
+                    Header="SIC" 
+                    SortMemberPath="SIC" 
+                    MinWidth="70" 
+                    Width="Auto"
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='SIC'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding SIC, Converter={StaticResource NumberToSIC}}" TextWrapping="Wrap" />
@@ -211,6 +230,7 @@
                         <DataTemplate>
                             <CheckBox 
                                 IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" 
+                                Style="{StaticResource FlatCheckbox}"
                                 Command="{
                                     Binding DataContext.UpdateExportStatusCommand,
                                     RelativeSource={RelativeSource FindAncestor, 
@@ -235,10 +255,41 @@
         <Border
             BorderThickness="0 1 0 0"
             BorderBrush="#FFC5C1C1"
-            Padding="12 12 12 12"
+            Padding="12 6 12 12"
             Grid.Row="3"
             >
-            
+            <Grid>
+                <StackPanel 
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    >
+                    <TextBlock
+                        Text="Show:"
+                        Style="{StaticResource Header}"
+                        FontSize="14"
+                        Margin="0 0 0 3"
+                        />
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox 
+                            Content="Comment" 
+                            Style="{StaticResource FlatCheckbox}"
+                            Margin="0 0 6 0" 
+                            IsChecked="{
+                                Binding Columns, 
+                                Converter={StaticResource CheckToList}, 
+                                ConverterParameter='PersonalComment'}" 
+                            />
+                        <CheckBox 
+                            Content="SIC" 
+                            Style="{StaticResource FlatCheckbox}"
+                            IsChecked="{
+                                Binding Columns, 
+                                Converter={StaticResource CheckToList}, 
+                                ConverterParameter='SIC'}" 
+                            />
+                    </StackPanel>
+                </StackPanel>
+                
             <!-- Export button -->
             <usercontrols:PendingButton
                     StartText="Export article PDFs"
@@ -255,6 +306,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     />
+            </Grid>
         </Border>
     </Grid>
 </Page>

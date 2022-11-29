@@ -43,21 +43,24 @@
                 <!-- Space -->
                 <ColumnDefinition Width="0.5*" />
                 <!-- Main article title column -->
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <!-- Header row -->
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            
+
             <!-- Bookmark name -->
+            <Rectangle
+                Fill="#632d98"
+                Width="6"
+                HorizontalAlignment="Left"
+                Grid.Column="0"
+                />
             <TextBlock 
                 Text="{Binding Reference.Name,FallbackValue=BindingWentWrong}"
                 FontSize="18" 
                 FontWeight="Bold"
                 FontFamily="Verdana"
+                Foreground="{StaticResource LabelColorBrush}"
                 VerticalAlignment="Center"
-                Margin="0 0 0 10"
+                Margin="12 0 0 0"
                 Grid.Column="0"
                 Grid.Row="0" 
                 />
@@ -69,12 +72,14 @@
             <Button Style="{x:Null}" Cursor="Hand" Command="{Binding OpenMainArticleCommand}">
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <TextBlock Text="{Binding Reference.Article.Title}"
-                                   TextTrimming="WordEllipsis"
-                                   ToolTip="{Binding Reference.Article.Title}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   FontSize="18" />
+                        <TextBlock 
+                            Text="{Binding Reference.Article.Title}"
+                            TextTrimming="WordEllipsis"
+                            ToolTip="{Binding Reference.Article.Title}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            FontSize="18" 
+                            />
                         </ControlTemplate>
                 </Button.Template>
             </Button>
@@ -189,7 +194,16 @@
                 </DataGridTemplateColumn>
 
                 <!-- Comment column -->
-                <DataGridTemplateColumn Header="Comment" SortMemberPath="PersonalComment" Width="0.4*">
+                <DataGridTemplateColumn 
+                    Header="Comment" 
+                    SortMemberPath="PersonalComment" 
+                    Width="0.4*"
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='PersonalComment'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding PersonalComment}" TextWrapping="Wrap" />
@@ -198,7 +212,17 @@
                 </DataGridTemplateColumn>
 
                 <!-- SIC column -->
-                <DataGridTemplateColumn Header="SIC" SortMemberPath="SIC" MinWidth="70" Width="Auto">
+                <DataGridTemplateColumn 
+                    Header="SIC" 
+                    SortMemberPath="SIC" 
+                    MinWidth="70" 
+                    Width="Auto"
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='SIC'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding SIC, Converter={StaticResource NumberToSIC}}" TextWrapping="Wrap" />
@@ -235,6 +259,7 @@
                             <CheckBox 
                                 IsChecked="{Binding Path=Checked, 
                                     UpdateSourceTrigger=PropertyChanged}" 
+                                Style="{StaticResource FlatCheckbox}"
                                 Command="{                                    
                                     Binding DataContext.UpdateExportStatusCommand,
                                     RelativeSource={RelativeSource FindAncestor, 
@@ -259,8 +284,41 @@
         <Border
             BorderThickness="0 1 0 0"
             BorderBrush="#FFC5C1C1"
-            Padding="12 12 12 12"
-            Grid.Row="2">
+            Padding="12 6 12 12"
+            Grid.Row="2"
+            >
+            <Grid>
+                <StackPanel 
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    >
+                    <TextBlock
+                        Text="Show:"
+                        Style="{StaticResource Header}"
+                        FontSize="14"
+                        Margin="0 0 0 3"
+                        />
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox 
+                            Content="Comment" 
+                            Style="{StaticResource FlatCheckbox}"
+                            Margin="0 0 6 0" 
+                            IsChecked="{
+                                Binding Columns, 
+                                Converter={StaticResource CheckToList}, 
+                                ConverterParameter='PersonalComment'}" 
+                            />
+                        <CheckBox 
+                            Content="SIC" 
+                            Style="{StaticResource FlatCheckbox}"
+                            IsChecked="{
+                                Binding Columns, 
+                                Converter={StaticResource CheckToList}, 
+                                ConverterParameter='SIC'}" 
+                            />
+                    </StackPanel>
+                </StackPanel>
+                
             <!-- Export button -->
             <usercontrols:PendingButton
                     StartText="Export article PDFs"
@@ -277,32 +335,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     />
-            <!--<StackPanel 
-                Orientation="Horizontal"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Right"
-                Grid.Row="2"
-                >
-                <CheckBox 
-                    Content="Export" 
-                    FontSize="16"
-                    Margin="0 0 10 0"
-                    IsChecked="{
-                        Binding Columns, 
-                        Converter={StaticResource CheckToList}, 
-                        ConverterParameter='Export'}"
-                    Command="{Binding EnableExportCommand}" 
-                    />
-                <Button 
-                    Content="Export"
-                    Margin="0 0 10 0"
-                    Command="{Binding ExportCommand}"
-                    />
-                <Button 
-                    Content="Export All"
-                    Command="{Binding ExportReferenceCommand}"
-                    />
-            </StackPanel>-->
+            </Grid>
         </Border>
     </Grid>
 </Page>

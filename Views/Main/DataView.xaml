@@ -569,7 +569,16 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!-- Comment column -->
-                <DataGridTemplateColumn Header="Comment" SortMemberPath="PersonalComment" Width="0.4*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='PersonalComment'}">
+                <DataGridTemplateColumn 
+                    Header="Comment" 
+                    SortMemberPath="PersonalComment" 
+                    Width="0.4*" 
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='PersonalComment'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding PersonalComment}" TextWrapping="Wrap" />
@@ -577,7 +586,17 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!-- SIC column -->
-                <DataGridTemplateColumn Header="SIC" SortMemberPath="SIC" MinWidth="70" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='SIC'}">
+                <DataGridTemplateColumn 
+                    Header="SIC" 
+                    SortMemberPath="SIC" 
+                    MinWidth="70" 
+                    Width="Auto" 
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='SIC'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding SIC, Converter={StaticResource NumberToSIC}}" TextWrapping="Wrap" />

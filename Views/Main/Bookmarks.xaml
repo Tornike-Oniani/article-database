@@ -12,20 +12,20 @@
             <!-- Main wrapper -->
             <DockPanel>
                 <!-- Buttons wrapper -->
-                <StackPanel Margin="12 12 12 12"
-                            Orientation="Horizontal"
-                            DockPanel.Dock="Top">
+                <StackPanel 
+                    Margin="12 12 12 12"
+                    Orientation="Horizontal"
+                    DockPanel.Dock="Top"
+                    >
                     <!-- Back button -->
-                    <Button Command="{x:Static NavigationCommands.BrowseBack}" 
-                            IsEnabled="{TemplateBinding CanGoBack}">
+                    <Button 
+                        Command="{x:Static NavigationCommands.BrowseBack}" 
+                        IsEnabled="{TemplateBinding CanGoBack}"
+                        >
                         <Button.Content>
                             <materialDesign:PackIcon Kind="ArrowBack" />
                         </Button.Content>
                     </Button>
-                    <!-- Forward button -->
-                    <!--<Button Content="Forward you dogs!" 
-                            Command="{x:Static NavigationCommands.BrowseForward}" 
-                            IsEnabled="{TemplateBinding CanGoForward}" />-->
                 </StackPanel>
 
                 <!-- Content wrapper -->
@@ -38,8 +38,10 @@
     </UserControl.Resources>
     <Border>
         <Grid>
-            <Frame x:Name="_mainFrame"
-                   Template="{StaticResource myFrame}" />
+            <Frame 
+                x:Name="_mainFrame"
+                Template="{StaticResource myFrame}" 
+                />
         </Grid>
     </Border>
 </UserControl>
