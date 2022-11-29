@@ -23,6 +23,7 @@ namespace MainLib.ViewModels.Main
         private string _exportedSync;
         private string _syncNameAndNumber;
         private bool _isAnythingToExport;
+        private List<string> _importHistory;
         private Shared services;
 
         // Public properties
@@ -42,6 +43,11 @@ namespace MainLib.ViewModels.Main
             set { _syncNameAndNumber = value; OnPropertyChanged("SyncNameAndNumber"); }
         }
         public bool ExportSyncStatus { get { return User.IsAdmin && _isAnythingToExport; } }
+        public List<string> ImportHistory
+        {
+            get { return _importHistory; }
+            set { _importHistory = value; OnPropertyChanged("ImportHistory"); }
+        }
 
         // Commands
         public RelayCommand ValidateCommand { get; set; }
@@ -457,11 +463,18 @@ namespace MainLib.ViewModels.Main
                    (!File.Exists(destination + "\\" + "user.sqlite3"));
         }
 
-        private void UpdateSyncInformationDisplay()
+        private async void UpdateSyncInformationDisplay()
         {
-            SyncInfo syncInfo = new SyncInformationManager().Read();
-            ExportedSync = syncInfo.LastSyncExportNumber.ToString();
-            SyncNameAndNumber = $"{(String.IsNullOrEmpty(syncInfo.LastSyncedName) ? "none" : syncInfo.LastSyncedName)} [{syncInfo.LastSyncedNumber}]";
+            services.IsWorking(true, "Reading sync information...");
+            await Task.Run(() =>
+            {
+                SyncInfo syncInfo = new SyncInformationManager().Read();
+                ExportedSync = syncInfo.LastSyncExportNumber.ToString();
+                SyncNameAndNumber = $"{(String.IsNullOrEmpty(syncInfo.LastSyncedName) ? "none" : syncInfo.LastSyncedName)} [{syncInfo.LastSyncedNumber}]";
+                ImportHistory = syncInfo.Syncs.Select(sync => $"{sync.Name} {sync.Number}").ToList();
+            });
+            OnPropertyChanged("ImportHistory");
+            services.IsWorking(false);
         }
 
         private async void SetExportSyncStatus()

@@ -233,4 +233,33 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!-- Text button -->
+    <Style x:Key="TextButton" TargetType="{x:Type ToggleButton}" BasedOn="{x:Null}">
+        <Setter Property="Padding" Value="6 0 6 0" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock
+                        Text="{Binding}"
+                        FontWeight="Bold"
+                        TextDecorations="Underline"
+                        Foreground="{StaticResource LabelColorBrush}"
+                        />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="Transparent">
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
