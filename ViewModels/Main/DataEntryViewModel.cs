@@ -1,22 +1,19 @@
-﻿using Lib.DataAccessLayer.Models;
+﻿using Lib.DataAccessLayer.Info;
+using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
+using Lib.ViewModels.Base;
+using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Popups;
+using MainLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Lib.ViewModels.Base;
-using Lib.ViewModels.Commands;
-using Lib.ViewModels.Services.Browser;
-using Lib.ViewModels.Services.Windows;
-using MainLib.ViewModels.Popups;
-using Lib.ViewModels.Services.Dialogs;
-using MainLib.ViewModels.Utils;
-using Lib.DataAccessLayer.Info;
 using System.Windows.Input;
 
 namespace MainLib.ViewModels.Main
@@ -81,6 +78,7 @@ namespace MainLib.ViewModels.Main
         private string _author;
         private string _keyword;
         private string _selectedFile;
+        private string _abstractBody;
         private Shared services;
 
         // TEST
@@ -106,6 +104,11 @@ namespace MainLib.ViewModels.Main
         }
         public List<Bookmark> Bookmarks { get; set; }
         public List<Reference> References { get; set; }
+        public string AbstractBody
+        {
+            get { return _abstractBody; }
+            set { _abstractBody = value; OnPropertyChanged("AbstractBody"); }
+        }
 
         // Commands
         public RelayCommand SelectFileCommand { get; set; }
@@ -151,7 +154,7 @@ namespace MainLib.ViewModels.Main
                 // Get the selected file
                 SelectedFile = result;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 new BugTracker().Track("Data Entry", "Select file", e.Message, e.StackTrace);
                 services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
@@ -192,7 +195,10 @@ namespace MainLib.ViewModels.Main
                     foreach (Reference reference in References)
                         new ReferenceRepo().AddArticleToReference(reference, currently_added_article);
 
-                    // 4.4 Tracking
+                    // 4.4
+                    new AbstractRepo().AddAbstract((int)currently_added_article.ID, AbstractBody);
+
+                    // 5. Tracking
                     ArticleInfo info = new ArticleInfo(User, Article.Title, Bookmarks, References);
                     Tracker tracker = new Tracker(User);
                     tracker.TrackCreate<ArticleInfo>(info);
@@ -229,8 +235,9 @@ namespace MainLib.ViewModels.Main
                 SelectedFile = null;
                 Bookmarks.Clear();
                 References.Clear();
+                AbstractBody = null;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 new BugTracker().Track("Data Entry", "Clear Article Attributes", e.Message, e.StackTrace);
                 services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));

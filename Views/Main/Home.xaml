@@ -184,7 +184,7 @@
                             </materialDesign:PackIcon>
                             <ToggleButton
                                 Content="Details"
-                                Style="{StaticResource TextButton}"
+                                Style="{StaticResource TextToggleButton}"
                                 Padding="0 0 6 0"
                                 >
                                 <ToggleButton.Triggers>

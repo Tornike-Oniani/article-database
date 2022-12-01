@@ -1,16 +1,7 @@
-﻿using Lib.DataAccessLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using Lib.ViewModels.Base;
 using MainLib.ViewModels.Main;
-using MainLib.ViewModels;
-using Lib.ViewModels.Services.Dialogs;
-using Lib.ViewModels.Services.Windows;
-using Lib.ViewModels.Services.Browser;
-using Lib.ViewModels.Base;
+using System;
+using System.Windows.Input;
 
 namespace MainLib.ViewModels.Commands
 {
@@ -48,6 +39,9 @@ namespace MainLib.ViewModels.Commands
                     break;
                 case ViewType.References:
                     _navigate(new ReferencesViewModel());
+                    break;
+                case ViewType.Abstracts:
+                    _navigate(new AbstractsViewModel());
                     break;
             }
         }

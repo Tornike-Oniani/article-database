@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MainLib.ViewModels.Main
+﻿namespace MainLib.ViewModels.Main
 {
     public enum ViewType
     {
@@ -12,6 +6,7 @@ namespace MainLib.ViewModels.Main
         DataEntry,
         DataView,
         Bookmarks,
-        References
+        References,
+        Abstracts
     }
 }

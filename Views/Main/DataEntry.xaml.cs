@@ -1,22 +1,13 @@
 ﻿using Lib.DataAccessLayer.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.Views.Services.Dialogs;
+using System;
+using System.Diagnostics;
+using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace MainLib.Views.Main
 {
@@ -75,7 +66,7 @@ namespace MainLib.Views.Main
             string title = txbTitle.Text;
             string file;
 
-            if ((new ArticleRepo()).Exists(title, out file))
+            if (new ArticleRepo().Exists(title, out file))
             {
 
                 if (new DialogService().OpenDialog(new DialogYesNoViewModel("An article with the given title already exists in Database, do you want to see the file?", "Duplicate", DialogType.Warning)))

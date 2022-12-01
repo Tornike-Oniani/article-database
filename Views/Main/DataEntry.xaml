@@ -15,11 +15,11 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="700" MaxWidth="800" Width="*" />
+            <ColumnDefinition MinWidth="712" MaxWidth="812" Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0">
-            <Border Padding="35 15 0 0">
+            <Border Padding="35 15 12 12">
                 <StackPanel>
                     <!-- Header -->
                     <TextBlock Text="Article:" Style="{StaticResource Header}" Margin="0 0 0 10" />
@@ -29,19 +29,21 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="txbTitle"
-                                Text="{Binding Article.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
-                                materialDesign:HintAssist.Hint="Title" 
-                                materialDesign:HintAssist.IsFloating="True" 
-                                AcceptsReturn="True" 
-                                TextWrapping="Wrap" 
-                                FontSize="16"
-                                SpellCheck.IsEnabled="True"
-                                materialDesign:ValidationAssist.UsePopup="True"
-                                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                                FontFamily="Verdana"
-                                Grid.Column="0"
-                                LostFocus="txbTitle_LostFocus" />
+                        <TextBox 
+                            x:Name="txbTitle"
+                            Text="{Binding Article.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
+                            Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                            materialDesign:HintAssist.Hint="Title" 
+                            materialDesign:HintAssist.IsFloating="True" 
+                            AcceptsReturn="True" 
+                            TextWrapping="Wrap" 
+                            FontSize="16"
+                            SpellCheck.IsEnabled="True"
+                            materialDesign:ValidationAssist.UsePopup="True"
+                            FontFamily="Verdana"
+                            LostFocus="txbTitle_LostFocus" 
+                            Grid.Column="0"
+                            />
                         <Button 
                             Command="{Binding ClearTitleCommand}"
                             Click="Button_Click"
@@ -140,15 +142,17 @@
                             />
                         <CheckBox
                             IsChecked="{Binding Article.AbstractOnly}"
-                            Content="Abstract only"
+                            Content="File containst only abstract"
                             Style="{StaticResource FlatCheckbox}"
                             Margin="12 0 0 0"
                             />
                     </StackPanel>
 
                     <!-- Bookmark and reference buttons -->
-                    <StackPanel Orientation="Horizontal"
-                            Margin="0 25 0 0">
+                    <StackPanel 
+                        Orientation="Horizontal"
+                        Margin="0 25 0 12"
+                        >
                         <!-- Bookmark -->
                         <Button 
                             Content="Bookmarks"
@@ -162,6 +166,19 @@
                             />
                     </StackPanel>
 
+                    <!-- Abstract -->
+                    <TextBox
+                        Text="{Binding AbstractBody}" 
+                        Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                        materialDesign:HintAssist.Hint="Abstract" 
+                        materialDesign:HintAssist.IsFloating="True" 
+                        AcceptsReturn="True" 
+                        TextWrapping="Wrap" 
+                        FontSize="16"
+                        SpellCheck.IsEnabled="True"
+                        FontFamily="Verdana"
+                        Margin="0 0 3 0"
+                        />
                     <!-- Buttons wrapper -->
                     <Grid Margin="0 15 0 0">
                         <Grid.ColumnDefinitions>
@@ -170,7 +187,6 @@
                             <!-- Add button column -->
                             <ColumnDefinition Width="*" />
                             <!-- Clear button column -->
-                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
@@ -188,15 +204,14 @@
                             Margin="5 0 0 0" 
                             Grid.Column="2"
                             />
-                        <Button 
+                        <!--<Button 
                             Content="Generate" 
                             Command="{Binding GenerateRandomArticlesCommand}" 
                             HorizontalAlignment="Left"
                             Margin="5 0 0 0" 
                             Grid.Column="3" 
-                            />
+                            />-->
                     </Grid>
-
                 </StackPanel>
             </Border>
         </ScrollViewer>

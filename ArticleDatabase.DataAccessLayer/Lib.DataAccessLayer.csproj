@@ -14,12 +14,12 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
-    <PropertyGroup>
-	    <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
-	    <CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
-	    <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
-	    <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
-    </PropertyGroup>
+  <PropertyGroup>
+    <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
+    <CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
+    <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
+    <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Info\Info.cs" />
+    <Compile Include="Models\Abstract.cs" />
     <Compile Include="Models\Article.cs" />
     <Compile Include="Models\Base\BaseModel.cs" />
     <Compile Include="Models\Bookmark.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Models\Reference.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AbstractRepo.cs" />
     <Compile Include="Repositories\ArticleRepo.cs" />
     <Compile Include="Repositories\Base\BaseRepo.cs" />
     <Compile Include="Repositories\BookmarkRepo.cs" />

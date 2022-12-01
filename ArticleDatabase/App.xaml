@@ -91,7 +91,12 @@
                     <DataTemplate DataType="{x:Type mainVM:ReferencesViewModel}">
                         <main:Bookmarks />
                     </DataTemplate>
-                    
+
+                    <!-- Abstracts -->
+                    <DataTemplate DataType="{x:Type mainVM:AbstractsViewModel}">
+                        <main:Abstracts />
+                    </DataTemplate>
+
                     <!-- Search dialog -->
                     <DataTemplate DataType="{x:Type popupVM:SearchDialogViewModel}">
                         <popupV:SearchDialog />

@@ -129,6 +129,15 @@
                             Command="{Binding UpdateViewCommand}" 
                             CommandParameter="{x:Static type:ViewType.References}" 
                             />
+                        <!-- Abstracts -->
+                        <RadioButton 
+                            Style="{StaticResource NavigationButton}"
+                            Content="Abstracts"
+                            Tag="{x:Static materialDesign:PackIconKind.Text}"
+                            GroupName="Navigation"
+                            Command="{Binding UpdateViewCommand}" 
+                            CommandParameter="{x:Static type:ViewType.Abstracts}" 
+                            />
                     </StackPanel>
 
                     <Border Grid.Row="2">
