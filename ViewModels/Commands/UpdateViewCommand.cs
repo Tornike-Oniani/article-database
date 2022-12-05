@@ -41,7 +41,7 @@ namespace MainLib.ViewModels.Commands
                     _navigate(new ReferencesViewModel());
                     break;
                 case ViewType.Abstracts:
-                    _navigate(new AbstractsViewModel());
+                    _navigate(new AbstractsEntryViewModel());
                     break;
             }
         }

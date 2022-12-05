@@ -44,7 +44,7 @@ namespace Lib.DataAccessLayer.Repositories
                 conn.Open();
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
-                    result = conn.QuerySingleOrDefault<Abstract>("SELECT abst.Id, art.Title AS ArticleTitle, abst.Body FROM tblAbstract AS abst INNER JOIN tblArticle AS art ON abst.Article_ID = art.ID WHERE Article_ID = @Article_ID;", new { Article_ID = articleId }, transaction: transaction);
+                    result = conn.QuerySingleOrDefault<Abstract>("SELECT abst.Id, art.Title AS ArticleTitle, art.File AS ArticleFileName, abst.Body FROM tblAbstract AS abst INNER JOIN tblArticle AS art ON abst.Article_ID = art.ID WHERE Article_ID = @Article_ID;", new { Article_ID = articleId }, transaction: transaction);
 
                     transaction.Commit();
                 }
@@ -61,13 +61,43 @@ namespace Lib.DataAccessLayer.Repositories
                 conn.Open();
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
-                    result = conn.Query<Abstract>("SELECT abst.Id, art.Title AS ArticleTitle, abst.Body FROM tblAbstract AS abst INNER JOIN tblArticle AS art ON abst.Article_ID = art.ID;", transaction: transaction).ToList();
+                    result = conn.Query<Abstract>("SELECT abst.Id, art.Title AS ArticleTitle, art.File AS ArticleFileName, abst.Body FROM tblAbstract AS abst INNER JOIN tblArticle AS art ON abst.Article_ID = art.ID;", transaction: transaction).ToList();
 
                     transaction.Commit();
                 }
             }
 
             return result;
+        }
+        public List<Abstract> GetArticleTitlesWithNoAbstracts(string sortDirection = "ASC")
+        {
+            List<Abstract> result;
+
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    result = conn.Query<Abstract>($"SELECT abst.Id, art.Title AS ArticleTitle, art.File AS ArticleFileName, abst.Body FROM tblArticle AS art LEFT JOIN tblAbstract AS abst ON abst.Article_ID = art.ID WHERE Body IS NULL ORDER BY ArticleFileName {sortDirection} LIMIT 10;", transaction: transaction).ToList();
+
+                    transaction.Commit();
+                }
+            }
+
+            return result;
+        }
+        public void DeleteAbstract(int id)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    conn.Execute("DELETE FROM tblAbstract WHERE Id = @Id", new { Id = id }, transaction: transaction);
+
+                    transaction.Commit();
+                }
+            }
         }
     }
 }

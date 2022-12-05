@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -82,7 +81,7 @@ namespace MainLib.ViewModels.Main
         private Shared services;
 
         // TEST
-        private Random rnd = new Random();
+        //private Random rnd = new Random();
 
         // Public properties
         public User User { get; set; }
@@ -140,7 +139,7 @@ namespace MainLib.ViewModels.Main
             OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager);
 
             // TEST
-            GenerateRandomArticlesCommand = new RelayCommand(GenerateRandomArticles);
+            //GenerateRandomArticlesCommand = new RelayCommand(GenerateRandomArticles);
             ItemsCollection = new ObservableCollection<string>();
         }
 
@@ -196,7 +195,10 @@ namespace MainLib.ViewModels.Main
                         new ReferenceRepo().AddArticleToReference(reference, currently_added_article);
 
                     // 4.4
-                    new AbstractRepo().AddAbstract((int)currently_added_article.ID, AbstractBody);
+                    if (!String.IsNullOrWhiteSpace(AbstractBody))
+                    {
+                        new AbstractRepo().AddAbstract((int)currently_added_article.ID, AbstractBody);
+                    }
 
                     // 5. Tracking
                     ArticleInfo info = new ArticleInfo(User, Article.Title, Bookmarks, References);
@@ -261,6 +263,7 @@ namespace MainLib.ViewModels.Main
         }
 
         #region Test
+        /*
         public RelayCommand GenerateRandomArticlesCommand { get; set; }
 
         // TEST
@@ -441,6 +444,7 @@ namespace MainLib.ViewModels.Main
         {
             return letters[rnd.Next(0, letters.Length - 1)];
         }
+        */
         #endregion
 
     }

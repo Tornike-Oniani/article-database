@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string ArticleTitle { get; set; }
+        public string ArticleFileName { get; set; }
         public string Body { get; set; }
 
         // Constructor

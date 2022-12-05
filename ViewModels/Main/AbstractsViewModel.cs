@@ -1,53 +1,43 @@
-﻿using Lib.DataAccessLayer.Repositories;
-using Lib.ViewModels.Base;
+﻿using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
-using MainLib.ViewModels.UIStructs;
-using MainLib.ViewModels.Utils;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System;
 using System.Windows.Input;
 
 namespace MainLib.ViewModels.Main
 {
     public class AbstractsViewModel : BaseViewModel
     {
-        private List<AbstractItem> _abstracts;
+        private BaseViewModel _selectedTabContent;
 
-        public List<AbstractItem> Abstracts
+        public BaseViewModel SelectedTabContent
         {
-            get { return _abstracts; }
-            set { _abstracts = value; OnPropertyChanged("Abstracts"); }
+            get { return _selectedTabContent; }
+            set { _selectedTabContent = value; OnPropertyChanged("SelectedTabContent"); }
         }
 
-        public ICommand ChangeAbstractToEditModeCommand { get; set; }
-        public ICommand ChangeAbstractToDisplayModeCommand { get; set; }
+        public ICommand SwitchTabContentCommand { get; set; }
 
+        // Constructor
         public AbstractsViewModel()
         {
-            ChangeAbstractToEditModeCommand = new RelayCommand(ChangeAbstractToEditMode);
-            ChangeAbstractToDisplayModeCommand = new RelayCommand(ChangeAbstractToDisplayMode);
-            PopulateAbstracts();
+            SwitchTabContentCommand = new RelayCommand(SwitchTabContent);
+            SwitchTabContentCommand.Execute("Browse");
         }
 
-        public void ChangeAbstractToEditMode(object input)
+        public void SwitchTabContent(object input)
         {
-            (input as AbstractItem).IsInEditMode = true;
-        }
-        public void ChangeAbstractToDisplayMode(object input)
-        {
-            (input as AbstractItem).IsInEditMode = false;
-        }
-
-        private async void PopulateAbstracts()
-        {
-            Shared.GetInstance().IsWorking(true, "Fetching abstracts");
-            await Task.Run(() =>
+            string tab = input.ToString();
+            if (String.IsNullOrEmpty(tab)) { return; }
+            if (tab == "Browse")
             {
-                Abstracts = new AbstractRepo().GetAllAbstracts().Select(a => new AbstractItem() { Id = a.Id, Title = a.ArticleTitle, Body = a.Body, Match = 55 }).ToList();
-            });
-            OnPropertyChanged("Abstracts");
-            Shared.GetInstance().IsWorking(false);
+                SelectedTabContent = new AbstractsBrowseViewModel();
+                return;
+            }
+            if (tab == "Entry")
+            {
+                SelectedTabContent = new AbstractsEntryViewModel();
+                return;
+            }
         }
     }
 }

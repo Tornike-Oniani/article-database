@@ -54,6 +54,7 @@ namespace MainLib.Views.Main
 
             txbTitle.Text = txbTitle.Text.Trim();
             txbTitle.Text = regex.Replace(txbTitle.Text, " ");
+            txbTitle.Text.Replace("\n", " ").Replace("\r", " ").Replace("–", "-").Replace("“", "\"").Replace("”", "\"").Replace("„", "\"").Replace("‟", "\"");
 
             // Check for unusual characters
             if (!string.IsNullOrEmpty(txbTitle.Text) & !unusualCharacters.IsMatch(txbTitle.Text))

@@ -74,6 +74,12 @@
     <Compile Include="Main\Abstracts.xaml.cs">
       <DependentUpon>Abstracts.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Main\AbstractsBrowse.xaml.cs">
+      <DependentUpon>AbstractsBrowse.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main\AbstractsEntry.xaml.cs">
+      <DependentUpon>AbstractsEntry.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Navigation.xaml.cs">
       <DependentUpon>Navigation.xaml</DependentUpon>
     </Compile>
@@ -100,6 +106,9 @@
     </Compile>
     <Compile Include="Pages\ReferenceView.xaml.cs">
       <DependentUpon>ReferenceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Popups\AbstractEditor.xaml.cs">
+      <DependentUpon>AbstractEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Popups\AddNewBookmark.xaml.cs">
       <DependentUpon>AddNewBookmark.xaml</DependentUpon>
@@ -193,6 +202,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Main\AbstractsBrowse.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main\AbstractsEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Navigation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -226,6 +243,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ReferenceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popups\AbstractEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -170,8 +170,20 @@
             </Border>
 
             <!-- Content -->
-            <ContentControl Content="{Binding SelectedViewModel}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" />
-            <notifications:NotificationArea x:Name="NotificationArea" Position="BottomLeft" MaxItems="3" Margin="0 0 0 0" Grid.Column="1" Grid.Row="0"/>
+            <ContentControl 
+                Content="{Binding SelectedViewModel}" 
+                Grid.Column="1" 
+                Grid.Row="0" 
+                Grid.RowSpan="2" 
+                />
+            <notifications:NotificationArea 
+                x:Name="NotificationArea" 
+                Position="BottomLeft" 
+                MaxItems="3" 
+                Margin="0 0 0 0" 
+                Grid.Column="1" 
+                Grid.Row="0" 
+                />
         </Grid>
     </Grid>
 </UserControl>

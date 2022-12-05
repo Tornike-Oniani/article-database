@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:local="clr-namespace:Lib.Styles"
-                    xmlns:converters="clr-namespace:Lib.Styles.Converters">
+                    xmlns:converters="clr-namespace:Lib.Styles.Converters"
+                    xmlns:ap="clr-namespace:Lib.Views.Attached_Properties;assembly=Lib.Views">
     
     <converters:IntToFontWeightConverter x:Key="IntToFontWeight" />
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
@@ -539,6 +540,199 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- Abstracts list -->
+    <DataTemplate x:Key="DisplayMode">
+        <StackPanel>
+            <Grid Margin="0 0 0 6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!-- Article title -->
+                <TextBlock
+                    Text="{Binding Title}"
+                    Style="{StaticResource Header}"
+                    TextWrapping="Wrap"
+                    FontSize="18"
+                    Grid.Column="0"
+                    />
+                <!-- Search match indicator -->
+                <Border
+                    BorderBrush="{StaticResource PrimaryColorBrush}"
+                    BorderThickness="0 0 0 2"
+                    Padding="0 0 0 0"
+                    VerticalAlignment="Top"
+                    Grid.Column="1"
+                    >
+                    <TextBlock
+                        Text="{Binding Match, StringFormat={}Match: {0}%}"
+                        Style="{StaticResource Header}"
+                        FontSize="14"
+                        />
+                </Border>
+            </Grid>
+            <!-- Abstract body -->
+            <TextBlock
+                Text="{Binding Body}"
+                TextWrapping="Wrap"
+                TextAlignment="Justify"
+                FontSize="14"
+                Margin="0 0 0 6"
+                />
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="EditMode">
+        <StackPanel>
+            <Grid Margin="0 0 0 6">
+                <!-- Article title and search match -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!-- Article title -->
+                <TextBlock
+                    Text="{Binding Title}"
+                    Style="{StaticResource Header}"
+                    TextWrapping="Wrap"
+                    FontSize="16"
+                    Grid.Column="0"
+                    />
+                <!-- Search match -->
+                <Border
+                    BorderBrush="{StaticResource PrimaryColorBrush}"
+                    BorderThickness="0 0 0 2"
+                    Padding="0 0 0 0"
+                    VerticalAlignment="Top"
+                    Grid.Column="1"
+                    >
+                    <TextBlock
+                        Text="{Binding Match, StringFormat={}Match: {0}%}"
+                        Style="{StaticResource Header}"
+                        FontSize="14"
+                        />
+                </Border>
+            </Grid>
+            <!-- Abstract -->
+            <TextBox
+                Text="{Binding Body}"
+                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                TextWrapping="Wrap"
+                FontSize="14"
+                Margin="0 0 0 6"
+                />
+            <!-- Buttons -->
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Margin="0 6 0 0"
+                >
+                <!-- Save button -->
+                <Button
+                    Content="Save"
+                    Command="{Binding DataContext.UpdateAbstractCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                    CommandParameter="{Binding}"
+                    Margin="0 0 6 0"
+                    />
+                <!-- Cancel button -->
+                <Button
+                    Content="Cancel"
+                    Command="{Binding DataContext.ChangeAbstractToDisplayModeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                    CommandParameter="{Binding}"
+                    />
+            </StackPanel>
+        </StackPanel>
+    </DataTemplate>
+    <Style x:Key="AbstractList" TargetType="{x:Type ListView}">
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListView}">
+                    <Border Background="{DynamicResource WhiteColorBrush}">
+                        <ScrollViewer>
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Grid Margin="12 6 12 6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <!-- Actions -->
+                                    <Border
+                                        Background="{StaticResource WhiteColorBrush}"
+                                        CornerRadius="3"
+                                        Grid.Column="0"
+                                        >
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <!-- Buttons -->
+                                            <StackPanel Grid.Row="0">
+                                                <!-- Read -->
+                                                <Button
+                                                    Style="{StaticResource ItemActionButton}"
+                                                    Tag="{x:Static materialDesign:PackIconKind.File}"
+                                                    Command="{Binding DataContext.OpenArticleFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
+                                                    />
+                                                <!-- Edit -->
+                                                <Button
+                                                    Style="{StaticResource ItemActionButton}"
+                                                    Tag="{x:Static materialDesign:PackIconKind.Edit}"
+                                                    Command="{Binding DataContext.ChangeAbstractToEditModeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}"
+                                                    />
+                                            </StackPanel>
+                                            <Border 
+                                                Background="Transparent"
+                                                Grid.Row="1"
+                                                />
+                                        </Grid>
+                                    </Border>
+                                    <!-- Body block -->
+                                    <Border
+                                        Background="{StaticResource WhiteColorBrush}"
+                                        CornerRadius="3"
+                                        Padding="12 12 12 12" 
+                                        Grid.Column="1"
+                                        >
+                                        <Border.BitmapEffect>
+                                            <DropShadowBitmapEffect 
+                                                Color="{StaticResource BlackColorAlt}"
+                                                Direction="-60"
+                                                ShadowDepth="5"
+                                                Softness="10"
+                                                Opacity="0.2" 
+                                                />
+                                        </Border.BitmapEffect>
+                                        <ContentPresenter />
+                                    </Border>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="ContentTemplate" Value="{StaticResource DisplayMode}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsInEditMode}" Value="True">
+                            <Setter Property="ContentTemplate" Value="{StaticResource EditMode}" />
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </Setter.Value>
         </Setter>

@@ -479,7 +479,7 @@ WHERE cmp.ID = @ID;
                 {
                     conn.Query(AttachUser(), transaction);
 
-                    result = conn.QuerySingleOrDefault<Article>("SELECT ID FROM tblArticle WHERE Title=@Title",
+                    result = conn.QuerySingleOrDefault<Article>("SELECT ID, File AS [FileName] FROM tblArticle WHERE Title=@Title",
                         new { Title = title }, transaction: transaction);
 
                     transaction.Commit();

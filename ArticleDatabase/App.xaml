@@ -97,6 +97,16 @@
                         <main:Abstracts />
                     </DataTemplate>
 
+                    <!-- Abstracts browse -->
+                    <DataTemplate DataType="{x:Type mainVM:AbstractsBrowseViewModel}">
+                        <main:AbstractsBrowse />
+                    </DataTemplate>
+
+                    <!-- Abstracts entry -->
+                    <DataTemplate DataType="{x:Type mainVM:AbstractsEntryViewModel}">
+                        <main:AbstractsEntry />
+                    </DataTemplate>
+
                     <!-- Search dialog -->
                     <DataTemplate DataType="{x:Type popupVM:SearchDialogViewModel}">
                         <popupV:SearchDialog />
@@ -147,6 +157,7 @@
                         <popupV:ReferenceEditor />
                     </DataTemplate>
 
+                    <!-- Settings -->
                     <DataTemplate DataType="{x:Type popupVM:SettingsViewModel}">
                         <popupV:SettingsDialog />
                     </DataTemplate>

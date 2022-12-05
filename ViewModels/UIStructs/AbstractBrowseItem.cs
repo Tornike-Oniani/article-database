@@ -2,7 +2,7 @@
 
 namespace MainLib.ViewModels.UIStructs
 {
-    public class AbstractItem : INotifyPropertyChanged
+    public class AbstractBrowseItem : INotifyPropertyChanged
     {
         private bool _isInEditMode;
         private string _title;

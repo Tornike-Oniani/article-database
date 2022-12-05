@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="Commands\UpdateViewCommand.cs" />
     <Compile Include="LoginViewModel.cs" />
+    <Compile Include="Main\AbstractsBrowseViewModel.cs" />
+    <Compile Include="Main\AbstractsEntryViewModel.cs" />
     <Compile Include="Main\AbstractsViewModel.cs" />
     <Compile Include="Main\SearchOptionsViewModel.cs" />
     <Compile Include="NavigationViewModel.cs" />
@@ -62,6 +64,7 @@
     <Compile Include="Pages\BookmarkViewViewModel.cs" />
     <Compile Include="Pages\ReferenceListViewModel.cs" />
     <Compile Include="Pages\ReferenceViewViewModel.cs" />
+    <Compile Include="Popups\AbstractEditorViewModel.cs" />
     <Compile Include="Popups\AddNewBookmarkViewModel.cs" />
     <Compile Include="Popups\AddNewReferenceViewModel.cs" />
     <Compile Include="Popups\AddPersonalViewModel.cs" />
@@ -81,7 +84,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="RegisterViewModel.cs" />
-    <Compile Include="UIStructs\AbstractItem.cs" />
+    <Compile Include="UIStructs\AbstractBrowseItem.cs" />
+    <Compile Include="UIStructs\AbstractEntryItem.cs" />
     <Compile Include="UIStructs\BookmarkBox.cs" />
     <Compile Include="UIStructs\ReferenceBox.cs" />
     <Compile Include="Utils\BugTracker.cs" />
