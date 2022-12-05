@@ -1,16 +1,8 @@
 ﻿using Lib.DataAccessLayer.Info;
 using Lib.DataAccessLayer.Models;
-using Lib.DataAccessLayer.Repositories;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.IO.Packaging;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MainLib.ViewModels.Utils
 {
@@ -18,21 +10,22 @@ namespace MainLib.ViewModels.Utils
     {
         private string _type;
 
-        // [Create, Update, Delete, Coupling]
+        // [Create, Update, Delete, Coupling, Personal, Pending, Abstract]
         public string Type
         {
             get { return _type; }
-            set 
+            set
             {
-                if (value.ToString() == "Create" 
-                    || value.ToString() == "Update" 
+                if (value.ToString() == "Create"
+                    || value.ToString() == "Update"
                     || value.ToString() == "Delete"
                     || value.ToString() == "Coupling"
                     || value.ToString() == "Personal"
-                    || value.ToString() == "Pending")
+                    || value.ToString() == "Pending"
+                    || value.ToString() == "Abstract")
                     _type = value;
                 else
-                    throw new ArgumentException("Invalid argument. It has to be Create, Update, Delete or Coupling");
+                    throw new ArgumentException("Invalid argument. It has to be Create, Update, Delete, Coupling, Personal, Pending or Abstract");
             }
         }
         public string Username { get; set; }
@@ -108,6 +101,11 @@ namespace MainLib.ViewModels.Utils
         public void TrackPending(PendingInfo info)
         {
             Track<PendingInfo>("Pending", info);
+        }
+
+        public void TrackAbstract(AbstractInfo info)
+        {
+            Track<AbstractInfo>("Abstract", info);
         }
 
         private void Track<T>(string action, T instance, string id = null)

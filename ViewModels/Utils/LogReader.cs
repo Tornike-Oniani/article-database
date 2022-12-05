@@ -419,6 +419,13 @@ namespace MainLib.ViewModels.Utils
                         textInfo = JsonConvert.SerializeObject(sections);
                         File.WriteAllText(path, textInfo);
                         break;
+                    case "Abstract":
+                        AbstractInfo a_info = (AbstractInfo)log.Info;
+                        // 1. Get article id
+                        Article a = new ArticleRepo().GetArticleWithTitle(a_info.ArticleTitle);
+                        // 2. Add abstract
+                        new AbstractRepo().AddAbstract((int)a.ID, a_info.AbstractBody);
+                        break;
                     default:
                         break;
                 }

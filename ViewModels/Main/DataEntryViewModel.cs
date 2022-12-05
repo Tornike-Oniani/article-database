@@ -106,7 +106,7 @@ namespace MainLib.ViewModels.Main
         public string AbstractBody
         {
             get { return _abstractBody; }
-            set { _abstractBody = value; OnPropertyChanged("AbstractBody"); }
+            set { _abstractBody = FormatText(value); OnPropertyChanged("AbstractBody"); }
         }
 
         // Commands
@@ -163,6 +163,15 @@ namespace MainLib.ViewModels.Main
         {
             try
             {
+                // Check for unusual characters in abstract
+                Regex unusualCharacters = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
+                if (!unusualCharacters.IsMatch(AbstractBody))
+                {
+                    Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Abstract contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
+                    AbstractBody = null;
+                    return;
+                }
+
                 services.IsWorking(true);
 
                 await Task.Run(() =>
@@ -205,6 +214,7 @@ namespace MainLib.ViewModels.Main
                     Tracker tracker = new Tracker(User);
                     tracker.TrackCreate<ArticleInfo>(info);
                     File.Copy(SelectedFile, tracker.GetFilesPath() + "\\" + Article.FileName + ".pdf");
+                    tracker.TrackAbstract(new AbstractInfo() { ArticleTitle = Article.Title, AbstractBody = AbstractBody });
 
                     // 6. Move the selected file into "Done" subfolder
                     string done_path = Path.GetDirectoryName(SelectedFile) + "\\Done\\";
@@ -260,6 +270,18 @@ namespace MainLib.ViewModels.Main
         public bool CanSaveArticle(object input = null)
         {
             return CanAdd && Article.CanAdd;
+        }
+
+        // Private helpers
+        // Removes carriage returns (CL RF) and unusual characters
+        private string FormatText(string text)
+        {
+            if (text == null)
+            {
+                return "";
+            }
+
+            return text.Replace("\n", " ").Replace("\r", " ").Replace("–", "-").Replace("“", "\"").Replace("”", "\"").Replace("„", "\"").Replace("‟", "\"");
         }
 
         #region Test

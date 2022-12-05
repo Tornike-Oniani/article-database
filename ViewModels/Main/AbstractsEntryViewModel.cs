@@ -1,4 +1,5 @@
-﻿using Lib.DataAccessLayer.Models;
+﻿using Lib.DataAccessLayer.Info;
+using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
@@ -106,10 +107,13 @@ namespace MainLib.ViewModels.Main
                 Article currentArticle = new ArticleRepo().GetArticleWithTitle(currentAbstract.Title);
                 // Create abstract
                 new AbstractRepo().AddAbstract((int)currentArticle.ID, currentAbstract.Body);
+                // Track abstract creation
+                new Tracker(Shared.GetInstance().User).TrackAbstract(new AbstractInfo() { ArticleTitle = currentAbstract.Title, AbstractBody = currentAbstract.Body });
             });
             // Remove from current list (as we only need artilces with no abstract)
-            Abstracts.Remove(currentAbstract);
             Shared.GetInstance().IsWorking(false);
+
+            await PopulateAbstracts();
         }
         public async void ChangeSortDirection(object input = null)
         {

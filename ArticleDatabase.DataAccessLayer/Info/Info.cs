@@ -220,4 +220,10 @@ namespace Lib.DataAccessLayer.Info
             this.Section = section;
         }
     }
+    public class AbstractInfo : IInfo
+    {
+        public string ArticleTitle { get; set; }
+        public string AbstractBody { get; set; }
+    }
+
 }

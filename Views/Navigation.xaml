@@ -132,6 +132,8 @@
                         <!-- Abstracts -->
                         <RadioButton 
                             Style="{StaticResource NavigationButton}"
+                            IsEnabled="{Binding User.IsAdmin}"
+                            Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Content="Abstracts"
                             Tag="{x:Static materialDesign:PackIconKind.Text}"
                             GroupName="Navigation"

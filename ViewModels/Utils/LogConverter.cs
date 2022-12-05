@@ -3,9 +3,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MainLib.ViewModels.Utils
 {
@@ -64,6 +61,12 @@ namespace MainLib.ViewModels.Utils
                 else if (check.Contains("Pending"))
                 {
                     Log<PendingInfo> temp = item.ToObject<Log<PendingInfo>>();
+                    Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
+                    result.Add(log);
+                }
+                else if (check.Contains("Abstract"))
+                {
+                    Log<AbstractInfo> temp = item.ToObject<Log<AbstractInfo>>();
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
                     result.Add(log);
                 }
