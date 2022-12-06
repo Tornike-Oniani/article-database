@@ -91,13 +91,22 @@ namespace MainLib.ViewModels.Main
         {
             AbstractEntryItem currentAbstract = input as AbstractEntryItem;
 
+            // Switch multiple spaces with one
+            RegexOptions options = RegexOptions.None;
+            Regex regex = new Regex("[ ]{2,}", options);
+            currentAbstract.Body = regex.Replace(currentAbstract.Body, " ");
+            currentAbstract.Body = currentAbstract.Body.Trim();
+
             // Check for unusual characters
-            Regex unusualCharacters = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
-            if (!unusualCharacters.IsMatch(currentAbstract.Body))
+            if (!String.IsNullOrWhiteSpace(currentAbstract.Body))
             {
-                Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("This input contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
-                currentAbstract.Body = null;
-                return;
+                Regex unusualCharacters = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
+                if (!unusualCharacters.IsMatch(currentAbstract.Body))
+                {
+                    Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("This input contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
+                    currentAbstract.Body = null;
+                    return;
+                }
             }
 
             Shared.GetInstance().IsWorking(true, "Adding abstract...");

@@ -95,7 +95,7 @@
                                             materialDesign:HintAssist.IsFloating="True"
 				                            TextWrapping="Wrap"
                                             AcceptsReturn="True"
-				                            FontSize="14"
+				                            FontSize="16"
                                             SpellCheck.IsEnabled="True"
 				                            Margin="0 0 0 6"
 				                            />

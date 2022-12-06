@@ -163,13 +163,22 @@ namespace MainLib.ViewModels.Main
         {
             try
             {
-                // Check for unusual characters in abstract
-                Regex unusualCharacters = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
-                if (!unusualCharacters.IsMatch(AbstractBody))
+                if (!String.IsNullOrWhiteSpace(AbstractBody))
                 {
-                    Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Abstract contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
-                    AbstractBody = null;
-                    return;
+                    // Switch multiple spaces with one
+                    RegexOptions options = RegexOptions.None;
+                    Regex regex = new Regex("[ ]{2,}", options);
+                    AbstractBody = regex.Replace(AbstractBody, " ");
+                    AbstractBody = AbstractBody.Trim();
+
+                    // Check for unusual characters in abstract
+                    Regex unusualCharacters = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
+                    if (!unusualCharacters.IsMatch(AbstractBody))
+                    {
+                        Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Abstract contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
+                        AbstractBody = null;
+                        return;
+                    }
                 }
 
                 services.IsWorking(true);
