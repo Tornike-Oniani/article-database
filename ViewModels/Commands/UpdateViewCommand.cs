@@ -43,6 +43,9 @@ namespace MainLib.ViewModels.Commands
                 case ViewType.Abstracts:
                     _navigate(new AbstractsEntryViewModel());
                     break;
+                case ViewType.SQL:
+                    _navigate(new SQLViewModel());
+                    break;
             }
         }
     }

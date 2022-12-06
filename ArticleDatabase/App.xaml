@@ -106,7 +106,12 @@
                     <DataTemplate DataType="{x:Type mainVM:AbstractsEntryViewModel}">
                         <main:AbstractsEntry />
                     </DataTemplate>
-
+                    
+                    <!-- Abstracts entry -->
+                    <DataTemplate DataType="{x:Type mainVM:SQLViewModel}">
+                        <main:SQL />
+                    </DataTemplate>
+                    
                     <!-- Search dialog -->
                     <DataTemplate DataType="{x:Type popupVM:SearchDialogViewModel}">
                         <popupV:SearchDialog />

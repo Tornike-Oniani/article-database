@@ -7,6 +7,7 @@
         DataView,
         Bookmarks,
         References,
-        Abstracts
+        Abstracts,
+        SQL
     }
 }

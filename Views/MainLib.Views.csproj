@@ -80,6 +80,9 @@
     <Compile Include="Main\AbstractsEntry.xaml.cs">
       <DependentUpon>AbstractsEntry.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Main\SQL.xaml.cs">
+      <DependentUpon>SQL.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Navigation.xaml.cs">
       <DependentUpon>Navigation.xaml</DependentUpon>
     </Compile>
@@ -207,6 +210,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Main\AbstractsEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main\SQL.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

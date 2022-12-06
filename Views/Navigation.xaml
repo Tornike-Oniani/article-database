@@ -140,6 +140,17 @@
                             Command="{Binding UpdateViewCommand}" 
                             CommandParameter="{x:Static type:ViewType.Abstracts}" 
                             />
+                        <!-- SQL -->
+                        <RadioButton 
+                            Style="{StaticResource NavigationButton}"
+                            IsEnabled="{Binding User.IsAdmin}"
+                            Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Content="SQL"
+                            Tag="{x:Static materialDesign:PackIconKind.SqlQuery}"
+                            GroupName="Navigation"
+                            Command="{Binding UpdateViewCommand}" 
+                            CommandParameter="{x:Static type:ViewType.SQL}" 
+                            />
                     </StackPanel>
 
                     <Border Grid.Row="2">

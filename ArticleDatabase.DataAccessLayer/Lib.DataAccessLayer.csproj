@@ -69,6 +69,7 @@
     <Compile Include="Repositories\ArticleRepo.cs" />
     <Compile Include="Repositories\Base\BaseRepo.cs" />
     <Compile Include="Repositories\BookmarkRepo.cs" />
+    <Compile Include="Repositories\GenericRepo.cs" />
     <Compile Include="Repositories\GlobalRepo.cs" />
     <Compile Include="Repositories\ReferenceRepo.cs" />
     <Compile Include="Repositories\SectionRepo.cs" />
