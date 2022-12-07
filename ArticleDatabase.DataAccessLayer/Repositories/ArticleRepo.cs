@@ -216,6 +216,8 @@ namespace Lib.DataAccessLayer.Repositories
                     // Remove from user Personal table (where PersonalComment and SIC are stored)
                     conn.Execute(@"DELETE FROM user.tblUserPersonal WHERE ArticleID=@ArticleID",
                         new { ArticleID = article.ID }, transaction);
+                    // Remove abstract
+                    conn.Execute(@"DELETE FROM tblAbstract WHERE Article_ID=@AritcleID", new { ArticleID = article.ID }, transaction);
                     transaction.Commit();
                 }
             }
