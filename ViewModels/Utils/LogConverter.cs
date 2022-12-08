@@ -40,7 +40,7 @@ namespace MainLib.ViewModels.Utils
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
                     result.Add(log);
                 }
-                else if (check.Contains("Couple"))
+                else if (check.Contains("\"Type\": \"Couple\""))
                 {
                     Log<Couple> temp = item.ToObject<Log<Couple>>();
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
@@ -52,7 +52,7 @@ namespace MainLib.ViewModels.Utils
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
                     result.Add(log);
                 }
-                else if (check.Contains("Personal"))
+                else if (check.Contains("\"Type\": \"Personal\""))
                 {
                     Log<PersonalInfo> temp = item.ToObject<Log<PersonalInfo>>();
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
@@ -64,7 +64,7 @@ namespace MainLib.ViewModels.Utils
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
                     result.Add(log);
                 }
-                else if (check.Contains("Abstract"))
+                else if (check.Contains("\"Type\": \"Abstract\""))
                 {
                     Log<AbstractInfo> temp = item.ToObject<Log<AbstractInfo>>();
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
