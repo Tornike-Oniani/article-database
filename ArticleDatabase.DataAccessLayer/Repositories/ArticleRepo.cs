@@ -234,7 +234,7 @@ namespace Lib.DataAccessLayer.Repositories
 
             // Template query
             StringBuilder queryBuilder = new StringBuilder(@"
-SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.AbstractOnly, final.PersonalComment, final.SIC
+SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.AbstractOnly, final.PersonalComment, final.SIC, abst.Body AS [AbstractBody]
 FROM
 (SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], cmp.AbstractOnly, per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
 FROM
@@ -254,7 +254,8 @@ GROUP BY art.Title) AS art_kwd
 ON art_ath.Article = art_kwd.Article) AS cmp
 LEFT JOIN
 (SELECT ArticleID, PersonalComment, SIC
-FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final 
+FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
+LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
 ");
             // 1. Add user id for comments and sic
             queryBuilder.Replace("#UserID", user.ID.ToString());

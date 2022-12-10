@@ -78,6 +78,8 @@ namespace Lib.DataAccessLayer.Models
         private int _sic;
         private int _abstractOnly;
         private bool _checked;
+        private string _abstractBody;
+        private bool _abstractShown;
 
         public long? ID
         {
@@ -124,7 +126,17 @@ namespace Lib.DataAccessLayer.Models
             get { return _abstractOnly; }
             set { _abstractOnly = value; OnPropertyChanged("AbstractOnly"); }
         }
+        public string AbstractBody
+        {
+            get { return _abstractBody; }
+            set { _abstractBody = value; OnPropertyChanged("AbstractBody"); }
+        }
 
+        public bool AbstractShown
+        {
+            get { return _abstractShown; }
+            set { _abstractShown = value; OnPropertyChanged("AbstractShown"); }
+        }
         public bool Checked
         {
             get { return _checked; }

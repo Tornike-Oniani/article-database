@@ -62,8 +62,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\ActiveStatusToStyleConverter.cs" />
+    <Compile Include="Converters\BoolToTextHeaderStyleConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CurrentPageToBoolVisibilityConverter.cs" />
+    <Compile Include="Converters\EmptyStringToVisibilityConverter.cs" />
     <Compile Include="Converters\IntToFontWeightConverter.cs" />
     <Compile Include="Converters\IntToVisibilityConverter.cs" />
     <Compile Include="Converters\IsIntToBoolConverter.cs" />

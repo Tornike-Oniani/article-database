@@ -65,7 +65,8 @@
                                         <RotateTransform 
                                             Angle="0" 
                                             CenterX="16" 
-                                            CenterY="16" />
+                                            CenterY="16" 
+                                            />
                                     </materialDesign:PackIcon.RenderTransform>
                                 </materialDesign:PackIcon>
                             </StackPanel>
