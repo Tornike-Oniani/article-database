@@ -1,12 +1,9 @@
-﻿using Lib.DataAccessLayer.Repositories.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SQLite;
-using Dapper;
+﻿using Dapper;
 using Lib.DataAccessLayer.Models;
+using Lib.DataAccessLayer.Repositories.Base;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Linq;
 
 namespace Lib.DataAccessLayer.Repositories
 {
@@ -88,7 +85,7 @@ namespace Lib.DataAccessLayer.Repositories
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
                     result = conn.QuerySingleOrDefault<Reference>("SELECT ID, Name, ArticleID FROM tblReference WHERE Name=@Name;",
-                        new { Name = name}, transaction: transaction);
+                        new { Name = name }, transaction: transaction);
                     transaction.Commit();
                 }
             }
@@ -189,7 +186,7 @@ namespace Lib.DataAccessLayer.Repositories
             List<Article> results;
 
             string query = @"
-SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName]
+SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], abst.Body AS [AbstractBody]
 FROM
 (SELECT art_ath.ID, art_ath.Article, art_ath.Authors, art_kwd.Keywords, art_ath.Year, art_ath.FileName
 FROM
@@ -207,6 +204,7 @@ GROUP BY art.Title) AS art_kwd
 ON art_ath.Article = art_kwd.Article) AS cmp
 JOIN tblReferenceArticle as ra ON cmp.ID = ra.ArticleID
 JOIN tblReference as r ON r.ID = ra.ReferenceID
+LEFT JOIN tblAbstract AS abst On abst.Article_ID = cmp.ID
 WHERE r.ID = @ReferenceID; 
 ";
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))

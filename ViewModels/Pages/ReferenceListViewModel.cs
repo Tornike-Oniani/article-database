@@ -132,7 +132,6 @@ namespace MainLib.ViewModels.Pages
                 foreach (Reference reference in new ReferenceRepo().LoadReferences())
                 {
                     // Populate articles colletion for each bookmark
-                    //reference.PopulateArticles();
                     reference.GetArticleCount();
                     reference.SetMainArticle();
                     references.Add(reference);

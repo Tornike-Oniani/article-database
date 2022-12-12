@@ -1,12 +1,9 @@
-﻿using Lib.DataAccessLayer.Repositories.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SQLite;
-using Dapper;
+﻿using Dapper;
 using Lib.DataAccessLayer.Models;
+using Lib.DataAccessLayer.Repositories.Base;
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Linq;
 
 namespace Lib.DataAccessLayer.Repositories
 {
@@ -214,7 +211,7 @@ namespace Lib.DataAccessLayer.Repositories
             List<Article> results;
 
             string query = $@"
-SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC
+SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC, abst.Body AS [AbstractBody]
 FROM
 (SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
 FROM
@@ -237,6 +234,7 @@ LEFT JOIN
 FROM tblUserPersonal WHERE UserID = {user.ID}) AS per ON cmp.ID = per.ArticleID) AS final
 JOIN tblBookmarkArticles as ba ON final.ID = ba.ArticleID
 JOIN tblBookmark as b ON b.ID = ba.BookmarkID 
+LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
 WHERE b.ID = {bookmark.ID}; 
 ";
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))

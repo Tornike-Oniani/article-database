@@ -53,7 +53,7 @@ namespace MainLib.ViewModels.Pages
             get { return Articles.Where(article => article.Checked == true).ToList().Count != 0; }
         }
         public Shared Services { get; set; }
-        public User User { get; set; } 
+        public User User { get; set; }
 
         /**
          * Commands:
@@ -116,7 +116,7 @@ namespace MainLib.ViewModels.Pages
 
                 await Task.Run(() =>
                 {
-                    foreach (Article article in (new BookmarkRepo()).LoadArticlesForBookmark(_user, this.Bookmark))
+                    foreach (Article article in new BookmarkRepo().LoadArticlesForBookmark(_user, this.Bookmark))
                         articles.Add(article);
                 });
 
