@@ -165,7 +165,7 @@ namespace Lib.DataAccessLayer.Utils
 
             filter.FilterQuery.Append("(");
 
-            filter.FilterQuery.Append($" ID >= {idFilters[0]} AND ID <= {idFilters[1]}");
+            filter.FilterQuery.Append($" final.ID >= {idFilters[0]} AND final.ID <= {idFilters[1]}");
 
             filter.FilterQuery.Append(")");
 
