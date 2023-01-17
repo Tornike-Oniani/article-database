@@ -8,6 +8,9 @@
     <!-- Secondary color -->
     <Color x:Key="SecondaryColor">#0575AC</Color>
     <SolidColorBrush x:Key="SecondaryColorBrush" Color="{StaticResource SecondaryColor}" />
+    <!-- Secondary color dark -->
+    <Color x:Key="SecondaryColorDark">#035c87</Color>
+    <SolidColorBrush x:Key="SecondaryColorDarkBrush" Color="{StaticResource SecondaryColorDark}" />
     <!-- Complementary color -->
     <Color x:Key="ComplementaryColor">#3b1065</Color>
     <SolidColorBrush x:Key="ComplementaryColorBrush" Color="{StaticResource ComplementaryColor}" />

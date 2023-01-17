@@ -165,7 +165,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource Gray-BlueColorDarkBrush}" />
         <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
         <Setter Property="Padding" Value="3 3 3 3" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="12" />
         <!-- Template -->
         <Setter Property="Template">
             <Setter.Value>

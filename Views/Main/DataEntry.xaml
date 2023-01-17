@@ -15,10 +15,14 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".5*" />
             <ColumnDefinition MinWidth="712" MaxWidth="812" Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="0">
+        <ScrollViewer 
+            Margin="0 24 0 0"
+            Grid.Column="1"
+            >
             <Border Padding="35 15 12 12">
                 <StackPanel>
                     <!-- Header -->

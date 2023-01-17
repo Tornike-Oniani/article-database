@@ -78,7 +78,7 @@
             Command="{Binding InitialCommand}"
             Style="{StaticResource PendingStartButton}"
             VerticalAlignment="Center"
-            HorizontalAlignment="Right"
+            HorizontalAlignment="left"
             />
         <Grid
             Visibility="{
