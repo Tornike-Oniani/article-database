@@ -181,13 +181,13 @@
                                 <TextBlock 
                                     Text="{Binding Name}"
                                     TextWrapping="Wrap"
-                                    FontSize="18"
+                                    FontSize="16"
                                     Foreground="{StaticResource LabelColorBrush}"
                                     />
                                 <TextBlock 
                                     x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
                                     Foreground="{StaticResource LabelColorLightBrush}" 
-                                    FontSize="16" 
+                                    FontSize="14" 
                                     Visibility="Collapsed"
                                     Opacity="0.0" 
                                     />

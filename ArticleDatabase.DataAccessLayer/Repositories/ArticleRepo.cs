@@ -265,7 +265,6 @@ LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
 
 
             string query = queryBuilder.ToString();
-            System.Console.WriteLine(query);
 
             // 4. Fetch articles
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))

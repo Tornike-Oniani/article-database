@@ -34,6 +34,10 @@ namespace MainLib.ViewModels.Main
         private string _selectedSection;
         private bool _isSectionSelected;
         private string _currentSort;
+        private bool _canSortColumns;
+        private bool _isViewCompact;
+        private string _selectedSortProperty;
+        private string _selectedSortDirection;
         private Shared services;
 
         private int _offset { get { return (CurrentPage - 1) * ItemsPerPage; } }
@@ -144,13 +148,29 @@ namespace MainLib.ViewModels.Main
         {
             get { return Articles.Where(article => article.Checked == true).ToList().Count != 0; }
         }
-
-        private bool _canSortColumns;
         public bool CanSortColumns
         {
             get { return _canSortColumns; }
             set { _canSortColumns = value; OnPropertyChanged("CanSortColumns"); }
         }
+        public bool IsViewCompact
+        {
+            get { return _isViewCompact; }
+            set { _isViewCompact = value; OnPropertyChanged("IsViewCompact"); }
+        }
+        public List<string> SortableProperties { get; set; }
+        public List<string> SortDirections { get; set; }
+        public string SelectedSortProperty
+        {
+            get { return _selectedSortProperty; }
+            set { _selectedSortProperty = value; OnPropertyChanged("SelectedSortProperty"); OnPropertyChanged("SelectedSort"); }
+        }
+        public string SelectedSortDirection
+        {
+            get { return _selectedSortDirection; }
+            set { _selectedSortDirection = value; OnPropertyChanged("SelectedSortDirection"); OnPropertyChanged("SelectedSort"); }
+        }
+        public string SelectedSort { get { return SelectedSortProperty + " " + SelectedSortDirection; } }
         public Shared Services { get; set; }
 
         #region Commands
@@ -158,15 +178,15 @@ namespace MainLib.ViewModels.Main
         public RelayCommand NextPageCommand { get; set; }
         public RelayCommand PreviousPageCommand { get; set; }
         public RelayCommand LoadArticlesCommand { get; set; }
-        public ICommand LoadArticlesSimpleCommand { get; set; }
         public ICommand EnableExportCommand { get; set; }
         public RelayCommand ExportCommand { get; set; }
         public RelayCommand DeleteArticleCommand { get; set; }
         public RelayCommand MassBookmarkCommand { get; set; }
         public RelayCommand SortCommand { get; set; }
-        public ICommand SwitchToDetailedSearchCommand { get; set; }
         public ICommand UpdateExportStatusCommand { get; set; }
         public ICommand CopyTitleCommand { get; set; }
+        public ICommand SwitchDataViewCommand { get; set; }
+        public ICommand ExpandAbstractCommand { get; set; }
 
         public RelayCommand OpenSearchDialogCommand { get; set; }
         public RelayCommand OpenAddPersonalCommand { get; set; }
@@ -196,6 +216,28 @@ namespace MainLib.ViewModels.Main
 
             if (User.IsAdmin) { Columns.Add("FileName"); }
 
+            SortDirections = new List<string>() { "ASC", "DESC" };
+            if (User.IsAdmin)
+            {
+                SortableProperties = new List<string>()
+                {
+                    "Title",
+                    "Year",
+                    "File name"
+                };
+            }
+            else
+            {
+                SortableProperties = new List<string>()
+                {
+                    "Title",
+                    "Year"
+                };
+            }
+
+            SelectedSortProperty = SortableProperties[0];
+            SelectedSortDirection = SortDirections[0];
+
             // Initialize sections collection
             this.Sections = new ObservableCollection<string>() { };
 
@@ -205,6 +247,7 @@ namespace MainLib.ViewModels.Main
             CurrentPage = 1;
             ItemsPerPage = 35;
             SelectedPage = "1";
+            IsViewCompact = true;
             GenerateButtons();
 
             // 3. Get the index of the logged in user and set it as selected index for combobox
@@ -218,19 +261,19 @@ namespace MainLib.ViewModels.Main
             UserIndex = index;
 
             // 4. Set up commands
+            SwitchDataViewCommand = new RelayCommand(SwitchDataView);
             OpenFileCommand = new RelayCommand(OpenFile);
             NextPageCommand = new RelayCommand(NextPage, CanNextPage);
             PreviousPageCommand = new RelayCommand(PreviousPage, CanPreviousPage);
             LoadArticlesCommand = new RelayCommand(LoadArticles);
-            LoadArticlesSimpleCommand = new RelayCommand(LoadArticlesSimple);
             EnableExportCommand = new RelayCommand(EnableExport);
             ExportCommand = new RelayCommand(Export, CanExport);
             DeleteArticleCommand = new RelayCommand(DeleteArticle, CanDeleteArticle);
             MassBookmarkCommand = new RelayCommand(MassBookmark);
             SortCommand = new RelayCommand(Sort);
-            SwitchToDetailedSearchCommand = new RelayCommand(SwitchToDetailedSearch);
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
             this.CopyTitleCommand = new RelayCommand(CopyTitle);
+            ExpandAbstractCommand = new RelayCommand(ExpandAbstract);
 
             OpenSearchDialogCommand = new RelayCommand(OpenSearchDialog);
             OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
@@ -251,21 +294,38 @@ namespace MainLib.ViewModels.Main
         }
 
         #region Command Actions
-        public void OpenFile(object input = null)
+        public void ExpandAbstract(object input)
+        {
+            Article article = input as Article;
+            article.AbstractExpanded = true;
+        }
+        public void SwitchDataView(object input)
+        {
+            string view = input as string;
+            IsViewCompact = view.Contains("Compact");
+        }
+        public void OpenFile(object input)
         {
             // 1. If no item was selected return
-            if (SelectedArticle == null)
+            if (SelectedArticle == null && input == null)
                 return;
 
-            // 2. Get full path of the file
-            string full_path = Environment.CurrentDirectory + "\\Files\\" + SelectedArticle.FileName + ".pdf";
+            string full_path = "";
+            if (input != null)
+            {
+                // 2. Get full path of the file
+                 full_path = Environment.CurrentDirectory + "\\Files\\" + ((Article)input).FileName + ".pdf";
+            }
+            else
+            {
+                full_path = Environment.CurrentDirectory + "\\Files\\" + SelectedArticle.FileName + ".pdf";
+            }           
 
             // 3. Open file with default program
             try
             {
                 Process.Start(full_path);
             }
-
             // 4. Catch if file doesn't exist physically
             catch
             {
@@ -306,14 +366,16 @@ namespace MainLib.ViewModels.Main
                 SearchOptionsIsChecked = false;
 
                 string _filterTitle = FilterTitle;
+                List<string> filterAuthorsFromString = String.IsNullOrEmpty(FilterAuthors) ? new List<string>() : FilterAuthors.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
+                List<string> filterKeywordsFromString = String.IsNullOrEmpty(FilterKeywords) ? new List<string>() : FilterKeywords.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
 
                 FilterExstension.SetGlobalPairing(isLoose: false);
 
                 Filter filter = new Filter();
                 filter
                     .FilterTitle(_filterTitle, WordBreakMode)
-                    .FilterAuthors(FilterAuthors.ToList(), SelectedAuthorPairing)
-                    .FilterKeywords(FilterKeywords.ToList(), SelectedKeywordPairing)
+                    .FilterAuthors(filterAuthorsFromString, SelectedAuthorPairing)
+                    .FilterKeywords(filterKeywordsFromString, SelectedKeywordPairing)
                     .FilterYear(FilterYear)
                     .FilterPersonalComment(FilterPersonalComment)
                     .FilterIds(GetFilterIds(IdFilter));
@@ -345,7 +407,7 @@ namespace MainLib.ViewModels.Main
                     this.IsSectionSelected = true;
                 else
                     this.IsSectionSelected = false;
-
+                
                 services.IsWorking(false);
             }
             catch (Exception e)
@@ -357,72 +419,8 @@ namespace MainLib.ViewModels.Main
             {
                 services.IsWorking(false);
             }
-        }
-        public async void LoadArticlesSimple(object input = null)
-        {
-            // Notify state that articles were fetched by simple search options
-            _isSearchSimple = true;
-            Clear();
-            try
-            {
-                FilterExstension.SetGlobalPairing(isLoose: true);
-                Filter filter = new Filter();
-                if (!String.IsNullOrEmpty(SimpleSearch))
-                {
-                    // We set this for highlights
-                    FilterTitle = SimpleSearch;
-                    foreach (string word in SimpleSearch.Split(' '))
-                    {
-                        FilterAuthors.Add(word);
-                        FilterKeywords.Add(word);
-                    }
-                    WordBreakMode = true;
 
-                    filter
-                        .FilterTitle(SimpleSearch, true)
-                        .FilterAuthors(SimpleSearch.Split(' ').ToList(), "AND")
-                        .FilterKeywords(SimpleSearch.Split(' ').ToList(), "AND");
-                }
-
-                services.IsWorking(true);
-
-                List<Article> articles = new List<Article>();
-                await Task.Run(() =>
-                {
-                    // 2. Calculate total pages
-                    int record_count = new ArticleRepo().GetRecordCount(Users[UserIndex], filter.GetFilterString());
-                    if ((record_count % ItemsPerPage) == 0)
-                        TotalPages = record_count / ItemsPerPage;
-                    else if (record_count == 0)
-                        TotalPages = 0;
-                    else
-                        TotalPages = (record_count / ItemsPerPage) + 1;
-
-                    IsThereAnyPages = TotalPages != 0;
-
-                    CurrentPage = 1;
-                });
-
-                await PopulateArticlesSimple();
-
-                GenerateButtons();
-
-                if (!string.IsNullOrEmpty(SelectedSection) && SelectedSection != "None")
-                    this.IsSectionSelected = true;
-                else
-                    this.IsSectionSelected = false;
-
-                services.IsWorking(false);
-            }
-            catch (Exception e)
-            {
-                new BugTracker().Track("Data View", "Load Articles", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
-            }
-            finally
-            {
-                services.IsWorking(false);
-            }
+            OnPropertyChanged("SelectedSort");
         }
         // Export
         public void EnableExport(object input = null)
@@ -624,17 +622,6 @@ namespace MainLib.ViewModels.Main
 
             services.IsWorking(false);
         }
-        public void SwitchToDetailedSearch(object input = null)
-        {
-            if (_isSearchSimple && !String.IsNullOrEmpty(SimpleSearch))
-            {
-                FilterTitle = null;
-                FilterAuthors.Clear();
-                FilterKeywords.Clear();
-                WordBreakMode = false;
-                OnPropertyChanged("FilterTitle");
-            }
-        }
         public void CopyTitle(object input)
         {
             Clipboard.SetText(((Article)input).Title);
@@ -747,12 +734,15 @@ namespace MainLib.ViewModels.Main
         // Private helpers
         private async Task PopulateArticles()
         {
+            List<string> filterAuthorsFromString = String.IsNullOrEmpty(FilterAuthors) ? new List<string>() : FilterAuthors.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
+            List<string> filterKeywordsFromString = String.IsNullOrEmpty(FilterKeywords) ? new List<string>() : FilterKeywords.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
+
             FilterExstension.SetGlobalPairing(isLoose: false);
             Filter filter = new Filter();
             filter
                 .FilterTitle(_filterTitle, WordBreakMode)
-                .FilterAuthors(FilterAuthors.ToList(), SelectedAuthorPairing)
-                .FilterKeywords(FilterKeywords.ToList(), SelectedKeywordPairing)
+                .FilterAuthors(filterAuthorsFromString, SelectedAuthorPairing)
+                .FilterKeywords(filterKeywordsFromString, SelectedKeywordPairing)
                 .FilterYear(FilterYear)
                 .FilterPersonalComment(FilterPersonalComment)
                 .FilterIds(GetFilterIds(IdFilter))

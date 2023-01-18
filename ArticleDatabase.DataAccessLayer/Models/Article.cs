@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace Lib.DataAccessLayer.Models
 {
@@ -80,6 +81,7 @@ namespace Lib.DataAccessLayer.Models
         private bool _checked;
         private string _abstractBody;
         private bool _abstractShown;
+        private bool _abstractExpanded;
 
         public long? ID
         {
@@ -130,6 +132,11 @@ namespace Lib.DataAccessLayer.Models
         {
             get { return _abstractBody; }
             set { _abstractBody = value; OnPropertyChanged("AbstractBody"); }
+        }
+        public bool AbstractExpanded
+        {
+            get { return _abstractExpanded; }
+            set { _abstractExpanded = value; OnPropertyChanged("AbstractExpanded"); }
         }
 
         public bool AbstractShown

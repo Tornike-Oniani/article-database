@@ -10,16 +10,14 @@ namespace MainLib.ViewModels.Main
         private string _simpleSearch;
         private bool _searchOptionsIsChecked;
         private string _filterTitle;
-        private string _filterAuthor;
-        private string _filterKeyword;
+        private string _filterAuthors;
+        private string _filterKeywords;
         private string _filterYear;
         private string _filterPersonalComment;
         private bool _wordBreakMode;
         private string _selectedAuthorPairing;
         private string _selectedKeywordPairing;
         private string _idFilter;
-
-
 
         public string SimpleSearch
         {
@@ -46,22 +44,6 @@ namespace MainLib.ViewModels.Main
                 OnPropertyChanged("FilterTitle");
             }
         }
-        public string FilterAuthor
-        {
-            get { return _filterAuthor; }
-            set
-            {
-                _filterAuthor = value; OnPropertyChanged("FilterAuthor");
-            }
-        }
-        public string FilterKeyword
-        {
-            get { return _filterKeyword; }
-            set
-            {
-                _filterKeyword = value; OnPropertyChanged("FilterKeyword");
-            }
-        }
         public string FilterYear
         {
             get { return _filterYear; }
@@ -73,9 +55,17 @@ namespace MainLib.ViewModels.Main
             set { _filterPersonalComment = value; OnPropertyChanged("FilterPersonalComment"); }
         }
         public List<string> AuthorPairings { get; set; }
-        public List<string> KeywordPairings { get; set; }
-        public ObservableCollection<string> FilterAuthors { get; set; }
-        public ObservableCollection<string> FilterKeywords { get; set; }
+        public List<string> KeywordPairings { get; set; }       
+        public string FilterAuthors
+        {
+            get { return _filterAuthors; }
+            set { _filterAuthors = value; OnPropertyChanged("FilterAuthors"); }
+        }
+        public string FilterKeywords
+        {
+            get { return _filterKeywords; }
+            set { _filterKeywords = value; OnPropertyChanged("FilterKeywords"); }
+        }
         public string SelectedAuthorPairing
         {
             get { return _selectedAuthorPairing; }
@@ -97,18 +87,18 @@ namespace MainLib.ViewModels.Main
         {
             get
             {
-                if (FilterAuthors.Count > 0) { return String.Join(" ", FilterAuthors); }
-
-                return "";
+                //if (FilterAuthors.Count > 0) { return String.Join(" ", FilterAuthors); }
+                if (String.IsNullOrEmpty(FilterAuthors)) { return ""; }
+                return FilterAuthors.Replace(",", "");
             }
         }
         public string KeywordHighlight
         {
             get
             {
-                if (FilterKeywords.Count > 0) { return String.Join(" ", FilterKeywords); }
-
-                return "";
+                //if (FilterKeywords.Count > 0) { return String.Join(" ", FilterKeywords); }
+                if (String.IsNullOrEmpty(FilterKeywords)) { return ""; }
+                return FilterKeywords.Replace(",", "");
             }
         }
         public bool WordBreakMode
@@ -122,8 +112,8 @@ namespace MainLib.ViewModels.Main
         public void Clear(object input = null)
         {
             FilterTitle = null;
-            FilterAuthors.Clear();
-            FilterKeywords.Clear();
+            FilterAuthors = null;
+            FilterKeywords = null;
             FilterYear = null;
             FilterPersonalComment = null;
             IdFilter = null;
@@ -134,8 +124,8 @@ namespace MainLib.ViewModels.Main
         {
             if (
                 string.IsNullOrEmpty(FilterTitle) &&
-                FilterAuthors.Count == 0 &&
-                FilterKeywords.Count == 0 &&
+                string.IsNullOrEmpty(FilterAuthors) &&
+                string.IsNullOrEmpty(FilterKeywords) &&
                 string.IsNullOrEmpty(FilterYear) &&
                 string.IsNullOrEmpty(FilterPersonalComment) &&
                 string.IsNullOrEmpty(IdFilter)
@@ -148,9 +138,6 @@ namespace MainLib.ViewModels.Main
         private void InitializeSearchOptions()
         {
             // 1. Initialize collections and fields
-            FilterAuthors = new ObservableCollection<string>();
-            FilterKeywords = new ObservableCollection<string>();
-
             this.AuthorPairings = new List<string>() { "AND", "OR" };
             this.KeywordPairings = new List<string>() { "AND", "OR" };
             if (String.IsNullOrWhiteSpace(SelectedAuthorPairing))

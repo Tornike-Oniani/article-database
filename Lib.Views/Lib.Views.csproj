@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Attached Properties\TextBlockHighlighter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityInverseConverter.cs" />
     <Compile Include="Converters\CheckToListConverter.cs" />
     <Compile Include="Converters\DialogTypeToColorConverter.cs" />
     <Compile Include="Converters\DialogTypeToIconConverter.cs" />

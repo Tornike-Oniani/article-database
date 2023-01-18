@@ -19,6 +19,7 @@
         <commonConverters:CheckToListConverter x:Key="CheckToList" />
         <commonConverters:ListToVisibilityConverter x:Key="ListToVisibility" />
         <commonConverters:NumberToSICConverter x:Key="NumberToSIC" />
+        <commonConverters:BoolToVisibilityInverseConverter x:Key="BoolToVisibilityInverse" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:ActiveStatusToStyleConverter x:Key="ActiveStatusToStyle" />
         <converters:IsIntToBoolConverter x:Key="IsIntToBool" />
@@ -26,19 +27,24 @@
         <converters:IntToVisibilityConverter x:Key="IntToVisibility" />
         <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibility" />
         <converters:BoolToTextHeaderStyleConverter x:Key="BoolToTextHeaderStyle" />
+        <converters:AbstractToVisibilityConverter x:Key="AbstractToVisibility" />
+        <converters:SortConverter x:Key="SortConverter" />
 
-        <Style x:Key="Ribbon" TargetType="{x:Type TabControl}">
+        <Style x:Key="Ribbon" TargetType="{x:Type TabControl}" BasedOn="{x:Null}">
+            <!-- Tab item styling -->
             <Style.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="Padding" Value="12 6 12 6" />
                     <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+                    <Setter Property="BorderThickness" Value="0 0 0 0" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TabItem}">
                                 <Border
                                     Padding="{TemplateBinding Padding}"
                                     Background="{TemplateBinding Background}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
                                     >
                                     <ContentPresenter ContentSource="Header" />
                                 </Border>
@@ -67,14 +73,18 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
 
+                            <!-- Headers -->
                             <Border
                                 Background="{StaticResource SecondaryColorBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 Grid.Row="0"
                                 >
                                 <TabPanel IsItemsHost="True" />
                             </Border>
 
+                            <!-- Tab content -->
                             <Border
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 Background="{DynamicResource GrayColorLightBrush}"
                                 Padding="6 6 6 6"
                                 Grid.Row="1"
@@ -135,43 +145,51 @@
                     VerticalAlignment="Center"
                     >
                     <TextBox
+                        Text="{Binding FilterTitle}"
                         Style="{StaticResource WatermarkTextBoxSmall}"
                         aps:TextBoxHelper.Watermark="Title"
                         MinWidth="250"
                         MaxWidth="300"
+                        LostFocus="txbSearch_LostFocus"
                         Margin="0 0 6 0"
                         />
                     <TextBox
+                        Text="{Binding FilterAuthors}"
                         Style="{StaticResource WatermarkTextBoxSmall}"
                         aps:TextBoxHelper.Watermark="Authors"
                         Width="150"
                         Margin="0 0 6 0"
                         />
                     <TextBox
+                        Text="{Binding FilterKeywords}"
                         Style="{StaticResource WatermarkTextBoxSmall}"
                         aps:TextBoxHelper.Watermark="Keywords"
                         Width="150"
                         Margin="0 0 6 0"
                         />
                     <TextBox
+                        Text="{Binding FilterYear}"
                         Style="{StaticResource WatermarkTextBoxSmall}"
                         aps:TextBoxHelper.Watermark="Year"
                         Width="90"
                         Margin="0 0 6 0"
                         />
                     <TextBox
+                        Text="{Binding FilterPersonalComment}"
                         Style="{StaticResource WatermarkTextBoxSmall}"
                         aps:TextBoxHelper.Watermark="Comment"
                         Width="100"
                         Margin="0 0 6 0"
                         />
                     <TextBox
+                        Text="{Binding IdFilter}"
                         Style="{StaticResource WatermarkTextBoxSmall}"
                         aps:TextBoxHelper.Watermark="Id"
                         Width="90"
                         Margin="0 0 6 0"
                         />
                     <Button
+                        Command="{Binding LoadArticlesCommand}"
                         Content="Search"
                         />
                 </StackPanel>
@@ -183,9 +201,12 @@
                     VerticalAlignment="Center"
                     >
                     <RadioButton
-                        Content="Compact&#x0a;View"
+                        Content="Compact&#x0a;View"                        
                         Tag="{x:Static materialDesign:PackIconKind.Text}"
                         GroupName="ViewType"
+                        Command="{Binding SwitchDataViewCommand}"
+                        CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
+                        IsChecked="True"
                         Style="{StaticResource RibbonRadioButtonIcon}"
                         Width="54"
                         Margin="0 0 6 0"
@@ -194,59 +215,90 @@
                         Content="Full&#x0a;View"
                         Tag="{x:Static materialDesign:PackIconKind.TextBox}"
                         GroupName="ViewType"
+                        Command="{Binding SwitchDataViewCommand}"
+                        CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
                         Style="{StaticResource RibbonRadioButtonIcon}"
                         Width="54"
-                        Margin="0 0 6 0"
+                        Margin="0 0 12 0"
                         />
                     <Rectangle
                         Width="3"
                         Fill="{DynamicResource GrayColorBrush}"
-                        Margin="0 0 6 0"                        
+                        Margin="0 0 12 0"                        
                         />
-                    <CheckBox 
-                        Content="Authors"
-                        IsChecked="{
-                            Binding Columns, 
-                            Converter={StaticResource CheckToList}, 
-                            ConverterParameter='Authors'}" 
-                        Style="{StaticResource FlatCheckbox}"
-                        Margin="0 0 8 0" 
-                        />
-                    <CheckBox 
-                        Content="Keywords"
-                        Style="{StaticResource FlatCheckbox}"
-                        Margin="0 0 8 0" 
-                        IsChecked="{
-                            Binding Columns, 
-                            Converter={StaticResource CheckToList}, 
-                            ConverterParameter='Keywords'}" 
-                        />
-                    <CheckBox 
-                        Content="Year" 
-                        Style="{StaticResource FlatCheckbox}" 
-                        Margin="0 0 8 0" 
-                        IsChecked="{
-                            Binding Columns, 
-                            Converter={StaticResource CheckToList}, 
-                            ConverterParameter='Year'}" 
-                        />
-                    <CheckBox 
-                        Content="Comment" 
-                        Style="{StaticResource FlatCheckbox}"
-                        Margin="0 0 8 0" 
-                        IsChecked="{
-                            Binding Columns, 
-                            Converter={StaticResource CheckToList}, 
-                            ConverterParameter='PersonalComment'}" 
-                        />
-                    <CheckBox 
-                        Content="SIC" 
-                        Style="{StaticResource FlatCheckbox}"
-                        IsChecked="{
-                            Binding Columns, 
-                            Converter={StaticResource CheckToList}, 
-                            ConverterParameter='SIC'}" 
-                        />
+                    <StackPanel 
+                        Orientation="Horizontal"
+                        Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibility}}"
+                        >
+                        <CheckBox 
+                            Content="Authors"
+                            IsChecked="{
+                                Binding Columns, 
+                                Converter={StaticResource CheckToList}, 
+                                ConverterParameter='Authors'}" 
+                            Style="{StaticResource FlatCheckbox}"
+                            Margin="0 0 8 0" 
+                            />
+                        <CheckBox 
+                            Content="Keywords"
+                            Style="{StaticResource FlatCheckbox}"
+                            Margin="0 0 8 0" 
+                            IsChecked="{
+                                Binding Columns, 
+                                Converter={StaticResource CheckToList}, 
+                                ConverterParameter='Keywords'}" 
+                            />
+                        <CheckBox 
+                            Content="Year" 
+                            Style="{StaticResource FlatCheckbox}" 
+                            Margin="0 0 8 0" 
+                            IsChecked="{
+                                Binding Columns, 
+                                Converter={StaticResource CheckToList}, 
+                                ConverterParameter='Year'}" 
+                            />
+                        <CheckBox 
+                            Content="Comment" 
+                            Style="{StaticResource FlatCheckbox}"
+                            Margin="0 0 8 0" 
+                            IsChecked="{
+                                Binding Columns, 
+                                Converter={StaticResource CheckToList}, 
+                                ConverterParameter='PersonalComment'}" 
+                            />
+                        <CheckBox 
+                            Content="SIC" 
+                            Style="{StaticResource FlatCheckbox}"
+                            IsChecked="{
+                                Binding Columns, 
+                                Converter={StaticResource CheckToList}, 
+                                ConverterParameter='SIC'}" 
+                            />
+                    </StackPanel>
+                    <StackPanel 
+                        Orientation="Horizontal"
+                        Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibilityInverse}}"
+                        >
+                        <TextBlock 
+                            Text="Sort by:"
+                            FontSize="12"
+                            Foreground="{StaticResource LabelColorBrush}" 
+                            VerticalAlignment="Center"
+                            Margin="0 0 6 0"
+                            />
+                        <ComboBox 
+                            ItemsSource="{Binding SortableProperties}" 
+                            SelectedItem="{Binding SelectedSortProperty}"
+                            MinWidth="70"
+                            Margin="0 0 6 0"
+                            />
+                        <ComboBox 
+                            ItemsSource="{Binding SortDirections}" 
+                            SelectedItem="{Binding SelectedSortDirection}"
+                            MinWidth="45"
+                            Margin="0 0 6 0"
+                            />
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
             <!-- Export -->
@@ -275,12 +327,13 @@
         <DataGrid 
             x:Name="myGrid"
             Style="{StaticResource ArticleGrid}"
+            Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibility}}"
             FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
             ItemsSource="{Binding Articles}"
             SelectedItem="{Binding SelectedArticle}"
             VirtualizingStackPanel.VirtualizationMode="Standard"
             ScrollViewer.CanContentScroll="False"
-            CanUserSortColumns="{Binding CanSortColumns}"
+            CanUserSortColumns="{Binding CanSortColumns}"            
             Grid.Row="2"
             >
             <DataGrid.CellStyle>
@@ -361,6 +414,11 @@
                     Header="Title" 
                     Width="*" 
                     SortMemberPath="Title"
+                    SortDirection="{
+                        Binding DataContext.SelectedSort, 
+                        Source={StaticResource ProxyElement},
+                        Converter={StaticResource SortConverter}, 
+                        ConverterParameter=Title}"
                     >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -522,7 +580,15 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!-- Authors column -->
-                <DataGridTemplateColumn Header="Authors" Width="0.5*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Authors'}">
+                <DataGridTemplateColumn 
+                    Header="Authors" 
+                    Width="0.5*" 
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='Authors'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock 
@@ -555,6 +621,11 @@
                 <DataGridTemplateColumn 
                     Header="Year" 
                     SortMemberPath="Year" 
+                    SortDirection="{
+                        Binding DataContext.SelectedSort, 
+                        Source={StaticResource ProxyElement},
+                        Converter={StaticResource SortConverter}, 
+                        ConverterParameter=Year}"
                     MinWidth="80" 
                     Width="Auto" 
                     Visibility="{
@@ -569,7 +640,21 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!-- File column -->
-                <DataGridTemplateColumn Header="FileName" SortMemberPath="FileName" MinWidth="95" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='FileName'}">
+                <DataGridTemplateColumn 
+                    Header="FileName" 
+                    SortMemberPath="FileName" 
+                    SortDirection="{
+                        Binding DataContext.SelectedSort, 
+                        Source={StaticResource ProxyElement},
+                        Converter={StaticResource SortConverter}, 
+                        ConverterParameter='File name'}"
+                    MinWidth="95" 
+                    Width="Auto" 
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='FileName'}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" />
@@ -578,8 +663,7 @@
                 </DataGridTemplateColumn>
                 <!-- Comment column -->
                 <DataGridTemplateColumn 
-                    Header="Comment" 
-                    SortMemberPath="PersonalComment" 
+                    Header="Comment"
                     Width="0.4*" 
                     Visibility="{
                         Binding DataContext.Columns, 
@@ -596,7 +680,6 @@
                 <!-- SIC column -->
                 <DataGridTemplateColumn 
                     Header="SIC" 
-                    SortMemberPath="SIC" 
                     MinWidth="70" 
                     Width="Auto" 
                     Visibility="{
@@ -676,7 +759,239 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        
+        <ListView 
+            ItemsSource="{Binding Articles}"
+            SelectedItem="{Binding SelectedArticle}"
+            Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibilityInverse}}"
+            Grid.Row="2"
+            >
+            <ListView.Style>
+                <Style TargetType="{x:Type ListView}">
+                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListView}">
+                                <Grid Background="{DynamicResource GrayColorBrush}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width=".3*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width=".4*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ScrollViewer Grid.Column="1">
+                                        <ItemsPresenter />
+                                    </ScrollViewer>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="ItemContainerStyle">
+                        <Setter.Value>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Setter Property="Padding" Value="18 12 18 12" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                            <Border
+                                                Background="{StaticResource WhiteColorBrush}"
+                                                Padding="{TemplateBinding Padding}"
+                                                CornerRadius="3 3 3 3"
+                                                Margin="0 0 0 12"
+                                                >
+                                                <ContentPresenter />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <!-- Title -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Year -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Keywords -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Authors -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Abstract -->
+                                                    <RowDefinition Height="*" />
+                                                    <!-- Open file -->
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <!-- Title -->
+                                                <TextBlock
+                                                    Text="{Binding Title}"
+                                                    FontSize="16"
+                                                    FontFamily="Verdana"
+                                                    TextWrapping="Wrap"
+                                                    Foreground="{StaticResource BlackColorAltBrush}"
+                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                    ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                    ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
+                                                    Margin="0 0 0 6"
+                                                    Grid.Row="0"
+                                                    />
+                                                <!-- Year -->
+                                                <TextBlock
+                                                    Text="{Binding Year}"
+                                                    Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
+                                                    FontSize="14"
+                                                    FontStyle="Italic"
+                                                    Foreground="{StaticResource BlackColorAltBrush}"                                                    
+                                                    Margin="0 0 0 6"
+                                                    Grid.Row="1"
+                                                    />
+                                                <!-- Keywords -->
+                                                <TextBlock
+                                                    Text="{Binding Keywords}"
+                                                    Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
+                                                    FontSize="14"
+                                                    Foreground="{StaticResource LabelColorBrush}"
+                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                    ap:TextBlockHighlighter.WordBreakMode="True"
+                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                    ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
+                                                    Margin="6 0 0 6"
+                                                    Grid.Row="2"
+                                                    />
+                                                <!-- Authors -->
+                                                <TextBlock
+                                                    Text="{Binding Authors}"
+                                                    Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
+                                                    FontSize="14"
+                                                    Foreground="{StaticResource BlackColorAltBrush}"
+                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                    ap:TextBlockHighlighter.WordBreakMode="True"
+                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                    ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
+                                                    Margin="0 0 0 12"
+                                                    Grid.Row="3"
+                                                    />
+                                                <!-- Abstract -->
+                                                <TextBlock
+                                                    Text="{Binding AbstractBody}"
+                                                    Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
+                                                    FontSize="14"
+                                                    TextWrapping="Wrap"
+                                                    Foreground="{StaticResource BlackColorAltBrush}"
+                                                    Margin="0 0 0 12"
+                                                    Grid.Row="4"
+                                                    />
+                                                <!-- Open file-->
+                                                <Button 
+                                                    Content="View PDF"
+                                                    Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding}"
+                                                    Grid.Row="5"
+                                                    >
+                                                    <Button.Style>
+                                                        <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
+                                                            <Setter Property="Foreground" Value="{StaticResource BlueColorBrush}" />
+                                                            <Setter Property="BorderThickness" Value="0 0 0 0" />
+                                                            <Setter Property="BorderBrush" Value="{StaticResource TextHighlightColorBrush}" />
+                                                            <Setter Property="Cursor" Value="Hand" />
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="{x:Type Button}">
+                                                                        <StackPanel 
+                                                                            Orientation="Horizontal" 
+                                                                            Background="Transparent"
+                                                                            >
+                                                                            <materialDesign:PackIcon
+                                                                                Kind="FilePdf"
+                                                                                Width="24"
+                                                                                Height="24"
+                                                                                Foreground="{StaticResource LabelColorBrush}"
+                                                                                Margin="0 0 6 0"
+                                                                                />
+                                                                            <Border
+                                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                VerticalAlignment="Center"
+                                                                                >
+                                                                                <TextBlock
+                                                                                    Text="{TemplateBinding Content}"
+                                                                                    FontSize="12"
+                                                                                    Foreground="{TemplateBinding Foreground}"
+                                                                                    />
+                                                                            </Border>
+                                                                        </StackPanel>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+                                                                    <Setter Property="BorderThickness" Value="0 0 0 2" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.Style>
+            <ListView.ContextMenu>
+                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                    <!-- We set these items' commands from code behind -->
+                    <MenuItem Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" Command="{Binding OpenAddPersonalCommand}" />
+                    <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
+                    <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding DeleteArticleCommand}" />
+                    <MenuItem Command="{Binding OpenBookmarkManagerCommand}" CommandParameter="{Binding SelectedArticle}">
+                        <MenuItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Bookmark" Grid.Column="0" />
+                                <TextBlock Text="Ctrl+B" Grid.Column="2" />
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenReferenceManagerCommand}" CommandParameter="{Binding SelectedArticle}">
+                        <MenuItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Reference" Grid.Column="0" />
+                                <TextBlock Text="Ctrl+R" Grid.Column="2" />
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}">
+                        <MenuItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Copy Title" Grid.Column="0" />
+                                <TextBlock Text="Ctrl+C" Grid.Column="2" />
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
+
         <notifications:NotificationArea 
             x:Name="DataViewNotificationArea" 
             Position="BottomRight" 
