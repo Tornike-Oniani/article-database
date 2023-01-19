@@ -51,6 +51,9 @@
                 <!-- Datagrid resource dictionary-->
                 <ResourceDictionary Source="/Lib.Styles;component/Components/Datagrid.xaml" />
 
+                <!-- Ribbon resource dictionary-->
+                <ResourceDictionary Source="/Lib.Styles;component/Components/Ribbon.xaml" />
+
                 <!-- ListView resource dictionary -->
                 <ResourceDictionary Source="/Lib.Styles;component/Components/ListView.xaml" />
 
