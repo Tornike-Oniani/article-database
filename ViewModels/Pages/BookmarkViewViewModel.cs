@@ -4,6 +4,7 @@ using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Popups;
 using MainLib.ViewModels.Utils;
 using NotificationService;
 using System;
@@ -75,6 +76,7 @@ namespace MainLib.ViewModels.Pages
         public ICommand UpdateExportStatusCommand { get; set; }
         public RelayCommand OpenAddPersonalCommand { get; set; }
         public RelayCommand OpenEditCommand { get; set; }
+        public ICommand OpenAbstractEditorCommand { get; set; }
 
         // Constructor
         public BookmarkViewViewModel(Bookmark bookmark, bool modifyRights = true)
@@ -98,7 +100,7 @@ namespace MainLib.ViewModels.Pages
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
             OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
             OpenEditCommand = new RelayCommand(OpenEditDialog, IsArticleSelected);
-
+            OpenAbstractEditorCommand = new RelayCommand(OpenAbstractEditor);
         }
 
         /**
@@ -337,6 +339,10 @@ namespace MainLib.ViewModels.Pages
         public void OpenEditDialog(object input = null)
         {
             services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.ArticleEditorViewModel(SelectedArticle));
+        }
+        public void OpenAbstractEditor(object input)
+        {
+            services.WindowService.OpenWindow(new AbstractEditorViewModel(SelectedArticle), passWindow: true);
         }
         public void OpenAddPersonal(object input)
         {

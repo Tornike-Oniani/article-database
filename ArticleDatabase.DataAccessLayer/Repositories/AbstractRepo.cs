@@ -35,6 +35,19 @@ namespace Lib.DataAccessLayer.Repositories
                 }
             }
         }
+        public void UpdateAbstractByArticleId(int articleId, string body)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    conn.Execute("UPDATE tblAbstract SET Body=@Body WHERE ArticleID=@ArticleID", new { ArticleID = articleId, Body = body }, transaction: transaction);
+
+                    transaction.Commit();
+                }
+            }
+        }
         public Abstract GetAbstractByArticleId(int articleId)
         {
             Abstract result;

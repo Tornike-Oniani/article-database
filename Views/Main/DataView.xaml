@@ -1018,6 +1018,7 @@
                     <!-- We set these items' commands from code behind -->
                     <MenuItem Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" Command="{Binding OpenAddPersonalCommand}" />
                     <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
+                    <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenAbstractEditorCommand}" />
                     <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding DeleteArticleCommand}" />
                     <MenuItem Command="{Binding OpenBookmarkManagerCommand}" CommandParameter="{Binding SelectedArticle}">
                         <MenuItem.Header>

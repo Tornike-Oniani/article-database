@@ -56,7 +56,7 @@ namespace MainLib.ViewModels.Popups
             // If article has abstract change it (We have to do this check because we keep abstracts in separate table)
             if (!String.IsNullOrEmpty(_article.AbstractBody)) 
             { 
-                new AbstractRepo().UpdateAbstract((int)_article.ID, AbstractBody);
+                new AbstractRepo().UpdateAbstractByArticleId((int)_article.ID, AbstractBody);
             }
             else
             // Otherwise create new abstract article relationshitp

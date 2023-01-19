@@ -292,7 +292,7 @@ namespace MainLib.ViewModels.Main
             SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
             SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
-            this.CopyTitleCommand = new RelayCommand(CopyTitle);
+            CopyTitleCommand = new RelayCommand(CopyTitle);
             ExpandAbstractCommand = new RelayCommand(ExpandAbstract);
 
             OpenSearchDialogCommand = new RelayCommand(OpenSearchDialog);
@@ -679,8 +679,7 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenAbstractEditor(object input)
         {
-            Article articleToPass = input == null ? SelectedArticle : input as Article;
-            services.WindowService.OpenWindow(new AbstractEditorViewModel(articleToPass), passWindow: true);
+            services.WindowService.OpenWindow(new AbstractEditorViewModel(SelectedArticle), passWindow: true);
         }
         public void OpenMassBookmarkManager(object input = null)
         {
