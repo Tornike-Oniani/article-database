@@ -110,6 +110,7 @@
                 Visibility="{
                     Binding CanRunAction, 
                     Converter={StaticResource BoolToVisibility}}"
+                FontSize="12"
                 Grid.Column="0"
                 />
             <!-- Cancel button -->

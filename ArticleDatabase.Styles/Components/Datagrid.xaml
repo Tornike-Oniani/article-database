@@ -9,7 +9,7 @@
         <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
         <Setter Property="BorderThickness" Value="0 0 1 0" />
         <Setter Property="BorderBrush" Value="{StaticResource LavenderColorDarkBrush}" />
-        <Setter Property="Command" Value="{Binding DataContext.SortCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+        <Setter Property="Command" Value="{Binding DataContext.SortFromDataGridCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
         <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Cursor" Value="Hand" />
         <Style.Triggers>

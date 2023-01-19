@@ -18,6 +18,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace MainLib.ViewModels.Main
 {
@@ -38,6 +39,7 @@ namespace MainLib.ViewModels.Main
         private bool _isViewCompact;
         private string _selectedSortProperty;
         private string _selectedSortDirection;
+        private bool _isExportEnabled;
         private Shared services;
 
         private int _offset { get { return (CurrentPage - 1) * ItemsPerPage; } }
@@ -163,14 +165,27 @@ namespace MainLib.ViewModels.Main
         public string SelectedSortProperty
         {
             get { return _selectedSortProperty; }
-            set { _selectedSortProperty = value; OnPropertyChanged("SelectedSortProperty"); OnPropertyChanged("SelectedSort"); }
+            set 
+            {
+                _selectedSortProperty = value; 
+                OnPropertyChanged("SelectedSortProperty"); 
+            }
         }
         public string SelectedSortDirection
         {
             get { return _selectedSortDirection; }
-            set { _selectedSortDirection = value; OnPropertyChanged("SelectedSortDirection"); OnPropertyChanged("SelectedSort"); }
+            set 
+            {
+                _selectedSortDirection = value; 
+                OnPropertyChanged("SelectedSortDirection"); 
+            }
         }
         public string SelectedSort { get { return SelectedSortProperty + " " + SelectedSortDirection; } }
+        public bool IsExportEnabled
+        {
+            get { return _isExportEnabled; }
+            set { _isExportEnabled = value; OnPropertyChanged("IsExportEnabled"); }
+        }
         public Shared Services { get; set; }
 
         #region Commands
@@ -182,7 +197,8 @@ namespace MainLib.ViewModels.Main
         public RelayCommand ExportCommand { get; set; }
         public RelayCommand DeleteArticleCommand { get; set; }
         public RelayCommand MassBookmarkCommand { get; set; }
-        public RelayCommand SortCommand { get; set; }
+        public RelayCommand SortFromDataGridCommand { get; set; }
+        public ICommand SortFromRibbonCommand { get; set; }
         public ICommand UpdateExportStatusCommand { get; set; }
         public ICommand CopyTitleCommand { get; set; }
         public ICommand SwitchDataViewCommand { get; set; }
@@ -223,7 +239,8 @@ namespace MainLib.ViewModels.Main
                 {
                     "Title",
                     "Year",
-                    "File name"
+                    "FileName",
+                    "PersonalComment"
                 };
             }
             else
@@ -231,7 +248,8 @@ namespace MainLib.ViewModels.Main
                 SortableProperties = new List<string>()
                 {
                     "Title",
-                    "Year"
+                    "Year",
+                    "PersonalComment"
                 };
             }
 
@@ -270,7 +288,8 @@ namespace MainLib.ViewModels.Main
             ExportCommand = new RelayCommand(Export, CanExport);
             DeleteArticleCommand = new RelayCommand(DeleteArticle, CanDeleteArticle);
             MassBookmarkCommand = new RelayCommand(MassBookmark);
-            SortCommand = new RelayCommand(Sort);
+            SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
+            SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
             this.CopyTitleCommand = new RelayCommand(CopyTitle);
             ExpandAbstractCommand = new RelayCommand(ExpandAbstract);
@@ -427,6 +446,7 @@ namespace MainLib.ViewModels.Main
         {
             foreach (Article article in Articles)
                 article.Checked = false;
+            IsExportEnabled = !IsExportEnabled;
             UpdateExportStatus();
         }
         public async void Export(object input = null)
@@ -584,7 +604,7 @@ namespace MainLib.ViewModels.Main
             foreach (Article article in Articles)
                 article.BMChecked = (bool)input;
         }
-        public async void Sort(object input)
+        public async void SortFromDataGrid(object input)
         {
             string header = input.ToString();
             header = header == "Comment" ? "PersonalComment" : header;
@@ -600,27 +620,38 @@ namespace MainLib.ViewModels.Main
             if (_currentSort.Contains(header))
             {
                 if (_currentSort.Contains("ASC"))
-                    _currentSort = $"{header} DESC";
+                {
+                    //_currentSort = $"{header} DESC";
+                    SelectedSortDirection = "DESC";
+                }
                 else
-                    _currentSort = $"{header} ASC";
+                {
+                    //_currentSort = $"{header} ASC";
+                    SelectedSortDirection = "ASC";
+                }
             }
             else
             {
-                _currentSort = $"{header} ASC";
+                //_currentSort = $"{header} ASC";
+                SelectedSortDirection = "ASC";
             }
+            SelectedSortProperty = header;
+
+            _currentSort = SelectedSort;
 
             services.IsWorking(true);
-
-            if (_isSearchSimple)
-            {
-                await PopulateArticlesSimple();
-            }
-            else
-            {
-                await PopulateArticles();
-            }
-
+            await PopulateArticles();
             services.IsWorking(false);
+
+            OnPropertyChanged("SelectedSort");
+        }
+        public async void SortFromRibbon(object input = null)
+        {
+            _currentSort = SelectedSort;
+            services.IsWorking(true);
+            await PopulateArticles();
+            services.IsWorking(false);
+            OnPropertyChanged("SelectedSort");
         }
         public void CopyTitle(object input)
         {

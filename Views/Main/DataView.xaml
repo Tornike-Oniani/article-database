@@ -277,7 +277,9 @@
                     </StackPanel>
                     <StackPanel 
                         Orientation="Horizontal"
-                        Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibilityInverse}}"
+                        Visibility="{
+                            Binding IsViewCompact, 
+                            Converter={StaticResource BoolToVisibilityInverse}}"
                         >
                         <TextBlock 
                             Text="Sort by:"
@@ -298,6 +300,14 @@
                             MinWidth="45"
                             Margin="0 0 6 0"
                             />
+                        <Button 
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            Command="{Binding SortFromRibbonCommand}"
+                            >
+                            <Button.Content>
+                                <materialDesign:PackIcon Kind="Refresh" />
+                            </Button.Content>
+                        </Button>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
@@ -327,7 +337,7 @@
         <DataGrid 
             x:Name="myGrid"
             Style="{StaticResource ArticleGrid}"
-            Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibility}}"
+            Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibility},ConverterParameter=Soft}"
             FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
             ItemsSource="{Binding Articles}"
             SelectedItem="{Binding SelectedArticle}"
@@ -603,7 +613,15 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!-- Keywords column -->
-                <DataGridTemplateColumn Header="Keywords" Width="0.5*" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Keywords'}">
+                <DataGridTemplateColumn 
+                    Header="Keywords" 
+                    Width="0.5*" 
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='Keywords'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock 
@@ -632,7 +650,8 @@
                         Binding DataContext.Columns, 
                         Source={StaticResource ProxyElement}, 
                         Converter={StaticResource ListToVisibility}, 
-                        ConverterParameter='Year'}">
+                        ConverterParameter='Year'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Year}" TextWrapping="Wrap" />
@@ -647,7 +666,7 @@
                         Binding DataContext.SelectedSort, 
                         Source={StaticResource ProxyElement},
                         Converter={StaticResource SortConverter}, 
-                        ConverterParameter='File name'}"
+                        ConverterParameter='FileName'}"
                     MinWidth="95" 
                     Width="Auto" 
                     Visibility="{
@@ -664,6 +683,12 @@
                 <!-- Comment column -->
                 <DataGridTemplateColumn 
                     Header="Comment"
+                    SortMemberPath="Comment"
+                    SortDirection="{
+                        Binding DataContext.SelectedSort, 
+                        Source={StaticResource ProxyElement},
+                        Converter={StaticResource SortConverter}, 
+                        ConverterParameter='Comment'}"
                     Width="0.4*" 
                     Visibility="{
                         Binding DataContext.Columns, 
@@ -732,7 +757,15 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <!-- Mass bookmark column -->
-                <DataGridTemplateColumn Header="Bookmark" Width="Auto" Visibility="{Binding DataContext.Columns, Source={StaticResource ProxyElement}, Converter={StaticResource ListToVisibility}, ConverterParameter='Bookmark'}">
+                <DataGridTemplateColumn 
+                    Header="Bookmark" 
+                    Width="Auto" 
+                    Visibility="{
+                        Binding DataContext.Columns, 
+                        Source={StaticResource ProxyElement}, 
+                        Converter={StaticResource ListToVisibility}, 
+                        ConverterParameter='Bookmark'}"
+                    >
                     <DataGridTemplateColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
                             <Setter Property="Background" Value="Transparent" />
@@ -752,7 +785,7 @@
                             <CheckBox 
                                 IsChecked="{
                                     Binding Path=BMChecked, 
-                                        UpdateSourceTrigger=PropertyChanged}" 
+                                    UpdateSourceTrigger=PropertyChanged}" 
                                 />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -762,7 +795,7 @@
         <ListView 
             ItemsSource="{Binding Articles}"
             SelectedItem="{Binding SelectedArticle}"
-            Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibilityInverse}}"
+            Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibilityInverse}, ConverterParameter=Soft}"
             Grid.Row="2"
             >
             <ListView.Style>
@@ -807,6 +840,10 @@
                                     <Setter.Value>
                                         <DataTemplate>
                                             <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
                                                     <!-- Title -->
                                                     <RowDefinition Height="Auto" />
@@ -822,6 +859,24 @@
                                                     <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
 
+                                                <!-- Export -->
+                                                <CheckBox 
+                                                    Content=""
+                                                    IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Command="{
+                                                        Binding DataContext.UpdateExportStatusCommand,
+                                                        RelativeSource={RelativeSource FindAncestor, 
+                                                        AncestorType={x:Type UserControl}}}"
+                                                    Style="{StaticResource FlatCheckbox}"
+                                                    Visibility="{
+                                                        Binding DataContext.IsExportEnabled, 
+                                                        RelativeSource={
+                                                        RelativeSource FindAncestor, 
+                                                        AncestorType={x:Type UserControl}}, 
+                                                        Converter={StaticResource BoolToVisibility}}"
+                                                    Grid.Column="1"
+                                                    Grid.Row="0"
+                                                    />
                                                 <!-- Title -->
                                                 <TextBlock
                                                     Text="{Binding Title}"
@@ -837,15 +892,29 @@
                                                     Grid.Row="0"
                                                     />
                                                 <!-- Year -->
-                                                <TextBlock
-                                                    Text="{Binding Year}"
-                                                    Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
-                                                    FontSize="14"
-                                                    FontStyle="Italic"
-                                                    Foreground="{StaticResource BlackColorAltBrush}"                                                    
+                                                <StackPanel
+                                                    Orientation="Horizontal"
                                                     Margin="0 0 0 6"
                                                     Grid.Row="1"
-                                                    />
+                                                    >
+                                                    <TextBlock
+                                                        Text="{Binding Year}"
+                                                        Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
+                                                        FontSize="14"
+                                                        FontStyle="Italic"
+                                                        Foreground="{StaticResource BlackColorAltBrush}"                                                                                                        
+                                                        Margin="0 0 6 0"
+                                                        />
+                                                    <TextBlock
+                                                        Text="{Binding FileName, StringFormat={}({0}), TargetNullValue=''}"
+                                                        Visibility="{
+                                                            Binding DataContext.User.IsAdmin, 
+                                                            RelativeSource={
+                                                            RelativeSource FindAncestor, 
+                                                            AncestorType={x:Type UserControl}}}"
+                                                        FontSize="14"
+                                                        />
+                                                </StackPanel>
                                                 <!-- Keywords -->
                                                 <TextBlock
                                                     Text="{Binding Keywords}"
