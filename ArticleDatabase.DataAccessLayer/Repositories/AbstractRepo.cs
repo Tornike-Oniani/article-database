@@ -42,7 +42,7 @@ namespace Lib.DataAccessLayer.Repositories
                 conn.Open();
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
-                    conn.Execute("UPDATE tblAbstract SET Body=@Body WHERE ArticleID=@ArticleID", new { ArticleID = articleId, Body = body }, transaction: transaction);
+                    conn.Execute("UPDATE tblAbstract SET Body=@Body WHERE Article_ID=@ArticleID", new { ArticleID = articleId, Body = body }, transaction: transaction);
 
                     transaction.Commit();
                 }
