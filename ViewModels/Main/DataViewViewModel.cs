@@ -207,6 +207,7 @@ namespace MainLib.ViewModels.Main
         public RelayCommand OpenSearchDialogCommand { get; set; }
         public RelayCommand OpenAddPersonalCommand { get; set; }
         public RelayCommand OpenEditCommand { get; set; }
+        public ICommand OpenAbstractEditorCommand { get; set; }
         public RelayCommand OpenBookmarkManagerCommand { get; set; }
         public RelayCommand OpenMassBookmarkManagerCommand { get; set; }
         public RelayCommand OpenReferenceManagerCommand { get; set; }
@@ -297,6 +298,7 @@ namespace MainLib.ViewModels.Main
             OpenSearchDialogCommand = new RelayCommand(OpenSearchDialog);
             OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
             OpenEditCommand = new RelayCommand(OpenEditDialog, IsArticleSelected);
+            OpenAbstractEditorCommand = new RelayCommand(OpenAbstractEditor);
             OpenBookmarkManagerCommand = new RelayCommand(OpenBookmarkManager, IsArticleSelected);
             OpenMassBookmarkManagerCommand = new RelayCommand(OpenMassBookmarkManager, CanOpenMassBookmarkManager);
             OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager, IsArticleSelected);
@@ -674,6 +676,11 @@ namespace MainLib.ViewModels.Main
         public void OpenEditDialog(object input = null)
         {
             services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.ArticleEditorViewModel(SelectedArticle));
+        }
+        public void OpenAbstractEditor(object input)
+        {
+            Article articleToPass = input == null ? SelectedArticle : input as Article;
+            services.WindowService.OpenWindow(new AbstractEditorViewModel(articleToPass), passWindow: true);
         }
         public void OpenMassBookmarkManager(object input = null)
         {

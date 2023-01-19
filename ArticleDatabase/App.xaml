@@ -107,7 +107,7 @@
                         <main:AbstractsEntry />
                     </DataTemplate>
                     
-                    <!-- Abstracts entry -->
+                    <!-- SQL -->
                     <DataTemplate DataType="{x:Type mainVM:SQLViewModel}">
                         <main:SQL />
                     </DataTemplate>
@@ -126,7 +126,12 @@
                     <DataTemplate DataType="{x:Type popupVM:ArticleEditorViewModel}">
                         <popupVG:ArticleEditor />
                     </DataTemplate>
-                    
+
+                    <!-- Edit abstract -->
+                    <DataTemplate DataType="{x:Type popupVM:AbstractEditorViewModel}">
+                        <popupV:AbstractEditor />
+                    </DataTemplate>
+
                     <!-- Bookmark manager -->
                     <DataTemplate DataType="{x:Type popupVM:BookmarkManagerViewModel}">
                         <popupV:BookmarkManager />

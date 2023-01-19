@@ -3,10 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MainLib.Views.Popups"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Margin="12 12 12 12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -19,11 +20,19 @@
             Grid.Row="0"
             />
         <TextBox
-            Text="{Binding Body}"
+            Text="{Binding AbstractBody, UpdateSourceTrigger=PropertyChanged}"
             Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+		    TextWrapping="Wrap"
+            AcceptsReturn="True"
+		    FontSize="16"
+            SpellCheck.IsEnabled="True"
             Margin="0 12 0 12"
             Grid.Row="1"
-            />
+            >
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding SaveCommand}" />
+            </TextBox.InputBindings>
+        </TextBox>
         <StackPanel
             Orientation="Horizontal"
             HorizontalAlignment="Right"            
@@ -31,11 +40,13 @@
             >
             <Button 
                 Content="Save"
+                Command="{Binding SaveCommand}"
                 Width="100"
                 Margin="0 0 6 0"
                 />
             <Button 
                 Content="Cancel"
+                Command="{Binding CancelCommand}"
                 Width="100"
                 />
         </StackPanel>
