@@ -551,7 +551,8 @@
                         Binding DataContext.Columns, 
                         Source={StaticResource ProxyElement}, 
                         Converter={StaticResource ListToVisibility}, 
-                        ConverterParameter='FileName'}">
+                        ConverterParameter='FileName'}"
+                    >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" />
@@ -752,7 +753,8 @@
                                                             Binding DataContext.User.IsAdmin, 
                                                             RelativeSource={
                                                             RelativeSource FindAncestor, 
-                                                            AncestorType={x:Type UserControl}}}"
+                                                            AncestorType={x:Type Page}}, 
+                                                            Converter={StaticResource BoolToVisibility}}"
                                                         FontSize="14"
                                                         />
                                                 </StackPanel>

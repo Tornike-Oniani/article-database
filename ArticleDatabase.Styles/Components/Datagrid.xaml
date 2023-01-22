@@ -74,6 +74,8 @@
         <Setter Property="GridLinesVisibility" Value="All" />
         <Setter Property="VerticalGridLinesBrush" Value="#e4e4e4" />
         <Setter Property="HorizontalGridLinesBrush" Value="#efefef" />
+        <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Standard" />
+        <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel" />
         <Setter Property="RowStyle" Value="{DynamicResource ArticleRowStyle}" />
 
         <Style.Triggers>

@@ -12,6 +12,7 @@
              xmlns:aps="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              xmlns:notifications="clr-namespace:NotificationService.Controls;assembly=NotificationService"
+             xmlns:utils="clr-namespace:MainLib.ViewModels.Utils;assembly=MainLib.ViewModels"
              mc:Ignorable="d" 
              Focusable="True"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -29,25 +30,717 @@
         <converters:BoolToTextHeaderStyleConverter x:Key="BoolToTextHeaderStyle" />
         <converters:AbstractToVisibilityConverter x:Key="AbstractToVisibility" />
         <converters:SortConverter x:Key="SortConverter" />
-        
+
+        <!-- Abstract animations -->
+        <Storyboard x:Key="ShowAbstract">
+            <!-- Show Abstract -->
+            <DoubleAnimation              
+                Storyboard.TargetName="AbstractWrapper"
+                Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                From="0"
+                To="1"
+                Duration="0:0:0.15"
+                />
+        </Storyboard>
+        <!-- Hide abstract -->
+        <Storyboard x:Key="HideAbstract">
+            <DoubleAnimation
+                Storyboard.TargetName="AbstractWrapper"
+                Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                From="1"
+                To="0"
+                Duration="0:0:0.15"
+                />
+        </Storyboard>
+        <!-- Rotate arrow -->
+        <Storyboard x:Key="RotateArrow">
+            <DoubleAnimation 
+                Storyboard.TargetName="AbstractShowArrow"
+                Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
+                From="0"
+                To="180"
+                Duration="0:0:0.15"
+                />
+        </Storyboard>
+        <!-- Reset arrow rotation -->
+        <Storyboard x:Key="ResetArrowRotation">
+            <DoubleAnimation 
+                Storyboard.TargetName="AbstractShowArrow"
+                Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
+                From="180"
+                To="0"
+                Duration="0:0:0.15"
+                />
+        </Storyboard>
+
+        <DataTemplate DataType="{x:Type utils:CompactViewTemplate}">
+            <Grid Focusable="True" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+                <Grid.InputBindings>
+                    <KeyBinding 
+                        Modifiers="Ctrl" Key="B" 
+                        Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}" 
+                        CommandParameter="{Binding ArticleDataManager.SelectedArticle}" 
+                        />
+                    <KeyBinding 
+                        Modifiers="Ctrl" Key="R" 
+                        Command="{Binding ArticleDataManager.OpenReferenceManagerCommand}" 
+                        CommandParameter="{Binding ArticleDataManager.SelectedArticle}" 
+                        />
+                </Grid.InputBindings>
+                <Grid.Resources>
+                    <FrameworkElement x:Key="ProxyElement" DataContext="{Binding}" />
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Proxy element to change datagrid columns' DataContext -->
+                <ContentControl 
+                    Visibility="Collapsed" 
+                    Content="{StaticResource ProxyElement}" 
+                    Grid.Row="0" 
+                    />
+
+                <!-- Each column is bound to command from ArticleGrid style for sorting -->
+                <DataGrid 
+                    x:Name="myGrid"
+                    ItemsSource="{Binding Articles}"
+                    SelectedItem="{Binding ArticleDataManager.SelectedArticle}"
+                    Style="{StaticResource ArticleGrid}"
+                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                    CanUserSortColumns="{Binding CanSortColumns}"
+                    Grid.Row="1"
+                    >
+                    <DataGrid.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Padding" Value="10" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter VerticalAlignment="Stretch" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.CellStyle>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                            <!-- We set these items' commands from code behind -->
+                            <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
+                            <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
+                            <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
+                            <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.DeleteArticleCommand}" />
+                            <MenuItem Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}">
+                                <MenuItem.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Bookmark" Grid.Column="0" />
+                                        <TextBlock Text="Ctrl+B" Grid.Column="2" />
+                                    </Grid>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenReferenceManagerCommand}">
+                                <MenuItem.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Reference" Grid.Column="0" />
+                                        <TextBlock Text="Ctrl+R" Grid.Column="2" />
+                                    </Grid>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem Command="{Binding ArticleDataManager.CopyTitleCommand}">
+                                <MenuItem.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Copy Title" Grid.Column="0" />
+                                        <TextBlock Text="Ctrl+C" Grid.Column="2" />
+                                    </Grid>
+                                </MenuItem.Header>
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ArticleDataManager.OpenFileCommand}" />
+                        <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding ArticleDataManager.CopyTitleCommand}" />
+                    </DataGrid.InputBindings>
+                    <!-- Data grid columns -->
+                    <DataGrid.Columns>
+                        <!-- Title column -->
+                        <DataGridTemplateColumn 
+                            Header="Title" 
+                            Width="*" 
+                            SortMemberPath="Title"
+                            >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <!-- Title -->
+                                        <TextBlock 
+                                            Text="{Binding Title}"
+                                            Style="{Binding AbstractShown, Converter={StaticResource BoolToTextHeaderStyle}}"
+                                            TextWrapping="Wrap"
+                                            ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                            ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                            ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                            ap:TextBlockHighlighter.Forecolor="#000000" 
+                                            Grid.Column="0"
+                                            Grid.Row="0"
+                                            />
+                                        <!-- File contains only abstract label -->
+                                        <Border
+                                            Visibility="{Binding AbstractOnly, Converter={StaticResource IntToVisibility}}"
+                                            Padding="6 3 6 3"
+                                            CornerRadius="6"
+                                            Background="{StaticResource PrimaryColorBrush}"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Bottom"
+                                            Margin="0 0 -7 -7"
+                                            Grid.Column="0"
+                                            Grid.Row="0"
+                                            >
+                                            <TextBlock
+                                                Text="AO"                                        
+                                                Foreground="{StaticResource WhiteColorBrush}"
+                                                FontSize="12"
+                                                />
+                                        </Border>
+                                        <!-- Show/Hide abstract button -->
+                                        <ToggleButton
+                                            IsChecked="{Binding AbstractShown, UpdateSourceTrigger=PropertyChanged}"
+                                            Visibility="{Binding AbstractBody, Converter={StaticResource EmptyStringToVisibility}}"                                    
+                                            Style="{x:Null}"
+                                            Foreground="{StaticResource PrimaryColorBrush}"
+                                            Cursor="Hand"
+                                            VerticalAlignment="Top"
+                                            Margin="6 0 0 0"
+                                            Grid.Column="1"
+                                            Grid.Row="0"
+                                            >
+                                            <ToggleButton.Template>
+                                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                    <Border
+                                                        BorderThickness="1 1 1 1"
+                                                        BorderBrush="{StaticResource PrimaryColorBrush}"                                                
+                                                        CornerRadius="6"
+                                                        Background="Transparent"
+                                                        Padding="6 6 6 6"
+                                                        >
+                                                        <ContentPresenter />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </ToggleButton.Template>
+                                            <ToggleButton.Content>
+                                                <materialDesign:PackIcon 
+                                                    x:Name="AbstractShowArrow"
+                                                    Kind="ArrowDown"                                            
+                                                    Height="14"
+                                                    Width="14"
+                                                    >
+                                                    <materialDesign:PackIcon.RenderTransform>
+                                                        <RotateTransform 
+                                                            Angle="0" 
+                                                            CenterX="7" 
+                                                            CenterY="7" 
+                                                            />
+                                                    </materialDesign:PackIcon.RenderTransform>
+                                                </materialDesign:PackIcon>
+                                            </ToggleButton.Content>
+                                            <ToggleButton.Triggers>
+                                                <EventTrigger RoutedEvent="ToggleButton.Checked">
+                                                    <BeginStoryboard Storyboard="{StaticResource ShowAbstract}" />
+                                                    <BeginStoryboard Storyboard="{StaticResource RotateArrow}" />
+                                                </EventTrigger>
+                                                <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                                                    <BeginStoryboard Storyboard="{StaticResource HideAbstract}" />
+                                                    <BeginStoryboard Storyboard="{StaticResource ResetArrowRotation}" />
+                                                </EventTrigger>
+                                            </ToggleButton.Triggers>
+                                        </ToggleButton>
+                                        <!-- Abstract body -->
+                                        <Border
+                                            x:Name="AbstractWrapper"
+                                            Visibility="{Binding AbstractShown, Converter={StaticResource BoolToVisibility}}"
+                                            Margin="0 6 0 0"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            Grid.Row="1"
+                                            >
+                                            <Border.RenderTransform>
+                                                <ScaleTransform ScaleY="0" />
+                                            </Border.RenderTransform>
+                                            <TextBlock
+                                                Text="{Binding AbstractBody}"
+                                                TextWrapping="Wrap"
+                                                TextAlignment="Justify"
+                                                Grid.Row="1"
+                                                />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!-- Authors column -->
+                        <DataGridTemplateColumn 
+                            Header="Authors" 
+                            Width="0.5*" 
+                            Visibility="{
+                                Binding DataContext.Columns, 
+                                Source={StaticResource ProxyElement}, 
+                                Converter={StaticResource ListToVisibility}, 
+                                ConverterParameter='Authors'}"
+                            >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock 
+                                        Text="{Binding Authors}" 
+                                        TextWrapping="Wrap"
+                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                        ap:TextBlockHighlighter.WordBreakMode="True"
+                                        ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                        ap:TextBlockHighlighter.Forecolor="#000000" 
+                                        />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!-- Keywords column -->
+                        <DataGridTemplateColumn 
+                            Header="Keywords" 
+                            Width="0.5*" 
+                            Visibility="{
+                                Binding DataContext.Columns, 
+                                Source={StaticResource ProxyElement}, 
+                                Converter={StaticResource ListToVisibility}, 
+                                ConverterParameter='Keywords'}"
+                            >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock 
+                                        Text="{Binding Keywords}" 
+                                        TextWrapping="Wrap"
+                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                        ap:TextBlockHighlighter.WordBreakMode="True"
+                                        ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                        ap:TextBlockHighlighter.Forecolor="#000000" 
+                                        />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!-- Year column -->
+                        <DataGridTemplateColumn 
+                            Header="Year" 
+                            SortMemberPath="Year" 
+                            MinWidth="80" 
+                            Width="Auto" 
+                            Visibility="{
+                                Binding DataContext.Columns, 
+                                Source={StaticResource ProxyElement}, 
+                                Converter={StaticResource ListToVisibility}, 
+                                ConverterParameter='Year'}"
+                            >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Year}" TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!-- File column -->
+                        <DataGridTemplateColumn 
+                            Header="FileName" 
+                            SortMemberPath="FileName" 
+                            MinWidth="95" 
+                            Width="Auto" 
+                            Visibility="{
+                                Binding DataContext.Columns, 
+                                Source={StaticResource ProxyElement}, 
+                                Converter={StaticResource ListToVisibility}, 
+                                ConverterParameter='FileName'}"
+                            >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!-- Comment column -->
+                        <DataGridTemplateColumn 
+                            Header="Comment"
+                            SortMemberPath="Comment"
+                            Width="0.4*" 
+                            Visibility="{
+                                Binding DataContext.Columns, 
+                                Source={StaticResource ProxyElement}, 
+                                Converter={StaticResource ListToVisibility}, 
+                                ConverterParameter='PersonalComment'}"
+                            >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding PersonalComment}" TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!-- SIC column -->
+                        <DataGridTemplateColumn 
+                            Header="SIC" 
+                            MinWidth="70" 
+                            Width="Auto" 
+                            Visibility="{
+                                Binding DataContext.Columns, 
+                                Source={StaticResource ProxyElement}, 
+                                Converter={StaticResource ListToVisibility}, 
+                                ConverterParameter='SIC'}"
+                            >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding SIC, Converter={StaticResource NumberToSIC}}" TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!-- Export column -->
+                        <DataGridTemplateColumn 
+                            Header="Export"
+                            MinWidth="78"
+                            Width="Auto"
+                            Visibility="{
+                                Binding DataContext.Columns, 
+                                Source={StaticResource ProxyElement}, 
+                                Converter={StaticResource ListToVisibility}, 
+                                ConverterParameter='Export'}"
+                            >
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                                <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter Margin="10 0 0 0" VerticalAlignment="Stretch" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" 
+                                        Command="{
+                                            Binding DataContext.UpdateExportStatusCommand,
+                                            RelativeSource={RelativeSource FindAncestor, 
+                                            AncestorType={x:Type UserControl}}}"
+                                        Style="{StaticResource FlatCheckbox}"
+                                        />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type utils:FullViewTemplate}">
+            <ListView
+                DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                ItemsSource="{Binding Articles}"
+                SelectedItem="{Binding ArticleDataManager.SelectedArticle}"
+                VirtualizingPanel.IsVirtualizing="True"
+                VirtualizingPanel.VirtualizationMode="Standard"
+                >
+                <ListView.Style>
+                    <Style TargetType="{x:Type ListView}">
+                        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+                        <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListView}">
+                                    <Grid Background="{DynamicResource GrayColorBrush}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width=".3*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width=".4*" />
+                                        </Grid.ColumnDefinitions>
+                                        <ScrollViewer Grid.Column="1">
+                                            <ItemsPresenter />
+                                        </ScrollViewer>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="ItemContainerStyle">
+                            <Setter.Value>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="Padding" Value="18 12 18 12" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                <Border
+                                                    Background="{StaticResource WhiteColorBrush}"
+                                                    Padding="{TemplateBinding Padding}"
+                                                    CornerRadius="3 3 3 3"
+                                                    Margin="0 0 0 12"
+                                                    >
+                                                    <ContentPresenter />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <!-- Title -->
+                                                        <RowDefinition Height="Auto" />
+                                                        <!-- Year -->
+                                                        <RowDefinition Height="Auto" />
+                                                        <!-- Keywords -->
+                                                        <RowDefinition Height="Auto" />
+                                                        <!-- Authors -->
+                                                        <RowDefinition Height="Auto" />
+                                                        <!-- Abstract -->
+                                                        <RowDefinition Height="*" />
+                                                        <!-- Open file -->
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <!-- Export -->
+                                                    <CheckBox 
+                                                        Content=""
+                                                        IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" 
+                                                        Command="{
+                                                            Binding DataContext.UpdateExportStatusCommand,
+                                                            RelativeSource={RelativeSource FindAncestor, 
+                                                            AncestorType={x:Type UserControl}}}"
+                                                        Style="{StaticResource FlatCheckbox}"
+                                                        Visibility="{
+                                                            Binding DataContext.IsExportEnabled, 
+                                                            RelativeSource={
+                                                            RelativeSource FindAncestor, 
+                                                            AncestorType={x:Type UserControl}}, 
+                                                            Converter={StaticResource BoolToVisibility}}"
+                                                        Grid.Column="1"
+                                                        Grid.Row="0"
+                                                        />
+                                                    <!-- Title -->
+                                                    <TextBlock
+                                                        Text="{Binding Title}"
+                                                        FontSize="16"
+                                                        FontFamily="Verdana"
+                                                        TextWrapping="Wrap"
+                                                        Foreground="{StaticResource BlackColorAltBrush}"
+                                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                        ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
+                                                        Margin="0 0 0 6"
+                                                        Grid.Row="0"
+                                                        />
+                                                    <!-- Year -->
+                                                    <StackPanel
+                                                        Orientation="Horizontal"
+                                                        Margin="0 0 0 6"
+                                                        Grid.Row="1"
+                                                        >
+                                                        <TextBlock
+                                                            Text="{Binding Year}"
+                                                            Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
+                                                            FontSize="14"
+                                                            FontStyle="Italic"
+                                                            Foreground="{StaticResource BlackColorAltBrush}"                                                                                                        
+                                                            Margin="0 0 6 0"
+                                                            />
+                                                        <TextBlock
+                                                            Text="{Binding FileName, StringFormat={}({0}), TargetNullValue=''}"
+                                                            Visibility="{
+                                                                Binding DataContext.User.IsAdmin, 
+                                                                RelativeSource={
+                                                                RelativeSource FindAncestor, 
+                                                                AncestorType={x:Type UserControl}}}"
+                                                            FontSize="14"
+                                                            />
+                                                    </StackPanel>
+                                                    <!-- Keywords -->
+                                                    <TextBlock
+                                                        Text="{Binding Keywords}"
+                                                        Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
+                                                        FontSize="14"
+                                                        Foreground="{StaticResource LabelColorBrush}"
+                                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        ap:TextBlockHighlighter.WordBreakMode="True"
+                                                        ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                        ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
+                                                        Margin="6 0 0 6"
+                                                        Grid.Row="2"
+                                                        />
+                                                    <!-- Authors -->
+                                                    <TextBlock
+                                                        Text="{Binding Authors}"
+                                                        Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
+                                                        FontSize="14"
+                                                        Foreground="{StaticResource BlackColorAltBrush}"
+                                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        ap:TextBlockHighlighter.WordBreakMode="True"
+                                                        ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                        ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
+                                                        Margin="0 0 0 12"
+                                                        Grid.Row="3"
+                                                        />
+                                                    <!-- Abstract -->
+                                                    <TextBlock
+                                                        Text="{Binding AbstractBody}"
+                                                        Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
+                                                        FontSize="14"
+                                                        TextWrapping="Wrap"
+                                                        Foreground="{StaticResource BlackColorAltBrush}"
+                                                        Margin="0 0 0 12"
+                                                        Grid.Row="4"
+                                                        />
+                                                    <!-- Open file-->
+                                                    <Button 
+                                                        Content="View PDF"
+                                                        Command="{Binding DataContext.ArticleDataManager.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        CommandParameter="{Binding}"
+                                                        Grid.Row="5"
+                                                        >
+                                                        <Button.Style>
+                                                            <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
+                                                                <Setter Property="Foreground" Value="{StaticResource BlueColorBrush}" />
+                                                                <Setter Property="BorderThickness" Value="0 0 0 0" />
+                                                                <Setter Property="BorderBrush" Value="{StaticResource TextHighlightColorBrush}" />
+                                                                <Setter Property="Cursor" Value="Hand" />
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                                            <StackPanel 
+                                                                                Orientation="Horizontal" 
+                                                                                Background="Transparent"
+                                                                                >
+                                                                                <materialDesign:PackIcon
+                                                                                    Kind="FilePdf"
+                                                                                    Width="24"
+                                                                                    Height="24"
+                                                                                    Foreground="{StaticResource LabelColorBrush}"
+                                                                                    Margin="0 0 6 0"
+                                                                                    />
+                                                                                <Border
+                                                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                    VerticalAlignment="Center"
+                                                                                    >
+                                                                                    <TextBlock
+                                                                                        Text="{TemplateBinding Content}"
+                                                                                        FontSize="12"
+                                                                                        Foreground="{TemplateBinding Foreground}"
+                                                                                        />
+                                                                                </Border>
+                                                                            </StackPanel>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+                                                                        <Setter Property="BorderThickness" Value="0 0 0 2" />
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.Style>
+                <ListView.ContextMenu>
+                    <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                        <!-- We set these items' commands from code behind -->
+                        <MenuItem Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" Command="{Binding OpenAddPersonalCommand}" />
+                        <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
+                        <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenAbstractEditorCommand}" />
+                        <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding DeleteArticleCommand}" />
+                        <MenuItem Command="{Binding OpenBookmarkManagerCommand}" CommandParameter="{Binding SelectedArticle}">
+                            <MenuItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Bookmark" Grid.Column="0" />
+                                    <TextBlock Text="Ctrl+B" Grid.Column="2" />
+                                </Grid>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenReferenceManagerCommand}" CommandParameter="{Binding SelectedArticle}">
+                            <MenuItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Reference" Grid.Column="0" />
+                                    <TextBlock Text="Ctrl+R" Grid.Column="2" />
+                                </Grid>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}">
+                            <MenuItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Copy Title" Grid.Column="0" />
+                                    <TextBlock Text="Ctrl+C" Grid.Column="2" />
+                                </Grid>
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
+        </DataTemplate>
     </UserControl.Resources>
 
-    <UserControl.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="B" 
-                    Command="{Binding DataContext.OpenBookmarkManagerCommand, 
-                    RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
-                    CommandParameter="{Binding SelectedArticle}" />
-        <KeyBinding Modifiers="Ctrl" Key="R" 
-                    Command="{Binding DataContext.OpenReferenceManagerCommand, 
-                    RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" 
-                    CommandParameter="{Binding SelectedArticle}" />
-    </UserControl.InputBindings>
-
     <Grid Focusable="True">
-        <Grid.Resources>
-            <FrameworkElement x:Key="ProxyElement" DataContext="{Binding}" />
-        </Grid.Resources>
-
         <Grid.RowDefinitions>
             <!-- Proxy column -->
             <RowDefinition Height="Auto" />
@@ -58,13 +751,6 @@
             <!-- Pagination column -->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
-        <!-- Proxy element to change datagrid columns' DataContext -->
-        <ContentControl 
-            Visibility="Collapsed" 
-            Content="{StaticResource ProxyElement}" 
-            Grid.Row="0" 
-            />
 
         <!-- Ribbon -->
         <TabControl
@@ -180,7 +866,7 @@
                             IsChecked="{
                                 Binding Columns, 
                                 Converter={StaticResource CheckToList}, 
-                                ConverterParameter='Keywords'}" 
+                                ConverterParameter='Keywords'}"
                             />
                         <CheckBox 
                             Content="Year" 
@@ -198,7 +884,7 @@
                             IsChecked="{
                                 Binding Columns, 
                                 Converter={StaticResource CheckToList}, 
-                                ConverterParameter='PersonalComment'}" 
+                                ConverterParameter='PersonalComment'}"
                             />
                         <CheckBox 
                             Content="SIC" 
@@ -206,7 +892,7 @@
                             IsChecked="{
                                 Binding Columns, 
                                 Converter={StaticResource CheckToList}, 
-                                ConverterParameter='SIC'}" 
+                                ConverterParameter='SIC'}"
                             />
                     </StackPanel>
                     <StackPanel 
@@ -267,735 +953,10 @@
         </TabControl>
         
         <!-- Datagrid -->
-        <!-- Each column is bound to command from ArticleGrid style for sorting -->
-        <DataGrid 
-            x:Name="myGrid"
-            ItemsSource="{Binding Articles}"
-            SelectedItem="{Binding SelectedArticle}"
-            Style="{StaticResource ArticleGrid}"
-            Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibility},ConverterParameter=Soft}"
-            FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
-            VirtualizingStackPanel.VirtualizationMode="Standard"
-            ScrollViewer.CanContentScroll="False"
-            CanUserSortColumns="{Binding CanSortColumns}"            
+        <ContentPresenter 
+            Content="{Binding SelectedViewType}" 
             Grid.Row="2"
-            >
-            <DataGrid.CellStyle>
-                <Style TargetType="{x:Type DataGridCell}">
-                    <Setter Property="Padding" Value="10" />
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter VerticalAlignment="Stretch" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.CellStyle>
-            <DataGrid.ContextMenu>
-                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                    <!-- We set these items' commands from code behind -->
-                    <MenuItem Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" Command="{Binding OpenAddPersonalCommand}" />
-                    <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
-                    <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenAbstractEditorCommand}" />
-                    <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding DeleteArticleCommand}" />
-                    <MenuItem Command="{Binding OpenBookmarkManagerCommand}" CommandParameter="{Binding SelectedArticle}">
-                        <MenuItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Bookmark" Grid.Column="0" />
-                                <TextBlock Text="Ctrl+B" Grid.Column="2" />
-                            </Grid>
-                        </MenuItem.Header>
-                    </MenuItem>
-                    <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenReferenceManagerCommand}" CommandParameter="{Binding SelectedArticle}">
-                        <MenuItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Reference" Grid.Column="0" />
-                                <TextBlock Text="Ctrl+R" Grid.Column="2" />
-                            </Grid>
-                        </MenuItem.Header>
-                    </MenuItem>
-                    <MenuItem Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}">
-                        <MenuItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Copy Title" Grid.Column="0" />
-                                <TextBlock Text="Ctrl+C" Grid.Column="2" />
-                            </Grid>
-                        </MenuItem.Header>
-                    </MenuItem>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-            <DataGrid.InputBindings>
-                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding OpenFileCommand}" CommandParameter="{Binding SelectedArticle}" />
-                <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}" />
-            </DataGrid.InputBindings>
-            <!-- Data grid columns -->
-            <DataGrid.Columns>
-                <!-- Title column -->
-                <DataGridTemplateColumn 
-                    Header="Title" 
-                    Width="*" 
-                    SortMemberPath="Title"
-                    SortDirection="{
-                        Binding DataContext.SelectedSort, 
-                        Source={StaticResource ProxyElement},
-                        Converter={StaticResource SortConverter}, 
-                        ConverterParameter=Title}"
-                    >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <!-- Animations -->
-                            <DataTemplate.Resources>
-                                <Storyboard x:Key="ShowAbstract">
-                                    <!-- Show Abstract -->
-                                    <DoubleAnimation              
-                                        Storyboard.TargetName="AbstractWrapper"
-                                        Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
-                                        From="0"
-                                        To="1"
-                                        Duration="0:0:0.15"
-                                        />
-                                </Storyboard>
-                                <!-- Hide abstract -->
-                                <Storyboard x:Key="HideAbstract">
-                                    <DoubleAnimation
-                                        Storyboard.TargetName="AbstractWrapper"
-                                        Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
-                                        From="1"
-                                        To="0"
-                                        Duration="0:0:0.15"
-                                        />
-                                </Storyboard>
-                                <!-- Rotate arrow -->
-                                <Storyboard x:Key="RotateArrow">
-                                    <DoubleAnimation 
-                                            Storyboard.TargetName="AbstractShowArrow"
-                                            Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
-                                            From="0"
-                                            To="180"
-                                            Duration="0:0:0.15"
-                                            />
-                                </Storyboard>
-                                <!-- Reset arrow rotation -->
-                                <Storyboard x:Key="ResetArrowRotation">
-                                    <DoubleAnimation 
-                                            Storyboard.TargetName="AbstractShowArrow"
-                                            Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
-                                            From="180"
-                                            To="0"
-                                            Duration="0:0:0.15"
-                                            />
-                                </Storyboard>
-                            </DataTemplate.Resources>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <!-- Title -->
-                                <TextBlock 
-                                    Text="{Binding Title}"
-                                    Style="{Binding AbstractShown, Converter={StaticResource BoolToTextHeaderStyle}}"
-                                    TextWrapping="Wrap"
-                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                    ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                    ap:TextBlockHighlighter.Forecolor="#000000" 
-                                    Grid.Column="0"
-                                    Grid.Row="0"
-                                    />
-                                <!-- File contains only abstract label -->
-                                <Border
-                                    Visibility="{Binding AbstractOnly, Converter={StaticResource IntToVisibility}}"
-                                    Padding="6 3 6 3"
-                                    CornerRadius="6"
-                                    Background="{StaticResource PrimaryColorBrush}"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Bottom"
-                                    Margin="0 0 -7 -7"
-                                    Grid.Column="0"
-                                    Grid.Row="0"
-                                    >
-                                    <TextBlock
-                                        Text="AO"                                        
-                                        Foreground="{StaticResource WhiteColorBrush}"
-                                        FontSize="12"
-                                        />
-                                </Border>
-                                <!-- Show/Hide abstract button -->
-                                <ToggleButton
-                                    IsChecked="{Binding AbstractShown, UpdateSourceTrigger=PropertyChanged}"
-                                    Visibility="{Binding AbstractBody, Converter={StaticResource EmptyStringToVisibility}}"                                    
-                                    Style="{x:Null}"
-                                    Foreground="{StaticResource PrimaryColorBrush}"
-                                    Cursor="Hand"
-                                    VerticalAlignment="Top"
-                                    Margin="6 0 0 0"
-                                    Grid.Column="1"
-                                    Grid.Row="0"
-                                    >
-                                    <ToggleButton.Template>
-                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                            <Border
-                                                BorderThickness="1 1 1 1"
-                                                BorderBrush="{StaticResource PrimaryColorBrush}"                                                
-                                                CornerRadius="6"
-                                                Background="Transparent"
-                                                Padding="6 6 6 6"
-                                                >
-                                                <ContentPresenter />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </ToggleButton.Template>
-                                    <ToggleButton.Content>
-                                        <materialDesign:PackIcon 
-                                            x:Name="AbstractShowArrow"
-                                            Kind="ArrowDown"                                            
-                                            Height="14"
-                                            Width="14"
-                                            >
-                                            <materialDesign:PackIcon.RenderTransform>
-                                                <RotateTransform 
-                                                    Angle="0" 
-                                                    CenterX="7" 
-                                                    CenterY="7" 
-                                                    />
-                                            </materialDesign:PackIcon.RenderTransform>
-                                        </materialDesign:PackIcon>
-                                    </ToggleButton.Content>
-                                    <ToggleButton.Triggers>
-                                        <EventTrigger RoutedEvent="ToggleButton.Checked">
-                                            <BeginStoryboard Storyboard="{StaticResource ShowAbstract}" />
-                                            <BeginStoryboard Storyboard="{StaticResource RotateArrow}" />
-                                        </EventTrigger>
-                                        <EventTrigger RoutedEvent="ToggleButton.Unchecked">
-                                            <BeginStoryboard Storyboard="{StaticResource HideAbstract}" />
-                                            <BeginStoryboard Storyboard="{StaticResource ResetArrowRotation}" />
-                                        </EventTrigger>
-                                    </ToggleButton.Triggers>
-                                </ToggleButton>
-                                <!-- Abstract body -->
-                                <Border
-                                    x:Name="AbstractWrapper"
-                                    Visibility="{Binding AbstractShown, Converter={StaticResource BoolToVisibility}}"
-                                    Margin="0 6 0 0"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="2"
-                                    Grid.Row="1"
-                                    >
-                                    <Border.RenderTransform>
-                                        <ScaleTransform ScaleY="0" />
-                                    </Border.RenderTransform>
-                                    <TextBlock
-                                        Text="{Binding AbstractBody}"
-                                        TextWrapping="Wrap"
-                                        TextAlignment="Justify"
-                                        Grid.Row="1"
-                                        />
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!-- Authors column -->
-                <DataGridTemplateColumn 
-                    Header="Authors" 
-                    Width="0.5*" 
-                    Visibility="{
-                        Binding DataContext.Columns, 
-                        Source={StaticResource ProxyElement}, 
-                        Converter={StaticResource ListToVisibility}, 
-                        ConverterParameter='Authors'}"
-                    >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock 
-                                Text="{Binding Authors}" 
-                                TextWrapping="Wrap"
-                                ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                ap:TextBlockHighlighter.WordBreakMode="True"
-                                ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                ap:TextBlockHighlighter.Forecolor="#000000" 
-                                />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!-- Keywords column -->
-                <DataGridTemplateColumn 
-                    Header="Keywords" 
-                    Width="0.5*" 
-                    Visibility="{
-                        Binding DataContext.Columns, 
-                        Source={StaticResource ProxyElement}, 
-                        Converter={StaticResource ListToVisibility}, 
-                        ConverterParameter='Keywords'}"
-                    >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock 
-                                Text="{Binding Keywords}" 
-                                TextWrapping="Wrap"
-                                ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                ap:TextBlockHighlighter.WordBreakMode="True"
-                                ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                ap:TextBlockHighlighter.Forecolor="#000000" 
-                                />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!-- Year column -->
-                <DataGridTemplateColumn 
-                    Header="Year" 
-                    SortMemberPath="Year" 
-                    SortDirection="{
-                        Binding DataContext.SelectedSort, 
-                        Source={StaticResource ProxyElement},
-                        Converter={StaticResource SortConverter}, 
-                        ConverterParameter=Year}"
-                    MinWidth="80" 
-                    Width="Auto" 
-                    Visibility="{
-                        Binding DataContext.Columns, 
-                        Source={StaticResource ProxyElement}, 
-                        Converter={StaticResource ListToVisibility}, 
-                        ConverterParameter='Year'}"
-                    >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Year}" TextWrapping="Wrap" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!-- File column -->
-                <DataGridTemplateColumn 
-                    Header="FileName" 
-                    SortMemberPath="FileName" 
-                    SortDirection="{
-                        Binding DataContext.SelectedSort, 
-                        Source={StaticResource ProxyElement},
-                        Converter={StaticResource SortConverter}, 
-                        ConverterParameter='FileName'}"
-                    MinWidth="95" 
-                    Width="Auto" 
-                    Visibility="{
-                        Binding DataContext.Columns, 
-                        Source={StaticResource ProxyElement}, 
-                        Converter={StaticResource ListToVisibility}, 
-                        ConverterParameter='FileName'}">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!-- Comment column -->
-                <DataGridTemplateColumn 
-                    Header="Comment"
-                    SortMemberPath="Comment"
-                    SortDirection="{
-                        Binding DataContext.SelectedSort, 
-                        Source={StaticResource ProxyElement},
-                        Converter={StaticResource SortConverter}, 
-                        ConverterParameter='Comment'}"
-                    Width="0.4*" 
-                    Visibility="{
-                        Binding DataContext.Columns, 
-                        Source={StaticResource ProxyElement}, 
-                        Converter={StaticResource ListToVisibility}, 
-                        ConverterParameter='PersonalComment'}"
-                    >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding PersonalComment}" TextWrapping="Wrap" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!-- SIC column -->
-                <DataGridTemplateColumn 
-                    Header="SIC" 
-                    MinWidth="70" 
-                    Width="Auto" 
-                    Visibility="{
-                        Binding DataContext.Columns, 
-                        Source={StaticResource ProxyElement}, 
-                        Converter={StaticResource ListToVisibility}, 
-                        ConverterParameter='SIC'}"
-                    >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding SIC, Converter={StaticResource NumberToSIC}}" TextWrapping="Wrap" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!-- Export column -->
-                <DataGridTemplateColumn 
-                    Header="Export"
-                    MinWidth="78"
-                    Width="Auto"
-                    Visibility="{
-                        Binding DataContext.Columns, 
-                        Source={StaticResource ProxyElement}, 
-                        Converter={StaticResource ListToVisibility}, 
-                        ConverterParameter='Export'}">
-                    <DataGridTemplateColumn.CellStyle>
-                        <Style TargetType="{x:Type DataGridCell}">
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                                            <ContentPresenter Margin="10 0 0 0" VerticalAlignment="Stretch" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTemplateColumn.CellStyle>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox
-                                IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" 
-                                Command="{
-                                    Binding DataContext.UpdateExportStatusCommand,
-                                    RelativeSource={RelativeSource FindAncestor, 
-                                    AncestorType={x:Type UserControl}}}"
-                                Style="{StaticResource FlatCheckbox}"
-                                />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!-- Mass bookmark column -->
-                <DataGridTemplateColumn 
-                    Header="Bookmark" 
-                    Width="Auto" 
-                    Visibility="{
-                        Binding DataContext.Columns, 
-                        Source={StaticResource ProxyElement}, 
-                        Converter={StaticResource ListToVisibility}, 
-                        ConverterParameter='Bookmark'}"
-                    >
-                    <DataGridTemplateColumn.CellStyle>
-                        <Style TargetType="{x:Type DataGridCell}">
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                                            <ContentPresenter Margin="10 0 0 0" VerticalAlignment="Stretch" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTemplateColumn.CellStyle>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox 
-                                IsChecked="{
-                                    Binding Path=BMChecked, 
-                                    UpdateSourceTrigger=PropertyChanged}" 
-                                />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <ListView 
-            ItemsSource="{Binding Articles}"
-            SelectedItem="{Binding SelectedArticle}"
-            Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibilityInverse}, ConverterParameter=Soft}"
-            Grid.Row="2"
-            >
-            <ListView.Style>
-                <Style TargetType="{x:Type ListView}">
-                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-                    <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ListView}">
-                                <Grid Background="{DynamicResource GrayColorBrush}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width=".3*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width=".4*" />
-                                    </Grid.ColumnDefinitions>
-                                    <ScrollViewer Grid.Column="1">
-                                        <ItemsPresenter />
-                                    </ScrollViewer>
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="ItemContainerStyle">
-                        <Setter.Value>
-                            <Style TargetType="{x:Type ListViewItem}">
-                                <Setter Property="Padding" Value="18 12 18 12" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                            <Border
-                                                Background="{StaticResource WhiteColorBrush}"
-                                                Padding="{TemplateBinding Padding}"
-                                                CornerRadius="3 3 3 3"
-                                                Margin="0 0 0 12"
-                                                >
-                                                <ContentPresenter />
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="ContentTemplate">
-                                    <Setter.Value>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <Grid.RowDefinitions>
-                                                    <!-- Title -->
-                                                    <RowDefinition Height="Auto" />
-                                                    <!-- Year -->
-                                                    <RowDefinition Height="Auto" />
-                                                    <!-- Keywords -->
-                                                    <RowDefinition Height="Auto" />
-                                                    <!-- Authors -->
-                                                    <RowDefinition Height="Auto" />
-                                                    <!-- Abstract -->
-                                                    <RowDefinition Height="*" />
-                                                    <!-- Open file -->
-                                                    <RowDefinition Height="Auto" />
-                                                </Grid.RowDefinitions>
-
-                                                <!-- Export -->
-                                                <CheckBox 
-                                                    Content=""
-                                                    IsChecked="{Binding Path=Checked, UpdateSourceTrigger=PropertyChanged}" 
-                                                    Command="{
-                                                        Binding DataContext.UpdateExportStatusCommand,
-                                                        RelativeSource={RelativeSource FindAncestor, 
-                                                        AncestorType={x:Type UserControl}}}"
-                                                    Style="{StaticResource FlatCheckbox}"
-                                                    Visibility="{
-                                                        Binding DataContext.IsExportEnabled, 
-                                                        RelativeSource={
-                                                        RelativeSource FindAncestor, 
-                                                        AncestorType={x:Type UserControl}}, 
-                                                        Converter={StaticResource BoolToVisibility}}"
-                                                    Grid.Column="1"
-                                                    Grid.Row="0"
-                                                    />
-                                                <!-- Title -->
-                                                <TextBlock
-                                                    Text="{Binding Title}"
-                                                    FontSize="16"
-                                                    FontFamily="Verdana"
-                                                    TextWrapping="Wrap"
-                                                    Foreground="{StaticResource BlackColorAltBrush}"
-                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                    ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                    ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
-                                                    Margin="0 0 0 6"
-                                                    Grid.Row="0"
-                                                    />
-                                                <!-- Year -->
-                                                <StackPanel
-                                                    Orientation="Horizontal"
-                                                    Margin="0 0 0 6"
-                                                    Grid.Row="1"
-                                                    >
-                                                    <TextBlock
-                                                        Text="{Binding Year}"
-                                                        Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
-                                                        FontSize="14"
-                                                        FontStyle="Italic"
-                                                        Foreground="{StaticResource BlackColorAltBrush}"                                                                                                        
-                                                        Margin="0 0 6 0"
-                                                        />
-                                                    <TextBlock
-                                                        Text="{Binding FileName, StringFormat={}({0}), TargetNullValue=''}"
-                                                        Visibility="{
-                                                            Binding DataContext.User.IsAdmin, 
-                                                            RelativeSource={
-                                                            RelativeSource FindAncestor, 
-                                                            AncestorType={x:Type UserControl}}}"
-                                                        FontSize="14"
-                                                        />
-                                                </StackPanel>
-                                                <!-- Keywords -->
-                                                <TextBlock
-                                                    Text="{Binding Keywords}"
-                                                    Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
-                                                    FontSize="14"
-                                                    Foreground="{StaticResource LabelColorBrush}"
-                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                    ap:TextBlockHighlighter.WordBreakMode="True"
-                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                    ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
-                                                    Margin="6 0 0 6"
-                                                    Grid.Row="2"
-                                                    />
-                                                <!-- Authors -->
-                                                <TextBlock
-                                                    Text="{Binding Authors}"
-                                                    Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
-                                                    FontSize="14"
-                                                    Foreground="{StaticResource BlackColorAltBrush}"
-                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                    ap:TextBlockHighlighter.WordBreakMode="True"
-                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                    ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
-                                                    Margin="0 0 0 12"
-                                                    Grid.Row="3"
-                                                    />
-                                                <!-- Abstract -->
-                                                <TextBlock
-                                                    Text="{Binding AbstractBody}"
-                                                    Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
-                                                    FontSize="14"
-                                                    TextWrapping="Wrap"
-                                                    Foreground="{StaticResource BlackColorAltBrush}"
-                                                    Margin="0 0 0 12"
-                                                    Grid.Row="4"
-                                                    />
-                                                <!-- Open file-->
-                                                <Button 
-                                                    Content="View PDF"
-                                                    Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                    CommandParameter="{Binding}"
-                                                    Grid.Row="5"
-                                                    >
-                                                    <Button.Style>
-                                                        <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
-                                                            <Setter Property="Foreground" Value="{StaticResource BlueColorBrush}" />
-                                                            <Setter Property="BorderThickness" Value="0 0 0 0" />
-                                                            <Setter Property="BorderBrush" Value="{StaticResource TextHighlightColorBrush}" />
-                                                            <Setter Property="Cursor" Value="Hand" />
-                                                            <Setter Property="Template">
-                                                                <Setter.Value>
-                                                                    <ControlTemplate TargetType="{x:Type Button}">
-                                                                        <StackPanel 
-                                                                            Orientation="Horizontal" 
-                                                                            Background="Transparent"
-                                                                            >
-                                                                            <materialDesign:PackIcon
-                                                                                Kind="FilePdf"
-                                                                                Width="24"
-                                                                                Height="24"
-                                                                                Foreground="{StaticResource LabelColorBrush}"
-                                                                                Margin="0 0 6 0"
-                                                                                />
-                                                                            <Border
-                                                                                BorderThickness="{TemplateBinding BorderThickness}"
-                                                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                                                VerticalAlignment="Center"
-                                                                                >
-                                                                                <TextBlock
-                                                                                    Text="{TemplateBinding Content}"
-                                                                                    FontSize="12"
-                                                                                    Foreground="{TemplateBinding Foreground}"
-                                                                                    />
-                                                                            </Border>
-                                                                        </StackPanel>
-                                                                    </ControlTemplate>
-                                                                </Setter.Value>
-                                                            </Setter>
-
-                                                            <Style.Triggers>
-                                                                <Trigger Property="IsMouseOver" Value="True">
-                                                                    <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
-                                                                    <Setter Property="BorderThickness" Value="0 0 0 2" />
-                                                                </Trigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Button.Style>
-                                                </Button>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.Style>
-            <ListView.ContextMenu>
-                <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                    <!-- We set these items' commands from code behind -->
-                    <MenuItem Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" Command="{Binding OpenAddPersonalCommand}" />
-                    <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
-                    <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenAbstractEditorCommand}" />
-                    <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding DeleteArticleCommand}" />
-                    <MenuItem Command="{Binding OpenBookmarkManagerCommand}" CommandParameter="{Binding SelectedArticle}">
-                        <MenuItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Bookmark" Grid.Column="0" />
-                                <TextBlock Text="Ctrl+B" Grid.Column="2" />
-                            </Grid>
-                        </MenuItem.Header>
-                    </MenuItem>
-                    <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenReferenceManagerCommand}" CommandParameter="{Binding SelectedArticle}">
-                        <MenuItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Reference" Grid.Column="0" />
-                                <TextBlock Text="Ctrl+R" Grid.Column="2" />
-                            </Grid>
-                        </MenuItem.Header>
-                    </MenuItem>
-                    <MenuItem Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}">
-                        <MenuItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Copy Title" Grid.Column="0" />
-                                <TextBlock Text="Ctrl+C" Grid.Column="2" />
-                            </Grid>
-                        </MenuItem.Header>
-                    </MenuItem>
-                </ContextMenu>
-            </ListView.ContextMenu>
-        </ListView>
+            />
 
         <notifications:NotificationArea 
             x:Name="DataViewNotificationArea" 
@@ -1016,11 +977,9 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <!-- Pagination column -->
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                     <!-- Items per page column -->
                     <ColumnDefinition Width="Auto" />
-                    <!-- Export column -->
-                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <!-- Pagination -->
                 <StackPanel
@@ -1047,6 +1006,24 @@
                         Content="Next" 
                         Command="{Binding NextPageCommand}"
                         Style="{StaticResource PaginationButton__Right}"
+                        />
+                </StackPanel>
+                <!-- Items per page -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    Grid.Column="1"
+                    >
+                    <TextBlock
+                        Text="Displays:"
+                        Style="{StaticResource SmallHeader}"
+                        VerticalAlignment="Center"
+                        Margin="0 0 6 0"
+                        />
+                    <TextBox
+                        Text="{Binding ItemsPerPage}"
+                        MinWidth="50"
+                        MaxWidth="100"
+                        VerticalAlignment="Center"
                         />
                 </StackPanel>
             </Grid>

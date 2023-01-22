@@ -89,7 +89,10 @@
     <Compile Include="UIStructs\AbstractEntryItem.cs" />
     <Compile Include="UIStructs\BookmarkBox.cs" />
     <Compile Include="UIStructs\ReferenceBox.cs" />
+    <Compile Include="Utils\ArticleDataManager.cs" />
     <Compile Include="Utils\BugTracker.cs" />
+    <Compile Include="Utils\CompactViewTemplate.cs" />
+    <Compile Include="Utils\FullViewTemplate.cs" />
     <Compile Include="Utils\IThemeService.cs" />
     <Compile Include="Utils\LogConverter.cs" />
     <Compile Include="Utils\LogReader.cs" />
@@ -97,6 +100,7 @@
     <Compile Include="Utils\Shared.cs" />
     <Compile Include="Utils\SyncInformationManager.cs" />
     <Compile Include="Utils\Tracker.cs" />
+    <Compile Include="Utils\ViewTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

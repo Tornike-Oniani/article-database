@@ -4,17 +4,20 @@ using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Popups;
 using MainLib.ViewModels.Utils;
 using NotificationService;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace MainLib.ViewModels.Pages
@@ -23,6 +26,10 @@ namespace MainLib.ViewModels.Pages
     {
         private User _user;
         private List<string> _columns;
+        private bool _isViewCompact;
+        private string _selectedSortProperty;
+        private string _selectedSortDirection;
+        private bool _isExportEnabled;
         private Shared services;
 
         /**
@@ -48,7 +55,41 @@ namespace MainLib.ViewModels.Pages
         {
             get { return Articles.Where(article => article.Checked == true).ToList().Count != 0; }
         }
+        public List<string> SortableProperties { get; set; }
+        public List<string> SortDirections { get; set; }
+        public string SelectedSortProperty
+        {
+            get { return _selectedSortProperty; }
+            set
+            {
+                _selectedSortProperty = value;
+                OnPropertyChanged("SelectedSortProperty");
+            }
+        }
+        public string SelectedSortDirection
+        {
+            get { return _selectedSortDirection; }
+            set
+            {
+                _selectedSortDirection = value;
+                OnPropertyChanged("SelectedSortDirection");
+            }
+        }
+        public bool IsExportEnabled
+        {
+            get { return _isExportEnabled; }
+            set { _isExportEnabled = value; OnPropertyChanged("IsExportEnabled"); }
+        }
+        public string SelectedSort { get { return SelectedSortProperty + " " + SelectedSortDirection; } }
+        public bool IsViewCompact
+        {
+            get { return _isViewCompact; }
+            set { _isViewCompact = value; OnPropertyChanged("IsViewCompact"); }
+        }
         public Shared Services { get; set; }
+
+        public CollectionViewSource _articlesCollection { get; set; }
+        public ICollectionView ArticlesCollection { get { return _articlesCollection.View; } }
 
         /**
          * Commands:
@@ -71,6 +112,10 @@ namespace MainLib.ViewModels.Pages
         public ICommand UpdateExportStatusCommand { get; set; }
         public RelayCommand OpenAddPersonalCommand { get; set; }
         public RelayCommand OpenEditCommand { get; set; }
+        public ICommand OpenAbstractEditorCommand { get; set; }
+        public ICommand SwitchDataViewCommand { get; set; }
+        public ICommand SortFromRibbonCommand { get; set; }
+        public ICommand SortFromDataGridCommand { get; set; }
 
         // Constructor
         public ReferenceViewViewModel(Reference reference)
@@ -81,6 +126,45 @@ namespace MainLib.ViewModels.Pages
             this.Reference = reference;
             this.User = services.User;
             this.Articles = new ObservableCollection<Article>();
+            this.IsViewCompact = true;
+            this.IsExportEnabled = false;
+
+            _articlesCollection = new CollectionViewSource();
+            _articlesCollection.Source = Articles;
+
+            // 1. Set neccessary columns to show on datagrid
+            Columns = new List<string>()
+            {
+                "Authors",
+                "Keywords",
+                "Year"
+            };
+
+            if (User.IsAdmin) { Columns.Add("FileName"); }
+
+            SortDirections = new List<string>() { "ASC", "DESC" };
+            if (User.IsAdmin)
+            {
+                SortableProperties = new List<string>()
+                {
+                    "Title",
+                    "Year",
+                    "FileName",
+                    "PersonalComment"
+                };
+            }
+            else
+            {
+                SortableProperties = new List<string>()
+                {
+                    "Title",
+                    "Year",
+                    "PersonalComment"
+                };
+            }
+
+            SelectedSortProperty = SortableProperties[0];
+            SelectedSortDirection = SortDirections[0];
 
             // Initialize commands
             OpenFileCommand = new RelayCommand(OpenFile);
@@ -93,6 +177,10 @@ namespace MainLib.ViewModels.Pages
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
             OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
             OpenEditCommand = new RelayCommand(OpenEditDialog, IsArticleSelected);
+            OpenAbstractEditorCommand = new RelayCommand(OpenAbstractEditor);
+            SwitchDataViewCommand = new RelayCommand(SwitchDataView);
+            SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
+            SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
         }
 
         /**
@@ -203,6 +291,7 @@ namespace MainLib.ViewModels.Pages
         {
             foreach (Article article in Articles)
                 article.Checked = false;
+            IsExportEnabled = !IsExportEnabled;
         }
         public async void Export(object input = null)
         {
@@ -353,6 +442,10 @@ namespace MainLib.ViewModels.Pages
         {
             services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.ArticleEditorViewModel(SelectedArticle));
         }
+        public void OpenAbstractEditor(object input)
+        {
+            services.WindowService.OpenWindow(new AbstractEditorViewModel(SelectedArticle), passWindow: true);
+        }
         public void OpenAddPersonal(object input)
         {
             services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle));
@@ -363,6 +456,52 @@ namespace MainLib.ViewModels.Pages
                 return true;
 
             return false;
+        }
+        public void SwitchDataView(object input)
+        {
+            string view = input as string;
+            IsViewCompact = view.Contains("Compact");
+        }
+        public void SortFromRibbon(object input = null)
+        {
+            if (Articles.Count == 0)
+                return;
+
+            ArticlesCollection.SortDescriptions.Clear();
+            ArticlesCollection.SortDescriptions.Add(new SortDescription(SelectedSortProperty, SelectedSortDirection == "ASC" ? ListSortDirection.Ascending : ListSortDirection.Descending));
+
+            OnPropertyChanged("SelectedSort");
+        }
+        public void SortFromDataGrid(object input)
+        {
+            string header = input.ToString();
+            header = header == "Comment" ? "PersonalComment" : header;
+
+            // Ignore columns
+            if (header == "Authors" || header == "Keywords" || header == "Export" || header == "Bookmark")
+                return;
+
+            if (Articles.Count == 0)
+                return;
+
+            if (SelectedSort.Contains(header))
+            {
+                if (SelectedSort.Contains("ASC"))
+                {
+                    SelectedSortDirection = "DESC";
+                }
+                else
+                {
+                    SelectedSortDirection = "ASC";
+                }
+            }
+            else
+            {
+                SelectedSortDirection = "ASC";
+            }
+            SelectedSortProperty = header;
+            OnPropertyChanged("SelectedSort");
+            SortFromRibbonCommand.Execute(null);
         }
     }
 }
