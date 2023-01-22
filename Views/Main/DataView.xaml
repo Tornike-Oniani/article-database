@@ -73,6 +73,7 @@
                 />
         </Storyboard>
 
+        <!-- Compact view -->
         <DataTemplate DataType="{x:Type utils:CompactViewTemplate}">
             <Grid Focusable="True" DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                 <Grid.InputBindings>
@@ -191,6 +192,7 @@
                             Header="Title" 
                             Width="*" 
                             SortMemberPath="Title"
+                            SortDirection="{Binding DataContext.SelectedSort, Source={StaticResource ProxyElement}, Converter={StaticResource SortConverter}, ConverterParameter=Title}"
                             >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -357,7 +359,6 @@
                         <!-- Year column -->
                         <DataGridTemplateColumn 
                             Header="Year" 
-                            SortMemberPath="Year" 
                             MinWidth="80" 
                             Width="Auto" 
                             Visibility="{
@@ -365,6 +366,8 @@
                                 Source={StaticResource ProxyElement}, 
                                 Converter={StaticResource ListToVisibility}, 
                                 ConverterParameter='Year'}"
+                            SortMemberPath="Year" 
+                            SortDirection="{Binding DataContext.SelectedSort, Source={StaticResource ProxyElement}, Converter={StaticResource SortConverter}, ConverterParameter=Year}"
                             >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -375,7 +378,6 @@
                         <!-- File column -->
                         <DataGridTemplateColumn 
                             Header="FileName" 
-                            SortMemberPath="FileName" 
                             MinWidth="95" 
                             Width="Auto" 
                             Visibility="{
@@ -383,6 +385,8 @@
                                 Source={StaticResource ProxyElement}, 
                                 Converter={StaticResource ListToVisibility}, 
                                 ConverterParameter='FileName'}"
+                            SortMemberPath="FileName"
+                            SortDirection="{Binding DataContext.SelectedSort, Source={StaticResource ProxyElement}, Converter={StaticResource SortConverter}, ConverterParameter=FileName}"
                             >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -393,13 +397,14 @@
                         <!-- Comment column -->
                         <DataGridTemplateColumn 
                             Header="Comment"
-                            SortMemberPath="Comment"
                             Width="0.4*" 
                             Visibility="{
                                 Binding DataContext.Columns, 
                                 Source={StaticResource ProxyElement}, 
                                 Converter={StaticResource ListToVisibility}, 
                                 ConverterParameter='PersonalComment'}"
+                            SortMemberPath="Comment"
+                            SortDirection="{Binding DataContext.SelectedSort, Source={StaticResource ProxyElement}, Converter={StaticResource SortConverter}, ConverterParameter=PersonalComment}"
                             >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -466,6 +471,7 @@
                 </DataGrid>
             </Grid>
         </DataTemplate>
+        <!-- Full view -->
         <DataTemplate DataType="{x:Type utils:FullViewTemplate}">
             <ListView
                 DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
@@ -691,11 +697,11 @@
                 <ListView.ContextMenu>
                     <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                         <!-- We set these items' commands from code behind -->
-                        <MenuItem Header="Add comment/SIC" IsEnabled="{Binding CanAddPersonal}" Command="{Binding OpenAddPersonalCommand}" />
-                        <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenEditCommand}" />
-                        <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenAbstractEditorCommand}" />
-                        <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding DeleteArticleCommand}" />
-                        <MenuItem Command="{Binding OpenBookmarkManagerCommand}" CommandParameter="{Binding SelectedArticle}">
+                        <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
+                        <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
+                        <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
+                        <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.DeleteArticleCommand}" />
+                        <MenuItem Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}">
                             <MenuItem.Header>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -708,7 +714,7 @@
                                 </Grid>
                             </MenuItem.Header>
                         </MenuItem>
-                        <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding OpenReferenceManagerCommand}" CommandParameter="{Binding SelectedArticle}">
+                        <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenReferenceManagerCommand}">
                             <MenuItem.Header>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -721,7 +727,7 @@
                                 </Grid>
                             </MenuItem.Header>
                         </MenuItem>
-                        <MenuItem Command="{Binding CopyTitleCommand}" CommandParameter="{Binding SelectedArticle}">
+                        <MenuItem Command="{Binding ArticleDataManager.CopyTitleCommand}">
                             <MenuItem.Header>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -820,6 +826,7 @@
                     Orientation="Horizontal"
                     VerticalAlignment="Center"
                     >
+                    <!-- Compact view -->
                     <RadioButton
                         Content="Compact&#x0a;View"                        
                         Tag="{x:Static materialDesign:PackIconKind.Text}"
@@ -831,6 +838,7 @@
                         Width="54"
                         Margin="0 0 6 0"
                         />
+                    <!-- Full view -->
                     <RadioButton
                         Content="Full&#x0a;View"
                         Tag="{x:Static materialDesign:PackIconKind.TextBox}"
@@ -846,9 +854,10 @@
                         Fill="{DynamicResource GrayColorBrush}"
                         Margin="0 0 12 0"                        
                         />
+                    <!-- Column selector for compact view -->
                     <StackPanel 
                         Orientation="Horizontal"
-                        Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibility}}"
+                        Visibility="{Binding IsDataViewCompact, Converter={StaticResource BoolToVisibility}}"
                         >
                         <CheckBox 
                             Content="Authors"
@@ -895,10 +904,11 @@
                                 ConverterParameter='SIC'}"
                             />
                     </StackPanel>
+                    <!-- Sorting for full view -->
                     <StackPanel 
                         Orientation="Horizontal"
                         Visibility="{
-                            Binding IsViewCompact, 
+                            Binding IsDataViewCompact, 
                             Converter={StaticResource BoolToVisibilityInverse}}"
                         >
                         <TextBlock 
@@ -952,7 +962,7 @@
             </TabItem>
         </TabControl>
         
-        <!-- Datagrid -->
+        <!-- Data view (compact or full) -->
         <ContentPresenter 
             Content="{Binding SelectedViewType}" 
             Grid.Row="2"

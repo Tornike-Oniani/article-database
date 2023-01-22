@@ -35,6 +35,7 @@ namespace MainLib.ViewModels.Main
         private string _selectedSortDirection;
         private bool _isExportEnabled;
         private ViewTemplate _selectedViewType;
+        private bool _isDataViewCompact;
         private bool _canSortColumns;
 
         // Private attributes
@@ -78,7 +79,11 @@ namespace MainLib.ViewModels.Main
             get { return _selectedViewType; }
             set { _selectedViewType = value; OnPropertyChanged("SelectedViewType"); }
         }
-        public Shared Services { get; set; }
+        public bool IsDataViewCompact
+        {
+            get { return _isDataViewCompact; }
+            set { _isDataViewCompact = value; OnPropertyChanged("IsDataViewCompact"); }
+        }
         // Pagination
         public int ItemsPerPage
         {
@@ -161,6 +166,7 @@ namespace MainLib.ViewModels.Main
             }
         }
         public string SelectedSort { get { return SelectedSortProperty + " " + SelectedSortDirection; } }
+        public Shared Services { get; set; }
 
         public ICommand SwitchDataViewCommand { get; set; }
         public ICommand LoadArticlesCommand { get; set; }
@@ -245,6 +251,7 @@ namespace MainLib.ViewModels.Main
 
             InitializeSearchOptions();
             this.SelectedViewType = new CompactViewTemplate();
+            IsDataViewCompact = true;
             this.ArticleDataManager = new ArticleDataManager(LoadArticlesCommand);
         }
 
@@ -255,13 +262,14 @@ namespace MainLib.ViewModels.Main
             if (view.Contains("Compact"))
             {
                 SelectedViewType = new CompactViewTemplate();
+                IsDataViewCompact = true;
             }
             else
             {
                 SelectedViewType = new FullViewTemplate();
+                IsDataViewCompact = false;
             }
         }
-        // Fetching articles
         public async void LoadArticles(object input = null)
         {
             OnPropertyChanged("FilterTitle");
