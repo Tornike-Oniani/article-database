@@ -774,7 +774,8 @@
             >
             <!-- Search menu -->
             <TabItem Header="Search">
-                <StackPanel 
+                <Grid>
+                    <StackPanel 
                     Orientation="Horizontal"
                     VerticalAlignment="Center"
                     >
@@ -827,6 +828,15 @@
                         Content="Search"
                         />
                 </StackPanel>
+                    <CheckBox
+                        Content="Word break"
+                        IsChecked="{Binding WordBreakMode}"
+                        Style="{StaticResource FlatCheckbox}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0 0 6 0"
+                        />
+                </Grid>
             </TabItem>
             <!-- View options -->
             <TabItem Header="View">

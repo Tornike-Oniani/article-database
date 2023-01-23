@@ -49,7 +49,7 @@ namespace MainLib.ViewModels.Main
         public bool WordBreakMode
         {
             get { return _wordBreakMode; }
-            set { _wordBreakMode = value; OnPropertyChanged("WordBreakMode"); }
+            set { _wordBreakMode = value; }
         }
         public string FilterYear
         {

@@ -273,6 +273,7 @@ namespace MainLib.ViewModels.Main
         public async void LoadArticles(object input = null)
         {
             OnPropertyChanged("FilterTitle");
+            OnPropertyChanged("WordBreakMode");
             try
             {
                 // This property is in SearchOptionsViewModel (partial class)
