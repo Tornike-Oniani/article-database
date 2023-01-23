@@ -499,11 +499,11 @@
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListViewItem}">
                                                 <Border
-                                                Background="{StaticResource WhiteColorBrush}"
-                                                Padding="{TemplateBinding Padding}"
-                                                CornerRadius="3 3 3 3"
-                                                Margin="0 0 0 12"
-                                                >
+                                                    Background="{StaticResource WhiteColorBrush}"
+                                                    Padding="{TemplateBinding Padding}"
+                                                    CornerRadius="3 3 3 3"
+                                                    Margin="0 0 0 12"
+                                                    >
                                                     <ContentPresenter />
                                                 </Border>
                                             </ControlTemplate>
@@ -525,6 +525,8 @@
                                                         <!-- Keywords -->
                                                         <RowDefinition Height="Auto" />
                                                         <!-- Authors -->
+                                                        <RowDefinition Height="Auto" />
+                                                        <!-- Separator -->
                                                         <RowDefinition Height="Auto" />
                                                         <!-- Abstract -->
                                                         <RowDefinition Height="*" />
@@ -602,6 +604,11 @@
                                                         Margin="0 0 0 12"
                                                         Grid.Row="3"
                                                         />
+                                                    <!-- Seprator -->
+                                                    <Separator 
+                                                        Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
+                                                        Grid.Row="4" 
+                                                        />
                                                     <!-- Abstract -->
                                                     <TextBlock
                                                         Text="{Binding AbstractBody}"
@@ -610,14 +617,14 @@
                                                         TextWrapping="Wrap"
                                                         Foreground="{StaticResource BlackColorAltBrush}"
                                                         Margin="0 0 0 12"
-                                                        Grid.Row="4"
+                                                        Grid.Row="5"
                                                         />
                                                     <!-- Open file-->
                                                     <Button 
                                                         Content="View PDF"
                                                         Command="{Binding DataContext.ArticleDataManager.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"
                                                         CommandParameter="{Binding}"
-                                                        Grid.Row="5"
+                                                        Grid.Row="6"
                                                         >
                                                         <Button.Style>
                                                             <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
@@ -872,6 +879,7 @@
                     </Grid>
                 </TabItem>
             </TabControl>
+            <!-- Reference name -->
             <TextBlock 
                 Text="{Binding Reference.Name,FallbackValue=BindingWentWrong}" 
                 FontSize="12" 

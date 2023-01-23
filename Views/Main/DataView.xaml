@@ -536,6 +536,8 @@
                                                         <RowDefinition Height="Auto" />
                                                         <!-- Authors -->
                                                         <RowDefinition Height="Auto" />
+                                                        <!-- Seprator -->
+                                                        <RowDefinition Height="Auto" />
                                                         <!-- Abstract -->
                                                         <RowDefinition Height="*" />
                                                         <!-- Open file -->
@@ -624,6 +626,11 @@
                                                         Margin="0 0 0 12"
                                                         Grid.Row="3"
                                                         />
+                                                    <!-- Seprator -->
+                                                    <Separator 
+                                                        Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
+                                                        Grid.Row="4" 
+                                                        />
                                                     <!-- Abstract -->
                                                     <TextBlock
                                                         Text="{Binding AbstractBody}"
@@ -632,14 +639,14 @@
                                                         TextWrapping="Wrap"
                                                         Foreground="{StaticResource BlackColorAltBrush}"
                                                         Margin="0 0 0 12"
-                                                        Grid.Row="4"
+                                                        Grid.Row="5"
                                                         />
                                                     <!-- Open file-->
                                                     <Button 
                                                         Content="View PDF"
                                                         Command="{Binding DataContext.ArticleDataManager.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         CommandParameter="{Binding}"
-                                                        Grid.Row="5"
+                                                        Grid.Row="6"
                                                         >
                                                         <Button.Style>
                                                             <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
