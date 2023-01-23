@@ -7,18 +7,20 @@ namespace MainLib.ViewModels.Main
 {
     public partial class DataViewViewModel
     {
+        // Public proeprty fields
         private string _simpleSearch;
         private bool _searchOptionsIsChecked;
         private string _filterTitle;
+        private bool _wordBreakMode;
         private string _filterAuthors;
         private string _filterKeywords;
         private string _filterYear;
         private string _filterPersonalComment;
-        private bool _wordBreakMode;
         private string _selectedAuthorPairing;
         private string _selectedKeywordPairing;
         private string _idFilter;
 
+        // Public properties
         public string SimpleSearch
         {
             get { return _simpleSearch; }
@@ -43,6 +45,11 @@ namespace MainLib.ViewModels.Main
                 _filterTitle = value;
                 OnPropertyChanged("FilterTitle");
             }
+        }
+        public bool WordBreakMode
+        {
+            get { return _wordBreakMode; }
+            set { _wordBreakMode = value; OnPropertyChanged("WordBreakMode"); }
         }
         public string FilterYear
         {
@@ -81,7 +88,7 @@ namespace MainLib.ViewModels.Main
             get { return _idFilter; }
             set { _idFilter = value; OnPropertyChanged("IdFilter"); }
         }
-
+        
         // Temporary authors and keywords highlighter
         public string AuthorHighlight
         {
@@ -100,15 +107,12 @@ namespace MainLib.ViewModels.Main
                 if (String.IsNullOrEmpty(FilterKeywords)) { return ""; }
                 return FilterKeywords.Replace(",", "");
             }
-        }
-        public bool WordBreakMode
-        {
-            get { return _wordBreakMode; }
-            set { _wordBreakMode = value; OnPropertyChanged("WordBreakMode"); }
-        }
+        }      
 
+        // Commands
         public RelayCommand ClearCommand { get; set; }
 
+        // Command actions
         public void Clear(object input = null)
         {
             FilterTitle = null;
@@ -120,6 +124,7 @@ namespace MainLib.ViewModels.Main
             Articles.Clear();
             OnPropertyChanged("FilterTitle");
         }
+        // Command action validators
         public bool CanClear(object input = null)
         {
             if (
@@ -135,6 +140,7 @@ namespace MainLib.ViewModels.Main
             return true;
         }
 
+        // Private helpers
         private void InitializeSearchOptions()
         {
             // 1. Initialize collections and fields
