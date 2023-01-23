@@ -1,4 +1,5 @@
-﻿using Lib.DataAccessLayer.Models;
+﻿using Lib.DataAccessLayer.Info;
+using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
@@ -39,6 +40,8 @@ namespace MainLib.ViewModels.Utils
         public ICommand OpenFileCommand { get; set; }
         public ICommand DeleteArticleCommand { get; set; }
         public ICommand CopyTitleCommand { get; set; }
+        public ICommand RemoveArticleFromBookmarkCommand { get; set; }
+        public ICommand RemoveArticleFromReferenceCommand { get; set; }
         // Dialog commands
         public ICommand OpenAddPersonalEditorCommand { get; set; }
         public ICommand OpenEditorCommand { get; set; }
@@ -55,7 +58,9 @@ namespace MainLib.ViewModels.Utils
 
             this.OpenFileCommand = new RelayCommand(OpenFile);
             this.DeleteArticleCommand = new RelayCommand(DeleteArticle, IsArticleSelected);
-            this.CopyTitleCommand = new RelayCommand(CopyTitle);
+            this.RemoveArticleFromBookmarkCommand = new RelayCommand(RemoveArticleFromBookmark, IsArticleSelected);
+            this.RemoveArticleFromReferenceCommand = new RelayCommand(RemoveArticleFromReference, IsArticleSelected);
+            this.CopyTitleCommand = new RelayCommand(CopyTitle, IsArticleSelected);
             this.OpenAddPersonalEditorCommand = new RelayCommand(OpenAddPersonalEditor, IsArticleSelected);
             this.OpenEditorCommand = new RelayCommand(OpenEditorDialog, IsArticleSelected);
             this.OpenAbstractEditorCommand = new RelayCommand(OpenAbstractEditor, IsArticleSelected);
@@ -132,6 +137,32 @@ namespace MainLib.ViewModels.Utils
         public void CopyTitle(object input = null)
         {
             Clipboard.SetText(SelectedArticle.Title);
+        }
+        public void RemoveArticleFromBookmark(object input)
+        {
+            try
+            {
+                Bookmark bookmark = input as Bookmark;
+
+                // 1. Remove article from bookmark in database
+                new BookmarkRepo().RemoveArticleFromBookmark(bookmark, SelectedArticle);
+
+                // 1.1 Track removing article from bookmark
+                Couple info = new Couple("Bookmark", "Remove", SelectedArticle.Title, bookmark.Name);
+                new Tracker(_user).TrackCoupling<Couple>(info);
+
+                // 2. Refresh articles collection
+                LoadArticlesCommand.Execute(null);
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Bookmark View", "Remove article", e.Message, e.StackTrace);
+                _services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+        }
+        public void RemoveArticleFromReference(object input = null)
+        {
+
         }
         // Dialog command actions
         public void OpenAddPersonalEditor(object input)
