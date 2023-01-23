@@ -77,7 +77,7 @@
         <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True" />
         <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Standard" />
         <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel" />
-        <Setter Property="RowStyle" Value="{DynamicResource ArticleRowStyle} " />
+        <Setter Property="RowStyle" Value="{DynamicResource ArticleRowStyle}" />
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding Services.SelectedTheme}" Value="Dim Monitor">

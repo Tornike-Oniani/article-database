@@ -121,7 +121,7 @@ namespace MainLib.ViewModels.Main
                     else
                     {
                         //services.DialogService.OpenDialog(new DialogOkViewModel("No missing files were found!", "Result", DialogType.Success));
-                        services.ShowNotification("No missing files were found!", "Database validation", NotificationType.Success, "HomeNotificationArea", TimeSpan.MaxValue);
+                        services.ShowNotification("No missing files were found!", "Database validation", NotificationType.Success, "HomeNotificationArea", new TimeSpan(0, 0, 3));
                     }
                 }
                 else
@@ -265,7 +265,7 @@ namespace MainLib.ViewModels.Main
                 if (reader.NoErrors)
                 {
                     //services.DialogService.OpenDialog(new DialogOkViewModel("Synchronisation successful", "Synchronisation", DialogType.Success));
-                    services.ShowNotification("Synchronisation successful", "Synchronisation", NotificationType.Success, "HomeNotificationArea", TimeSpan.MaxValue);
+                    services.ShowNotification("Synchronisation successful", "Synchronisation", NotificationType.Success, "HomeNotificationArea", new TimeSpan(0, 0, 3));
                 }
                 else
                 {
@@ -394,7 +394,7 @@ namespace MainLib.ViewModels.Main
                 services.IsWorking(false);
 
                 //services.DialogService.OpenDialog(new DialogOkViewModel("Sync information exported successfully.", "Sync export", DialogType.Success));
-                services.ShowNotification("Sync information exported successfully.", "Export Sync", NotificationType.Success, "HomeNotificationArea", new TimeSpan(0, 0, 10));
+                services.ShowNotification("Sync information exported successfully.", "Export Sync", NotificationType.Success, "HomeNotificationArea", new TimeSpan(0, 0, 3));
             }
             catch (Exception e)
             {
