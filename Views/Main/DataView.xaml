@@ -109,6 +109,7 @@
                     ItemsSource="{Binding Articles}"
                     SelectedItem="{Binding ArticleDataManager.SelectedArticle}"
                     Style="{StaticResource ArticleGrid}"
+                    ColumnHeaderStyle="{StaticResource DefaultColumnHeader}"
                     FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
                     CanUserSortColumns="{Binding CanSortColumns}"
                     Grid.Row="1"
