@@ -160,9 +160,27 @@ namespace MainLib.ViewModels.Utils
                 _services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
-        public void RemoveArticleFromReference(object input = null)
+        public void RemoveArticleFromReference(object input)
         {
+            try
+            {
+                Reference reference = input as Reference;
 
+                // 1. Remove article from bookmark in database
+                new ReferenceRepo().RemoveArticleFromReference(reference, SelectedArticle);
+
+                // 1.1 Track removing article from reference
+                Couple info = new Couple("Reference", "Remove", SelectedArticle.Title, reference.Name);
+                new Tracker(_user).TrackCoupling<Couple>(info);
+
+                // 2. Refresh articles collection
+                LoadArticlesCommand.Execute(null);
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Reference List", "Remove article", e.Message, e.StackTrace);
+                _services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
         }
         // Dialog command actions
         public void OpenAddPersonalEditor(object input)

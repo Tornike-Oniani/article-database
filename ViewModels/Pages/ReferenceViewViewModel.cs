@@ -4,6 +4,7 @@ using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Main;
 using MainLib.ViewModels.Popups;
 using MainLib.ViewModels.Utils;
 using NotificationService;
@@ -24,23 +25,29 @@ namespace MainLib.ViewModels.Pages
 {
     public class ReferenceViewViewModel : BaseViewModel
     {
+        // Property fields
+        private ViewTemplate _selectedDataViewType;
+        private bool _isViewCompact;
         private User _user;
         private List<string> _columns;
-        private bool _isViewCompact;
         private string _selectedSortProperty;
         private string _selectedSortDirection;
         private bool _isExportEnabled;
-        private Shared services;
 
-        /**
-         * Public properties:
-         *  - Bookmark
-         *  - Selected article
-         *  [Selected article in data grid]
-         */
+        // Public properties
+        public ViewTemplate SelectedViewType
+        {
+            get { return _selectedDataViewType; }
+            set { _selectedDataViewType = value; OnPropertyChanged("SelectedViewType"); }
+        }
+        public bool IsViewCompact
+        {
+            get { return _isViewCompact; }
+            set { _isViewCompact = value; OnPropertyChanged("IsViewCompact"); }
+        }
         public Reference Reference { get; set; }
-        public Article SelectedArticle { get; set; }
         public ObservableCollection<Article> Articles { get; set; }
+        public ArticleDataManager ArticleDataManager { get; set; }
         public User User
         {
             get { return _user; }
@@ -81,50 +88,29 @@ namespace MainLib.ViewModels.Pages
             set { _isExportEnabled = value; OnPropertyChanged("IsExportEnabled"); }
         }
         public string SelectedSort { get { return SelectedSortProperty + " " + SelectedSortDirection; } }
-        public bool IsViewCompact
-        {
-            get { return _isViewCompact; }
-            set { _isViewCompact = value; OnPropertyChanged("IsViewCompact"); }
-        }
         public Shared Services { get; set; }
 
         public CollectionViewSource _articlesCollection { get; set; }
         public ICollectionView ArticlesCollection { get { return _articlesCollection.View; } }
 
-        /**
-         * Commands:
-         *  - Open file
-         *  [Opens selected file in .pdf browser]
-         *  - Export bookmark
-         *  [Exports all files in bookmark into selected folder]
-         *  - Remove article
-         *  [Removes article from bookmark]
-         *  - Copy
-         *  [Copy's article name to clipboar]
-         */
-        public RelayCommand OpenFileCommand { get; set; }
-        public RelayCommand RemoveArticleCommand { get; set; }
-        public RelayCommand CopyCommand { get; set; }
-        public RelayCommand OpenMainArticleCommand { get; set; }
-        public RelayCommand ExportCommand { get; set; }
-        public RelayCommand ExportReferenceCommand { get; set; }
-        public RelayCommand EnableExportCommand { get; set; }
-        public ICommand UpdateExportStatusCommand { get; set; }
-        public RelayCommand OpenAddPersonalCommand { get; set; }
-        public RelayCommand OpenEditCommand { get; set; }
-        public ICommand OpenAbstractEditorCommand { get; set; }
+        // Commands
         public ICommand SwitchDataViewCommand { get; set; }
+        public ICommand LoadArticlesCommand { get; set; }
+        public ICommand OpenMainArticleCommand { get; set; }
+        public ICommand ExportCommand { get; set; }
+        public ICommand ExportReferenceCommand { get; set; }
+        public ICommand EnableExportCommand { get; set; }
+        public ICommand UpdateExportStatusCommand { get; set; }
         public ICommand SortFromRibbonCommand { get; set; }
         public ICommand SortFromDataGridCommand { get; set; }
 
         // Constructor
         public ReferenceViewViewModel(Reference reference)
         {
-            this.services = Shared.GetInstance();
             this.Services = Shared.GetInstance();
             this.Columns = new List<string>();
             this.Reference = reference;
-            this.User = services.User;
+            this.User = Services.User;
             this.Articles = new ObservableCollection<Article>();
             this.IsViewCompact = true;
             this.IsExportEnabled = false;
@@ -167,30 +153,44 @@ namespace MainLib.ViewModels.Pages
             SelectedSortDirection = SortDirections[0];
 
             // Initialize commands
-            OpenFileCommand = new RelayCommand(OpenFile);
-            RemoveArticleCommand = new RelayCommand(RemoveArticle, CanOnSelectedArticle);
-            CopyCommand = new RelayCommand(Copy, CanOnSelectedArticle);
-            OpenMainArticleCommand = new RelayCommand(OpenMainArticle);
-            ExportCommand = new RelayCommand(Export, CanExport);
-            ExportReferenceCommand = new RelayCommand(ExportReference, CanExportReference);
-            EnableExportCommand = new RelayCommand(EnableExport);
-            UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
-            OpenAddPersonalCommand = new RelayCommand(OpenAddPersonal, IsArticleSelected);
-            OpenEditCommand = new RelayCommand(OpenEditDialog, IsArticleSelected);
-            OpenAbstractEditorCommand = new RelayCommand(OpenAbstractEditor);
-            SwitchDataViewCommand = new RelayCommand(SwitchDataView);
-            SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
-            SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
+            this.SwitchDataViewCommand = new RelayCommand(SwitchDataView);
+            this.LoadArticlesCommand = new RelayCommand(LoadArticles);
+            this.OpenMainArticleCommand = new RelayCommand(OpenMainArticle);
+            this.ExportCommand = new RelayCommand(Export, CanExport);
+            this.ExportReferenceCommand = new RelayCommand(ExportReference, CanExportReference);
+            this.EnableExportCommand = new RelayCommand(EnableExport);
+            this.UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
+            this.SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
+            this.SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
+
+            this.ArticleDataManager = new ArticleDataManager(LoadArticlesCommand);
+            this.SelectedViewType = new CompactViewTemplate();
         }
 
-        /**
-         * Command actions
-         */
+        // Command actions
+        public void SwitchDataView(object input)
+        {
+            string view = input as string;
+            if (view.Contains("Compact"))
+            {
+                SelectedViewType = new CompactViewTemplate();
+                IsViewCompact = true;
+            }
+            else
+            {
+                SelectedViewType = new FullViewTemplate();
+                IsViewCompact = false;
+            }
+        }
+        public async void LoadArticles(object input = null)
+        {
+            await PopulateReferenceArticles();
+        }
         public async Task PopulateReferenceArticles()
         {
             try
             {
-                services.IsWorking(true);
+                Services.IsWorking(true);
 
                 Articles.Clear();
 
@@ -205,66 +205,17 @@ namespace MainLib.ViewModels.Pages
                 foreach (Article article in articles)
                     Articles.Add(article);
 
-                services.IsWorking(false);
+                Services.IsWorking(false);
             }
             catch (Exception e)
             {
                 new BugTracker().Track("Reference View", "Populate references", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                Services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                services.IsWorking(false);
+                Services.IsWorking(false);
             }
-        }
-        public void OpenFile(object input = null)
-        {
-            // 1. If no item was selected return
-            if (SelectedArticle == null)
-                return;
-
-            // 2. Get full path of the file
-            string full_path = Environment.CurrentDirectory + "\\Files\\" + SelectedArticle.FileName + ".pdf";
-
-            // 3. Open file with default program
-            try
-            {
-                Process.Start(full_path);
-            }
-
-            // 4. Catch if file doesn't exist physically
-            catch
-            {
-                services.DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
-            }
-        }
-        public async void RemoveArticle(object input = null)
-        {
-            try
-            {
-                // 1. Remove article from bookmark in database
-                new ReferenceRepo().RemoveArticleFromReference(Reference, SelectedArticle);
-
-                // 1.1 Track removing article from reference
-                Couple info = new Couple("Reference", "Remove", SelectedArticle.Title, Reference.Name);
-                new Tracker(User).TrackCoupling<Couple>(info);
-
-                // 2. Refresh articles collection
-                await PopulateReferenceArticles();
-            }
-            catch (Exception e)
-            {
-                new BugTracker().Track("Reference List", "Remove article", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
-            }
-        }
-        public void Copy(object input = null)
-        {
-            Clipboard.SetText(SelectedArticle.Title);
-        }
-        public bool CanOnSelectedArticle(object input = null)
-        {
-            return SelectedArticle != null;
         }
         public void OpenMainArticle(object input = null)
         {
@@ -284,7 +235,7 @@ namespace MainLib.ViewModels.Pages
             // 4. Catch if file doesn't exist physically
             catch
             {
-                services.DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
+                Services.DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
         public void EnableExport(object input)
@@ -300,14 +251,14 @@ namespace MainLib.ViewModels.Pages
                 // Destination will be the path chosen from dialog box (Where files should be exported)
                 string destination = null;
 
-                destination = services.BrowserService.OpenFolderDialog(services.LastExportFolderPath);
+                destination = Services.BrowserService.OpenFolderDialog(Services.LastExportFolderPath);
 
                 // If path was chosen from the dialog box
                 if (destination != null)
                 {
-                    services.SaveExportPath(destination);
+                    Services.SaveExportPath(destination);
 
-                    services.IsWorking(true);
+                    Services.IsWorking(true);
 
                     await Task.Run(() =>
                     {
@@ -346,32 +297,24 @@ namespace MainLib.ViewModels.Pages
                         exportedArticlesCount++;
                     }
 
-                    services.IsWorking(false);
+                    Services.IsWorking(false);
 
                     UpdateExportStatus();
 
                     //services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Message", DialogType.Success));
-                    services.ShowNotification("Export", $"Exported {exportedArticlesCount} files successfully.", NotificationType.Success, "ReferenceNotificationArea", new TimeSpan(0, 0, 3));
+                    Services.ShowNotification("Export", $"Exported {exportedArticlesCount} files successfully.", NotificationType.Success, "ReferenceNotificationArea", new TimeSpan(0, 0, 3));
                 }
             }
             catch (Exception e)
             {
-                new BugTracker().Track("Bookmark View", "Export", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                new BugTracker().Track("Reference View", "Export", e.Message, e.StackTrace);
+                Services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                services.IsWorking(false);
+                Services.IsWorking(false);
             }
-        }
-        public bool CanExport(object input = null)
-        {
-            List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
-            if (checked_articles.Count > 0)
-                return true;
-
-            return false;
-        }
+        }    
         public async void ExportReference(object input = null)
         {
             try
@@ -379,14 +322,14 @@ namespace MainLib.ViewModels.Pages
                 // Destination will be the path chosen from dialog box (Where files should be exported)
                 string destination = null;
 
-                destination = services.BrowserService.OpenFolderDialog(services.LastExportFolderPath);
+                destination = Services.BrowserService.OpenFolderDialog(Services.LastExportFolderPath);
 
                 // If path was chosen from the dialog box
                 if (destination != null)
                 {
-                    services.SaveExportPath(destination);
+                    Services.SaveExportPath(destination);
 
-                    services.IsWorking(true);
+                    Services.IsWorking(true);
 
                     await Task.Run(() =>
                     {
@@ -414,53 +357,25 @@ namespace MainLib.ViewModels.Pages
                         }
                     });
 
-                    services.IsWorking(false);
+                    Services.IsWorking(false);
 
-                    services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
+                    Services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
                 }
             }
             catch (Exception e)
             {
                 new BugTracker().Track("Bookmark View", "Export Bookmark", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                Services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
-                services.IsWorking(false);
+                Services.IsWorking(false);
             }
 
-        }
-        public bool CanExportReference(object input = null)
-        {
-            return Articles.Count > 0;
         }
         public void UpdateExportStatus(object input = null)
         {
             OnPropertyChanged("CanExportP");
-        }
-        public void OpenEditDialog(object input = null)
-        {
-            services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.ArticleEditorViewModel(SelectedArticle));
-        }
-        public void OpenAbstractEditor(object input)
-        {
-            services.WindowService.OpenWindow(new AbstractEditorViewModel(SelectedArticle), passWindow: true);
-        }
-        public void OpenAddPersonal(object input)
-        {
-            services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle));
-        }
-        public bool IsArticleSelected(object input = null)
-        {
-            if (SelectedArticle != null)
-                return true;
-
-            return false;
-        }
-        public void SwitchDataView(object input)
-        {
-            string view = input as string;
-            IsViewCompact = view.Contains("Compact");
         }
         public void SortFromRibbon(object input = null)
         {
@@ -502,6 +417,19 @@ namespace MainLib.ViewModels.Pages
             SelectedSortProperty = header;
             OnPropertyChanged("SelectedSort");
             SortFromRibbonCommand.Execute(null);
+        }
+        // Command validators
+        public bool CanExport(object input = null)
+        {
+            List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
+            if (checked_articles.Count > 0)
+                return true;
+
+            return false;
+        }
+        public bool CanExportReference(object input = null)
+        {
+            return Articles.Count > 0;
         }
     }
 }

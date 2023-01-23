@@ -475,13 +475,12 @@
                 ItemsSource="{Binding ArticlesCollection}"
                 SelectedItem="{Binding ArticleDataManager.SelectedArticle}"
                 VirtualizingPanel.IsVirtualizing="True"
-                    VirtualizingPanel.VirtualizationMode="Standard"
-                Grid.Row="2"
+                VirtualizingPanel.VirtualizationMode="Standard"
                 >
                 <ListView.Style>
                     <Style TargetType="{x:Type ListView}">
                         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-                        <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+                        <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListView}">
