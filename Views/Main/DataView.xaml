@@ -239,7 +239,7 @@
                                         <!-- Show/Hide abstract button -->
                                         <ToggleButton
                                             IsChecked="{Binding AbstractShown, UpdateSourceTrigger=PropertyChanged}"
-                                            Visibility="{Binding AbstractBody, Converter={StaticResource EmptyStringToVisibility}}"                                    
+                                            Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"                                    
                                             Style="{x:Null}"
                                             Foreground="{StaticResource PrimaryColorBrush}"
                                             Cursor="Hand"

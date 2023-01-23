@@ -26,6 +26,48 @@
         <converters:AbstractToVisibilityConverter x:Key="AbstractToVisibility" />
         <converters:SortConverter x:Key="SortConverter" />
         
+        <!-- Animation -->
+        <Storyboard x:Key="ShowAbstract">
+            <!-- Show Abstract -->
+            <DoubleAnimation              
+                Storyboard.TargetName="AbstractWrapper"
+                Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                From="0"
+                To="1"
+                Duration="0:0:0.15"
+                />
+        </Storyboard>
+        <!-- Hide abstract -->
+        <Storyboard x:Key="HideAbstract">
+            <DoubleAnimation
+                Storyboard.TargetName="AbstractWrapper"
+                Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                From="1"
+                To="0"
+                Duration="0:0:0.15"
+                />
+        </Storyboard>
+        <!-- Rotate arrow -->
+        <Storyboard x:Key="RotateArrow">
+            <DoubleAnimation 
+                Storyboard.TargetName="AbstractShowArrow"
+                Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
+                From="0"
+                To="180"
+                Duration="0:0:0.15"
+                />
+        </Storyboard>
+        <!-- Reset arrow rotation -->
+        <Storyboard x:Key="ResetArrowRotation">
+            <DoubleAnimation 
+                Storyboard.TargetName="AbstractShowArrow"
+                Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
+                From="180"
+                To="0"
+                Duration="0:0:0.15"
+                />
+        </Storyboard>
+
         <!-- Compact view -->
         <DataTemplate DataType="{x:Type utils:CompactViewTemplate}">
             <Grid DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}">
@@ -150,48 +192,6 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <!-- Animations -->
-                                <DataTemplate.Resources>
-                                    <Storyboard x:Key="ShowAbstract">
-                                        <!-- Show Abstract -->
-                                        <DoubleAnimation              
-                                        Storyboard.TargetName="AbstractWrapper"
-                                        Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
-                                        From="0"
-                                        To="1"
-                                        Duration="0:0:0.15"
-                                        />
-                                    </Storyboard>
-                                    <!-- Hide abstract -->
-                                    <Storyboard x:Key="HideAbstract">
-                                        <DoubleAnimation
-                                        Storyboard.TargetName="AbstractWrapper"
-                                        Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
-                                        From="1"
-                                        To="0"
-                                        Duration="0:0:0.15"
-                                        />
-                                    </Storyboard>
-                                    <!-- Rotate arrow -->
-                                    <Storyboard x:Key="RotateArrow">
-                                        <DoubleAnimation 
-                                            Storyboard.TargetName="AbstractShowArrow"
-                                            Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
-                                            From="0"
-                                            To="180"
-                                            Duration="0:0:0.15"
-                                            />
-                                    </Storyboard>
-                                    <!-- Reset arrow rotation -->
-                                    <Storyboard x:Key="ResetArrowRotation">
-                                        <DoubleAnimation 
-                                            Storyboard.TargetName="AbstractShowArrow"
-                                            Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)"
-                                            From="180"
-                                            To="0"
-                                            Duration="0:0:0.15"
-                                            />
-                                    </Storyboard>
-                                </DataTemplate.Resources>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -229,16 +229,16 @@
                                     </Border>
                                     <!-- Show/Hide abstract button -->
                                     <ToggleButton
-                                    IsChecked="{Binding AbstractShown, UpdateSourceTrigger=PropertyChanged}"
-                                    Visibility="{Binding AbstractBody, Converter={StaticResource EmptyStringToVisibility}}"                                    
-                                    Style="{x:Null}"
-                                    Foreground="{StaticResource PrimaryColorBrush}"
-                                    Cursor="Hand"
-                                    VerticalAlignment="Top"
-                                    Margin="6 0 0 0"
-                                    Grid.Column="1"
-                                    Grid.Row="0"
-                                    >
+                                        IsChecked="{Binding AbstractShown, UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"                                    
+                                        Style="{x:Null}"
+                                        Foreground="{StaticResource PrimaryColorBrush}"
+                                        Cursor="Hand"
+                                        VerticalAlignment="Top"
+                                        Margin="6 0 0 0"
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        >
                                         <ToggleButton.Template>
                                             <ControlTemplate TargetType="{x:Type ToggleButton}">
                                                 <Border
