@@ -84,8 +84,7 @@
             Visibility="{
                 Binding IsChecked, 
                 ElementName=StartExport, 
-                Converter={StaticResource BoolToVisibility}, 
-                ConverterParameter=Soft}"
+                Converter={StaticResource BoolToVisibility}}"
             >
             <Grid.ColumnDefinitions>
                 <!-- Lable/Action column -->

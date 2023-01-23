@@ -29,13 +29,7 @@ namespace MainLib.ViewModels.Pages
             set { _user = value; OnPropertyChanged("User"); }
         }
 
-
-        /**
-         * Commands:
-         *  - Open bookmark
-         *  [The action of this command is in code behind of BookmarkList view because we use NavigationService which is not accessible from view model]
-         *  - Delete bookmark
-         */
+        // Commands
         public RelayCommand OpenReferenceCommand { get; set; }
         public ICommand CreateNewReferenceCommand { get; set; }
         public RelayCommand EditReferenceCommand { get; set; }
@@ -57,9 +51,7 @@ namespace MainLib.ViewModels.Pages
             DeleteReferenceCommand = new RelayCommand(DeleteReference);
         }
 
-        /**
-         * Command actions
-         */
+        // Command actions
         public void CreateNewReference(object input = null)
         {
             services.WindowService.OpenWindow(new AddNewReferenceViewModel(this));
@@ -95,9 +87,7 @@ namespace MainLib.ViewModels.Pages
             }
         }
 
-        /**
-         * Public methods
-         */
+        // Public methods
         public async void PopulateReferences(bool global = false)
         {
             try
@@ -122,7 +112,6 @@ namespace MainLib.ViewModels.Pages
                 services.IsWorking(false);
             }
         }
-
         public async Task Populate()
         {
             List<Reference> references = new List<Reference>();

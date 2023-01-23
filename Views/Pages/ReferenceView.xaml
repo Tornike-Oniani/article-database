@@ -819,22 +819,57 @@
                 </TabItem>
                 <!-- Export -->
                 <TabItem Header="Export">
-                    <usercontrols:PendingButton
-                        StartText="Export article PDFs"
-                        PendingText="Check articles you want to export..."
-                        ActionText="Export selected"
-                        IsPending="{
-                            Binding Columns,
-                            Converter={StaticResource CheckToList},
-                            ConverterParameter='Export'}"
-                        CanRunAction="{Binding CanExportP}"
-                        InitialCommand="{Binding EnableExportCommand}"
-                        ActionCommand="{Binding ExportCommand}"
-                        CancelCommand="{Binding EnableExportCommand}"
-                        HorizontalAlignment="left"
+                    <StackPanel 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        Grid.Column="2"
-                        />
+                        >
+                        <usercontrols:PendingButton
+                            StartText="Export article PDFs"
+                            PendingText="Check articles you want to export..."
+                            ActionText="Export selected"
+                            IsPending="{
+                                Binding Columns,
+                                Converter={StaticResource CheckToList},
+                                ConverterParameter='Export'}"
+                            CanRunAction="{Binding CanExportP}"
+                            InitialCommand="{Binding EnableExportCommand}"
+                            ActionCommand="{Binding ExportCommand}"
+                            CancelCommand="{Binding EnableExportCommand}"
+                            Margin="0 0 12 0"
+                            />
+                        <Button
+                            Content="Export whole reference PDFs"
+                            Command="{Binding ExportReferenceCommand}"
+                            Style="{StaticResource GenericButton}"
+                            />
+                    </StackPanel>
+                </TabItem>
+                <!-- References -->
+                <TabItem Header="Reference">
+                    <Grid>
+                        <Button
+                            Content="{Binding Reference.Article.Title}"
+                            Command="{Binding OpenMainArticleCommand}"
+                            Style="{x:Null}"
+                            FontSize="14"
+                            Cursor="Hand"
+                            Margin="6 0 0 0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            >
+                            <Button.Template>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border
+                                        BorderThickness="0 0 0 1"
+                                        BorderBrush="{StaticResource PrimaryColorBrush}"
+                                        >
+                                        <TextBlock Text="{TemplateBinding Content}" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
                 </TabItem>
             </TabControl>
             <TextBlock 

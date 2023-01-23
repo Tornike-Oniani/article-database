@@ -828,22 +828,34 @@
                 </TabItem>
                 <!-- Export -->
                 <TabItem Header="Export">
-                    <usercontrols:PendingButton
-                        StartText="Export article PDFs"
-                        PendingText="Check articles you want to export..."
-                        ActionText="Export selected"
-                        IsPending="{
-                            Binding Columns,
-                            Converter={StaticResource CheckToList},
-                            ConverterParameter='Export'}"
-                        CanRunAction="{Binding CanExportP}"
-                        InitialCommand="{Binding EnableExportCommand}"
-                        ActionCommand="{Binding ExportCommand}"
-                        CancelCommand="{Binding EnableExportCommand}"
+                    <StackPanel 
+                        Orientation="Horizontal"
                         HorizontalAlignment="left"
                         VerticalAlignment="Center"
-                        Grid.Column="2"
-                        />
+                        >
+                        <!-- Selective export -->
+                        <usercontrols:PendingButton
+                            StartText="Export article PDFs"
+                            PendingText="Check articles you want to export..."
+                            ActionText="Export selected"
+                            IsPending="{
+                                Binding Columns,
+                                Converter={StaticResource CheckToList},
+                                ConverterParameter='Export'}"
+                            CanRunAction="{Binding CanExportP}"
+                            InitialCommand="{Binding EnableExportCommand}"
+                            ActionCommand="{Binding ExportCommand}"
+                            CancelCommand="{Binding EnableExportCommand}"                        
+                            Margin="0 0 12 0"
+                            />
+                        <!-- Whole bookmark export -->
+                        <Button 
+                            Content="Export whole bookmark PDFs"
+                            Command="{Binding ExportBookmarkCommand}"
+                            Style="{StaticResource GenericButton}"
+                            />
+
+                    </StackPanel>
                 </TabItem>
             </TabControl>
             <TextBlock 
