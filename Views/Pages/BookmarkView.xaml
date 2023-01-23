@@ -36,7 +36,7 @@
         <Grid.RowDefinitions>
             <!-- Proxy element row -->
             <RowDefinition Height="Auto" />
-            <!-- Header row -->
+            <!-- Ribbon row -->
             <RowDefinition Height="Auto" />
             <!-- Data grid row -->
             <RowDefinition Height="*" />
@@ -51,13 +51,13 @@
             Style="{StaticResource Ribbon}"
             MinHeight="105"
             >
-            <!-- View options -->
-            <TabItem Header="View">
-                <StackPanel 
+                <!-- View options -->
+                <TabItem Header="View">
+                    <StackPanel 
                     Orientation="Horizontal"
                     VerticalAlignment="Center"
                     >
-                    <RadioButton
+                        <RadioButton
                         Content="Compact&#x0a;View"                        
                         Tag="{x:Static materialDesign:PackIconKind.Text}"
                         GroupName="ViewType"
@@ -68,7 +68,7 @@
                         Width="54"
                         Margin="0 0 6 0"
                         />
-                    <RadioButton
+                        <RadioButton
                         Content="Full&#x0a;View"
                         Tag="{x:Static materialDesign:PackIconKind.TextBox}"
                         GroupName="ViewType"
@@ -78,16 +78,16 @@
                         Width="54"
                         Margin="0 0 12 0"
                         />
-                    <Rectangle
+                        <Rectangle
                         Width="3"
                         Fill="{DynamicResource GrayColorBrush}"
                         Margin="0 0 12 0"                        
                         />
-                    <StackPanel 
+                        <StackPanel 
                         Orientation="Horizontal"
                         Visibility="{Binding IsViewCompact, Converter={StaticResource BoolToVisibility}}"
                         >
-                        <CheckBox 
+                            <CheckBox 
                             Content="Authors"
                             IsChecked="{
                                 Binding Columns, 
@@ -96,7 +96,7 @@
                             Style="{StaticResource FlatCheckbox}"
                             Margin="0 0 8 0" 
                             />
-                        <CheckBox 
+                            <CheckBox 
                             Content="Keywords"
                             Style="{StaticResource FlatCheckbox}"
                             Margin="0 0 8 0" 
@@ -105,7 +105,7 @@
                                 Converter={StaticResource CheckToList}, 
                                 ConverterParameter='Keywords'}" 
                             />
-                        <CheckBox 
+                            <CheckBox 
                             Content="Year" 
                             Style="{StaticResource FlatCheckbox}" 
                             Margin="0 0 8 0" 
@@ -114,7 +114,7 @@
                                 Converter={StaticResource CheckToList}, 
                                 ConverterParameter='Year'}" 
                             />
-                        <CheckBox 
+                            <CheckBox 
                             Content="Comment" 
                             Style="{StaticResource FlatCheckbox}"
                             Margin="0 0 8 0" 
@@ -123,7 +123,7 @@
                                 Converter={StaticResource CheckToList}, 
                                 ConverterParameter='PersonalComment'}" 
                             />
-                        <CheckBox 
+                            <CheckBox 
                             Content="SIC" 
                             Style="{StaticResource FlatCheckbox}"
                             IsChecked="{
@@ -131,46 +131,46 @@
                                 Converter={StaticResource CheckToList}, 
                                 ConverterParameter='SIC'}" 
                             />
-                    </StackPanel>
-                    <StackPanel 
+                        </StackPanel>
+                        <StackPanel 
                         Orientation="Horizontal"
                         Visibility="{
                             Binding IsViewCompact, 
                             Converter={StaticResource BoolToVisibilityInverse}}"
                         >
-                        <TextBlock 
+                            <TextBlock 
                             Text="Sort by:"
                             FontSize="12"
                             Foreground="{StaticResource LabelColorBrush}" 
                             VerticalAlignment="Center"
                             Margin="0 0 6 0"
                             />
-                        <ComboBox 
+                            <ComboBox 
                             ItemsSource="{Binding SortableProperties}" 
                             SelectedItem="{Binding SelectedSortProperty}"
                             MinWidth="70"
                             Margin="0 0 6 0"
                             />
-                        <ComboBox 
+                            <ComboBox 
                             ItemsSource="{Binding SortDirections}" 
                             SelectedItem="{Binding SelectedSortDirection}"
                             MinWidth="45"
                             Margin="0 0 6 0"
                             />
-                        <Button 
+                            <Button 
                             Style="{StaticResource MaterialDesignIconButton}"
                             Command="{Binding SortFromRibbonCommand}"
                             >
-                            <Button.Content>
-                                <materialDesign:PackIcon Kind="Refresh" />
-                            </Button.Content>
-                        </Button>
+                                <Button.Content>
+                                    <materialDesign:PackIcon Kind="Refresh" />
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </TabItem>
-            <!-- Export -->
-            <TabItem Header="Export">
-                <usercontrols:PendingButton
+                </TabItem>
+                <!-- Export -->
+                <TabItem Header="Export">
+                    <usercontrols:PendingButton
                     StartText="Export article PDFs"
                     PendingText="Check articles you want to export..."
                     ActionText="Export selected"
@@ -186,8 +186,8 @@
                     VerticalAlignment="Center"
                     Grid.Column="2"
                     />
-            </TabItem>
-        </TabControl>
+                </TabItem>
+            </TabControl>
             <TextBlock 
                 Text="{Binding Bookmark.Name,FallbackValue=BindingWentWrong}" 
                 FontSize="12" 
@@ -197,27 +197,6 @@
                 VerticalAlignment="Top"
                 HorizontalAlignment="Right"
                 Margin="0 6 6 0"
-                Grid.Row="0" 
-                />
-        </Grid>
-
-        <!-- Header -->
-        <Grid Margin="0 0 0 6" Grid.Row="1" Visibility="Collapsed">
-            <Rectangle
-                Fill="#632d98"
-                Width="6"
-                HorizontalAlignment="Left"
-                />
-            <!-- Bookmark name -->
-            <TextBlock 
-                Text="{Binding Bookmark.Name,FallbackValue=BindingWentWrong}" 
-                FontSize="18" 
-                FontWeight="Bold"
-                FontFamily="Verdana"
-                Foreground="{StaticResource LabelColorBrush}"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Left"
-                Margin="12 0 0 0"
                 Grid.Row="0" 
                 />
         </Grid>
