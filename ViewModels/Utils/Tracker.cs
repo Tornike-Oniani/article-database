@@ -103,11 +103,6 @@ namespace MainLib.ViewModels.Utils
             Track<PendingInfo>("Pending", info);
         }
 
-        public void TrackAbstract(AbstractInfo info)
-        {
-            Track<AbstractInfo>("Abstract", info);
-        }
-
         private void Track<T>(string action, T instance, string id = null)
         {
             // If user is not admin, don't track

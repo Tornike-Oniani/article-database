@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace MainLib.ViewModels.Utils
 {
@@ -145,6 +146,24 @@ namespace MainLib.ViewModels.Utils
 
                             new ReferenceRepo().AddReference(local_info.Name);
                         }
+                        // Create abstract
+                        else if (log.Info.InfoType == "AbstractInfo")
+                        {
+                            AbstractInfo local_info = log.Info as AbstractInfo;
+                            AbstractRepo repo = new AbstractRepo();
+
+                            // Edge case: title already has an abstract
+                            int articleId = (int)new ArticleRepo().GetArticleWithTitle(local_info.ArticleTitle).ID;
+                            if (repo.GetAbstractByArticleId(articleId) != null)
+                            {
+                                string mismatch = $"Article '{local_info.ArticleTitle}' already has an abstract."
+                                _mismatches.Add(mismatch);
+                                currentLogCount++;
+                                return;
+                            }
+
+                            repo.AddAbstract(articleId, local_info.AbstractBody);
+                        }
                         break;
                     case "Update":
                         // Update article
@@ -222,6 +241,15 @@ namespace MainLib.ViewModels.Utils
                             }
 
                             repo.UpdateReference(newReference, has);
+                        }
+                        // Update abstract
+                        else if (log.Info.InfoType == "AbstractInfo")
+                        {
+                            AbstractInfo local_info = log.Info as AbstractInfo;
+                            AbstractRepo repo = new AbstractRepo();
+
+                            int articleId = (int)new ArticleRepo().GetArticleWithTitle(local_info.ArticleTitle).ID;
+                            repo.UpdateAbstract(articleId, local_info.AbstractBody);
                         }
                         break;
                     case "Coupling":
@@ -418,13 +446,6 @@ namespace MainLib.ViewModels.Utils
                         sections.Remove(l_info.Section);
                         textInfo = JsonConvert.SerializeObject(sections);
                         File.WriteAllText(path, textInfo);
-                        break;
-                    case "Abstract":
-                        AbstractInfo a_info = (AbstractInfo)log.Info;
-                        // 1. Get article id
-                        Article a = new ArticleRepo().GetArticleWithTitle(a_info.ArticleTitle);
-                        // 2. Add abstract
-                        new AbstractRepo().AddAbstract((int)a.ID, a_info.AbstractBody);
                         break;
                     default:
                         break;

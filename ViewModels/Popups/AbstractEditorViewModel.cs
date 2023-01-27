@@ -57,11 +57,17 @@ namespace MainLib.ViewModels.Popups
             if (!String.IsNullOrEmpty(_article.AbstractBody)) 
             { 
                 new AbstractRepo().UpdateAbstractByArticleId((int)_article.ID, AbstractBody);
+
+                // Track abstract editing
+                new Tracker(Shared.GetInstance().User).TrackAbstract(new Lib.DataAccessLayer.Info.AbstractInfo() { ArticleTitle = _article.Title, AbstractBody = AbstractBody, InfoType = "Abstract" });
             }
             else
             // Otherwise create new abstract article relationshitp
             {
                 new AbstractRepo().AddAbstract((int)_article.ID, AbstractBody);
+
+                // Track abstract creationg
+                new Tracker(Shared.GetInstance().User).TrackAbstract(new Lib.DataAccessLayer.Info.AbstractInfo() { ArticleTitle = _article.Title, AbstractBody = AbstractBody, InfoType = "Abstract" });
             }
             _article.AbstractBody = AbstractBody;
             this.Window.Close();
