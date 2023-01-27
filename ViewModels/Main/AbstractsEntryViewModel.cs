@@ -117,7 +117,7 @@ namespace MainLib.ViewModels.Main
                 // Create abstract
                 new AbstractRepo().AddAbstract((int)currentArticle.ID, currentAbstract.Body);
                 // Track abstract creation
-                new Tracker(Shared.GetInstance().User).TrackAbstract(new AbstractInfo() { ArticleTitle = currentAbstract.Title, AbstractBody = currentAbstract.Body });
+                new Tracker(Shared.GetInstance().User).TrackCreate(new AbstractInfo() { ArticleTitle = currentAbstract.Title, AbstractBody = currentAbstract.Body });
             });
             // Remove from current list (as we only need artilces with no abstract)
             Shared.GetInstance().IsWorking(false);

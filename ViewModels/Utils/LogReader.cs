@@ -156,7 +156,7 @@ namespace MainLib.ViewModels.Utils
                             int articleId = (int)new ArticleRepo().GetArticleWithTitle(local_info.ArticleTitle).ID;
                             if (repo.GetAbstractByArticleId(articleId) != null)
                             {
-                                string mismatch = $"Article '{local_info.ArticleTitle}' already has an abstract."
+                                string mismatch = $"Article '{local_info.ArticleTitle}' already has an abstract.";
                                 _mismatches.Add(mismatch);
                                 currentLogCount++;
                                 return;

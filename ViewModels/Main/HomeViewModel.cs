@@ -298,12 +298,6 @@ namespace MainLib.ViewModels.Main
                 // If sync is already exported in destination
                 if (Directory.Exists(Path.Combine(destination, "Sync")))
                 {
-                    //services.DialogService.OpenDialog(
-                    //    new DialogOkViewModel(
-                    //        "This folder already contains sync information. Please choose different path",
-                    //        "Export Sync",
-                    //        DialogType.Error)
-                    //    );
                     services.ShowNotification("This folder already contains sync information. Please choose different path.", "Export Sync", NotificationType.Error, "HomeNotificationArea", TimeSpan.MaxValue);
                     return;
                 }
@@ -316,12 +310,6 @@ namespace MainLib.ViewModels.Main
                 // There is no sync folder in root
                 if (!Directory.Exists(syncPath))
                 {
-                    //services.DialogService.OpenDialog(
-                    //    new DialogOkViewModel(
-                    //        "No information to export, please restart application.",
-                    //        "Export Sync",
-                    //        DialogType.Error)
-                    //    );
                     services.ShowNotification("No information to export, please restart application.", "Export Sync", NotificationType.Error, "HomeNotificationArea", TimeSpan.MaxValue);
                     return;
                 }

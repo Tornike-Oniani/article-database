@@ -223,7 +223,7 @@ namespace MainLib.ViewModels.Main
                     Tracker tracker = new Tracker(User);
                     tracker.TrackCreate<ArticleInfo>(info);
                     File.Copy(SelectedFile, tracker.GetFilesPath() + "\\" + Article.FileName + ".pdf");
-                    tracker.TrackAbstract(new AbstractInfo() { ArticleTitle = Article.Title, AbstractBody = AbstractBody });
+                    tracker.TrackCreate(new AbstractInfo() { ArticleTitle = Article.Title, AbstractBody = AbstractBody });
 
                     // 6. Move the selected file into "Done" subfolder
                     string done_path = Path.GetDirectoryName(SelectedFile) + "\\Done\\";

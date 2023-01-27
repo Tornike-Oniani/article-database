@@ -59,7 +59,7 @@ namespace MainLib.ViewModels.Popups
                 new AbstractRepo().UpdateAbstractByArticleId((int)_article.ID, AbstractBody);
 
                 // Track abstract editing
-                new Tracker(Shared.GetInstance().User).TrackAbstract(new Lib.DataAccessLayer.Info.AbstractInfo() { ArticleTitle = _article.Title, AbstractBody = AbstractBody, InfoType = "Abstract" });
+                new Tracker(Shared.GetInstance().User).TrackCreate(new Lib.DataAccessLayer.Info.AbstractInfo() { ArticleTitle = _article.Title, AbstractBody = AbstractBody, InfoType = "Abstract" });
             }
             else
             // Otherwise create new abstract article relationshitp
@@ -67,7 +67,7 @@ namespace MainLib.ViewModels.Popups
                 new AbstractRepo().AddAbstract((int)_article.ID, AbstractBody);
 
                 // Track abstract creationg
-                new Tracker(Shared.GetInstance().User).TrackAbstract(new Lib.DataAccessLayer.Info.AbstractInfo() { ArticleTitle = _article.Title, AbstractBody = AbstractBody, InfoType = "Abstract" });
+                new Tracker(Shared.GetInstance().User).TrackCreate(new Lib.DataAccessLayer.Info.AbstractInfo() { ArticleTitle = _article.Title, AbstractBody = AbstractBody, InfoType = "Abstract" });
             }
             _article.AbstractBody = AbstractBody;
             this.Window.Close();
