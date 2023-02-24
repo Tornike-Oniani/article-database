@@ -211,10 +211,10 @@
                                             Text="{Binding Title}"
                                             Style="{Binding AbstractShown, Converter={StaticResource BoolToTextHeaderStyle}}"
                                             TextWrapping="Wrap"
-                                            ap:TextBlockHighlighter.Selection="{Binding DataContext.TitleHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                            ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                            ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                            ap:TextBlockHighlighter.Forecolor="#000000" 
+                                            ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.TitleSearchWords, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                            ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.TitleSearchPhrases, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                            ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                            ap:AdvancedTextblockHighlighter.Forecolor="#000000"                                                 
                                             Grid.Column="0"
                                             Grid.Row="0"
                                             />
@@ -573,10 +573,10 @@
                                                         FontFamily="Verdana"
                                                         TextWrapping="Wrap"
                                                         Foreground="{StaticResource BlackColorAltBrush}"
-                                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.TitleHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                        ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                        ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                        ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
+                                                        ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.TitleSearchWords, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.TitleSearchPhrases, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                        ap:AdvancedTextblockHighlighter.Forecolor="#000000"                                      
                                                         Margin="0 0 0 6"
                                                         Grid.Row="0"
                                                         />
@@ -797,7 +797,6 @@
                             aps:TextBoxHelper.Watermark="Title"
                             MinWidth="250"
                             MaxWidth="300"
-                            LostFocus="txbSearch_LostFocus"
                             Margin="0 0 6 0"
                             />
                         <TextBox

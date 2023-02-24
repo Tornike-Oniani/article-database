@@ -20,47 +20,36 @@ namespace Lib.DataAccessLayer.Utils
 
         }
 
-        public static Filter FilterTitle(this Filter filter, string title, bool wordBreak)
+        public static Filter FilterTitle(this Filter filter, string[] words, string[] phrases)
         {
             // If title is blank return
-            if (String.IsNullOrEmpty(title))
-            {
-                return filter;
-            }
+            if ((words.Length == 0 && phrases.Length == 0)) { return filter; }
 
-            // Double single quotes (') to avoid conflict with SQL query
-            string formatedTitle = title.Replace("'", "''");
-            formatedTitle = formatedTitle.Trim();
 
             AppendModifed(filter);
 
-            // Append each word as wildcard
             filter.FilterQuery.Append("(");
-            if (wordBreak)
-            {
-                string[] words = formatedTitle.Split(' ');
-                for (int i = 0; i < words.Length; i++)
-                {
-                    if (IsAllUpper(words[i]))
-                    {
-                        //filter.FilterQuery.Append("final.Title LIKE " + ToWildCardUpper(words[i]));
-                        filter.FilterQuery.Append("final.Title LIKE " + ToWildCardUpper(words[i]));
-                    }
-                    else
-                    {
-                        filter.FilterQuery.Append("final.Title LIKE " + ToWildCardUpper(words[i]));
-                    }
 
-                    if (i < words.Length - 1)
-                    {
-                        filter.FilterQuery.Append(" AND ");
-                    }
+            // Append each word as wildcard
+            for (int i = 0; i < words.Length; i++)
+            {
+                filter.FilterQuery.Append("final.Title LIKE " + ToWildCardUpper(words[i]));
+
+                if (i < words.Length - 1 || phrases.Length > 0)
+                {
+                    filter.FilterQuery.Append(" AND ");
                 }
             }
-            // Append as whole substring
-            else
+
+            // Append each phrase as wildcard
+            for (int i = 0; i < phrases.Length; i++)
             {
-                filter.FilterQuery.Append("final.Title LIKE " + ToWildCard(formatedTitle));
+                filter.FilterQuery.Append("final.Title LIKE " + ToWildCard(phrases[i]));
+
+                if (i < phrases.Length - 1)
+                {
+                    filter.FilterQuery.Append(" AND ");
+                }
             }
 
             filter.FilterQuery.Append(")");
@@ -176,7 +165,7 @@ namespace Lib.DataAccessLayer.Utils
         }
         public static Filter FilterAbstract(this Filter filter, string[] words, string[] phrases)
         {
-            if ((words == null && phrases == null) || (words.Length == 0 && phrases.Length == 0)) { return filter; }
+            if ((words.Length == 0 && phrases.Length == 0)) { return filter; }
             
             AppendModifed(filter);
 

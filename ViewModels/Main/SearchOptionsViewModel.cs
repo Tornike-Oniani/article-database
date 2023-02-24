@@ -21,7 +21,8 @@ namespace MainLib.ViewModels.Main
         private string _selectedKeywordPairing;
         private string _idFilter;
         private string _filterAbstract;
-        private string _abstractHighlight;
+        private List<string> _titleSearchWords;
+        private List<string> _titleSearchPhrases;
         private List<string> _abstractSearchWords;
         private List<string> _abstractSearchPhrases;
 
@@ -100,6 +101,16 @@ namespace MainLib.ViewModels.Main
         {
             get { return _filterAbstract; }
             set { _filterAbstract = value; OnPropertyChanged("FilterAbstract"); }
+        }      
+        public List<string> TitleSearchWords
+        {
+            get { return _titleSearchWords; }
+            set { _titleSearchWords = value; OnPropertyChanged("TitleSearchWords"); }
+        }
+        public List<string> TitleSearchPhrases
+        {
+            get { return _titleSearchPhrases; }
+            set { _titleSearchPhrases = value; OnPropertyChanged("TitleSearchPhrases"); }
         }
         public List<string> AbstractSearchWords
         {
