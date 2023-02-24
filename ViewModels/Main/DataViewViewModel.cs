@@ -274,6 +274,7 @@ namespace MainLib.ViewModels.Main
         {
             OnPropertyChanged("FilterTitle");
             OnPropertyChanged("WordBreakMode");
+            OnPropertyChanged("TitleHighlight");
             try
             {
                 // This property is in SearchOptionsViewModel (partial class)
@@ -284,6 +285,12 @@ namespace MainLib.ViewModels.Main
                 List<string> filterAuthorsFromString = String.IsNullOrEmpty(FilterAuthors) ? new List<string>() : FilterAuthors.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
                 List<string> filterKeywordsFromString = String.IsNullOrEmpty(FilterKeywords) ? new List<string>() : FilterKeywords.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
 
+                this.AbstractSearchPhrases = Regex.Matches(FilterAbstract, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
+                this.AbstractSearchWords = Regex.Replace(FilterAbstract, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords).ToList();
+
+                OnPropertyChanged("AbstractWordsHighlight");
+                OnPropertyChanged("AbstractPhrasesHighlight");
+
                 FilterExstension.SetGlobalPairing(isLoose: false);
 
                 Filter filter = new Filter();
@@ -293,6 +300,7 @@ namespace MainLib.ViewModels.Main
                     .FilterKeywords(filterKeywordsFromString, SelectedKeywordPairing)
                     .FilterYear(FilterYear)
                     .FilterPersonalComment(FilterPersonalComment)
+                    .FilterAbstract(AbstractSearchWords.ToArray(), AbstractSearchPhrases.ToArray())
                     .FilterIds(GetFilterIds(IdFilter));
 
                 Services.IsWorking(true);
@@ -315,6 +323,8 @@ namespace MainLib.ViewModels.Main
                 });
 
                 await PopulateArticles();
+
+                OnPropertyChanged("AbstractHighlight");
 
                 GenerateButtons();
                 
@@ -530,6 +540,7 @@ namespace MainLib.ViewModels.Main
                 .FilterKeywords(filterKeywordsFromString, SelectedKeywordPairing)
                 .FilterYear(FilterYear)
                 .FilterPersonalComment(FilterPersonalComment)
+                .FilterAbstract(AbstractSearchWords.ToArray(), AbstractSearchPhrases.ToArray())
                 .FilterIds(GetFilterIds(IdFilter))
                 .Sort(_currentSort)
                 .Paginate(ItemsPerPage, _offset);

@@ -40,12 +40,12 @@
   <PropertyGroup>
     <ApplicationIcon>Logo.ico</ApplicationIcon>
   </PropertyGroup>
-    <PropertyGroup>
-	    <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
-		<CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
-		<CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
-		<CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
-    </PropertyGroup>
+  <PropertyGroup>
+    <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
+    <CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
+    <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
+    <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MaterialDesignColors, Version=1.2.6.1513, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.2.6\lib\net45\MaterialDesignColors.dll</HintPath>
@@ -116,9 +116,7 @@
     <Content Include="Logs\init.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="NikasDB.sqlite3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="NikasDB.sqlite3" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -127,9 +125,7 @@
     <Content Include="Query.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="User.sqlite3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="User.sqlite3" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

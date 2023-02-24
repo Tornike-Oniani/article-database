@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace MainLib.ViewModels.Main
 {
@@ -19,6 +20,13 @@ namespace MainLib.ViewModels.Main
         private string _selectedAuthorPairing;
         private string _selectedKeywordPairing;
         private string _idFilter;
+        private string _filterAbstract;
+        private string _abstractHighlight;
+        private List<string> _abstractSearchWords;
+        private List<string> _abstractSearchPhrases;
+
+        string[] dudWords = new string[] { "in", "of", "at", "to", "into", "on", "onto", "a", "the", "and" };
+
 
         // Public properties
         public string SimpleSearch
@@ -88,8 +96,24 @@ namespace MainLib.ViewModels.Main
             get { return _idFilter; }
             set { _idFilter = value; OnPropertyChanged("IdFilter"); }
         }
-        
+        public string FilterAbstract
+        {
+            get { return _filterAbstract; }
+            set { _filterAbstract = value; OnPropertyChanged("FilterAbstract"); }
+        }
+        public List<string> AbstractSearchWords
+        {
+            get { return _abstractSearchWords; }
+            set { _abstractSearchWords = value; OnPropertyChanged("AbstractSearchWords"); }
+        }
+        public List<string> AbstractSearchPhrases
+        {
+            get { return _abstractSearchPhrases; }
+            set { _abstractSearchPhrases = value; OnPropertyChanged("AbstractSearchPhrases"); }
+        }
+
         // Temporary authors and keywords highlighter
+        public string TitleHighlight { get { return this._filterTitle; } }
         public string AuthorHighlight
         {
             get
@@ -107,7 +131,7 @@ namespace MainLib.ViewModels.Main
                 if (String.IsNullOrEmpty(FilterKeywords)) { return ""; }
                 return FilterKeywords.Replace(",", "");
             }
-        }      
+        }
 
         // Commands
         public RelayCommand ClearCommand { get; set; }
@@ -121,6 +145,7 @@ namespace MainLib.ViewModels.Main
             FilterYear = null;
             FilterPersonalComment = null;
             IdFilter = null;
+            FilterAbstract= null;
             Articles.Clear();
             OnPropertyChanged("FilterTitle");
         }

@@ -211,7 +211,7 @@
                                             Text="{Binding Title}"
                                             Style="{Binding AbstractShown, Converter={StaticResource BoolToTextHeaderStyle}}"
                                             TextWrapping="Wrap"
-                                            ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                            ap:TextBlockHighlighter.Selection="{Binding DataContext.TitleHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                             ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                             ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
                                             ap:TextBlockHighlighter.Forecolor="#000000" 
@@ -304,6 +304,10 @@
                                                 Text="{Binding AbstractBody}"
                                                 TextWrapping="Wrap"
                                                 TextAlignment="Justify"
+                                                ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.AbstractSearchWords, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.AbstractSearchPhrases, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                ap:AdvancedTextblockHighlighter.Forecolor="#000000"                                                 
                                                 Grid.Row="1"
                                                 />
                                         </Border>
@@ -569,7 +573,7 @@
                                                         FontFamily="Verdana"
                                                         TextWrapping="Wrap"
                                                         Foreground="{StaticResource BlackColorAltBrush}"
-                                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.FilterTitle, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.TitleHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:TextBlockHighlighter.WordBreakMode="{Binding DataContext.WordBreakMode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
                                                         ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
@@ -635,6 +639,10 @@
                                                     <TextBlock
                                                         Text="{Binding AbstractBody}"
                                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
+                                                        ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.AbstractSearchWords, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.AbstractSearchPhrases, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                        ap:AdvancedTextblockHighlighter.Forecolor="#000000"           
                                                         FontSize="14"
                                                         TextWrapping="Wrap"
                                                         Foreground="{StaticResource BlackColorAltBrush}"
@@ -776,57 +784,68 @@
             <TabItem Header="Search">
                 <Grid>
                     <StackPanel 
-                    Orientation="Horizontal"
-                    VerticalAlignment="Center"
-                    >
-                    <TextBox
-                        Text="{Binding FilterTitle}"
-                        Style="{StaticResource WatermarkTextBoxSmall}"
-                        aps:TextBoxHelper.Watermark="Title"
-                        MinWidth="250"
-                        MaxWidth="300"
-                        LostFocus="txbSearch_LostFocus"
-                        Margin="0 0 6 0"
-                        />
-                    <TextBox
-                        Text="{Binding FilterAuthors}"
-                        Style="{StaticResource WatermarkTextBoxSmall}"
-                        aps:TextBoxHelper.Watermark="Authors"
-                        Width="150"
-                        Margin="0 0 6 0"
-                        />
-                    <TextBox
-                        Text="{Binding FilterKeywords}"
-                        Style="{StaticResource WatermarkTextBoxSmall}"
-                        aps:TextBoxHelper.Watermark="Keywords"
-                        Width="150"
-                        Margin="0 0 6 0"
-                        />
-                    <TextBox
-                        Text="{Binding FilterYear}"
-                        Style="{StaticResource WatermarkTextBoxSmall}"
-                        aps:TextBoxHelper.Watermark="Year"
-                        Width="90"
-                        Margin="0 0 6 0"
-                        />
-                    <TextBox
-                        Text="{Binding FilterPersonalComment}"
-                        Style="{StaticResource WatermarkTextBoxSmall}"
-                        aps:TextBoxHelper.Watermark="Comment"
-                        Width="100"
-                        Margin="0 0 6 0"
-                        />
-                    <TextBox
-                        Text="{Binding IdFilter}"
-                        Style="{StaticResource WatermarkTextBoxSmall}"
-                        aps:TextBoxHelper.Watermark="Id"
-                        Width="90"
-                        Margin="0 0 6 0"
-                        />
-                    <Button
-                        Command="{Binding LoadArticlesCommand}"
-                        Content="Search"
-                        />
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Focusable="True"
+                        >
+                        <StackPanel.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding LoadArticlesCommand}" />
+                        </StackPanel.InputBindings>
+                        <TextBox
+                            Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            aps:TextBoxHelper.Watermark="Title"
+                            MinWidth="250"
+                            MaxWidth="300"
+                            LostFocus="txbSearch_LostFocus"
+                            Margin="0 0 6 0"
+                            />
+                        <TextBox
+                            Text="{Binding FilterAuthors, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            aps:TextBoxHelper.Watermark="Authors"
+                            Width="150"
+                            Margin="0 0 6 0"
+                            />
+                        <TextBox
+                            Text="{Binding FilterKeywords, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            aps:TextBoxHelper.Watermark="Keywords"
+                            Width="150"
+                            Margin="0 0 6 0"
+                            />
+                        <TextBox
+                            Text="{Binding FilterYear, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            aps:TextBoxHelper.Watermark="Year"
+                            Width="90"
+                            Margin="0 0 6 0"
+                            />
+                        <TextBox
+                            Text="{Binding FilterPersonalComment, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            aps:TextBoxHelper.Watermark="Comment"
+                            Width="100"
+                            Margin="0 0 6 0"
+                            />
+                        <TextBox
+                            Text="{Binding IdFilter, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            aps:TextBoxHelper.Watermark="Id"
+                            Width="90"
+                            Margin="0 0 6 0"
+                            />
+                        <TextBox
+                            Text="{Binding FilterAbstract, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            aps:TextBoxHelper.Watermark="Abstract"
+                            Width="250"
+                            Margin="0 0 6 0"
+                            />
+                        <Button
+                            Command="{Binding LoadArticlesCommand}"
+                            Content="Search"
+                            />
                 </StackPanel>
                     <CheckBox
                         Content="Word break"
