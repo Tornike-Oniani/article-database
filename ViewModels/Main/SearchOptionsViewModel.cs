@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace MainLib.ViewModels.Main
 {
@@ -145,7 +146,7 @@ namespace MainLib.ViewModels.Main
         }
 
         // Commands
-        public RelayCommand ClearCommand { get; set; }
+        public ICommand ClearCommand { get; set; }
 
         // Command actions
         public void Clear(object input = null)
@@ -157,7 +158,12 @@ namespace MainLib.ViewModels.Main
             FilterPersonalComment = null;
             IdFilter = null;
             FilterAbstract= null;
+            FilterAbstract = null;
             Articles.Clear();
+            TitleSearchWords.Clear();
+            TitleSearchPhrases.Clear();
+            AbstractSearchWords.Clear();
+            AbstractSearchPhrases.Clear();
             OnPropertyChanged("FilterTitle");
         }
         // Command action validators

@@ -782,23 +782,32 @@
             >
             <!-- Search menu -->
             <TabItem Header="Search">
-                <Grid>
+                <Grid Focusable="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width=".8*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding LoadArticlesCommand}" />
+                    </Grid.InputBindings>
+                    <!-- Title -->
+                    <TextBox
+                        Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        aps:TextBoxHelper.Watermark="Title"
+                        MinWidth="250"
+                        VerticalAlignment="Center"
+                        Margin="0 0 6 0"
+                        Grid.Column="0"
+                        />
                     <StackPanel 
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
-                        Focusable="True"
+                        Grid.Column="1"
                         >
-                        <StackPanel.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding LoadArticlesCommand}" />
-                        </StackPanel.InputBindings>
-                        <TextBox
-                            Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
-                            aps:TextBoxHelper.Watermark="Title"
-                            MinWidth="250"
-                            MaxWidth="300"
-                            Margin="0 0 6 0"
-                            />
+                        <!-- Authors -->
                         <TextBox
                             Text="{Binding FilterAuthors, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource WatermarkTextBoxSmall}"
@@ -806,6 +815,7 @@
                             Width="150"
                             Margin="0 0 6 0"
                             />
+                        <!-- Keywords -->
                         <TextBox
                             Text="{Binding FilterKeywords, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource WatermarkTextBoxSmall}"
@@ -813,6 +823,7 @@
                             Width="150"
                             Margin="0 0 6 0"
                             />
+                        <!-- Year -->
                         <TextBox
                             Text="{Binding FilterYear, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource WatermarkTextBoxSmall}"
@@ -820,6 +831,7 @@
                             Width="90"
                             Margin="0 0 6 0"
                             />
+                        <!-- Comment -->
                         <TextBox
                             Text="{Binding FilterPersonalComment, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource WatermarkTextBoxSmall}"
@@ -827,6 +839,7 @@
                             Width="100"
                             Margin="0 0 6 0"
                             />
+                        <!-- Id -->
                         <TextBox
                             Text="{Binding IdFilter, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource WatermarkTextBoxSmall}"
@@ -834,16 +847,35 @@
                             Width="90"
                             Margin="0 0 6 0"
                             />
-                        <TextBox
-                            Text="{Binding FilterAbstract, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
-                            aps:TextBoxHelper.Watermark="Abstract"
-                            Width="250"
-                            Margin="0 0 6 0"
-                            />
+                    </StackPanel>
+                    <!-- Abstract -->
+                    <TextBox
+                        Text="{Binding FilterAbstract, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        aps:TextBoxHelper.Watermark="Abstract"
+                        MinWidth="250"
+                        VerticalAlignment="Center"
+                        Margin="0 0 6 0"
+                        Grid.Column="2"
+                        />
+                    <!-- Buttons -->
+                    <StackPanel
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Grid.Column="3"
+                        >
+                        <!-- Search -->
                         <Button
                             Command="{Binding LoadArticlesCommand}"
                             Content="Search"
+                            Width="80"
+                            Margin="0 0 6 0"
+                            />
+                        <!-- Clear -->
+                        <Button
+                            Command="{Binding ClearCommand}"
+                            Content="Clear"
+                            Width="80"
                             />
                     </StackPanel>
                 </Grid>
