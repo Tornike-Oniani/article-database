@@ -145,6 +145,16 @@ namespace MainLib.ViewModels.Utils
 
                             new ReferenceRepo().AddReference(local_info.Name);
                         }
+                        // Abstract
+                        else if (log.Info.InfoType == "AbstractInfo")
+                        {
+                            AbstractInfo a_info = (AbstractInfo)log.Info;
+                            // 1. Get article id
+                            Article a = new ArticleRepo().GetArticleWithTitle(a_info.ArticleTitle);
+
+                            // 2. Add abstract
+                            new AbstractRepo().AddAbstract((int)a.ID, a_info.AbstractBody);
+                        }
                         break;
                     case "Update":
                         // Update article
@@ -418,13 +428,6 @@ namespace MainLib.ViewModels.Utils
                         sections.Remove(l_info.Section);
                         textInfo = JsonConvert.SerializeObject(sections);
                         File.WriteAllText(path, textInfo);
-                        break;
-                    case "Abstract":
-                        AbstractInfo a_info = (AbstractInfo)log.Info;
-                        // 1. Get article id
-                        Article a = new ArticleRepo().GetArticleWithTitle(a_info.ArticleTitle);
-                        // 2. Add abstract
-                        new AbstractRepo().AddAbstract((int)a.ID, a_info.AbstractBody);
                         break;
                     default:
                         break;
