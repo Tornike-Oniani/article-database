@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Input;
 
 namespace MainLib.ViewModels.Main
 {
@@ -19,6 +21,14 @@ namespace MainLib.ViewModels.Main
         private string _selectedAuthorPairing;
         private string _selectedKeywordPairing;
         private string _idFilter;
+        private string _filterAbstract;
+        private List<string> _titleSearchWords;
+        private List<string> _titleSearchPhrases;
+        private List<string> _abstractSearchWords;
+        private List<string> _abstractSearchPhrases;
+
+        string[] dudWords = new string[] { "in", "of", "at", "to", "into", "on", "onto", "a", "the", "and" };
+
 
         // Public properties
         public string SimpleSearch
@@ -88,8 +98,34 @@ namespace MainLib.ViewModels.Main
             get { return _idFilter; }
             set { _idFilter = value; OnPropertyChanged("IdFilter"); }
         }
-        
+        public string FilterAbstract
+        {
+            get { return _filterAbstract; }
+            set { _filterAbstract = value; OnPropertyChanged("FilterAbstract"); }
+        }      
+        public List<string> TitleSearchWords
+        {
+            get { return _titleSearchWords; }
+            set { _titleSearchWords = value; OnPropertyChanged("TitleSearchWords"); }
+        }
+        public List<string> TitleSearchPhrases
+        {
+            get { return _titleSearchPhrases; }
+            set { _titleSearchPhrases = value; OnPropertyChanged("TitleSearchPhrases"); }
+        }
+        public List<string> AbstractSearchWords
+        {
+            get { return _abstractSearchWords; }
+            set { _abstractSearchWords = value; OnPropertyChanged("AbstractSearchWords"); }
+        }
+        public List<string> AbstractSearchPhrases
+        {
+            get { return _abstractSearchPhrases; }
+            set { _abstractSearchPhrases = value; OnPropertyChanged("AbstractSearchPhrases"); }
+        }
+
         // Temporary authors and keywords highlighter
+        public string TitleHighlight { get { return this._filterTitle; } }
         public string AuthorHighlight
         {
             get
@@ -107,10 +143,10 @@ namespace MainLib.ViewModels.Main
                 if (String.IsNullOrEmpty(FilterKeywords)) { return ""; }
                 return FilterKeywords.Replace(",", "");
             }
-        }      
+        }
 
         // Commands
-        public RelayCommand ClearCommand { get; set; }
+        public ICommand ClearCommand { get; set; }
 
         // Command actions
         public void Clear(object input = null)
@@ -121,7 +157,13 @@ namespace MainLib.ViewModels.Main
             FilterYear = null;
             FilterPersonalComment = null;
             IdFilter = null;
+            FilterAbstract= null;
+            FilterAbstract = null;
             Articles.Clear();
+            TitleSearchWords.Clear();
+            TitleSearchPhrases.Clear();
+            AbstractSearchWords.Clear();
+            AbstractSearchPhrases.Clear();
             OnPropertyChanged("FilterTitle");
         }
         // Command action validators

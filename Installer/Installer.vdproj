@@ -507,7 +507,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Lib.DataAccessLayer, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Lib.DataAccessLayer, Version=3.4.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_2B54CF8261804C31C7D6AF05EF8BE8A5"
@@ -1120,15 +1120,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Article Database"
-        "ProductCode" = "8:{23321C09-DDE9-41D4-8D4B-9499385F8237}"
-        "PackageCode" = "8:{5649CB00-1581-4C00-B786-3DF36E4B09E4}"
+        "ProductCode" = "8:{EA6248E7-D792-42E9-94DB-71B751A32496}"
+        "PackageCode" = "8:{72E2B3C2-ECBC-4548-A9E9-F6E24A226334}"
         "UpgradeCode" = "8:{D9CF4364-FEF5-43C0-86F5-FD264AB82DF8}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:3.4.1"
+        "ProductVersion" = "8:4.0.0"
         "Manufacturer" = "8:NikasLab"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

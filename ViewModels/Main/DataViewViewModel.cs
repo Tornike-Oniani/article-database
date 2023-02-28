@@ -274,6 +274,7 @@ namespace MainLib.ViewModels.Main
         {
             OnPropertyChanged("FilterTitle");
             OnPropertyChanged("WordBreakMode");
+            OnPropertyChanged("TitleHighlight");
             try
             {
                 // This property is in SearchOptionsViewModel (partial class)
@@ -284,20 +285,44 @@ namespace MainLib.ViewModels.Main
                 List<string> filterAuthorsFromString = String.IsNullOrEmpty(FilterAuthors) ? new List<string>() : FilterAuthors.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
                 List<string> filterKeywordsFromString = String.IsNullOrEmpty(FilterKeywords) ? new List<string>() : FilterKeywords.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
 
+                if (String.IsNullOrWhiteSpace(FilterTitle))
+                {
+                    this.TitleSearchPhrases= new List<string>();
+                    this.TitleSearchWords = new List<string>();
+                }
+                else
+                {
+                    this.TitleSearchPhrases = Regex.Matches(FilterTitle, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
+                    this.TitleSearchWords = Regex.Replace(FilterTitle, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords).ToList();
+                }
+                if (String.IsNullOrWhiteSpace(FilterAbstract))
+                {
+                    this.AbstractSearchPhrases = new List<string>();
+                    this.AbstractSearchWords = new List<string>();
+                }
+                else
+                {
+                    this.AbstractSearchPhrases = Regex.Matches(FilterAbstract, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
+                    this.AbstractSearchWords = Regex.Replace(FilterAbstract, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords).ToList();
+                }
+
+                OnPropertyChanged("AbstractWordsHighlight");
+                OnPropertyChanged("AbstractPhrasesHighlight");
+
                 FilterExstension.SetGlobalPairing(isLoose: false);
 
                 Filter filter = new Filter();
                 filter
-                    .FilterTitle(_filterTitle, WordBreakMode)
+                    .FilterTitle(TitleSearchWords.ToArray(), TitleSearchPhrases.ToArray())
                     .FilterAuthors(filterAuthorsFromString, SelectedAuthorPairing)
                     .FilterKeywords(filterKeywordsFromString, SelectedKeywordPairing)
                     .FilterYear(FilterYear)
                     .FilterPersonalComment(FilterPersonalComment)
+                    .FilterAbstract(AbstractSearchWords.ToArray(), AbstractSearchPhrases.ToArray())
                     .FilterIds(GetFilterIds(IdFilter));
 
                 Services.IsWorking(true);
 
-                List<Article> articles = new List<Article>();
                 await Task.Run(() =>
                 {
                     // 2. Calculate total pages
@@ -315,6 +340,8 @@ namespace MainLib.ViewModels.Main
                 });
 
                 await PopulateArticles();
+
+                OnPropertyChanged("AbstractHighlight");
 
                 GenerateButtons();
                 
@@ -483,18 +510,15 @@ namespace MainLib.ViewModels.Main
             {
                 if (_currentSort.Contains("ASC"))
                 {
-                    //_currentSort = $"{header} DESC";
                     SelectedSortDirection = "DESC";
                 }
                 else
                 {
-                    //_currentSort = $"{header} ASC";
                     SelectedSortDirection = "ASC";
                 }
             }
             else
             {
-                //_currentSort = $"{header} ASC";
                 SelectedSortDirection = "ASC";
             }
             SelectedSortProperty = header;
@@ -525,11 +549,12 @@ namespace MainLib.ViewModels.Main
             FilterExstension.SetGlobalPairing(isLoose: false);
             Filter filter = new Filter();
             filter
-                .FilterTitle(_filterTitle, WordBreakMode)
+                .FilterTitle(TitleSearchWords.ToArray(), TitleSearchPhrases.ToArray())
                 .FilterAuthors(filterAuthorsFromString, SelectedAuthorPairing)
                 .FilterKeywords(filterKeywordsFromString, SelectedKeywordPairing)
                 .FilterYear(FilterYear)
                 .FilterPersonalComment(FilterPersonalComment)
+                .FilterAbstract(AbstractSearchWords.ToArray(), AbstractSearchPhrases.ToArray())
                 .FilterIds(GetFilterIds(IdFilter))
                 .Sort(_currentSort)
                 .Paginate(ItemsPerPage, _offset);

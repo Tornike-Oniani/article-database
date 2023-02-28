@@ -266,6 +266,8 @@ LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
 
             string query = queryBuilder.ToString();
 
+            System.Console.WriteLine(query);
+
             // 4. Fetch articles
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
             {
@@ -309,6 +311,7 @@ ON art_ath.Article = art_kwd.Article) AS cmp
 LEFT JOIN
 (SELECT ArticleID, PersonalComment, SIC
 FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) AS final
+LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
 ");
 
             // 1. Add user id for comments and sic
@@ -317,7 +320,7 @@ FROM tblUserPersonal WHERE UserID = #UserID) AS per ON cmp.ID = per.ArticleID) A
             queryBuilder.Append(filter);
 
             string query = queryBuilder.ToString();
-
+            System.Console.WriteLine(query);
 
             // 3. Fetch count
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
