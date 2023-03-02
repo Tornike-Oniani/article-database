@@ -249,6 +249,15 @@ namespace MainLib.ViewModels.Utils
                             AbstractRepo repo = new AbstractRepo();
 
                             int articleId = (int)new ArticleRepo().GetArticleWithTitle(local_info.ArticleTitle).ID;
+                            Abstract hasAbstract = repo.GetAbstractByArticleId(articleId);
+                            // Edge case article whose abstract we are trying to update has no abstract.
+                            if (hasAbstract == null || String.IsNullOrEmpty(hasAbstract.Body))
+                            {
+                                string mismatch = $"Article with id of '{articleId}' has no abstract to update.";
+                                _mismatches.Add(mismatch);
+                                currentLogCount++;
+                                return;
+                            }
                             repo.UpdateAbstract(articleId, local_info.AbstractBody);
                         }
                         break;
