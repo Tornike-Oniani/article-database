@@ -99,6 +99,7 @@
     <Compile Include="UIStructs\PageButtonModel.cs" />
     <Compile Include="Utils\Shared.cs" />
     <Compile Include="Utils\SyncInformationManager.cs" />
+    <Compile Include="Utils\TextFormat.cs" />
     <Compile Include="Utils\Tracker.cs" />
     <Compile Include="Utils\ViewTemplate.cs" />
   </ItemGroup>
