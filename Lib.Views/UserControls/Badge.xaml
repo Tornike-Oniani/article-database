@@ -9,16 +9,16 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Border
         Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-        Padding="7"
-        CornerRadius="6"
+        Padding="6 3 6 3"
+        CornerRadius="3"
         >
         <materialDesign:PackIcon 
             Kind="{Binding Icon, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
             Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
-            Width="25"
-            Height="25"
+            Width="28"
+            Height="28"
             />
     </Border>
 

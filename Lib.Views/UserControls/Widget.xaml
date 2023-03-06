@@ -13,26 +13,32 @@
         <Button.Template>
             <ControlTemplate TargetType="{x:Type Button}">
                 <!-- 1px border around the widget -->
-                <Border x:Name="wrapper" BorderThickness="1 1 1 1" Width="200"
-                        BorderBrush="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                        Margin="10"
-                        Cursor="Hand">
+                <Border 
+                    x:Name="wrapper" 
+                    BorderThickness="1 1 1 1" 
+                    Width="180"
+                    BorderBrush="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                    Margin="10"
+                    Cursor="Hand"
+                    >
                     <!-- Stackpanel consisting of icon and content -->
-                    <StackPanel Width="200" Height="Auto" Background="#ffffff">
+                    <StackPanel Width="180" Height="Auto" Background="#ffffff">
                         <Border Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Padding="10">
-                            <materialDesign:PackIcon Kind="{Binding Icon, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                                         Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                         VerticalAlignment="Center"
-                                         HorizontalAlignment="Center"
-                                         Width="90"
-                                         Height="90"/>
+                            <materialDesign:PackIcon 
+                                Kind="{Binding Icon, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Width="72"
+                                Height="72" 
+                                />
                         </Border>
                         <!-- Title and description -->
                         <Border Padding="10">
                             <StackPanel>
                                 <TextBlock Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=Lorem}" 
                                            Foreground="{StaticResource LabelColorBrush}"
-                                           FontSize="16"
+                                           FontSize="14"
                                            FontWeight="Bold"
                                            TextAlignment="Center" />
                                 <TextBlock Text="{Binding Description, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=LoremIpsum}" 

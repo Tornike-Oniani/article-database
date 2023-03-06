@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Attached Properties\TextBoxHelper.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityInverseConverter.cs" />
     <Compile Include="Converters\IntToFontWeightConverter.cs" />
     <Compile Include="Converters\IsIntToBoolConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

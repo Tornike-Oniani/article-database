@@ -164,8 +164,8 @@ namespace MainLib.ViewModels.UIStructs
                         break;
                     // If entered year is more than current date
                     case "Year":
-                        if (Year > DateTime.Now.Year)
-                            error = "> " + DateTime.Now.Year.ToString();
+                        if (Year != null && Year > DateTime.Now.Year)
+                            error = Year + " is above current year - " + DateTime.Now.Year.ToString();
                         break;
                     // If no file is selected
                     case "FilePath":

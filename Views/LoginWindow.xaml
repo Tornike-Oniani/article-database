@@ -17,7 +17,11 @@
         Style="{StaticResource LoginWindowStyle}"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
-        Title="LoginWindow"  SizeToContent="Height" Height="Auto" Width="500">
+        Title="LoginWindow"  
+        SizeToContent="Height" 
+        Height="Auto" 
+        Width="500"
+        >
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
         <localConverters:CurrentPageToBoolVisibilityConverter x:Key="CurrentPageToVisibility" />
@@ -93,11 +97,11 @@
                 <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=txbPassword}" Key="Enter" />
             </Grid.InputBindings>
             <!-- Login fields -->
-            <Border Padding="30 20 30 10">
+            <Border Padding="24 18 24 18">
                 <StackPanel>
                     <!-- Logo -->
                     <Image Source="/Lib.Styles;component/Images/logo.png" 
-                       Width="70"
+                       Width="56"
                        RenderOptions.BitmapScalingMode="Fant"
                        HorizontalAlignment="Left"/>
 
@@ -105,7 +109,7 @@
                     <TextBlock 
                         Text="Sign in with your Account"
                         Style="{StaticResource BigHeader}"
-                        Margin="0 50 0 30" 
+                        Margin="0 24 0 24" 
                         />
 
                     <!-- Username -->
@@ -123,12 +127,14 @@
                             Margin="0 0 8 0"
                             Grid.Column="0" />
 
-                        <TextBox x:Name="txbUsername" 
-                                 Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" 
-                                 ap:TextBoxHelper.Watermark="Username"
-                                 Style="{StaticResource WatermarkTextBox}"
-                                 attachedProperties:FocusExtension.IsFocused="{Binding LoginFocus}"
-                                 Grid.Column="1" />
+                        <TextBox 
+                            x:Name="txbUsername" 
+                            Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" 
+                            ap:TextBoxHelper.Watermark="Username"
+                            Style="{StaticResource WatermarkTextBox}"
+                            attachedProperties:FocusExtension.IsFocused="{Binding LoginFocus}"
+                            Grid.Column="1" 
+                            />
                     </Grid>
 
                     <!-- Password -->
@@ -155,7 +161,7 @@
                     </Grid>
 
                     <!-- Buttons -->
-                    <Grid Margin="0 20 0 25">
+                    <Grid Margin="0 24 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
@@ -196,8 +202,8 @@
                     <materialDesign:PackIcon 
                         Kind="UserAdd"
                         Foreground="{StaticResource PrimaryColorBrush}" 
-                        Width="70"
-                        Height="70"
+                        Width="56"
+                        Height="56"
                         Margin="0"
                         Padding="0"
                         />

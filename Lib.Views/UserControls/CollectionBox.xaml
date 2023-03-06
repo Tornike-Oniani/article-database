@@ -168,8 +168,8 @@
         </Grid.RowDefinitions>
         <TextBox 
             Text="{Binding Item, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-            ap:TextBoxHelper.Watermark="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-            Style="{StaticResource WatermarkTextBoxSmall}"
+            materialDesign:HintAssist.Hint="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+            materialDesign:HintAssist.IsFloating="True"
             FontFamily="Verdana"
             Margin="0 0 0 10"
             Grid.Row="0"
