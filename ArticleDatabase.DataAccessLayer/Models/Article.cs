@@ -8,67 +8,8 @@ using System.Windows.Input;
 
 namespace Lib.DataAccessLayer.Models
 {
-    public class Article : BaseModel, IDataErrorInfo
+    public class Article : BaseModel
     {
-        #region Validation
-        // blank attribute waste from IDataErrorInfo not used in WPF but we have to have it in the interface
-        public string Error { get { return null; } }
-
-        // Dictionary for errors used to display them in tooltips (Title empty -> "Title can not be empty")
-        public Dictionary<string, string> ErrorCollection { get; private set; } = new Dictionary<string, string>();
-
-        // Bool used to Disable/Enable add and save buttons
-        private bool _canAdd;
-        public bool CanAdd
-        {
-            get { return _canAdd; }
-            set { _canAdd = value; OnPropertyChanged("CanAdd"); }
-        }
-
-        // Validation for textboxes
-        string IDataErrorInfo.this[string PropertyName]
-        {
-            get
-            {
-                string error = null;
-                bool check = true;
-
-                switch (PropertyName)
-                {
-                    // If title is empty set error string
-                    case "Title":
-                        if (string.IsNullOrWhiteSpace(Title))
-                            error = "Title can not be empty.";
-                        break;
-                    case "Year":
-                        if (Year > DateTime.Now.Year)
-                            error = "> " + DateTime.Now.Year.ToString();
-                        break;
-                }
-                // if Dictionary already containts error for this property change it else add the error into dictionary
-                // For example one textbox can have multiple validations (It can not be empty and minimum characters)
-                // If error was set to "Title can not be empty" and now it is not empty but breaks the minimum character validation
-                // Property was already in the dictionary and instead of adding we change its content to second validation error
-                if (ErrorCollection.ContainsKey(PropertyName))
-                    ErrorCollection[PropertyName] = error;
-                else if (error != null)
-                    ErrorCollection.Add(PropertyName, error);
-
-                // Raise observable event and set CanAdd bool based on error
-                OnPropertyChanged("ErrorCollection");
-                foreach (KeyValuePair<string, string> entry in ErrorCollection)
-                {
-                    if (entry.Value != null)
-                        check = false;
-                }
-                CanAdd = check;
-
-                return error;
-            }
-        }
-
-        #endregion
-
         private long? _id;
         private string _title;
         private string _authors;

@@ -5,6 +5,7 @@ using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
 using MainLib.ViewModels.Popups;
+using MainLib.ViewModels.UIStructs;
 using MainLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
@@ -17,148 +18,34 @@ using System.Windows.Input;
 
 namespace MainLib.ViewModels.Main
 {
-    public class DataEntryViewModel : BaseViewModel, IDataErrorInfo
+    public class DataEntryViewModel : BaseViewModel
     {
-        #region Validation
-        // blank attribute waste from IDataErrorInfo not used in WPF but we have to have it in the interface
-        public string Error { get { return null; } }
-
-        // Dictionary for errors used to display them in tooltips (Title empty -> "Title can not be empty")
-        public Dictionary<string, string> ErrorCollection { get; private set; } = new Dictionary<string, string>();
-
-        // Bool used to Disable/Enable add and save buttons
-        private bool _canAdd;
-        public bool CanAdd
-        {
-            get { return _canAdd; }
-            set { _canAdd = value; OnPropertyChanged("CanAdd"); }
-        }
-
-        // Validation for textboxes
-        string IDataErrorInfo.this[string PropertyName]
-        {
-            get
-            {
-                string error = null;
-                bool check = true;
-
-                switch (PropertyName)
-                {
-                    // If abstract is empty set error string
-                    case "AbstractBody":
-                        if (string.IsNullOrEmpty(AbstractBody))
-                        {
-                            error = "Abstract can not be empty";
-                        }
-                        else if (AbstractUnusualCharacters.Count > 0)
-                        {
-                            error = "Remove highlighted characters from absract";
-                        }
-                        break;
-                    // If no file is selected set error string
-                    case "SelectedFile":
-                        if (string.IsNullOrEmpty(SelectedFile))
-                            error = "File must be selected.";
-                        break;
-                }
-                // if Dictionary already containts error for this property change it else add the error into dictionary
-                // For example one textbox can have multiple validations (It can not be empty and minimum characters)
-                // If error was set to "Title can not be empty" and now it is not empty but breaks the minimum character validation
-                // Property was already in the dictionary and instead of adding we change its content to second validation error
-                if (ErrorCollection.ContainsKey(PropertyName))
-                    ErrorCollection[PropertyName] = error;
-                else if (error != null)
-                    ErrorCollection.Add(PropertyName, error);
-
-                // Raise observable event and set CanAdd bool based on error
-                OnPropertyChanged("ErrorCollection");
-                foreach (KeyValuePair<string, string> entry in ErrorCollection)
-                {
-                    if (entry.Value != null)
-                        check = false;
-                }
-                CanAdd = check;
-
-                return error;
-            }
-        }
-        #endregion
-
         // Private memebers
-        private string _author;
-        private string _keyword;
-        private string _selectedFile;
-        private string _abstractBody;
-        private List<string> _titleUnusualCharacters;
-        private List<string> _abstractUnusualCharacters;
         private readonly Shared services;
-
-        // TEST
-        //private Random rnd = new Random();
 
         // Public properties
         public User User { get; set; }
-        public Article Article { get; set; }
-        public string Author
-        {
-            get { return _author; }
-            set { _author = value; OnPropertyChanged("Author"); }
-        }
-        public string Keyword
-        {
-            get { return _keyword; }
-            set { _keyword = value; OnPropertyChanged("Keyword"); }
-        }
-        public string SelectedFile
-        {
-            get { return _selectedFile; }
-            set { _selectedFile = value; OnPropertyChanged("SelectedFile"); }
-        }
         public List<Bookmark> Bookmarks { get; set; }
         public List<Reference> References { get; set; }
-        public string AbstractBody
-        {
-            get { return _abstractBody; }
-            set 
-            { 
-                _abstractBody = TextFormat.RemoveSpareWhiteSpace(value); 
-                AbstractUnusualCharacters = new List<string>(TextFormat.GetUnusualCharacters(_abstractBody));
-                OnPropertyChanged("AbstractBody"); 
-            }
-        }
-        public List<string> TitleUnusualCharacters
-        {
-            get { return _titleUnusualCharacters; }
-            set { _titleUnusualCharacters = value; OnPropertyChanged("UnusualCharacters"); }
-        }
-        public List<string> AbstractUnusualCharacters
-        {
-            get { return _abstractUnusualCharacters; }
-            set { _abstractUnusualCharacters = value; OnPropertyChanged("AbstractUnusualCharacters"); }
-        }
+        public ArticleForm ArticleForm { get; set; }
 
         // Commands
-        public RelayCommand SelectFileCommand { get; set; }
-        public RelayCommand SaveArticleCommand { get; set; }
-        public RelayCommand ClearArticleAttributesCommand { get; set; }
+        public ICommand SelectFileCommand { get; set; }
+        public ICommand SaveArticleCommand { get; set; }
+        public ICommand ClearArticleAttributesCommand { get; set; }
         public ICommand ClearTitleCommand { get; set; }
-        public RelayCommand OpenBookmarkManagerCommand { get; set; }
-        public RelayCommand OpenReferenceManagerCommand { get; set; }
-
-        // TEST
-        public ObservableCollection<string> ItemsCollection { get; set; }
+        public ICommand OpenBookmarkManagerCommand { get; set; }
+        public ICommand OpenReferenceManagerCommand { get; set; }
 
         // Constructor
         public DataEntryViewModel()
         {
             // 1. Initialize article and User
             this.services = Shared.GetInstance();
-            this.Article = new Article();
             this.User = services.User;
+            this.ArticleForm = new ArticleForm();
             this.Bookmarks = new List<Bookmark>();
             this.References = new List<Reference>();
-            this.TitleUnusualCharacters = new List<string>();
-            this.AbstractUnusualCharacters = new List<string>();
 
             // 2. Initialize commands
             SelectFileCommand = new RelayCommand(SelectFile);
@@ -166,11 +53,7 @@ namespace MainLib.ViewModels.Main
             ClearArticleAttributesCommand = new RelayCommand(ClearArticleAttributes);
             ClearTitleCommand = new RelayCommand(ClearTitle);
             OpenBookmarkManagerCommand = new RelayCommand(OpenBookmarkManager);
-            OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager);
-
-            // TEST
-            //GenerateRandomArticlesCommand = new RelayCommand(GenerateRandomArticles);
-            ItemsCollection = new ObservableCollection<string>();
+            OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager);            
         }
 
         // Command actions
@@ -181,7 +64,7 @@ namespace MainLib.ViewModels.Main
                 string result = services.BrowserService.OpenFileDialog(".pdf", "PDF files (*.pdf)|*.pdf");
 
                 // Get the selected file
-                SelectedFile = result;
+                ArticleForm.FilePath = result;
             }
             catch (Exception e)
             {
@@ -193,46 +76,39 @@ namespace MainLib.ViewModels.Main
         {
             try
             {
-                if (!String.IsNullOrWhiteSpace(AbstractBody))
-                {
-                    // Switch multiple spaces with one
-                    RegexOptions options = RegexOptions.None;
-                    Regex regex = new Regex("[ ]{2,}", options);
-                    AbstractBody = regex.Replace(AbstractBody, " ");
-                    AbstractBody = AbstractBody.Trim();
-
-                    // Check for unusual characters in abstract
-                    Regex unusualCharacters = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
-                    if (!unusualCharacters.IsMatch(AbstractBody))
-                    {
-                        Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Abstract contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
-                        AbstractBody = null;
-                        return;
-                    }
-                }
-
                 services.IsWorking(true);
 
                 await Task.Run(() =>
                 {
                     ArticleRepo articleRepo = new ArticleRepo();
 
-                    // Regex to switch multiple spaces into one (Restricts user to enter more than one space in Title textboxes)
-                    RegexOptions options = RegexOptions.None;
-                    Regex regex = new Regex("[ ]{2,}", options);
+                    // Create article from form
+                    Article article = new Article()
+                    {
+                        Title = ArticleForm.Title,
+                        Year = ArticleForm.Year,
+                        PersonalComment = ArticleForm.PersonalComment,
+                        SIC = ArticleForm.SIC ? 1 : 0,
+                        AbstractOnly = ArticleForm.FileContainsOnlyAbstract ? 1 : 0
+                    };
+                    // Copy authors and keywords
+                    foreach (string author in ArticleForm.Authors)
+                    {
+                        article.AuthorsCollection.Add(author);
+                    }
+                    foreach (string keyword in ArticleForm.Keywords)
+                    {
+                        article.KeywordsCollection.Add(keyword);
+                    }
 
-                    // 1. Format title
-                    Article.Title = Article.Title.Trim();
-                    Article.Title = regex.Replace(Article.Title, " ");
-
-                    // 2. Add article to database
-                    articleRepo.SaveArticle(Article, User);
+                    // Save base info to database
+                    articleRepo.SaveArticle(article, User);
 
                     // 3. Copy selected file to root folder with the new ID-based name
-                    File.Copy(SelectedFile, Path.Combine(Environment.CurrentDirectory, "Files\\") + Article.FileName + ".pdf");
+                    File.Copy(ArticleForm.FilePath, Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf");
 
                     // 4.1 Retrieve id (in reality we retrieve whole article) of newly added article
-                    Article currently_added_article = articleRepo.GetArticleWithTitle(Article.Title);
+                    Article currently_added_article = articleRepo.GetArticleWithTitle(article.Title);
 
                     // 4.2 Add bookmarks
                     foreach (Bookmark bookmark in Bookmarks)
@@ -242,23 +118,20 @@ namespace MainLib.ViewModels.Main
                     foreach (Reference reference in References)
                         new ReferenceRepo().AddArticleToReference(reference, currently_added_article);
 
-                    // 4.4
-                    if (!String.IsNullOrWhiteSpace(AbstractBody))
-                    {
-                        new AbstractRepo().AddAbstract((int)currently_added_article.ID, AbstractBody);
-                    }
+                    // 4.4 Add abstract
+                    new AbstractRepo().AddAbstract((int)currently_added_article.ID, ArticleForm.Abstract);
 
                     // 5. Tracking
-                    ArticleInfo info = new ArticleInfo(User, Article.Title, Bookmarks, References);
+                    ArticleInfo info = new ArticleInfo(User, article.Title, Bookmarks, References);
                     Tracker tracker = new Tracker(User);
                     tracker.TrackCreate<ArticleInfo>(info);
-                    File.Copy(SelectedFile, tracker.GetFilesPath() + "\\" + Article.FileName + ".pdf");
-                    tracker.TrackCreate(new AbstractInfo() { ArticleTitle = Article.Title, AbstractBody = AbstractBody });
+                    File.Copy(ArticleForm.FilePath, tracker.GetFilesPath() + "\\" + article.FileName + ".pdf");
+                    tracker.TrackCreate(new AbstractInfo() { ArticleTitle = article.Title, AbstractBody = ArticleForm.Abstract });
 
                     // 6. Move the selected file into "Done" subfolder
-                    string done_path = Path.GetDirectoryName(SelectedFile) + "\\Done\\";
-                    Directory.CreateDirectory(Path.GetDirectoryName(SelectedFile) + "\\Done");
-                    File.Move(SelectedFile, done_path + System.IO.Path.GetFileName(SelectedFile));
+                    string done_path = Path.GetDirectoryName(ArticleForm.FilePath) + "\\Done\\";
+                    Directory.CreateDirectory(Path.GetDirectoryName(ArticleForm.FilePath) + "\\Done");
+                    File.Move(ArticleForm.FilePath, done_path + System.IO.Path.GetFileName(ArticleForm.FilePath));
                 });
 
                 // 5. Clear article attributes
@@ -282,11 +155,9 @@ namespace MainLib.ViewModels.Main
         {
             try
             {
-                Article.Clear();
-                SelectedFile = null;
+                ArticleForm.ClearForm();
                 Bookmarks.Clear();
                 References.Clear();
-                AbstractBody = null;
             }
             catch (Exception e)
             {
@@ -296,7 +167,7 @@ namespace MainLib.ViewModels.Main
         }
         public void ClearTitle(object input = null)
         {
-            Article.Title = null;
+            ArticleForm.Title = null;
         }
         public void OpenBookmarkManager(object input = null)
         {
@@ -308,205 +179,8 @@ namespace MainLib.ViewModels.Main
         }
         public bool CanSaveArticle(object input = null)
         {
-            return CanAdd && Article.CanAdd;
+            return ArticleForm.IsArticleValid();
         }
-
-        // Private helpers
-        // Removes carriage returns (CL RF) and unusual characters
-        private string FormatText(string text)
-        {
-            if (text == null)
-            {
-                return "";
-            }
-
-            return text.Replace("\n", " ").Replace("\r", " ");
-        }
-
-        #region Test
-        /*
-        public RelayCommand GenerateRandomArticlesCommand { get; set; }
-
-        // TEST
-        public async void GenerateRandomArticles(object input = null)
-        {
-            List<Article> random_articles = new List<Article>();
-            Article random_article;
-            string prevTitle = "";
-
-            services.IsWorking(true);
-
-            await Task.Run(() =>
-            {
-                for (int i = 0; i < 15; i++)
-                {
-                    random_article = new Article();
-
-                    random_article.Title = RandomTitle(prevTitle);
-
-                    for (int k = 1; k < rnd.Next(3, 7); k++)
-                    {
-                        random_article.AuthorsCollection.Add(RandomAuthor());
-                    }
-
-                    for (int k = 1; k < rnd.Next(3, 7); k++)
-                    {
-                        random_article.KeywordsCollection.Add(RandomKeyword());
-                    }
-
-                    random_article.Year = RandomYear();
-
-                    random_article.PersonalComment = RandomComment();
-
-                    random_article.SIC = RandomSIC();
-
-                    random_articles.Add(random_article);
-
-                    prevTitle = random_article.Title;
-                }
-
-                foreach (Article article in random_articles)
-                    new ArticleRepo().SaveArticle(article, User);
-
-            });
-
-            services.IsWorking(false);
-
-            Console.WriteLine("Done");
-        }
-
-        // TEST
-        private string RandomTitle(string prevTitle)
-        {
-
-            int word_length = rnd.Next(15, 30);
-            string title = "";
-            string finTitle;
-
-            for (int i = 0; i < word_length; i++)
-            {
-                title += GenerateRandomWord(5, 10) + " ";
-            }
-
-            finTitle = title.First().ToString().ToUpper() + title.Substring(1);
-
-            while (finTitle == prevTitle)
-            {
-                word_length = rnd.Next(15, 30);
-                title = "";
-
-                for (int i = 0; i < word_length; i++)
-                {
-                    title += GenerateRandomWord(5, 10) + " ";
-                }
-
-                finTitle = title.First().ToString().ToUpper() + title.Substring(1);
-            }
-
-            return finTitle;
-        }
-        private int RandomSIC()
-        {
-            if (rnd.Next(0, 100) < 70)
-                return 0;
-
-            return 1;
-        }
-        private string RandomComment()
-        {
-            int word_length = rnd.Next(3, 5);
-            string comment = "";
-
-            for (int i = 0; i < word_length; i++)
-            {
-                comment += GenerateRandomWord(5, 10) + " ";
-            }
-
-            return comment;
-        }
-        private int RandomYear()
-        {
-            return rnd.Next(1900, DateTime.Now.Year);
-        }
-        private string RandomKeyword()
-        {
-            return GenerateRandomWord(5, 8);
-        }
-        private string RandomAuthor()
-        {
-            string[] middle = new string[] { "A.", "R.", "J.", "K.", "L.", "O.", "S." };
-
-            string Author = "";
-            string word;
-
-            word = GenerateRandomWord(4, 8);
-            word = word.First().ToString().ToUpper() + word.Substring(1) + " ";
-
-            Author += word;
-
-            if (rnd.Next(0, 100) < 75)
-                Author += middle[rnd.Next(0, middle.Length - 1)] + " ";
-
-            word = GenerateRandomWord(4, 8);
-            word = word.First().ToString().ToUpper() + word.Substring(1);
-
-            Author += word;
-
-            return Author;
-        }
-        private string GenerateRandomWord(int min, int max)
-        {
-            string[] consonants = { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z" };
-            string[] vowels = { "a", "e", "i", "o", "u" };
-
-
-            string word = "";
-
-            int requestedLength = rnd.Next(min, max);
-
-            // Generate the word in consonant / vowel pairs
-            while (word.Length < requestedLength)
-            {
-                if (requestedLength != 1)
-                {
-                    // Add the consonant
-                    string consonant = GetRandomLetter(rnd, consonants);
-
-                    if (consonant == "q" && word.Length + 3 <= requestedLength) // check +3 because we'd add 3 characters in this case, the "qu" and the vowel.  Change 3 to 2 to allow words that end in "qu"
-                    {
-                        word += "qu";
-                    }
-                    else
-                    {
-                        while (consonant == "q")
-                        {
-                            // Replace an orphaned "q"
-                            consonant = GetRandomLetter(rnd, consonants);
-                        }
-
-                        if (word.Length + 1 <= requestedLength)
-                        {
-                            // Only add a consonant if there's enough room remaining
-                            word += consonant;
-                        }
-                    }
-                }
-
-                if (word.Length + 1 <= requestedLength)
-                {
-                    // Only add a vowel if there's enough room remaining
-                    word += GetRandomLetter(rnd, vowels);
-                }
-            }
-
-            return word;
-        }
-        private string GetRandomLetter(Random rnd, string[] letters)
-        {
-            return letters[rnd.Next(0, letters.Length - 1)];
-        }
-        */
-        #endregion
 
     }
 }
