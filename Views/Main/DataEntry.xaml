@@ -8,6 +8,7 @@
              xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
+             xmlns:custom="clr-namepsace:MainLib.Views.UserControls.HighlightTextBox"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="700">
     <UserControl.Resources>
@@ -33,8 +34,10 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBox 
+                        <local:HighlightTextBox 
                             x:Name="txbTitle"
+                            HighlightWords="{Binding TitleUnusualCharacters}"
+                            HighlightColor="Red"
                             Text="{Binding Article.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
                             Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                             materialDesign:HintAssist.Hint="Title" 
@@ -137,7 +140,17 @@
                     <!-- File -->
                     <StackPanel Orientation="Horizontal" Margin="0 15 0 0">
                         <AdornerDecorator>
-                            <TextBox Text="{Binding SelectedFile, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource PathToName}}" materialDesign:HintAssist.Hint="file.pdf" Width="200" IsReadOnly="True" IsTabStop="False" />
+                            <TextBox 
+                                Text="{
+                                    Binding SelectedFile, 
+                                    ValidatesOnDataErrors=True, 
+                                    UpdateSourceTrigger=PropertyChanged, 
+                                    Converter={StaticResource PathToName}}" 
+                                materialDesign:HintAssist.Hint="file.pdf" 
+                                Width="200" 
+                                IsReadOnly="True" 
+                                IsTabStop="False" 
+                                />
                         </AdornerDecorator>
                         <Button 
                             Content="Select File"
@@ -171,18 +184,21 @@
                     </StackPanel>
 
                     <!-- Abstract -->
-                    <TextBox
-                        Text="{Binding AbstractBody}" 
-                        Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                        materialDesign:HintAssist.Hint="Abstract" 
-                        materialDesign:HintAssist.IsFloating="True" 
-                        AcceptsReturn="True" 
-                        TextWrapping="Wrap" 
-                        FontSize="16"
-                        SpellCheck.IsEnabled="True"
-                        FontFamily="Verdana"
-                        Margin="0 0 3 0"
-                        />
+                    <local:HighlightTextBox
+                            Text="{Binding AbstractBody, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
+                            HighlightWords="{Binding AbstractUnusualCharacters}"
+                            HighlightColor="Red"
+                            Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                            materialDesign:HintAssist.Hint="Abstract" 
+                            materialDesign:HintAssist.IsFloating="True" 
+                            AcceptsReturn="True" 
+                            TextWrapping="Wrap" 
+                            FontSize="16"
+                            materialDesign:ValidationAssist.UsePopup="True"
+                            SpellCheck.IsEnabled="True"
+                            FontFamily="Verdana"
+                            Margin="0 0 3 0"
+                            />
                     <!-- Buttons wrapper -->
                     <Grid Margin="0 15 0 0">
                         <Grid.ColumnDefinitions>

@@ -1,7 +1,10 @@
 ﻿using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.Views.Services.Dialogs;
+using MainLib.ViewModels.Main;
+using MainLib.ViewModels.Utils;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -48,21 +51,25 @@ namespace MainLib.Views.Main
             TextBox txbTitle = sender as TextBox;
 
             // Regex to switch multiple spaces into one (Restricts user to enter more than one space in Title textboxes)
-            RegexOptions options = RegexOptions.None;
-            Regex regex = new Regex("[ ]{2,}", options);
-            Regex unusualCharacters = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
+            //RegexOptions options = RegexOptions.None;
+            //Regex regex = new Regex("[ ]{2,}", options);
+            //Regex unusualCharacters = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
 
-            txbTitle.Text = txbTitle.Text.Trim();
-            txbTitle.Text = regex.Replace(txbTitle.Text, " ");
-            txbTitle.Text.Replace("\n", " ").Replace("\r", " ").Replace("–", "-").Replace("“", "\"").Replace("”", "\"").Replace("„", "\"").Replace("‟", "\"");
+            DataEntryViewModel vm = this.DataContext as DataEntryViewModel;
+            txbTitle.Text = TextFormat.RemoveSpareWhiteSpace(txbTitle.Text);
+            vm.TitleUnusualCharacters = new List<string>(TextFormat.GetUnusualCharacters(txbTitle.Text));
+
+            //txbTitle.Text = txbTitle.Text.Trim();
+            //txbTitle.Text = regex.Replace(txbTitle.Text, " ");
+            //txbTitle.Text.Replace("\n", " ").Replace("\r", " ").Replace("–", "-").Replace("“", "\"").Replace("”", "\"").Replace("„", "\"").Replace("‟", "\"");
 
             // Check for unusual characters
-            if (!string.IsNullOrEmpty(txbTitle.Text) & !unusualCharacters.IsMatch(txbTitle.Text))
-            {
-                new DialogService().OpenDialog(new DialogOkViewModel("This input contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
-                txbTitle.Text = null;
-                return;
-            }
+            //if (!string.IsNullOrEmpty(txbTitle.Text))
+            //{
+            //    new DialogService().OpenDialog(new DialogOkViewModel("This input contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
+            //    txbTitle.Text = null;
+            //    return;
+            //}
 
             string title = txbTitle.Text;
             string file;

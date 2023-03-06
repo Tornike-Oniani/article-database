@@ -44,7 +44,18 @@ namespace MainLib.ViewModels.Main
 
                 switch (PropertyName)
                 {
-                    // If title is empty set error string
+                    // If abstract is empty set error string
+                    case "AbstractBody":
+                        if (string.IsNullOrEmpty(AbstractBody))
+                        {
+                            error = "Abstract can not be empty";
+                        }
+                        else if (AbstractUnusualCharacters.Count > 0)
+                        {
+                            error = "Remove highlighted characters from absract";
+                        }
+                        break;
+                    // If no file is selected set error string
                     case "SelectedFile":
                         if (string.IsNullOrEmpty(SelectedFile))
                             error = "File must be selected.";
@@ -78,7 +89,9 @@ namespace MainLib.ViewModels.Main
         private string _keyword;
         private string _selectedFile;
         private string _abstractBody;
-        private Shared services;
+        private List<string> _titleUnusualCharacters;
+        private List<string> _abstractUnusualCharacters;
+        private readonly Shared services;
 
         // TEST
         //private Random rnd = new Random();
@@ -106,7 +119,22 @@ namespace MainLib.ViewModels.Main
         public string AbstractBody
         {
             get { return _abstractBody; }
-            set { _abstractBody = FormatText(value); OnPropertyChanged("AbstractBody"); }
+            set 
+            { 
+                _abstractBody = TextFormat.RemoveSpareWhiteSpace(value); 
+                AbstractUnusualCharacters = new List<string>(TextFormat.GetUnusualCharacters(_abstractBody));
+                OnPropertyChanged("AbstractBody"); 
+            }
+        }
+        public List<string> TitleUnusualCharacters
+        {
+            get { return _titleUnusualCharacters; }
+            set { _titleUnusualCharacters = value; OnPropertyChanged("UnusualCharacters"); }
+        }
+        public List<string> AbstractUnusualCharacters
+        {
+            get { return _abstractUnusualCharacters; }
+            set { _abstractUnusualCharacters = value; OnPropertyChanged("AbstractUnusualCharacters"); }
         }
 
         // Commands
@@ -129,6 +157,8 @@ namespace MainLib.ViewModels.Main
             this.User = services.User;
             this.Bookmarks = new List<Bookmark>();
             this.References = new List<Reference>();
+            this.TitleUnusualCharacters = new List<string>();
+            this.AbstractUnusualCharacters = new List<string>();
 
             // 2. Initialize commands
             SelectFileCommand = new RelayCommand(SelectFile);
@@ -290,7 +320,7 @@ namespace MainLib.ViewModels.Main
                 return "";
             }
 
-            return text.Replace("\n", " ").Replace("\r", " ").Replace("–", "-").Replace("“", "\"").Replace("”", "\"").Replace("„", "\"").Replace("‟", "\"");
+            return text.Replace("\n", " ").Replace("\r", " ");
         }
 
         #region Test

@@ -10,7 +10,7 @@ namespace MainLib.ViewModels.Utils
     public static class TextFormat
     {
         private static readonly Regex unusualWhiteSpace = new Regex("\\s{2,}|[\\t\\n\\r]");
-        private static readonly Regex unusualCharacters = new Regex("[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+");
+        private static readonly Regex unusualCharacters = new Regex("[^A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+");
 
         public static string RemoveSpareWhiteSpace(string input)
         {
@@ -18,7 +18,8 @@ namespace MainLib.ViewModels.Utils
         }
         public static string[] GetUnusualCharacters(string input)
         {
-            return unusualCharacters.Matches(input).Cast<Match>().Select(match => match.Value).ToArray();
+            string[] temp = unusualCharacters.Matches(input).Cast<Match>().Select(match => match.Value).Distinct().ToArray();
+            return unusualCharacters.Matches(input).Cast<Match>().Select(match => match.Value).Distinct().ToArray();
         }
     }
 }
