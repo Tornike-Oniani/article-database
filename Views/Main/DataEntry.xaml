@@ -108,7 +108,10 @@
                     </Grid>
 
                     <!-- Year and SIC -->
-                    <StackPanel Orientation="Horizontal" Margin="0 25 0 25">
+                    <StackPanel 
+                        Orientation="Horizontal" 
+                        Margin="0 24 0 12"
+                        >
                         <!-- Year -->
                         <AdornerDecorator>
                             <TextBox 
@@ -135,10 +138,14 @@
                         Text="{Binding Article.PersonalComment}" 
                         materialDesign:HintAssist.Hint="Personal comment"
                         materialDesign:HintAssist.IsFloating="True"
-                        FontFamily="Verdana" />
+                        FontFamily="Verdana" 
+                        />
 
                     <!-- File -->
-                    <StackPanel Orientation="Horizontal" Margin="0 15 0 0">
+                    <StackPanel 
+                        Orientation="Horizontal" 
+                        Margin="0 12 0 0"
+                        >
                         <AdornerDecorator>
                             <TextBox 
                                 Text="{
@@ -168,13 +175,13 @@
                     <!-- Bookmark and reference buttons -->
                     <StackPanel 
                         Orientation="Horizontal"
-                        Margin="0 25 0 12"
+                        Margin="0 25 0 24"
                         >
                         <!-- Bookmark -->
                         <Button 
                             Content="Bookmarks"
                             Command="{Binding OpenBookmarkManagerCommand}" 
-                            Margin="0 0 10 0"
+                            Margin="0 0 12 0"
                             />
                         <!-- Reference -->
                         <Button 
