@@ -29,6 +29,9 @@
     <!-- Black alt color -->
     <Color x:Key="BlackColorAlt">#212529</Color>
     <SolidColorBrush x:Key="BlackColorAltBrush" Color="{StaticResource BlackColorAlt}" />
+    <!-- Text color -->
+    <Color x:Key="TextColor">#414141</Color>
+    <SolidColorBrush x:Key="TextColorBrush" Color="{StaticResource TextColor}" />
     <!-- Blue color -->
     <Color x:Key="BlueColor">#0c63e4</Color>
     <Color x:Key="BlueColorBM">#0c63e4</Color>
@@ -50,6 +53,9 @@
     <Color x:Key="LavenderColorDark">#424184</Color>
     <SolidColorBrush x:Key="LavenderColorDarkBrush" Color="{StaticResource LavenderColorDark}" />
 
+    <!-- Border gary color -->
+    <Color x:Key="BorderGrayColor">#C0C0C0</Color>
+    <SolidColorBrush x:Key="BorderGrayColorBrush" Color="{StaticResource BorderGrayColor}" />
     <!-- Gray color -->
     <Color x:Key="GrayColor">#dee2e6</Color>
     <Color x:Key="GrayColorBM">#ced2d6</Color>
@@ -58,6 +64,9 @@
     <Color x:Key="GrayColorLight">#f0f2f5</Color>
     <Color x:Key="GrayColorLightBM">#e6e9ed</Color>
     <SolidColorBrush x:Key="GrayColorLightBrush" Color="{DynamicResource GrayColorLight}" />
+    <!-- Super light gray color -->
+    <Color x:Key="GrayColorSuperLight">#fafafa</Color>
+    <SolidColorBrush x:Key="GrayColorSuperLightBrush" Color="{StaticResource GrayColorSuperLight}" />
     <!-- Gray color dark -->
     <Color x:Key="GrayColorDark">#6c757d</Color>
     <SolidColorBrush x:Key="GrayColorDarkBrush" Color="{StaticResource GrayColorDark}" />

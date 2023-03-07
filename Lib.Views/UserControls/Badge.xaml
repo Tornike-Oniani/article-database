@@ -17,8 +17,8 @@
             Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
-            Width="28"
-            Height="28"
+            Width="24"
+            Height="24"
             />
     </Border>
 

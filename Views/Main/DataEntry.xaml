@@ -110,14 +110,14 @@
                     <!-- Year and SIC -->
                     <StackPanel 
                         Orientation="Horizontal" 
-                        Margin="0 24 0 12"
+                        Margin="0 24 0 24"
                         >
                         <!-- Year -->
                         <AdornerDecorator>
                             <TextBox 
                                 Text="{Binding ArticleForm.Year, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
-                                materialDesign:HintAssist.Hint="Year"
-                                materialDesign:HintAssist.IsFloating="True"
+                                ap:TextBoxHelper.Watermark="Year"
+                                Style="{StaticResource WatermarkTextBox}"
                                 Width="200" 
                                 PreviewTextInput="TextBox_PreviewTextInput" 
                                 />
@@ -136,8 +136,8 @@
                     <!-- Personal Comment -->
                     <TextBox 
                         Text="{Binding Article.PersonalComment}" 
-                        materialDesign:HintAssist.Hint="Personal comment"
-                        materialDesign:HintAssist.IsFloating="True"
+                        ap:TextBoxHelper.Watermark="Personal comment"
+                        Style="{StaticResource WatermarkTextBox}"
                         FontFamily="Verdana" 
                         />
 

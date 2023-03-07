@@ -29,50 +29,52 @@
     <Style x:Key="WatermarkTextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
         <!-- Generic styling -->
         <Setter Property="BorderThickness" Value="1 1 1 1" />
-        <Setter Property="BorderBrush" Value="{StaticResource Gray-BlueColorDarkBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderGrayColorBrush}" />
         <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
-        <Setter Property="Padding" Value="6 6 6 6" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="Foreground" Value="{StaticResource LabelColorBrush}" />
+        <Setter Property="Padding" Value="4 4 4 4" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
         <!-- Template -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Grid>
-                        <!-- Textbox area -->
-                        <Border
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="6"
-                            Padding="{TemplateBinding Padding}"
-                            >
-                            <ScrollViewer 
-                                x:Name="PART_ContentHost"
+                    <Border Padding="0 3 0 3">
+                        <Grid>
+                            <!-- Textbox area -->
+                            <Border
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}"
+                                >
+                                <ScrollViewer 
+                                    x:Name="PART_ContentHost"
+                                    VerticalAlignment="Center"
+                                    />
+                            </Border>
+                            <!-- Watermark -->
+                            <Border 
+                                x:Name="watermark"
+                                Padding="4 1 4 0"
+                                Background="{StaticResource WhiteColorBrush}"
                                 VerticalAlignment="Center"
-                                />
-                        </Border>
-                        <!-- Watermark -->
-                        <Border 
-                            x:Name="watermark"
-                            Padding="4 0 4 0"
-                            Background="{StaticResource WhiteColorBrush}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"
-                            Margin="8 0 0 0"
-                            >
-                            <Border.RenderTransform>
-                                <TranslateTransform X="0" Y="0" />
-                            </Border.RenderTransform>
-                            <TextBlock
-                                x:Name="watermark__text"
-                                IsHitTestVisible="False"
-                                Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
-                                Foreground="{StaticResource Gray-BlueColorDarkBrush}"
-                                FontSize="{TemplateBinding FontSize}"
-                                />
-                        </Border>
-                    </Grid>
+                                HorizontalAlignment="Left"
+                                Margin="6 0 0 0"
+                                >
+                                <Border.RenderTransform>
+                                    <TranslateTransform X="0" Y="0" />
+                                </Border.RenderTransform>
+                                <TextBlock
+                                    x:Name="watermark__text"
+                                    IsHitTestVisible="False"
+                                    Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
+                                    Foreground="{StaticResource LabelColorBrush}"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    />
+                            </Border>
+                        </Grid>
+                    </Border>
 
                     <!-- Triggers on template level -->
                     <ControlTemplate.Triggers>
@@ -91,9 +93,16 @@
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                                            From="-24" 
+                                            From="-19" 
                                             To="0"
-                                            Duration="0:0:0"
+                                            Duration="0:0:0.1"
+                                            />
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="watermark__text"
+                                            Storyboard.TargetProperty="FontSize"
+                                            From="11" 
+                                            To="13"
+                                            Duration="0:0:0.1"
                                             />
                                     </Storyboard>
                                 </BeginStoryboard>
@@ -106,7 +115,14 @@
                                             Storyboard.TargetName="watermark"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
                                             From="0" 
-                                            To="-24"
+                                            To="-19"
+                                            Duration="0:0:0.1"
+                                            />
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="watermark__text"
+                                            Storyboard.TargetProperty="FontSize"
+                                            From="13" 
+                                            To="11"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
@@ -147,16 +163,36 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
+        <!-- Error template -->
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <StackPanel>
+                        <AdornedElementPlaceholder x:Name="placeholder" />
+                        <Border
+                            Padding="6 0 1 0">
+                            <TextBlock 
+                                Text="{
+                                    Binding ElementName=placeholder, 
+                                    Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                                Foreground="{StaticResource RedColorBrush}"
+                                FontSize="11"
+                                />
+                        </Border>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
         <!-- Triggers -->
         <Style.Triggers>
             <!-- Focused styling -->
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" /> <!-- #86b7fe -->
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
             </Trigger>
-            <DataTrigger Binding="{Binding Path=HasError}" Value="True">
+            <Trigger Property="Validation.HasError" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource RedColorBrush}" />
-            </DataTrigger>
+            </Trigger>
         </Style.Triggers>
     </Style>
     <Style x:Key="WatermarkTextBoxSmall" TargetType="{x:Type TextBox}">
@@ -294,11 +330,11 @@
     <Style x:Key="WatermarkPasswordBox" TargetType="{x:Type PasswordBox}" BasedOn="{x:Null}">
         <!-- Generic styling -->
         <Setter Property="BorderThickness" Value="1 1 1 1" />
-        <Setter Property="BorderBrush" Value="{StaticResource Gray-BlueColorDarkBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderGrayColorBrush}" />
         <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
-        <Setter Property="Padding" Value="6 6 6 6" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="Foreground" Value="{StaticResource LabelColorBrush}" />
+        <Setter Property="Padding" Value="4 4 4 4" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
         <!-- Template -->
         <Setter Property="Template">
             <Setter.Value>
@@ -320,11 +356,11 @@
                         <!-- Watermark -->
                         <Border 
                             x:Name="watermark"
-                            Padding="4 0 4 0"
+                            Padding="4 1 4 0"
                             Background="{StaticResource WhiteColorBrush}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
-                            Margin="8 0 0 0"
+                            Margin="6 0 0 0"
                             >
                             <Border.RenderTransform>
                                 <TranslateTransform X="0" Y="0" />
@@ -333,8 +369,8 @@
                                 x:Name="watermark__text"
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
                                 IsHitTestVisible="False"
-                                Foreground="{StaticResource Gray-BlueColorDarkBrush}"
-                                FontSize="14"
+                                Foreground="{StaticResource LabelColorBrush}"
+                                FontSize="11"
                                 />
                         </Border>
                     </Grid>
@@ -356,9 +392,16 @@
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                                            From="-24" 
+                                            From="-19" 
                                             To="0"
-                                            Duration="0:0:0"
+                                            Duration="0:0:0.1"
+                                            />
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="watermark__text"
+                                            Storyboard.TargetProperty="FontSize"
+                                            From="11" 
+                                            To="13"
+                                            Duration="0:0:0.1"
                                             />
                                     </Storyboard>
                                 </BeginStoryboard>
@@ -371,7 +414,14 @@
                                             Storyboard.TargetName="watermark"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
                                             From="0" 
-                                            To="-24"
+                                            To="-19"
+                                            Duration="0:0:0.1"
+                                            />
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="watermark__text"
+                                            Storyboard.TargetProperty="FontSize"
+                                            From="13" 
+                                            To="11"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
@@ -412,7 +462,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
         <!-- Triggers -->
         <Style.Triggers>
             <!-- Focused styling -->

@@ -75,15 +75,15 @@
                     BorderBrush="{StaticResource PrimaryColorBrush}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Padding="10">
+                    Padding="8">
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
-                    <usercontrols:LoadingControl Diameter="50"
+                    <usercontrols:LoadingControl Diameter="42"
                                                  Color1="{StaticResource PrimaryColor}"
                                                  Color2="{StaticResource LavenderColor}" />
                     <Label Content="Working..." 
-                           FontSize="18" 
+                           FontSize="14" 
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            Margin="5 0 0 0" />
@@ -108,7 +108,7 @@
                     <!-- Title -->
                     <TextBlock 
                         Text="Sign in with your Account"
-                        Style="{StaticResource BigHeader}"
+                        Style="{StaticResource Header}"
                         Margin="0 24 0 24" 
                         />
 
@@ -169,7 +169,7 @@
 
                         <Button Content="Log In" 
                                 Command="{Binding LoginCommand}" 
-                                CommandParameter="{Binding ElementName=txbPassword}" 
+                                CommandParameter="{Binding ElementName=txbPassword}"
                                 Margin="0 0 5 0"
                                 Grid.Column="0">
                         </Button>
@@ -211,7 +211,7 @@
                     <!-- Register title -->
                     <TextBlock 
                         Text="Register new Account"
-                        Style="{StaticResource BigHeader}"
+                        Style="{StaticResource Header}"
                         Margin="0 10 0 25"
                         />
 

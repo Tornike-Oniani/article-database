@@ -2,6 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Lib.Styles">
 
+    <FontFamily x:Key="SourceSans">../fonts/#Source Sans Pro</FontFamily>
+    
     <!-- Window header -->
     <Style TargetType="{x:Type TextBlock}" x:Key="WindowHeader">
         <Setter Property="Foreground" Value="{StaticResource PrimaryColorNewBrush}" />
@@ -19,8 +21,9 @@
 
     <!-- Big header -->
     <Style TargetType="{x:Type TextBlock}" x:Key="BigHeader">
-        <Setter Property="Foreground" Value="{StaticResource LabelColorBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
         <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontFamily" Value="{StaticResource Inter}" />
         <Setter Property="FontSize" Value="22" />
     </Style>
 

@@ -4,4 +4,6 @@
     <FontFamily x:Key="SourseSansPro">../fonts/SourceSansPro-Regular.ttf #Source Sans Pro</FontFamily>
     <FontFamily x:Key="SourseSansProSemiBold">../fonts/SourceSansPro-SemiBold.ttf #Source Sans Pro</FontFamily>
     <FontFamily x:Key="SourseSansProBold">../fonts/SourceSansPro-Bold.ttf #Source Sans Pro</FontFamily>
+    <FontFamily x:Key="Inter">../fonts/#Inter</FontFamily>
+    <FontFamily x:Key="InterLight">../fonts/#Inter Light</FontFamily>
 </ResourceDictionary>

@@ -80,6 +80,10 @@
     <Resource Include="fonts\SourceSansPro-Bold.ttf" />
     <Resource Include="fonts\SourceSansPro-Regular.ttf" />
     <Resource Include="fonts\SourceSansPro-SemiBold.ttf" />
+    <Resource Include="fonts\Inter-Bold.otf" />
+    <Resource Include="fonts\Inter-Light.otf" />
+    <Resource Include="fonts\Inter-Regular.otf" />
+    <Resource Include="fonts\Inter-SemiBold.otf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
