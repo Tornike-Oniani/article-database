@@ -2,7 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:local="clr-namespace:Lib.Styles"
+                    xmlns:converters="clr-namespace:Lib.Styles.Converters"
                     xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties">
+
+    <converters:EmptyStringToVisibility x:Key="EmptyStringToVisibility" />
 
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
         <Setter Property="FontSize" Value="14" />
@@ -56,6 +59,7 @@
                             <!-- Watermark -->
                             <Border 
                                 x:Name="watermark"
+                                Visibility="{TemplateBinding ap:TextBoxHelper.Watermark,Converter={StaticResource EmptyStringToVisibility}}"
                                 Padding="4 1 4 0"
                                 Background="{StaticResource WhiteColorBrush}"
                                 VerticalAlignment="Center"

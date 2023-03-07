@@ -24,7 +24,6 @@ namespace MainLib.ViewModels.Utils
         }
         public static string[] GetUnusualCharacters(string input)
         {
-            string[] temp = unusualCharacters.Matches(input).Cast<Match>().Select(match => match.Value).Distinct().ToArray();
             return unusualCharacters.Matches(input).Cast<Match>().Select(match => match.Value).Distinct().ToArray();
         }
         public static bool IsValidText(string input)
