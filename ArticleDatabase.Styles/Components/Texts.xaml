@@ -44,5 +44,13 @@
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FontSize" Value="14" />
     </Style>
+    
+    <!-- Label -->
+    <Style x:Key="Label" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontFamily" Value="{StaticResource Inter}" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
 
 </ResourceDictionary>

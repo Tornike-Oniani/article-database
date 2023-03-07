@@ -21,5 +21,18 @@ namespace Lib.Styles.Attached_Properties
 
         public static readonly DependencyProperty WatermarkProperty =
             DependencyProperty.RegisterAttached("Watermark", typeof(string), typeof(TextBoxHelper), new UIPropertyMetadata(string.Empty));
+
+        public static bool GetIsFloating(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IsFloatingProperty);
+        }
+
+        public static void SetIsFloating(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsFloatingProperty, value);
+        }
+
+        public static readonly DependencyProperty IsFloatingProperty =
+            DependencyProperty.RegisterAttached("IsFloating", typeof(bool), typeof(TextBoxHelper), new UIPropertyMetadata(false));
     }
 }
