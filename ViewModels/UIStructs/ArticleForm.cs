@@ -13,7 +13,7 @@ namespace MainLib.ViewModels.UIStructs
     {
         // Property fields
         private string _title;
-        private int? _year;
+        private string _year;
         private string _personalComment;
         private string _abstract;
         private bool _sic;
@@ -37,7 +37,7 @@ namespace MainLib.ViewModels.UIStructs
         }
         public ObservableCollection<string> Authors { get; set; }
         public ObservableCollection<string> Keywords { get; set; }
-        public int? Year
+        public string Year
         {
             get { return _year; }
             set { _year = value; OnPropertyChanged("Year"); }
@@ -156,16 +156,31 @@ namespace MainLib.ViewModels.UIStructs
                         if (String.IsNullOrWhiteSpace(Title))
                         {
                             error = "Title can nto be empty";
+                            break;
                         }
-                        else if (UnusualCharactersInTitle.Count > 0)
+                        if (UnusualCharactersInTitle.Count > 0)
                         {
                             error = "Remove highlighted characters from title";
+                            break;
                         }
                         break;
                     // If entered year is more than current date
                     case "Year":
-                        if (Year != null && Year > DateTime.Now.Year)
+                        if (String.IsNullOrEmpty(Year))
+                        {
+                            error = null;
+                            break;
+                        }
+                        if (!int.TryParse(Year, out _))
+                        {
+                            error = "Year must be a number";
+                            break;
+                        }
+                        if (int.Parse(Year) > DateTime.Now.Year)
+                        {
                             error = Year + " is above current year - " + DateTime.Now.Year.ToString();
+                            break;
+                        }
                         break;
                     // If no file is selected
                     case "FilePath":
@@ -177,10 +192,12 @@ namespace MainLib.ViewModels.UIStructs
                         if (String.IsNullOrWhiteSpace(Abstract))
                         {
                             error = "Abstract can not be empty";
+                            break;
                         }
-                        else if (UnusualCharactersInAbstract.Count > 0)
+                        if (UnusualCharactersInAbstract.Count > 0)
                         {
                             error = "Remove highlighted characters from absract";
+                            break;
                         }
                         break;
 

@@ -9,6 +9,7 @@
                 <Setter Property="Padding" Value="12 6 12 6" />
                 <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
                 <Setter Property="BorderThickness" Value="0 0 0 0" />
+                <Setter Property="FontSize" Value="13" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">

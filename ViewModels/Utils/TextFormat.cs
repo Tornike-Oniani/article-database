@@ -16,7 +16,7 @@ namespace MainLib.ViewModels.Utils
 
         public static string RemoveSpareWhiteSpace(string input)
         {
-            return unusualWhiteSpace.Replace(input, " ").Trim();
+            return unusualWhiteSpace.Replace(input, " ");
         }
         public static string RemoveUnprintableCharacters(string input)
         {

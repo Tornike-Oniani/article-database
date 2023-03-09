@@ -80,13 +80,17 @@ namespace MainLib.ViewModels.Main
 
                 await Task.Run(() =>
                 {
+                    // Trim we do it here because if we do it FormatText it will prevent users from typing spaces as it is run in setter and runs each time user enters a character since we set UpdateSourceTrigger to Property changed in XAML
+                    ArticleForm.Title = ArticleForm.Title.Trim();
+                    ArticleForm.Abstract = ArticleForm.Abstract.Trim();
+
                     ArticleRepo articleRepo = new ArticleRepo();
 
                     // Create article from form
                     Article article = new Article()
                     {
                         Title = ArticleForm.Title,
-                        Year = ArticleForm.Year,
+                        Year = int.Parse(ArticleForm.Year),
                         PersonalComment = ArticleForm.PersonalComment,
                         SIC = ArticleForm.SIC ? 1 : 0,
                         AbstractOnly = ArticleForm.FileContainsOnlyAbstract ? 1 : 0

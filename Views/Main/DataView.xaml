@@ -797,7 +797,6 @@
                         Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource WatermarkTextBoxSmall}"
                         aps:TextBoxHelper.Watermark="Title"
-                        MinWidth="250"
                         VerticalAlignment="Center"
                         Margin="0 0 6 0"
                         Grid.Column="0"
@@ -853,7 +852,6 @@
                         Text="{Binding FilterAbstract, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource WatermarkTextBoxSmall}"
                         aps:TextBoxHelper.Watermark="Abstract"
-                        MinWidth="250"
                         VerticalAlignment="Center"
                         Margin="0 0 6 0"
                         Grid.Column="2"
@@ -895,7 +893,7 @@
                         CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
                         IsChecked="True"
                         Style="{StaticResource RibbonRadioButtonIcon}"
-                        Width="54"
+                        Width="58"
                         Margin="0 0 6 0"
                         />
                     <!-- Full view -->
