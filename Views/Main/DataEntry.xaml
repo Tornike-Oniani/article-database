@@ -8,7 +8,7 @@
              xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
-             xmlns:custom="clr-namepsace:MainLib.Views.UserControls.HighlightTextBox"
+             xmlns:highlighter="clr-namespace:MainLib.Views.UserControls.HighlightTextBox"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="700">
     <UserControl.Resources>
@@ -81,8 +81,8 @@
                             Text="Title"
                             Style="{StaticResource Label}"
                             HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Margin="0 0 12 18"
+                            VerticalAlignment="Top"
+                            Margin="0 12 12 18"
                             Grid.Column="1"
                             Grid.Row="2"
                             />
@@ -96,7 +96,7 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <local:HighlightTextBox 
+                            <highlighter:HighlightTextBox 
                                 x:Name="txbTitle"
                                 Text="{Binding ArticleForm.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
                                 HighlightWords="{Binding ArticleForm.UnusualCharactersInTitle}"
@@ -240,7 +240,7 @@
                                 Content="File containst only abstract"
                                 Style="{StaticResource FlatCheckbox}"
                                 VerticalAlignment="Bottom"
-                                Margin="0 0 0 3"
+                                Margin="0 0 0 6"
                                 Grid.Column="2"
                                 Grid.ColumnSpan="2"
                                 Grid.Row="7"
@@ -472,9 +472,9 @@
                                         Text="Abstract"
                                         Style="{StaticResource Label}"
                                         VerticalAlignment="Top"
-                                        Margin="0 2 12 8"
+                                        Margin="0 12 12 8"
                                         />
-                                    <local:HighlightTextBox
+                                    <highlighter:HighlightTextBox
                                         x:Name="txbAbstract"
                                         Text="{Binding ArticleForm.Abstract, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
                                         HighlightWords="{Binding ArticleForm.UnusualCharactersInAbstract}"

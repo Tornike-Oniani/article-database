@@ -63,9 +63,9 @@
                                 Visibility="{TemplateBinding ap:TextBoxHelper.Watermark,Converter={StaticResource EmptyStringToVisibility}}"
                                 Padding="4 1 4 0"
                                 Background="{StaticResource WhiteColorBrush}"
-                                VerticalAlignment="Center"
+                                VerticalAlignment="Top"
                                 HorizontalAlignment="Left"
-                                Margin="6 0 0 0"
+                                Margin="6 9 0 0"
                                 >
                                 <Border.RenderTransform>
                                     <TranslateTransform X="0" Y="0" />
@@ -363,9 +363,9 @@
                             x:Name="watermark"
                             Padding="4 1 4 0"
                             Background="{StaticResource WhiteColorBrush}"
-                            VerticalAlignment="Center"
+                            VerticalAlignment="Top"
                             HorizontalAlignment="Left"
-                            Margin="6 0 0 0"
+                            Margin="6 9 0 0"
                             >
                             <Border.RenderTransform>
                                 <TranslateTransform X="0" Y="0" />
@@ -375,7 +375,7 @@
                                 Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
                                 IsHitTestVisible="False"
                                 Foreground="{StaticResource LabelColorBrush}"
-                                FontSize="11"
+                                FontSize="14"
                                 />
                         </Border>
                     </Grid>
@@ -404,8 +404,8 @@
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="FontSize"
-                                            From="11" 
-                                            To="13"
+                                            From="12" 
+                                            To="14"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
@@ -425,8 +425,8 @@
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="FontSize"
-                                            From="13" 
-                                            To="11"
+                                            From="14" 
+                                            To="12"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>

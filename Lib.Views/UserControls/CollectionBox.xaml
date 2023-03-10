@@ -142,11 +142,28 @@
                                                     Background="{DynamicResource GrayColorLightBrush}"
                                                     CornerRadius="6"
                                                     >
-                                                    <ScrollViewer 
-                                                        x:Name="PART_ContentHost"
-                                                        VerticalAlignment="Center"
-                                                        />
+                                                    <Grid>
+                                                        <ScrollViewer 
+                                                            x:Name="PART_ContentHost"
+                                                            />
+                                                        <TextBlock 
+                                                            x:Name="watermark"
+                                                            Visibility="Collapsed"
+                                                            Text="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                                            Margin="7 9 0 0"
+                                                            />
+                                                    </Grid>
                                                 </Border>
+
+                                                <ControlTemplate.Triggers>
+                                                    <MultiTrigger>
+                                                        <MultiTrigger.Conditions>
+                                                            <Condition Property="IsFocused" Value="False" />
+                                                            <Condition Property="Text" Value="" />
+                                                        </MultiTrigger.Conditions>
+                                                        <Setter TargetName="watermark" Property="Visibility" Value="Visible" />
+                                                    </MultiTrigger>
+                                                </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </TextBox.Template>
                                     </TextBox>

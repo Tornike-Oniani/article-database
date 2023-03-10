@@ -84,9 +84,6 @@
     <Compile Include="Main\AbstractsEntry.xaml.cs">
       <DependentUpon>AbstractsEntry.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Main\GenericAdorner.cs" />
-    <Compile Include="Main\HighlightTextBox.cs" />
-    <Compile Include="Main\HighlightTextBoxExtension.cs" />
     <Compile Include="Main\SQL.xaml.cs">
       <DependentUpon>SQL.xaml</DependentUpon>
     </Compile>
@@ -125,6 +122,9 @@
     </Compile>
     <Compile Include="Popups\AddNewReference.xaml.cs">
       <DependentUpon>AddNewReference.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Popups\ArticleEditor.xaml.cs">
+      <DependentUpon>ArticleEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Popups\BookmarkEditor.xaml.cs">
       <DependentUpon>BookmarkEditor.xaml</DependentUpon>
@@ -274,6 +274,10 @@
     <Page Include="Popups\AddNewReference.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popups\ArticleEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Popups\BookmarkEditor.xaml">
       <SubType>Designer</SubType>

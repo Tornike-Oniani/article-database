@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="MainLib.Views.Popups.ArticleEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:MainLib.Views.Popups"
+             xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
+             xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
+             xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
+             xmlns:main="clr-namespace:MainLib.Views.Main"
+             xmlns:utils="clr-namespace:MainLib.Views.UserControls.HighlightTextBox"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:PathToNameConverter x:Key="PathToName" />
+    </UserControl.Resources>
+
+    <Border Padding="20 5 20 5">
+        <StackPanel>
+            <!-- Title -->
+            <AdornerDecorator>
+                <utils:HighlightTextBox
+                    x:Name="txbTitle" 
+                    Text="{Binding ArticleForm.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
+                    HighlightWords="{Binding ArticleForm.UnusualCharactersInTitle}"
+                    HighlightColor="{StaticResource RedColorBrush}"
+                    ap:TextBoxHelper.Watermark="Title"
+                    Style="{StaticResource WatermarkTextBox}" 
+                    AcceptsReturn="True" 
+                    TextWrapping="Wrap"
+                    SpellCheck.IsEnabled="True" 
+                    FontSize="14"
+                    FontFamily="Verdana"
+                    Margin="0 0 0 18"
+                    />
+            </AdornerDecorator>
+
+            <!-- Authors -->
+            <usercontrols:CollectionBox 
+                Title="Authors"
+                Text="Author" 
+                ItemsSource="{Binding ArticleForm.Authors}" 
+                Restriction="Author"
+                Margin="0 0 0 12" 
+                />
+
+            <!-- Keywords -->
+            <usercontrols:CollectionBox 
+                Title="Keywords"
+                Text="Keyword" 
+                ItemsSource="{Binding ArticleForm.Keywords}" 
+                Restriction="Keyword"
+                Margin="0 0 0 12" 
+                />
+
+            <!-- Year -->
+            <AdornerDecorator>
+                <TextBox 
+                    Text="{Binding ArticleForm.Year, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
+                    ap:TextBoxHelper.Watermark="Year"
+                    Style="{StaticResource WatermarkTextBox}"
+                    Width="200" 
+                    HorizontalAlignment="Left"
+                    Margin="0 0 0 18"
+                    />
+            </AdornerDecorator>
+
+            <!-- Personal Comment -->
+            <TextBox 
+                Text="{Binding ArticleForm.PersonalComment}" 
+                ap:TextBoxHelper.Watermark="Personal comment"
+                Style="{StaticResource WatermarkTextBox}"
+                FontFamily="Verdana"
+                Margin="0 0 0 12" 
+                />
+            <!-- SIC -->
+            <CheckBox                 
+                IsChecked="{Binding ArticleForm.SIC}" 
+                Content="SIC"
+                Style="{StaticResource FlatCheckbox}"
+                IsTabStop="False"
+                VerticalAlignment="Bottom"
+                Margin="0 0 0 12" 
+                />
+            
+            <!-- File -->
+            <StackPanel 
+                Orientation="Horizontal" 
+                Margin="0 0 0 12"
+                >
+                <StackPanel>
+                    <!--File name label-->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="File name:" />
+                        <TextBlock Text="{Binding Article.FileName}" Margin="5 0 0 0" />
+                    </StackPanel>
+
+                    <!-- File text box -->
+                    <AdornerDecorator>
+                        <TextBox Text="{Binding SelectedFile, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource PathToName}}" materialDesign:HintAssist.Hint="file.pdf" Width="200" IsReadOnly="True" IsTabStop="False" />
+                    </AdornerDecorator>
+                </StackPanel>
+                <Button Content="Select File" Width="150" Margin="10 0 0 0" Command="{Binding SelectFileCommand}" />
+                <CheckBox
+                    IsChecked="{Binding ArticleForm.FileContainsOnlyAbstract}"
+                    Content="File contains only abstract"
+                    Style="{StaticResource FlatCheckbox}"
+                    VerticalAlignment="Bottom"
+                    Margin="12 0 0 6"
+                    />
+            </StackPanel>
+
+            <!-- Buttons wrapper -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <!-- Space -->
+                    <ColumnDefinition Width="2*" />
+                    <!-- Add button column -->
+                    <ColumnDefinition Width="*" />
+                    <!-- Clear button column -->
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button 
+                    Content="Update" 
+                    Command="{Binding UpdateArticleCommand}"
+                    CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                    Margin="0 0 5 0" 
+                    Grid.Column="1" 
+                    />
+                <Button 
+                    Content="Cancel" 
+                    IsCancel="True"
+                    Margin="6 0 0 0" 
+                    Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                    Grid.Column="2" 
+                    />
+            </Grid>
+
+        </StackPanel>
+    </Border>
+</UserControl>
+
+    

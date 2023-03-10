@@ -86,7 +86,8 @@
             <Setter.Value>
                 <DataTemplate>
                     <CheckBox 
-                        Padding="8"
+                        Style="{StaticResource FlatCheckbox}"
+                        Padding="6 12 12 12"
                         IsChecked="{Binding IsChecked}"
                         Command="{Binding DataContext.CheckChangedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
                         CommandParameter="{Binding}"

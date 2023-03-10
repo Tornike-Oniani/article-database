@@ -3,34 +3,26 @@ using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
+using Lib.ViewModels.Services.Browser;
 using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.UIStructs;
 using MainLib.ViewModels.Utils;
 using System;
 using System.IO;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace MainLib.ViewModels.Popups
 {
     public class ArticleEditorViewModel : BaseViewModel
     {
-        private string _author;
-        private string _keyword;
         private string _selectedFile;
-        private Shared services;
+        private readonly Shared services;
 
         public Article SelectedArticle { get; set; }
         public User User { get; set; }
         public Article Article { get; set; }
-        public string Author
-        {
-            get { return _author; }
-            set { _author = value; OnPropertyChanged("Author"); }
-        }
-        public string Keyword
-        {
-            get { return _keyword; }
-            set { _keyword = value; OnPropertyChanged("Keyword"); }
-        }
+        public ArticleForm ArticleForm { get; set; }
         public string SelectedFile
         {
             get { return _selectedFile; }
@@ -51,13 +43,28 @@ namespace MainLib.ViewModels.Popups
 
             // 2. Create article instance
             Article = new Article();
+            this.ArticleForm = new ArticleForm();
 
             // 3. Copy article properties from parent's selected article
             Article.CopyByValue(SelectedArticle, true, false);
+            this.ArticleForm.Title = selectedArticle.Title;
+            this.ArticleForm.Year = selectedArticle.Year.ToString();
+            this.ArticleForm.PersonalComment = selectedArticle.PersonalComment;
+            this.ArticleForm.SIC = selectedArticle.SIC == 1;
+            this.ArticleForm.FileContainsOnlyAbstract = selectedArticle.AbstractOnly == 1;
+            foreach (string author in Article.AuthorsCollection)
+            {
+                this.ArticleForm.Authors.Add(author);
+            }
+            foreach (string keyword in Article.KeywordsCollection)
+            {
+                this.ArticleForm.Keywords.Add(keyword);
+            }
+            
 
             // 4. Initialize commands
             SelectFileCommand = new RelayCommand(SelectFile);
-            UpdateArticleCommand = new RelayCommand(UpdateArticle);
+            UpdateArticleCommand = new RelayCommand(UpdateArticle, CanUpdateArticle);
         }
 
         public void SelectFile(object input = null)
@@ -76,6 +83,21 @@ namespace MainLib.ViewModels.Popups
                 // 0. Retrieve old article id so we can track which article was updated
                 string oldName = articleRepo.GetArticleTitleWithId((int)Article.ID);
                 // 1. Update article record in database
+                Article.Title = ArticleForm.Title.Trim();
+                Article.Year = int.Parse(ArticleForm.Year);
+                Article.SIC = ArticleForm.SIC ? 1 : 0;
+                Article.PersonalComment = ArticleForm.PersonalComment.Trim();
+                Article.AbstractOnly = ArticleForm.FileContainsOnlyAbstract ? 1 : 0;
+                Article.AuthorsCollection.Clear();
+                foreach (string author in ArticleForm.Authors)
+                {
+                    Article.AuthorsCollection.Add(author);
+                }
+                Article.KeywordsCollection.Clear();
+                foreach (string keyword in ArticleForm.Keywords)
+                {
+                    Article.KeywordsCollection.Add(keyword);
+                }
                 articleRepo.UpdateArticle(Article, User);
 
                 // 1.1 Track article update
@@ -116,6 +138,25 @@ namespace MainLib.ViewModels.Popups
 
             // Close window
             (input as ICommand).Execute(null);
+        }
+        public bool CanUpdateArticle(object input = null)
+        {
+            if (this.ArticleForm.ErrorCollection == null)
+            {
+                return true;
+            }
+
+            if (this.ArticleForm.ErrorCollection.ContainsKey("Title") && this.ArticleForm.ErrorCollection["Title"] != null)
+            {
+                return false;
+            }
+
+            if (this.ArticleForm.ErrorCollection.ContainsKey("Year") && this.ArticleForm.ErrorCollection["Year"] != null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

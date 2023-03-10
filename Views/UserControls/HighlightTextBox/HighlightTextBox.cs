@@ -80,7 +80,6 @@ namespace MainLib.Views.UserControls.HighlightTextBox
             }
 
             if (indexes.Count == 0) { return; }
-
             List<Tuple<int, int>> newIndexes = new List<Tuple<int, int>>();
             int i = 0;
             Tuple<int, int> currentItem;
