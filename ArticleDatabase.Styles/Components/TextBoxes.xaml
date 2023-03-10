@@ -37,6 +37,7 @@
         <Setter Property="Padding" Value="4 4 4 4" />
         <Setter Property="FontSize" Value="13" />
         <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Hidden" />
         <!-- Template -->
         <Setter Property="Template">
             <Setter.Value>
@@ -53,7 +54,7 @@
                                 >
                                 <ScrollViewer 
                                     x:Name="PART_ContentHost"
-                                    VerticalAlignment="Center"
+                                    VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"
                                     />
                             </Border>
                             <!-- Watermark -->

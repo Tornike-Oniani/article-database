@@ -15,6 +15,7 @@ namespace MainLib.ViewModels.UIStructs
         private string _title;
         private string _year;
         private string _personalComment;
+        private bool _hasNoAbstract;
         private string _abstract;
         private bool _sic;
         private bool _fileContainsOnlyAbstract;
@@ -46,6 +47,11 @@ namespace MainLib.ViewModels.UIStructs
         {
             get { return _personalComment; }
             set { _personalComment = value; OnPropertyChanged("PersonalComment"); }
+        }
+        public bool HasNoAbstract
+        {
+            get { return _hasNoAbstract; }
+            set { _hasNoAbstract = value; OnPropertyChanged("HasNoAbstract"); }
         }
         public string Abstract
         {
@@ -97,7 +103,7 @@ namespace MainLib.ViewModels.UIStructs
         // Public methods
         public bool IsArticleValid()
         {
-            return !String.IsNullOrWhiteSpace(Title) && !String.IsNullOrWhiteSpace(Abstract) && HasNoErrors && TextFormat.IsValidText(Title) && TextFormat.IsValidText(Abstract);
+            return !String.IsNullOrWhiteSpace(Title) && (!String.IsNullOrWhiteSpace(Abstract) || HasNoAbstract) && HasNoErrors && TextFormat.IsValidText(Title) && TextFormat.IsValidText(Abstract);
         }
         public void ClearForm()
         {
@@ -155,7 +161,7 @@ namespace MainLib.ViewModels.UIStructs
                     case "Title":
                         if (String.IsNullOrWhiteSpace(Title))
                         {
-                            error = "Title can nto be empty";
+                            error = "Title can not be empty";
                             break;
                         }
                         if (UnusualCharactersInTitle.Count > 0)

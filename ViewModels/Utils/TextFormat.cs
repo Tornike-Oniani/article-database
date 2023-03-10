@@ -11,8 +11,8 @@ namespace MainLib.ViewModels.Utils
     {
         private static readonly Regex unusualWhiteSpace = new Regex("\\s{2,}|[\\t\\n\\r]");
         private static readonly Regex unprintableCharacters = new Regex("[\x00-\x1f]+");
-        private static readonly Regex unusualCharacters = new Regex("[^A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+");
-        private static readonly Regex isValidText = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
+        private static readonly Regex unusualCharacters = new Regex("[^\x20-\x7e]+");
+        private static readonly Regex isValidText = new Regex("^[\x20-\x7e]+$");
 
         public static string RemoveSpareWhiteSpace(string input)
         {

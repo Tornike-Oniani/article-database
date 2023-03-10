@@ -20,6 +20,9 @@ namespace MainLib.ViewModels.Main
 {
     public class DataEntryViewModel : BaseViewModel
     {
+        // Property fields
+        private bool _isAbstractFieldVisible;
+
         // Private memebers
         private readonly Shared services;
 
@@ -28,6 +31,11 @@ namespace MainLib.ViewModels.Main
         public List<Bookmark> Bookmarks { get; set; }
         public List<Reference> References { get; set; }
         public ArticleForm ArticleForm { get; set; }
+        public bool IsAbstractFieldVisible
+        {
+            get { return _isAbstractFieldVisible; }
+            set { _isAbstractFieldVisible = value; OnPropertyChanged("IsAbstractFieldVisible"); }
+        }
 
         // Commands
         public ICommand SelectFileCommand { get; set; }
@@ -36,6 +44,9 @@ namespace MainLib.ViewModels.Main
         public ICommand ClearTitleCommand { get; set; }
         public ICommand OpenBookmarkManagerCommand { get; set; }
         public ICommand OpenReferenceManagerCommand { get; set; }
+        public ICommand ShowAbstractFieldCommand { get; set; }
+        public ICommand HideAbstractFieldCommand { get; set; }
+        public ICommand SetNoAbstractCommand { get; set; }
 
         // Constructor
         public DataEntryViewModel()
@@ -53,7 +64,10 @@ namespace MainLib.ViewModels.Main
             ClearArticleAttributesCommand = new RelayCommand(ClearArticleAttributes);
             ClearTitleCommand = new RelayCommand(ClearTitle);
             OpenBookmarkManagerCommand = new RelayCommand(OpenBookmarkManager);
-            OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager);            
+            OpenReferenceManagerCommand = new RelayCommand(OpenReferenceManager);
+            ShowAbstractFieldCommand = new RelayCommand(ShowAbstractField, CanShowAbstractField);
+            HideAbstractFieldCommand = new RelayCommand(HideAbstractField);
+            SetNoAbstractCommand = new RelayCommand(SetNoAbstract);
         }
 
         // Command actions
@@ -155,6 +169,10 @@ namespace MainLib.ViewModels.Main
                 services.IsWorking(false);
             }
         }
+        public bool CanSaveArticle(object input = null)
+        {
+            return ArticleForm.IsArticleValid();
+        }
         public void ClearArticleAttributes(object input = null)
         {
             try
@@ -181,9 +199,27 @@ namespace MainLib.ViewModels.Main
         {
             services.WindowService.OpenWindow(new ReferenceManagerViewModel(ViewType.DataEntry, references: References));
         }
-        public bool CanSaveArticle(object input = null)
+        public void ShowAbstractField(object input = null)
         {
-            return ArticleForm.IsArticleValid();
+            this.IsAbstractFieldVisible = true;
+        }
+        public bool CanShowAbstractField(object input = null)
+        {
+            return !ArticleForm.HasNoAbstract;
+        }
+        public void HideAbstractField(object input = null)
+        {
+            this.IsAbstractFieldVisible = false;
+        }
+        public void SetNoAbstract(object input = null)
+        {
+            if (!String.IsNullOrEmpty(ArticleForm.Abstract) && ArticleForm.Abstract == "No Abstract")
+            {
+                ArticleForm.Abstract = null;
+                return;
+            }
+
+            ArticleForm.Abstract = "No Abstract";
         }
 
     }

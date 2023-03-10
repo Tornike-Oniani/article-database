@@ -13,367 +13,496 @@
              d:DesignHeight="800" d:DesignWidth="700">
     <UserControl.Resources>
         <converters:PathToNameConverter x:Key="PathToName" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:BoolToVisibilityInverseConverter x:Key="BoolToVisibilityInverse" />
     </UserControl.Resources>
-    <ScrollViewer>
-        <Grid Margin="-1,0,1,0">
+    <Grid>
+        <ScrollViewer>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=".5*" />
+                    <ColumnDefinition MinWidth="712" MaxWidth="812" Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Padding="35 15 12 12" Grid.Column="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="45px" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                    
+                        <!-- Header -->
+                        <TextBlock 
+                            Text="Article Information" 
+                            Style="{StaticResource Header}" 
+                            Margin="0 0 0 18"                         
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Grid.Row="0"
+                            />
+
+                        <!-- Basic info -->
+                        <StackPanel
+                            Margin="0 0 0 12"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Grid.Row="1">
+                            <TextBlock
+                                Text="Basic info"
+                                Style="{StaticResource MediumHeader}"
+                                Margin="0 0 0 3"
+                                />
+                            <TextBlock
+                                Text="Title, authors, keywords, year file and abstract"
+                                FontSize="12"
+                                Foreground="{StaticResource GrayColorDarkBrush}"
+                                />
+                        </StackPanel>
+
+                        <!-- Title -->
+                        <TextBlock 
+                            Text="Title"
+                            Style="{StaticResource Label}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="0 0 12 18"
+                            Grid.Column="1"
+                            Grid.Row="2"
+                            />
+                        <Grid 
+                            Margin="0 0 0 18"
+                            Grid.Column="2"
+                            Grid.Row="2"
+                            >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <local:HighlightTextBox 
+                                x:Name="txbTitle"
+                                Text="{Binding ArticleForm.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
+                                HighlightWords="{Binding ArticleForm.UnusualCharactersInTitle}"
+                                HighlightColor="{StaticResource RedColorBrush}"
+                                Style="{StaticResource WatermarkTextBox}"
+                                TextWrapping="Wrap" 
+                                AcceptsReturn="True"
+                                FontSize="14"
+                                SpellCheck.IsEnabled="True"
+                                FontFamily="Verdana"
+                                LostFocus="txbTitle_LostFocus" 
+                                Grid.Column="0"
+                                />
+                            <Button 
+                                Command="{Binding ClearTitleCommand}"
+                                Click="Button_Click"
+                                IsTabStop="False"
+                                Grid.Column="1"
+                                >
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Margin" Value="5 0 0 0" />
+                                        <Setter Property="Cursor" Value="Hand" />
+                                        <Setter Property="Foreground" Value="#80868b" />
+                                        <Setter Property="Width" Value="25" />
+                                        <Setter Property="Height" Value="25" />
+                                    </Style>
+                                </Button.Style>
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="Transparent">
+                                            <materialDesign:PackIcon 
+                                                Kind="Close"
+                                                Foreground="{TemplateBinding Foreground}"
+                                                Height="{TemplateBinding Width}"
+                                                Width="{TemplateBinding Height}" 
+                                                />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+
+                        <!-- Authors -->
+                        <TextBlock 
+                            Text="Authors"
+                            Style="{StaticResource Label}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="0 0 12 12"
+                            Grid.Column="1"
+                            Grid.Row="3"
+                            />
+                        <usercontrols:CollectionBox 
+                            Title="Authors"
+                            Text="Author" 
+                            ItemsSource="{Binding ArticleForm.Authors}" 
+                            Restriction="Author"
+                            Margin="0 0 0 12"
+                            Grid.Column="2"
+                            Grid.Row="3"
+                            />
+
+                        <!-- Keywords -->
+                        <TextBlock 
+                            Text="Keywords"
+                            Style="{StaticResource Label}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="0 0 12 12"
+                            Grid.Column="1"
+                            Grid.Row="4"
+                            />
+                        <usercontrols:CollectionBox                         
+                            Title="Keywords"
+                            Text="Keyword" 
+                            ItemsSource="{Binding ArticleForm.Keywords}" 
+                            Restriction="Keyword"
+                            Margin="0 0 0 12"
+                            Grid.Column="2"
+                            Grid.Row="4"
+                            />
+
+                        <!-- Year -->
+                        <TextBlock 
+                            Text="Year"
+                            Style="{StaticResource Label}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="0 0 12 18"
+                            Grid.Column="1"
+                            Grid.Row="5"
+                            />
+                        <TextBox 
+                            Text="{Binding ArticleForm.Year, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource WatermarkTextBox}"
+                            Width="200"
+                            HorizontalAlignment="Left"
+                            PreviewTextInput="TextBox_PreviewTextInput" 
+                            Margin="0 0 0 18"
+                            Grid.Column="2"
+                            Grid.Row="5"
+                            />
+
+                        <!-- File -->
+                        <TextBlock 
+                            Text="File"
+                            Style="{StaticResource Label}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="0 0 12 18"
+                            Grid.Column="1"
+                            Grid.Row="6"
+                            />
+                        <StackPanel 
+                            Orientation="Horizontal" 
+                            Margin="0 0 0 24"
+                            Grid.Column="2"
+                            Grid.Row="6"
+                            >
+                            <TextBox 
+                                Text="{
+                                    Binding ArticleForm.FilePath, 
+                                    ValidatesOnDataErrors=True, 
+                                    UpdateSourceTrigger=PropertyChanged, 
+                                    Converter={StaticResource PathToName}}" 
+                                Style="{StaticResource WatermarkTextBox}"
+                                Width="200" 
+                                IsReadOnly="True" 
+                                IsTabStop="False" 
+                                />
+                            <Button 
+                                Content="Select File"
+                                Margin="12 0 12 0" 
+                                Command="{Binding SelectFileCommand}" 
+                                />
+
+                            <CheckBox
+                                IsChecked="{Binding ArticleForm.FileContainsOnlyAbstract}"
+                                Content="File containst only abstract"
+                                Style="{StaticResource FlatCheckbox}"
+                                VerticalAlignment="Bottom"
+                                Margin="0 0 0 3"
+                                Grid.Column="2"
+                                Grid.ColumnSpan="2"
+                                Grid.Row="7"
+                                />
+                        </StackPanel>
+
+                        <!-- Abstract -->
+                        <StackPanel 
+                            Orientation="Horizontal"
+                            Margin="0 0 12 18"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="3"
+                            Grid.Row="8"
+                            >
+                            <CheckBox 
+                                IsChecked="{Binding ArticleForm.HasNoAbstract}"
+                                Content="No abstract"
+                                Command="{Binding SetNoAbstractCommand}"
+                                Style="{StaticResource FlatCheckbox}"
+                                Margin="0 0 12 0" 
+                                />
+                            <Button 
+                                Content="Abstract"
+                                Command="{Binding ShowAbstractFieldCommand}"
+                                Margin="0 0 12 0"
+                                >
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=txbAbstract, Path=(Validation.HasError)}" Value="True">
+                                                <Setter Property="Foreground" Value="{StaticResource RedColorBrush}" />
+                                                <Setter Property="BorderBrush" Value="{StaticResource RedColorBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <TextBlock 
+                                Visibility="{Binding ArticleForm.HasNoAbstract,Converter={StaticResource BoolToVisibilityInverse}}"
+                                Foreground="{StaticResource RedColorBrush}"
+                                VerticalAlignment="Bottom"
+                                >
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=txbAbstract, Path=(Validation.HasError)}" Value="True">
+                                                <Setter Property="Text" Value="{Binding ElementName=txbAbstract, Path=(Validation.Errors).CurrentItem.ErrorContent}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <!-- Personal info -->
+                        <StackPanel
+                            Margin="0 0 0 12"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Grid.Row="9"
+                            >
+                            <Separator Margin="0 0 0 12"/>
+                            <TextBlock
+                                Text="Personal info"
+                                Style="{StaticResource MediumHeader}"
+                                Margin="0 0 0 3"
+                                />
+                            <TextBlock
+                                Text="comment, SIC, bookmarks and references"
+                                FontSize="12"
+                                Foreground="{StaticResource GrayColorDarkBrush}"
+                                />
+                        </StackPanel>
+
+                        <!-- Personal comment -->
+                        <TextBlock 
+                            Text="Comment"
+                            Style="{StaticResource Label}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="0 0 12 12"
+                            Grid.Column="1"
+                            Grid.Row="10"
+                            />
+
+                        <TextBox 
+                            Text="{Binding ArticleForm.PersonalComment}" 
+                            Style="{StaticResource WatermarkTextBox}"
+                            TextWrapping="Wrap"
+                            AcceptsReturn="True"
+                            FontFamily="Verdana" 
+                            Margin="0 0 0 12"
+                            Grid.Column="2"
+                            Grid.Row="10"
+                            />
+
+                        <!-- SIC -->
+                        <CheckBox 
+                            IsChecked="{Binding ArticleForm.SIC}"
+                            Content="SIC"
+                            Style="{StaticResource FlatCheckbox}"
+                            IsTabStop="False" 
+                            VerticalAlignment="Bottom" 
+                            Margin="0 0 0 12"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="11"
+                            />
+
+                        <StackPanel 
+                            Orientation="Horizontal"
+                            Margin="0 0 0 12"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="12"
+                            >
+                            <!-- Bookmark -->
+                            <Button 
+                                Content="Bookmarks"
+                                Command="{Binding OpenBookmarkManagerCommand}" 
+                                Margin="0 0 12 0"
+                                />
+                            <!-- Reference -->
+                            <Button 
+                                Content="References"
+                                Command="{Binding OpenReferenceManagerCommand}" 
+                                />
+                        </StackPanel>
+
+                        <Grid 
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Grid.Row="13"
+                            >
+                            <Grid.ColumnDefinitions>
+                                <!-- Space -->
+                                <ColumnDefinition Width="2*" />
+                                <!-- Add button column -->
+                                <ColumnDefinition Width="*" />
+                                <!-- Clear button column -->
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button 
+                                Content="Add" 
+                                Command="{Binding SaveArticleCommand}" 
+                                Click="Button_Click" 
+                                Margin="0 0 5 0" 
+                                Grid.Column="1"
+                                />
+                            <Button 
+                                Content="Clear" 
+                                Command="{Binding ClearArticleAttributesCommand}"
+                                Click="Button_Click" 
+                                Margin="5 0 0 0" 
+                                Grid.Column="2"
+                                />
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+        <Grid 
+            Visibility="{Binding IsAbstractFieldVisible, Converter={StaticResource BoolToVisibility}, FallbackValue=Hidden}"
+            Focusable="True"
+            >
+            <Grid.Background>
+                <SolidColorBrush Color="{StaticResource BlackColorAlt}" Opacity="0.6" />
+            </Grid.Background>
+            <Grid.InputBindings>
+                <KeyBinding Key="Esc" Command="{Binding HideAbstractFieldCommand}" />
+            </Grid.InputBindings>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width=".5*" />
-                <ColumnDefinition MinWidth="712" MaxWidth="812" Width="*" />
+                <ColumnDefinition Width=".1*" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width=".1*" />
             </Grid.ColumnDefinitions>
-            <Border Padding="35 15 12 12" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="0.1*" />
+            </Grid.RowDefinitions>
+            <Border
+                Background="{StaticResource WhiteColorBrush}"
+                CornerRadius="6"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Center"
+                Grid.Column="1"
+                Grid.Row="1"
+                >
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="45px" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    
-                    <!-- Header -->
-                    <TextBlock 
-                        Text="Article Information" 
-                        Style="{StaticResource Header}" 
-                        Margin="0 0 0 18"                         
-                        Grid.Column="0"
-                        Grid.ColumnSpan="3"
+
+                    <Border 
+                        Background="{StaticResource LavenderColorBrush}"
                         Grid.Row="0"
-                        />
-
-                    <!-- Basic info -->
-                    <StackPanel
-                        Margin="0 0 0 12"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="3"
-                        Grid.Row="1">
-                        <TextBlock
-                            Text="Basic info"
-                            Style="{StaticResource MediumHeader}"
-                            Margin="0 0 0 3"
-                            />
-                        <TextBlock
-                            Text="Title, authors, keywords, year file and abstract"
-                            FontSize="12"
-                            Foreground="{StaticResource GrayColorDarkBrush}"
-                            />
-                    </StackPanel>
-
-                    <!-- Title -->
-                    <TextBlock 
-                        Text="Title"
-                        Style="{StaticResource Label}"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="0 0 12 18"
-                        Grid.Column="1"
-                        Grid.Row="2"
-                        />
-                    <Grid 
-                        Margin="0 0 0 18"
-                        Grid.Column="2"
-                        Grid.Row="2"
                         >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <local:HighlightTextBox 
-                            x:Name="txbTitle"
-                            Text="{Binding ArticleForm.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
-                            HighlightWords="{Binding ArticleForm.UnusualCharactersInTitle}"
-                            HighlightColor="{StaticResource RedColorBrush}"
-                            Style="{StaticResource WatermarkTextBox}"
-                            TextWrapping="Wrap" 
-                            AcceptsReturn="True"
-                            FontSize="14"
-                            SpellCheck.IsEnabled="True"
-                            FontFamily="Verdana"
-                            LostFocus="txbTitle_LostFocus" 
-                            Grid.Column="0"
-                            />
                         <Button 
-                            Command="{Binding ClearTitleCommand}"
-                            Click="Button_Click"
-                            IsTabStop="False"
-                            Grid.Column="1"
+                            Style="{StaticResource SystemIconButton}"
+                            HorizontalAlignment="Right"
+                            Command="{Binding HideAbstractFieldCommand}"
+                            Cursor="Hand"
                             >
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
-                                    <Setter Property="VerticalAlignment" Value="Center" />
-                                    <Setter Property="Margin" Value="5 0 0 0" />
-                                    <Setter Property="Cursor" Value="Hand" />
-                                    <Setter Property="Foreground" Value="#80868b" />
-                                    <Setter Property="Width" Value="25" />
-                                    <Setter Property="Height" Value="25" />
-                                </Style>
-                            </Button.Style>
-                            <Button.Template>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border Background="Transparent">
-                                        <materialDesign:PackIcon 
-                                            Kind="Close"
-                                            Foreground="{TemplateBinding Foreground}"
-                                            Height="{TemplateBinding Width}"
-                                            Width="{TemplateBinding Height}" 
-                                            />
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
+                            <Button.Content>
+                                <materialDesign:PackIcon 
+                                    Kind="Close" 
+                                    Width="24"
+                                    Height="24"
+                                    Foreground="{DynamicResource WhiteColorBrush}"
+                                    />
+                            </Button.Content>
                         </Button>
-                    </Grid>
-
-                    <!-- Authors -->
-                    <TextBlock 
-                        Text="Authors"
-                        Style="{StaticResource Label}"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="0 0 12 12"
-                        Grid.Column="1"
-                        Grid.Row="3"
-                        />
-                    <usercontrols:CollectionBox 
-                        Title="Authors"
-                        Text="Author" 
-                        ItemsSource="{Binding ArticleForm.Authors}" 
-                        Restriction="Author"
-                        Margin="0 0 0 12"
-                        Grid.Column="2"
-                        Grid.Row="3"
-                        />
-
-                    <!-- Keywords -->
-                    <TextBlock 
-                        Text="Keywords"
-                        Style="{StaticResource Label}"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="0 0 12 12"
-                        Grid.Column="1"
-                        Grid.Row="4"
-                        />
-                    <usercontrols:CollectionBox                         
-                        Title="Keywords"
-                        Text="Keyword" 
-                        ItemsSource="{Binding ArticleForm.Keywords}" 
-                        Restriction="Keyword"
-                        Margin="0 0 0 12"
-                        Grid.Column="2"
-                        Grid.Row="4"
-                        />
-
-                    <!-- Year -->
-                    <TextBlock 
-                        Text="Year"
-                        Style="{StaticResource Label}"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="0 0 12 18"
-                        Grid.Column="1"
-                        Grid.Row="5"
-                        />
-                    <TextBox 
-                        Text="{Binding ArticleForm.Year, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource WatermarkTextBox}"
-                        Width="200"
-                        HorizontalAlignment="Left"
-                        PreviewTextInput="TextBox_PreviewTextInput" 
-                        Margin="0 0 0 18"
-                        Grid.Column="2"
-                        Grid.Row="5"
-                        />
-
-                    <!-- Abstract -->
-                    <TextBlock 
-                        Text="Abstract"
-                        Style="{StaticResource Label}"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="0 0 12 18"
-                        Grid.Column="1"
-                        Grid.Row="6"
-                        />
-                    <local:HighlightTextBox
-                        Text="{Binding ArticleForm.Abstract, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
-                        HighlightWords="{Binding ArticleForm.UnusualCharactersInAbstract}"
-                        HighlightColor="{StaticResource RedColorBrush}"
-                        Style="{StaticResource WatermarkTextBox}"
-                        TextWrapping="Wrap" 
-                        AcceptsReturn="True"
-                        FontSize="14"
-                        SpellCheck.IsEnabled="True"
-                        FontFamily="Verdana"
-                        Margin="0 0 0 18"
-                        Grid.Column="2"
-                        Grid.Row="6"
-                        />
-
-                    <!-- File -->
-                    <TextBlock 
-                        Text="File"
-                        Style="{StaticResource Label}"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="0 0 12 18"
-                        Grid.Column="1"
-                        Grid.Row="7"
-                        />
-                    <StackPanel 
-                        Orientation="Horizontal" 
-                        Margin="0 0 0 18"
-                        Grid.Column="2"
-                        Grid.Row="7"
-                        >
-                        <TextBox 
-                            Text="{
-                                Binding ArticleForm.FilePath, 
-                                ValidatesOnDataErrors=True, 
-                                UpdateSourceTrigger=PropertyChanged, 
-                                Converter={StaticResource PathToName}}" 
-                            materialDesign:HintAssist.Hint="file.pdf" 
-                            Width="200" 
-                            IsReadOnly="True" 
-                            IsTabStop="False" 
-                            />
-                        <Button 
-                            Content="Select File"
-                            Margin="12 0 0 0" 
-                            Command="{Binding SelectFileCommand}" 
-                            />
-                    </StackPanel>
-
-                    <CheckBox
-                        IsChecked="{Binding ArticleForm.AbstractOnly}"
-                        Content="File containst only abstract"
-                        Style="{StaticResource FlatCheckbox}"
-                        Margin="0 0 0 12"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        Grid.Row="8"
-                        />
-
-                    <!-- Personal info -->
-                    <StackPanel
-                        Margin="0 0 0 12"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="3"
-                        Grid.Row="9"
-                        >
-                        <Separator Margin="0 0 0 12"/>
-                        <TextBlock
-                            Text="Personal info"
-                            Style="{StaticResource MediumHeader}"
-                            Margin="0 0 0 3"
-                            />
-                        <TextBlock
-                            Text="comment, SIC, bookmarks and references"
-                            FontSize="12"
-                            Foreground="{StaticResource GrayColorDarkBrush}"
-                            />
-                    </StackPanel>
-
-                    <!-- Personal comment -->
-                    <TextBlock 
-                        Text="Comment"
-                        Style="{StaticResource Label}"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="0 0 12 12"
-                        Grid.Column="1"
-                        Grid.Row="10"
-                        />
-
-                    <TextBox 
-                        Text="{Binding Article.PersonalComment}" 
-                        Style="{StaticResource WatermarkTextBox}"
-                        TextWrapping="Wrap"
-                        AcceptsReturn="True"
-                        FontFamily="Verdana" 
-                        Margin="0 0 0 12"
-                        Grid.Column="2"
-                        Grid.Row="10"
-                        />
-
-                    <!-- SIC -->
-                    <CheckBox 
-                        IsChecked="{Binding ArticleForm.SIC}"
-                        Content="SIC"
-                        Style="{StaticResource FlatCheckbox}"
-                        IsTabStop="False" 
-                        VerticalAlignment="Bottom" 
-                        Margin="0 0 0 12"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        Grid.Row="11"
-                        />
-
-                    <StackPanel 
-                        Orientation="Horizontal"
-                        Margin="0 0 0 12"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        Grid.Row="12"
-                        >
-                        <!-- Bookmark -->
-                        <Button 
-                            Content="Bookmarks"
-                            Command="{Binding OpenBookmarkManagerCommand}" 
-                            Margin="0 0 12 0"
-                            />
-                        <!-- Reference -->
-                        <Button 
-                            Content="References"
-                            Command="{Binding OpenReferenceManagerCommand}" 
-                            />
-                    </StackPanel>
-
-                    <Grid 
-                        Grid.Column="0"
-                        Grid.ColumnSpan="3"
-                        Grid.Row="13"
-                        >
-                        <Grid.ColumnDefinitions>
-                            <!-- Space -->
-                            <ColumnDefinition Width="2*" />
-                            <!-- Add button column -->
-                            <ColumnDefinition Width="*" />
-                            <!-- Clear button column -->
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Button 
-                            Content="Add" 
-                            Command="{Binding SaveArticleCommand}" 
-                            Click="Button_Click" 
-                            Margin="0 0 5 0" 
-                            Grid.Column="1"
-                            />
-                        <Button 
-                            Content="Clear" 
-                            Command="{Binding ClearArticleAttributesCommand}"
-                            Click="Button_Click" 
-                            Margin="5 0 0 0" 
-                            Grid.Column="2"
-                            />
-                    </Grid>
+                    </Border>
+                    <ScrollViewer Grid.Row="1">
+                        <Border Padding="12 12 12 12">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <StackPanel 
+                                    Orientation="Horizontal"
+                                    Grid.Row="0"
+                                    >
+                                    <TextBlock 
+                                        Text="Abstract"
+                                        Style="{StaticResource Label}"
+                                        VerticalAlignment="Top"
+                                        Margin="0 2 12 8"
+                                        />
+                                    <local:HighlightTextBox
+                                        x:Name="txbAbstract"
+                                        Text="{Binding ArticleForm.Abstract, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
+                                        HighlightWords="{Binding ArticleForm.UnusualCharactersInAbstract}"
+                                        HighlightColor="{StaticResource RedColorBrush}"
+                                        Style="{StaticResource WatermarkTextBox}"                                
+                                        TextWrapping="Wrap" 
+                                        AcceptsReturn="True"
+                                        FontSize="14"
+                                        SpellCheck.IsEnabled="True"
+                                        FontFamily="Verdana"
+                                        Width="750px"
+                                        MinHeight="200px"
+                                        Margin="0 0 0 8"
+                                        />
+                                </StackPanel>
+                                <Button 
+                                    Content="Ok"
+                                    Command="{Binding HideAbstractFieldCommand}"
+                                    HorizontalAlignment="Right"
+                                    Width="100"
+                                    Grid.Row="1"
+                                    />
+                            </Grid>
+                        </Border>
+                    </ScrollViewer>
+                    
                 </Grid>
             </Border>
         </Grid>
-    </ScrollViewer>
+    </Grid>
 </UserControl>
