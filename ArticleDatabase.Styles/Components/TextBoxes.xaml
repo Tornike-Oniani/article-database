@@ -74,7 +74,7 @@
                                     IsHitTestVisible="False"
                                     Text="{TemplateBinding ap:TextBoxHelper.Watermark}"
                                     Foreground="{StaticResource LabelColorBrush}"
-                                    FontSize="{TemplateBinding FontSize}"
+                                    FontSize="14"
                                     />
                             </Border>
                         </Grid>
@@ -104,8 +104,8 @@
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="FontSize"
-                                            From="11" 
-                                            To="13"
+                                            From="12" 
+                                            To="14"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
@@ -125,8 +125,8 @@
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="FontSize"
-                                            From="13" 
-                                            To="11"
+                                            From="14" 
+                                            To="12"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
