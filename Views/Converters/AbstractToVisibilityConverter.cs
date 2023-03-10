@@ -13,7 +13,7 @@ namespace MainLib.Views.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || String.IsNullOrEmpty(value.ToString()) || value.ToString() == "No abstract")
+            if (value == null || String.IsNullOrEmpty(value.ToString()) || value.ToString().ToLower() == "no abstract")
             {
                 return Visibility.Collapsed;
             }

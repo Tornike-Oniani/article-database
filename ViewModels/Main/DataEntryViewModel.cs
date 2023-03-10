@@ -213,13 +213,13 @@ namespace MainLib.ViewModels.Main
         }
         public void SetNoAbstract(object input = null)
         {
-            if (!String.IsNullOrEmpty(ArticleForm.Abstract) && ArticleForm.Abstract == "No Abstract")
+            if (!String.IsNullOrEmpty(ArticleForm.Abstract) && ArticleForm.Abstract == "No abstract")
             {
                 ArticleForm.Abstract = null;
                 return;
             }
 
-            ArticleForm.Abstract = "No Abstract";
+            ArticleForm.Abstract = "No abstract";
         }
 
     }

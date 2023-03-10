@@ -438,7 +438,7 @@
                     </Grid.RowDefinitions>
 
                     <Border 
-                        Background="{StaticResource LavenderColorBrush}"
+                        Background="{StaticResource PopupWindowHeaderColorBrush}"
                         Grid.Row="0"
                         >
                         <Button 

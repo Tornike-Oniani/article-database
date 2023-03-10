@@ -22,6 +22,10 @@
     <!-- Light selection color -->
     <Color x:Key="LightSelectionColor">#cbe8f6</Color>
     <SolidColorBrush x:Key="LightSelectionColorBrush" Color="{StaticResource LightSelectionColor}" />
+    
+    <!-- Popup window header color -->
+    <Color x:Key="PopupWindowHeaderColor">#3b1065</Color>
+    <SolidColorBrush x:Key="PopupWindowHeaderColorBrush" Color="{StaticResource PopupWindowHeaderColor}" />
 
     <!-- White color -->
     <Color x:Key="WhiteColor">#ffffff</Color>
