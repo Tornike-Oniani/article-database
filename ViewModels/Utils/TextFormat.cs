@@ -10,7 +10,7 @@ namespace MainLib.ViewModels.Utils
     public static class TextFormat
     {
         private static readonly Regex unusualWhiteSpace = new Regex("\\s{2,}|[\\t\\n\\r]");
-        private static readonly Regex unprintableCharacters = new Regex("[\u0001-\u0008\u000b-\u000f\u0010-\u0019\u001a-\u001f]+");
+        private static readonly Regex unprintableCharacters = new Regex("[\x00-\x1f]+");
         private static readonly Regex unusualCharacters = new Regex("[^A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+");
         private static readonly Regex isValidText = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
 
