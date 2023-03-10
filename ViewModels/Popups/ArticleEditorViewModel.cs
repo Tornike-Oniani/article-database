@@ -16,9 +16,14 @@ namespace MainLib.ViewModels.Popups
 {
     public class ArticleEditorViewModel : BaseViewModel
     {
+        // Property fields
         private string _selectedFile;
+
+        // Private members
+        private readonly ICommand loadArticlesCommand;
         private readonly Shared services;
 
+        // Public properties
         public Article SelectedArticle { get; set; }
         public User User { get; set; }
         public Article Article { get; set; }
@@ -29,13 +34,16 @@ namespace MainLib.ViewModels.Popups
             set { _selectedFile = value; OnPropertyChanged("SelectedFile"); }
         }
 
+        // Commands
         public RelayCommand SelectFileCommand { get; set; }
         public RelayCommand UpdateArticleCommand { get; set; }
 
-        public ArticleEditorViewModel(Article selectedArticle)
+        // Constructor
+        public ArticleEditorViewModel(Article selectedArticle, ICommand loadArticlesCommand)
         {
             this.services = Shared.GetInstance();
             this.Title = "Edit Article";
+            this.loadArticlesCommand = loadArticlesCommand;
 
             // 1. Set parent view model
             this.SelectedArticle = selectedArticle;
@@ -83,10 +91,15 @@ namespace MainLib.ViewModels.Popups
                 // 0. Retrieve old article id so we can track which article was updated
                 string oldName = articleRepo.GetArticleTitleWithId((int)Article.ID);
                 // 1. Update article record in database
+                int? intYear = null;
+                if (!String.IsNullOrEmpty(ArticleForm.Year))
+                {
+                    intYear = int.Parse(ArticleForm.Year);
+                }
                 Article.Title = ArticleForm.Title.Trim();
-                Article.Year = int.Parse(ArticleForm.Year);
+                Article.Year = intYear;
                 Article.SIC = ArticleForm.SIC ? 1 : 0;
-                Article.PersonalComment = ArticleForm.PersonalComment.Trim();
+                Article.PersonalComment = String.IsNullOrEmpty(ArticleForm.PersonalComment) ? null : ArticleForm.PersonalComment.Trim();
                 Article.AbstractOnly = ArticleForm.FileContainsOnlyAbstract ? 1 : 0;
                 Article.AuthorsCollection.Clear();
                 foreach (string author in ArticleForm.Authors)
@@ -117,7 +130,7 @@ namespace MainLib.ViewModels.Popups
                 tracker.TrackUpdate<ArticleInfo>(info, oldName);
 
                 // 3. Copy new article properties to parent's selected article (so that the values will be updated on data grid)
-                SelectedArticle.CopyByValue(Article, false, true);
+                //SelectedArticle.CopyByValue(Article, false, true);
                 OnPropertyChanged("SelectedArticle");
             }
 
@@ -136,6 +149,7 @@ namespace MainLib.ViewModels.Popups
                 }
             }
 
+            loadArticlesCommand.Execute(null);
             // Close window
             (input as ICommand).Execute(null);
         }

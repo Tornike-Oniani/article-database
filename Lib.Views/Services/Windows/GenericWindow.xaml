@@ -14,7 +14,7 @@
         Title="{Binding Title, FallbackValue=DummyTitle}" 
         SizeToContent="Height"
         Focusable="True"
-        Height="Auto" Width="550">
+        Height="Auto" Width="750">
 
     <WindowChrome.WindowChrome>
         <WindowChrome 

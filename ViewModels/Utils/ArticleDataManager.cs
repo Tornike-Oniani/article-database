@@ -24,8 +24,8 @@ namespace MainLib.ViewModels.Utils
         private Article _selectedArticle;
 
         // Private helpers
-        private Shared _services;
-        private User _user;
+        private readonly Shared _services;
+        private readonly User _user;
 
         // Public properties
         public Article SelectedArticle
@@ -193,7 +193,7 @@ namespace MainLib.ViewModels.Utils
         }
         public void OpenEditorDialog(object input = null)
         {
-            _services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.ArticleEditorViewModel(SelectedArticle));
+            _services.WindowService.OpenWindow(new ArticleEditorViewModel(SelectedArticle, LoadArticlesCommand));
         }
         public void OpenAbstractEditor(object input)
         {
