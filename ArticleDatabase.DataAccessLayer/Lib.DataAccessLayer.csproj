@@ -73,6 +73,8 @@
     <Compile Include="Repositories\GlobalRepo.cs" />
     <Compile Include="Repositories\ReferenceRepo.cs" />
     <Compile Include="Repositories\SectionRepo.cs" />
+    <Compile Include="Repositories\SQLiteConnectionExtension.cs" />
+    <Compile Include="Repositories\SQLiteRegexFunction.cs" />
     <Compile Include="Repositories\UserRepo.cs" />
     <Compile Include="Utils\Filter.cs" />
     <Compile Include="Utils\FilterExstension.cs" />

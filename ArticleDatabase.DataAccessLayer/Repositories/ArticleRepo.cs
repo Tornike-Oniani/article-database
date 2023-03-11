@@ -272,6 +272,7 @@ LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
             {
                 conn.Open();
+                conn.BindFunction(new SQLiteRegexFunction());
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
                     conn.Query(AttachUser(), transaction);
@@ -326,6 +327,7 @@ LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
             {
                 conn.Open();
+                conn.BindFunction(new SQLiteRegexFunction());
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
                     conn.Query(AttachUser(), transaction);
