@@ -97,6 +97,10 @@ namespace MainLib.ViewModels.Main
                     // Trim we do it here because if we do it in FormatText it will prevent users from typing spaces as it is run in setter and runs each time user enters a character since we set UpdateSourceTrigger to Property changed in XAML
                     ArticleForm.Title = ArticleForm.Title.Trim();
                     ArticleForm.Abstract = ArticleForm.Abstract.Trim();
+                    if (!String.IsNullOrEmpty(ArticleForm.PersonalComment))
+                    {
+                        ArticleForm.PersonalComment = ArticleForm.PersonalComment.Trim();
+                    }
 
                     ArticleRepo articleRepo = new ArticleRepo();
 

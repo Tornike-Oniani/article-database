@@ -58,6 +58,7 @@ namespace MainLib.ViewModels.Popups
                     Reference.ArticleID = (new ArticleRepo()).CheckArticleWithTitle(MainArticleTitle);
 
                 // 1. Update reference in database
+                Reference.Name = Reference.Name.Trim();
                 if (hasMainArticle)
                     referenceRepo.UpdateReference(Reference, true);
                 else

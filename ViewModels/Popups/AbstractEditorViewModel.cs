@@ -33,6 +33,8 @@ namespace MainLib.ViewModels.Popups
         public void Save(object input = null)
         {
 
+            ArticleForm.Abstract = ArticleForm.Abstract.Trim();
+
             // If article has abstract change it (We have to do this check because we keep abstracts in separate table)
             if (!String.IsNullOrEmpty(_article.AbstractBody)) 
             { 

@@ -43,6 +43,11 @@ namespace MainLib.ViewModels.Popups
         {
             try
             {
+                if (!String.IsNullOrWhiteSpace(PersonalComment))
+                {
+                    PersonalComment = PersonalComment.Trim();
+                }
+
                 if (PersonalComment != SelectedArticle.PersonalComment || SIC != SelectedArticle.SIC)
                 {
                     // 1. Send new comment and SIC values to parent
@@ -51,7 +56,7 @@ namespace MainLib.ViewModels.Popups
                     OnPropertyChanged("SelectedArticle");
 
                     // 2. Update record in database
-                    (new ArticleRepo()).UpdatePersonal(SelectedArticle, User);
+                    new ArticleRepo().UpdatePersonal(SelectedArticle, User);
 
                     // 3. Track update record
                     PersonalInfo info = new PersonalInfo(SelectedArticle.Title, PersonalComment, SIC);

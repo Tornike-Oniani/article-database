@@ -71,6 +71,7 @@ namespace MainLib.ViewModels.Popups
                 _name = bookmarkRepo.GetBookmarkNameWithId(Bookmark.ID);
 
                 // 1. Update new values to database
+                Bookmark.Name = Bookmark.Name.Trim();
                 bookmarkRepo.UpdateBookmark(Bookmark);
 
                 // 1.1 Track bookmark update
