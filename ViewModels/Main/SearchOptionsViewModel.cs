@@ -170,12 +170,13 @@ namespace MainLib.ViewModels.Main
         public bool CanClear(object input = null)
         {
             if (
-                string.IsNullOrEmpty(FilterTitle) &&
-                string.IsNullOrEmpty(FilterAuthors) &&
-                string.IsNullOrEmpty(FilterKeywords) &&
-                string.IsNullOrEmpty(FilterYear) &&
-                string.IsNullOrEmpty(FilterPersonalComment) &&
-                string.IsNullOrEmpty(IdFilter)
+                String.IsNullOrEmpty(FilterTitle) &&
+                String.IsNullOrEmpty(FilterAuthors) &&
+                String.IsNullOrEmpty(FilterKeywords) &&
+                String.IsNullOrEmpty(FilterYear) &&
+                String.IsNullOrEmpty(FilterPersonalComment) &&
+                String.IsNullOrEmpty(IdFilter) &&
+                String.IsNullOrEmpty(FilterAbstract)
                 )
                 return false;
 

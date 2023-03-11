@@ -860,6 +860,7 @@
                             Content="Export whole bookmark PDFs"
                             Command="{Binding ExportBookmarkCommand}"
                             Style="{StaticResource GenericButton}"
+                            VerticalAlignment="Center"
                             />
 
                     </StackPanel>

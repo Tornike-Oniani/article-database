@@ -222,6 +222,10 @@ namespace MainLib.ViewModels.Main
             // Initialize articles collection and paging
             Users = new ObservableCollection<User>(new UserRepo().GetUsers());
             Articles = new ObservableCollection<Article>();
+            this.TitleSearchWords = new List<string>();
+            this.TitleSearchPhrases = new List<string>();
+            this.AbstractSearchWords = new List<string>();
+            this.AbstractSearchPhrases = new List<string>();
             OnPropertyChanged("Articles");
             CurrentPage = 1;
             ItemsPerPage = 35;

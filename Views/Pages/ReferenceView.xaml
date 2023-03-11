@@ -849,6 +849,7 @@
                             Content="Export whole reference PDFs"
                             Command="{Binding ExportReferenceCommand}"
                             Style="{StaticResource GenericButton}"
+                            VerticalAlignment="Center"
                             />
                     </StackPanel>
                 </TabItem>
