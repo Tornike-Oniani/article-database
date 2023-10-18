@@ -19,38 +19,4 @@
         <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
     </Style>
 
-    <!-- Big header -->
-    <Style TargetType="{x:Type TextBlock}" x:Key="BigHeader">
-        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
-        <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="FontFamily" Value="{StaticResource Inter}" />
-        <Setter Property="FontSize" Value="22" />
-    </Style>
-
-    <!-- Generic header -->
-    <Style TargetType="{x:Type TextBlock}" x:Key="Header" BasedOn="{StaticResource BigHeader}">
-        <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="FontSize" Value="20" />
-    </Style>
-    
-    <!-- Medium header -->
-    <Style TargetType="{x:Type TextBlock}" x:Key="MediumHeader" BasedOn="{StaticResource BigHeader}">
-        <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="FontSize" Value="16" />
-    </Style>
-
-    <!-- Small header -->
-    <Style TargetType="{x:Type TextBlock}" x:Key="SmallHeader" BasedOn="{StaticResource BigHeader}">
-        <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="FontSize" Value="14" />
-    </Style>
-    
-    <!-- Label -->
-    <Style x:Key="Label" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
-        <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="FontFamily" Value="{StaticResource Inter}" />
-        <Setter Property="FontSize" Value="14" />
-    </Style>
-
 </ResourceDictionary>

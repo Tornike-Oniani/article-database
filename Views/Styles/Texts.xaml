@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
+                    >
+    
+    <!-- Big header -->
+    <Style x:Key="BigHeader" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontFamily" Value="{StaticResource Inter}" />
+        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=BigHeaderFontSize}" />
+    </Style>
+
+    <!-- Generic header -->
+    <Style x:Key="Header" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BigHeader}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=HeaderFontSize}" />
+    </Style>
+    <!-- Medium header -->
+    <Style x:Key="MediumHeader" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BigHeader}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+    </Style>
+    <!-- Small header -->
+    <Style x:Key="SmallHeader" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BigHeader}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=SmallTextFontSize}" />
+    </Style>
+    <!-- Default text -->
+    <Style x:Key="DefaultText" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
+    </Style>
+    <!-- Small text -->
+    <Style x:Key="SmallText" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=SmallTextFontSize}" />
+        <Setter Property="Foreground" Value="{StaticResource GrayColorDarkBrush}" />
+    </Style>
+    <!-- Label -->
+    <Style x:Key="Label" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontFamily" Value="{StaticResource Inter}" />
+        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+    </Style>
+
+</ResourceDictionary>

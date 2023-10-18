@@ -99,7 +99,7 @@
                     >
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                            <Setter Property="FontSize" Value="12" />
+                            <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
                             <Setter Property="Padding" Value="6 6 6 6" />
                             <Setter Property="Background" Value="{StaticResource LavenderColorBrush}" />
                             <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
@@ -561,7 +561,7 @@
                                                     <!-- Title -->
                                                     <TextBlock
                                                         Text="{Binding Title}"
-                                                        FontSize="16"
+                                                        Style="{StaticResource Header}"
                                                         FontFamily="Verdana"
                                                         TextWrapping="Wrap"
                                                         Margin="0 0 0 6"
@@ -576,7 +576,7 @@
                                                         <TextBlock
                                                             Text="{Binding Year}"
                                                             Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
-                                                            FontSize="14"
+                                                            Style="{StaticResource SmallText}"
                                                             FontStyle="Italic"
                                                             Foreground="{StaticResource BlackColorAltBrush}"                                                                                                        
                                                             Margin="0 0 6 0"
@@ -596,7 +596,7 @@
                                                     <TextBlock
                                                         Text="{Binding Keywords}"
                                                         Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
-                                                        FontSize="14"
+                                                        Style="{StaticResource SmallText}"
                                                         Foreground="{StaticResource LabelColorBrush}"
                                                         Margin="6 0 0 6"
                                                         Grid.Row="2"
@@ -605,7 +605,7 @@
                                                     <TextBlock
                                                         Text="{Binding Authors}"
                                                         Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
-                                                        FontSize="14"
+                                                        Style="{StaticResource SmallText}"
                                                         Foreground="{StaticResource BlackColorAltBrush}"
                                                         Margin="0 0 0 12"
                                                         Grid.Row="3"
@@ -619,7 +619,7 @@
                                                     <TextBlock
                                                         Text="{Binding AbstractBody}"
                                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
-                                                        FontSize="14"
+                                                        Style="{StaticResource DefaultText}"
                                                         TextWrapping="Wrap"
                                                         Foreground="{StaticResource BlackColorAltBrush}"
                                                         Margin="0 0 0 12"
@@ -659,7 +659,7 @@
                                                                                     >
                                                                                     <TextBlock
                                                                                         Text="{TemplateBinding Content}"
-                                                                                        FontSize="12"
+                                                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
                                                                                         Foreground="{TemplateBinding Foreground}"
                                                                                         />
                                                                                 </Border>
@@ -868,7 +868,7 @@
             </TabControl>
             <TextBlock 
                 Text="{Binding Bookmark.Name,FallbackValue=BindingWentWrong}" 
-                FontSize="12" 
+                Style="{StaticResource SmallText}" 
                 FontWeight="Bold"
                 FontFamily="Verdana"
                 Foreground="{StaticResource WhiteColorBrush}"

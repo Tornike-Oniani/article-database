@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:Main"
+             xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
+             
              xmlns:vm="clr-namespace:MainLib.ViewModels;assembly=MainLib.ViewModels"
              xmlns:views="clr-namespace:MainLib.Views;assembly=MainLib.Views"
              
@@ -32,9 +34,11 @@
                 
                 <!-- Texts resource dictionary -->
                 <ResourceDictionary Source="/Lib.Styles;component/Components/Texts.xaml" />
+                <ResourceDictionary Source="/MainLib.Views;component/Styles/Texts.xaml" />
 
                 <!-- Buttons resource dictionary -->
                 <ResourceDictionary Source="/Lib.Styles;component/Components/Buttons.xaml" />
+                <ResourceDictionary Source="/MainLib.Views;component/Styles/Buttons.xaml" />
 
                 <!-- Textboxes resource dictionary -->
                 <ResourceDictionary Source="/Lib.Styles;component/Components/TextBoxes.xaml" />
@@ -43,22 +47,22 @@
                 <ResourceDictionary Source="/Lib.Styles;component/Components/Navigation.xaml" />
 
                 <!-- Checkboxes resource dictionary-->
-                <ResourceDictionary Source="/Lib.Styles;component/Components/Checkboxes.xaml" />
+                <ResourceDictionary Source="/MainLib.Views;component/Styles/Checkboxes.xaml" />
 
                 <!-- Windows resource dictionary-->
                 <ResourceDictionary Source="/Lib.Styles;component/Components/Windows.xaml" />
 
                 <!-- Datagrid resource dictionary-->
-                <ResourceDictionary Source="/Lib.Styles;component/Components/Datagrid.xaml" />
+                <ResourceDictionary Source="/MainLib.Views;component/Styles/Datagrid.xaml" />
 
                 <!-- Ribbon resource dictionary-->
-                <ResourceDictionary Source="/Lib.Styles;component/Components/Ribbon.xaml" />
+                <ResourceDictionary Source="/MainLib.Views;component/Styles/Ribbon.xaml" />
 
                 <!-- ListView resource dictionary -->
-                <ResourceDictionary Source="/Lib.Styles;component/Components/ListView.xaml" />
+                <ResourceDictionary Source="/MainLib.Views;component/Styles/ListView.xaml" />
 
-                <!-- Dialog resource dictionary -->
-                <ResourceDictionary Source="/Lib.Styles;component/Components/Misc.xaml" />
+                <!-- Misc resource dictionary -->
+                <ResourceDictionary Source="/MainLib.Views;component/Styles/Misc.xaml" />
 
                 <!-- Dialog resource dictionary -->
                 <ResourceDictionary Source="/Lib.Views;component/Styles/DialogStyle.xaml" />

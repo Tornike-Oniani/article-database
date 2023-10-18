@@ -10,22 +10,63 @@ namespace MainLib.ViewModels.Popups
     public class SettingsViewModel : BaseViewModel
     {
 
+        #region Property fields
         private int _fontSize;
+        private int _headerFontSize;
+        private int _textFontSize;
+        private int _smallTextFontSize;
+        private int _buttonFontSize;
+        private int _inputTextFontSize;
         private string _syncName;
+        private string _allowedCharacters;
         private string _selectedTheme;
-        private IThemeService _themeService;
+        #endregion
 
+        #region Private attributes
+        private readonly IThemeService _themeService;
+        #endregion
+
+        #region Public properties
         public int FontSize
         {
             get { return _fontSize; }
             set { _fontSize = value; OnPropertyChanged("FontSize"); }
+        }
+        public int HeaderFontSize
+        {
+            get { return _headerFontSize; }
+            set { _headerFontSize = value; OnPropertyChanged("HeaderFontSize"); }
+        }
+        public int TextFontSize
+        {
+            get { return _textFontSize; }
+            set { _textFontSize = value; OnPropertyChanged("TextFontSize"); }
+        }
+        public int SmallTextFontSize
+        {
+            get { return _smallTextFontSize; }
+            set { _smallTextFontSize = value; OnPropertyChanged("SmallTextFontSize"); }
+        }
+        public int ButtonFontSize
+        {
+            get { return _buttonFontSize; }
+            set { _buttonFontSize = value; OnPropertyChanged("BigHeaderFontSize"); }
+        }      
+        public int InputTextFontSize
+        {
+            get { return _inputTextFontSize; }
+            set { _inputTextFontSize = value; OnPropertyChanged("InputTextFontSize"); }
         }
         public string SyncName
         {
             get { return _syncName; }
             set { _syncName = value; OnPropertyChanged("SyncName"); }
         }
-        public User User { get; set; }
+        public string AllowedCharacters
+        {
+            get { return _allowedCharacters; }
+            set { _allowedCharacters = value; OnPropertyChanged("AllowedCharacters"); }
+        }
         public string SelectedTheme
         {
             get { return _selectedTheme; }
@@ -35,17 +76,28 @@ namespace MainLib.ViewModels.Popups
                 OnPropertyChanged("SelectedTheme");
             }
         }
+        public User User { get; set; }
         public ObservableCollection<string> Themes { get; set; }
+        #endregion
 
+        #region Commands
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }
+        #endregion
 
+        #region Constructor
         public SettingsViewModel()
         {
             this.User = Shared.GetInstance().User;
             this.Title = "Settings...";
             this.FontSize = Properties.Settings.Default.FontSize;
+            this.HeaderFontSize = Properties.Settings.Default.HeaderFontSize;
+            this.TextFontSize = Properties.Settings.Default.TextFontSize;
+            this.SmallTextFontSize = Properties.Settings.Default.SmallTextFontSize;
+            this.ButtonFontSize = Properties.Settings.Default.ButtonFontSize;
+            this.InputTextFontSize = Properties.Settings.Default.InputTextFontSize;
             this.SyncName = Properties.Settings.Default.SyncName;
+            this.AllowedCharacters = Properties.Settings.Default.AllowedCharacters;
             this._themeService = Shared.GetInstance().ThemeService;
             this.Themes = new ObservableCollection<string>()
             {
@@ -57,11 +109,19 @@ namespace MainLib.ViewModels.Popups
             SaveCommand = new RelayCommand(Save);
             CancelCommand = new RelayCommand(Cancel);
         }
+        #endregion
 
+        #region Command actions
         public void Save(object input = null)
         {
             Properties.Settings.Default.FontSize = FontSize;
+            Properties.Settings.Default.HeaderFontSize = HeaderFontSize;
+            Properties.Settings.Default.TextFontSize = TextFontSize;
+            Properties.Settings.Default.SmallTextFontSize = SmallTextFontSize;
+            Properties.Settings.Default.ButtonFontSize = ButtonFontSize;
+            Properties.Settings.Default.InputTextFontSize = InputTextFontSize;
             Properties.Settings.Default.SyncName = SyncName;
+            Properties.Settings.Default.AllowedCharacters = AllowedCharacters;
             Properties.Settings.Default.Theme = _selectedTheme;
             Properties.Settings.Default.Save();
             _themeService.ChangeTheme(_selectedTheme);
@@ -72,5 +132,6 @@ namespace MainLib.ViewModels.Popups
         {
             this.Window.Close();
         }
+        #endregion
     }
 }

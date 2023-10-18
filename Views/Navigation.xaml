@@ -31,13 +31,12 @@
                     <usercontrols:LoadingControl Diameter="50"
                                                  Color1="{StaticResource PrimaryColor}"
                                                  Color2="{StaticResource LavenderColor}" />
-                    <Label 
-                        Content="{Binding WorkLabel, FallbackValue=Working...}" 
-                        FontSize="18"
-                        FontWeight="Bold"
+                    <TextBlock 
+                        Text="{Binding WorkLabel, FallbackValue=Working...}" 
+                        Style="{StaticResource Header}"
                         Foreground="{StaticResource LabelColorBrush}"
                         VerticalAlignment="Center"
-                        Margin="6 0 0 0" 
+                        Margin="8 0 0 0" 
                         />
                 </StackPanel>
             </Border>

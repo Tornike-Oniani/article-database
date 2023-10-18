@@ -569,10 +569,10 @@
                                                     <!-- Title -->
                                                     <TextBlock
                                                         Text="{Binding Title}"
-                                                        FontSize="16"
+                                                        Style="{StaticResource Header}"
+                                                        Foreground="{StaticResource BlackColorAltBrush}"
                                                         FontFamily="Verdana"
                                                         TextWrapping="Wrap"
-                                                        Foreground="{StaticResource BlackColorAltBrush}"
                                                         ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.TitleSearchWords, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.TitleSearchPhrases, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
@@ -589,9 +589,9 @@
                                                         <TextBlock
                                                             Text="{Binding Year}"
                                                             Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
-                                                            FontSize="14"
+                                                            Style="{StaticResource SmallText}"
                                                             FontStyle="Italic"
-                                                            Foreground="{StaticResource BlackColorAltBrush}"                                                                                                        
+                                                            Foreground="{StaticResource BlackColorAltBrush}"
                                                             Margin="0 0 6 0"
                                                             />
                                                         <TextBlock
@@ -601,15 +601,16 @@
                                                                 RelativeSource={
                                                                 RelativeSource FindAncestor, 
                                                                 AncestorType={x:Type UserControl}}}"
-                                                            FontSize="14"
+                                                            Style="{StaticResource SmallText}"
+                                                            Foreground="{StaticResource BlackColorAltBrush}"
                                                             />
                                                     </StackPanel>
                                                     <!-- Keywords -->
                                                     <TextBlock
                                                         Text="{Binding Keywords}"
                                                         Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
-                                                        FontSize="14"
-                                                        Foreground="{StaticResource LabelColorBrush}"
+                                                        Style="{StaticResource SmallText}"
+                                                        Foreground="{StaticResource TextColorBrush}"
                                                         ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:TextBlockHighlighter.WordBreakMode="True"
                                                         ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
@@ -621,8 +622,8 @@
                                                     <TextBlock
                                                         Text="{Binding Authors}"
                                                         Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
-                                                        FontSize="14"
-                                                        Foreground="{StaticResource BlackColorAltBrush}"
+                                                        Style="{StaticResource SmallText}"
+                                                        Foreground="{StaticResource TextColorBrush}"
                                                         ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:TextBlockHighlighter.WordBreakMode="True"
                                                         ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
@@ -639,13 +640,12 @@
                                                     <TextBlock
                                                         Text="{Binding AbstractBody}"
                                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
+                                                        Style="{StaticResource DefaultText}"
                                                         ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.AbstractSearchWords, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.AbstractSearchPhrases, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
                                                         ap:AdvancedTextblockHighlighter.Forecolor="#000000"           
-                                                        FontSize="14"
                                                         TextWrapping="Wrap"
-                                                        Foreground="{StaticResource BlackColorAltBrush}"
                                                         Margin="0 0 0 12"
                                                         Grid.Row="5"
                                                         />
@@ -683,7 +683,7 @@
                                                                                     >
                                                                                     <TextBlock
                                                                                         Text="{TemplateBinding Content}"
-                                                                                        FontSize="12"
+                                                                                        Style="{StaticResource DefaultText}"
                                                                                         Foreground="{TemplateBinding Foreground}"
                                                                                         />
                                                                                 </Border>

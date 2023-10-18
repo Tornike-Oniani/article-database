@@ -74,19 +74,18 @@
                             <materialDesign:PackIcon 
                                 Kind="BookmarkMultiple"
                                 VerticalAlignment="Center"
-                                Foreground="{StaticResource PrimaryColorBrush}"
-                                Height="25"
-                                Width="25"
+                                Foreground="{StaticResource TextColorBrush}"
+                                Height="24"
+                                Width="24"
                                 Margin="0 0 5 0"
                                 Grid.Row="0"
                                 Grid.Column="2" 
                                 />
                             <TextBlock 
                                 Text="My bookmarks:"
-                                Style="{StaticResource Header}"
+                                Style="{StaticResource MediumHeader}"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Foreground="{StaticResource PrimaryColorBrush}" 
                                 />
                         </StackPanel>
 
@@ -142,17 +141,16 @@
                             <materialDesign:PackIcon 
                                 Kind="Globe"
                                 VerticalAlignment="Center"
-                                Foreground="{StaticResource PrimaryColorBrush}"
+                                Foreground="{StaticResource TextColorBrush}"
                                 Height="25"
                                 Width="25"
                                 Margin="0 0 5 0"
                                 />
                             <TextBlock 
                                 Text="Global bookmarks:"
-                                Style="{StaticResource Header}"
+                                Style="{StaticResource MediumHeader}"
                                 HorizontalAlignment="Left" 
                                 VerticalAlignment="Center"
-                                Foreground="{StaticResource PrimaryColorBrush}" 
                                 />
                         </StackPanel>
 

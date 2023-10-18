@@ -71,8 +71,7 @@
                                 />
                             <TextBlock
                                 Text="Title, authors, keywords, year file and abstract"
-                                FontSize="12"
-                                Foreground="{StaticResource GrayColorDarkBrush}"
+                                Style="{StaticResource SmallText}"
                                 />
                         </StackPanel>
 
@@ -104,7 +103,6 @@
                                 Style="{StaticResource WatermarkTextBox}"
                                 TextWrapping="Wrap" 
                                 AcceptsReturn="True"
-                                FontSize="14"
                                 SpellCheck.IsEnabled="True"
                                 FontFamily="Verdana"
                                 LostFocus="txbTitle_LostFocus" 
@@ -309,9 +307,8 @@
                                 Margin="0 0 0 3"
                                 />
                             <TextBlock
-                                Text="comment, SIC, bookmarks and references"
-                                FontSize="12"
-                                Foreground="{StaticResource GrayColorDarkBrush}"
+                                Text="Comment, SIC, bookmarks and references"
+                                Style="{StaticResource SmallText}"
                                 />
                         </StackPanel>
 

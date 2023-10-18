@@ -203,7 +203,9 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArticleDatabase.Styles\Lib.Styles.csproj">
       <Project>{57dda4cd-7e62-43a4-8a67-9c9a16154e69}</Project>
@@ -212,6 +214,10 @@
     <ProjectReference Include="..\Lib.ViewModels\Lib.ViewModels.csproj">
       <Project>{22197010-2cc9-4f4b-b22c-c39ed33f91b7}</Project>
       <Name>Lib.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ViewModels\MainLib.ViewModels.csproj">
+      <Project>{4414eb2f-7ab3-46f4-92c3-c4ecbcbe7b35}</Project>
+      <Name>MainLib.ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

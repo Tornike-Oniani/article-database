@@ -6,6 +6,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:Lib.Views.UserControls"
              xmlns:converters="clr-namespace:Lib.Views.Converters"
+             xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -16,7 +17,7 @@
             <Setter Property="BorderThickness" Value="0 0 0 0" />
             <Setter Property="Foreground" Value="#ffffff" />
             <Setter Property="Padding" Value="12 6 12 6" />
-            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ButtonFontSize}" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -46,7 +47,7 @@
             <Setter Property="Background" Value="#ffffff" />
             <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
             <Setter Property="BorderThickness" Value="1 1 1 1" />
-            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
             <Setter Property="Padding" Value="12 6 12 6" />
             <Setter Property="Template">
                 <Setter.Value>

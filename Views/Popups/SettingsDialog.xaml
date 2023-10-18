@@ -22,10 +22,10 @@
             <!-- Settings -->
             <StackPanel 
                 HorizontalAlignment="Left"
-                Width="250"
+                Width="350"
                 Grid.Row="0"
                 >
-                <!-- Font size -->
+                <!-- Data font size -->
                 <Grid>
                     <TextBlock 
                         Text="Data font size:"
@@ -34,6 +34,78 @@
                         />
                     <TextBox 
                         Text="{Binding FontSize}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        HorizontalAlignment="Right"
+                        Width="35"
+                        Margin="6 0 0 0" 
+                        />
+                </Grid>
+
+                <Separator Margin="0 6 0 6" />
+                                
+                <!-- Header font size -->
+                <Grid>
+                    <TextBlock 
+                        Text="Header font size:"
+                        Style="{StaticResource MediumHeader}"
+                        VerticalAlignment="Center"
+                        />
+                    <TextBox 
+                        Text="{Binding HeaderFontSize}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        HorizontalAlignment="Right"
+                        Width="35"
+                        Margin="6 0 0 0" 
+                        />
+                </Grid>
+
+                <Separator Margin="0 6 0 6" />
+
+                <!-- Text font size -->
+                <Grid>
+                    <TextBlock 
+                        Text="Text font size:"
+                        Style="{StaticResource MediumHeader}"
+                        VerticalAlignment="Center"
+                        />
+                    <TextBox 
+                        Text="{Binding TextFontSize}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        HorizontalAlignment="Right"
+                        Width="35"
+                        Margin="6 0 0 0" 
+                        />
+                </Grid>
+
+                <Separator Margin="0 6 0 6" />
+
+                <!-- Small text font size -->
+                <Grid>
+                    <TextBlock 
+                        Text="Small text font size:"
+                        Style="{StaticResource MediumHeader}"
+                        VerticalAlignment="Center"
+                        />
+                    <TextBox 
+                        Text="{Binding SmallTextFontSize}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        HorizontalAlignment="Right"
+                        Width="35"
+                        Margin="6 0 0 0" 
+                        />
+                </Grid>
+
+                <Separator Margin="0 6 0 6" />
+
+                <!-- Button font size -->
+                <Grid>
+                    <TextBlock 
+                        Text="Button font size:"
+                        Style="{StaticResource MediumHeader}"
+                        VerticalAlignment="Center"
+                        />
+                    <TextBox 
+                        Text="{Binding ButtonFontSize}"
                         Style="{StaticResource WatermarkTextBoxSmall}"
                         HorizontalAlignment="Right"
                         Width="35"
@@ -62,7 +134,27 @@
                     Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
                     Margin="0 6 0 6" 
                     />
+
+                <!-- Sync name -->
+                <Grid Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock 
+                        Text="Allowed characters:"
+                        Style="{StaticResource MediumHeader}" 
+                        VerticalAlignment="Center"
+                        />
+                    <TextBox 
+                        Text="{Binding AllowedCharacters}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        HorizontalAlignment="Right"
+                        Width="130" 
+                        />
+                </Grid>
                 
+                <Separator  
+                    Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                    Margin="0 6 0 6" 
+                    />
+
                 <!-- Theme -->
                 <Grid>
                     <TextBlock
