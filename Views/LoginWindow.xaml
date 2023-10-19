@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:Main"
+        xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
         xmlns:base="clr-namespace:Lib.Views;assembly=Lib.Views"
         xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
         xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
@@ -83,7 +84,7 @@
                                                  Color1="{StaticResource PrimaryColor}"
                                                  Color2="{StaticResource LavenderColor}" />
                     <Label Content="Working..." 
-                           FontSize="14" 
+                           FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=DefaultFontSize}" 
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            Margin="5 0 0 0" />

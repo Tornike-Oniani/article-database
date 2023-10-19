@@ -14,15 +14,21 @@
     
     <Border Padding="12 12 12 12">
         <Grid>
-            <Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             
             <!-- Settings -->
             <StackPanel 
-                HorizontalAlignment="Left"
-                Width="350"
+                Grid.Column="0"
                 Grid.Row="0"
                 >
                 <!-- Data font size -->
@@ -135,26 +141,6 @@
                     Margin="0 6 0 6" 
                     />
 
-                <!-- Sync name -->
-                <Grid Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}">
-                    <TextBlock 
-                        Text="Allowed characters:"
-                        Style="{StaticResource MediumHeader}" 
-                        VerticalAlignment="Center"
-                        />
-                    <TextBox 
-                        Text="{Binding AllowedCharacters}"
-                        Style="{StaticResource WatermarkTextBoxSmall}"
-                        HorizontalAlignment="Right"
-                        Width="130" 
-                        />
-                </Grid>
-                
-                <Separator  
-                    Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
-                    Margin="0 6 0 6" 
-                    />
-
                 <!-- Theme -->
                 <Grid>
                     <TextBlock
@@ -174,12 +160,44 @@
 
                 <Separator Margin="0 6 0 6" />
             </StackPanel>
-            
+
+            <!-- Allowed characters -->
+            <StackPanel
+                Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Grid.Row="1"
+                >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock 
+                        Text="Allowed characters:"
+                        Style="{StaticResource MediumHeader}" 
+                        VerticalAlignment="Center"
+                        Margin="0 0 12 0"
+                        />
+                    <TextBox 
+                        Text="{Binding AllowedCharacters}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"                    
+                        Grid.Column="1"
+                        />
+                </Grid>
+
+                <Separator  
+                        Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                        Margin="0 6 0 6" 
+                        />
+            </StackPanel>
+
+
             <!-- Buttons -->
             <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right"
+                        HorizontalAlignment="Left"
                         Margin="0 15 0 0"
-                        Grid.Row="1">
+                        Grid.Row="4">
                 <Button Content="Save"
                         Width="85"
                         Margin="0 0 10 0"

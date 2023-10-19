@@ -177,6 +177,7 @@ namespace MainLib.ViewModels.Main
         public ICommand ExportCommand { get; set; }
         public ICommand SortFromDataGridCommand { get; set; }
         public ICommand SortFromRibbonCommand { get; set; }
+        public ICommand CopyWordCommand { get; set; }
 
         // Constructor
         public DataViewViewModel()
@@ -252,6 +253,7 @@ namespace MainLib.ViewModels.Main
             SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
             SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
+            CopyWordCommand = new RelayCommand(CopyWord);
 
             InitializeSearchOptions();
             this.SelectedViewType = new CompactViewTemplate();
@@ -286,6 +288,18 @@ namespace MainLib.ViewModels.Main
                 SearchOptionsIsChecked = false;
 
                 string _filterTitle = FilterTitle;
+                if (!String.IsNullOrEmpty(FilterTitle))
+                {
+                    FilterTitle = FilterTitle.Trim();
+                }
+                if (!String.IsNullOrEmpty(FilterAuthors))
+                {
+                    FilterAuthors = FilterAuthors.Trim();
+                }
+                if (!String.IsNullOrEmpty(FilterKeywords))
+                {
+                    FilterKeywords = FilterKeywords.Trim();
+                }
                 List<string> filterAuthorsFromString = String.IsNullOrEmpty(FilterAuthors) ? new List<string>() : FilterAuthors.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
                 List<string> filterKeywordsFromString = String.IsNullOrEmpty(FilterKeywords) ? new List<string>() : FilterKeywords.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
 
@@ -542,6 +556,10 @@ namespace MainLib.ViewModels.Main
             await PopulateArticles();
             Services.IsWorking(false);
             OnPropertyChanged("SelectedSort");
+        }
+        public void CopyWord(object input)
+        {
+            Clipboard.SetText(input.ToString());
         }
 
         // Private helpers

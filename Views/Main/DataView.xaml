@@ -30,6 +30,7 @@
         <converters:BoolToTextHeaderStyleConverter x:Key="BoolToTextHeaderStyle" />
         <converters:AbstractToVisibilityConverter x:Key="AbstractToVisibility" />
         <converters:SortConverter x:Key="SortConverter" />
+        <converters:StringToWords x:Key="StringToWords" />
 
         <!-- Abstract animations -->
         <Storyboard x:Key="ShowAbstract">
@@ -72,6 +73,25 @@
                 Duration="0:0:0.15"
                 />
         </Storyboard>
+
+        <Style x:Key="HoverBorder" TargetType="{x:Type Border}">
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="1" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="1" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
         <!-- Compact view -->
         <DataTemplate DataType="{x:Type utils:CompactViewTemplate}">
@@ -327,14 +347,77 @@
                             >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock 
+                                    <ListView
+                                        ItemsSource="{Binding Authors, Converter={StaticResource StringToWords}}"
+                                        BorderThickness="1"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                        ScrollViewer.CanContentScroll="False"
+                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                                        >
+                                        <ListView.Template>
+                                            <ControlTemplate TargetType="{x:Type ListView}">
+                                                <ItemsPresenter />
+                                            </ControlTemplate>
+                                        </ListView.Template>
+                                        <ListView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button 
+                                                    Content="{Binding}" 
+                                                    Style="{x:Null}" 
+                                                    Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="Copy"
+                                                    >
+                                                    <Button.Template>
+                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                            <ContentPresenter />
+                                                        </ControlTemplate>
+                                                    </Button.Template>
+                                                    <Button.ContentTemplate>
+                                                        <DataTemplate>
+                                                            <Border
+                                                                Style="{StaticResource HoverBorder}"
+                                                                >
+                                                                <TextBlock 
+                                                                    Text="{Binding Path=.}"
+                                                                    TextWrapping="Wrap"
+                                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                                    ap:TextBlockHighlighter.WordBreakMode="True"
+                                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                                    ap:TextBlockHighlighter.Forecolor="#000000" 
+                                                                    />
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </Button.ContentTemplate>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="{x:Type ListViewItem}">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                            <ContentPresenter />
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                    </ListView>
+                                    <!--<TextBlock 
                                         Text="{Binding Authors}" 
                                         TextWrapping="Wrap"
                                         ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                         ap:TextBlockHighlighter.WordBreakMode="True"
                                         ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
                                         ap:TextBlockHighlighter.Forecolor="#000000" 
-                                        />
+                                        />-->
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -350,14 +433,77 @@
                             >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock 
+                                    <ListView
+                                        ItemsSource="{Binding Keywords, Converter={StaticResource StringToWords}}"
+                                        BorderThickness="1"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                        ScrollViewer.CanContentScroll="False"
+                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                                        >
+                                        <ListView.Template>
+                                            <ControlTemplate TargetType="{x:Type ListView}">
+                                                <ItemsPresenter />
+                                            </ControlTemplate>
+                                        </ListView.Template>
+                                        <ListView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button 
+                                                    Content="{Binding}" 
+                                                    Style="{x:Null}" 
+                                                    Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="Copy"
+                                                    >
+                                                    <Button.Template>
+                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                            <ContentPresenter />
+                                                        </ControlTemplate>
+                                                    </Button.Template>
+                                                    <Button.ContentTemplate>
+                                                        <DataTemplate>
+                                                            <Border
+                                                                Style="{StaticResource HoverBorder}"
+                                                                >
+                                                                <TextBlock 
+                                                                    Text="{Binding Path=.}"
+                                                                    TextWrapping="Wrap"
+                                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                                    ap:TextBlockHighlighter.WordBreakMode="True"
+                                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                                    ap:TextBlockHighlighter.Forecolor="#000000" 
+                                                                    />
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </Button.ContentTemplate>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="{x:Type ListViewItem}">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                            <ContentPresenter />
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                    </ListView>
+                                    <!--<TextBlock 
                                         Text="{Binding Keywords}" 
                                         TextWrapping="Wrap"
                                         ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                         ap:TextBlockHighlighter.WordBreakMode="True"
                                         ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
                                         ap:TextBlockHighlighter.Forecolor="#000000" 
-                                        />
+                                        />-->
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -606,7 +752,74 @@
                                                             />
                                                     </StackPanel>
                                                     <!-- Keywords -->
-                                                    <TextBlock
+                                                    <ListView
+                                                        ItemsSource="{Binding Keywords, Converter={StaticResource StringToWords}}"
+                                                        Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
+                                                        BorderThickness="1"
+                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                                        ScrollViewer.CanContentScroll="False"
+                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                                                        Margin="0 0 0 12"
+                                                        Grid.Row="2"
+                                                        >
+                                                        <ListView.Template>
+                                                            <ControlTemplate TargetType="{x:Type ListView}">
+                                                                <ItemsPresenter />
+                                                            </ControlTemplate>
+                                                        </ListView.Template>
+                                                        <ListView.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                                                            </ItemsPanelTemplate>
+                                                        </ListView.ItemsPanel>
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Button 
+                                                                    Content="{Binding}" 
+                                                                    Style="{x:Null}" 
+                                                                    Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                                                    CommandParameter="{Binding}"
+                                                                    ToolTip="Copy"
+                                                                    >
+                                                                    <Button.Template>
+                                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                                            <ContentPresenter />
+                                                                        </ControlTemplate>
+                                                                    </Button.Template>
+                                                                    <Button.ContentTemplate>
+                                                                        <DataTemplate>
+                                                                            <Border
+                                                                                Style="{StaticResource HoverBorder}"
+                                                                                >
+                                                                                <TextBlock 
+                                                                                    Text="{Binding Path=.}"
+                                                                                    Style="{StaticResource SmallText}"
+                                                                                    Foreground="{StaticResource TextColorBrush}"
+                                                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                                                    ap:TextBlockHighlighter.WordBreakMode="True"
+                                                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                                                    ap:TextBlockHighlighter.Forecolor="#000000" 
+                                                                                    />
+                                                                            </Border>
+                                                                        </DataTemplate>
+                                                                    </Button.ContentTemplate>
+                                                                </Button>
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                        <ListView.ItemContainerStyle>
+                                                            <Style TargetType="{x:Type ListViewItem}">
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                                            <ContentPresenter />
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </ListView.ItemContainerStyle>
+                                                    </ListView>
+                                                    <!--<TextBlock
                                                         Text="{Binding Keywords}"
                                                         Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
                                                         Style="{StaticResource SmallText}"
@@ -617,9 +830,76 @@
                                                         ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
                                                         Margin="6 0 0 6"
                                                         Grid.Row="2"
-                                                        />
+                                                        />-->
                                                     <!-- Authors -->
-                                                    <TextBlock
+                                                    <ListView
+                                                        ItemsSource="{Binding Authors, Converter={StaticResource StringToWords}}"
+                                                        Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
+                                                        BorderThickness="1"
+                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                                        ScrollViewer.CanContentScroll="False"
+                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                                                        Margin="0 0 0 12"
+                                                        Grid.Row="3"
+                                                        >
+                                                        <ListView.Template>
+                                                            <ControlTemplate TargetType="{x:Type ListView}">
+                                                                <ItemsPresenter />
+                                                            </ControlTemplate>
+                                                        </ListView.Template>
+                                                        <ListView.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                                                            </ItemsPanelTemplate>
+                                                        </ListView.ItemsPanel>
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Button 
+                                                                    Content="{Binding}" 
+                                                                    Style="{x:Null}" 
+                                                                    Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                                                    CommandParameter="{Binding}"
+                                                                    ToolTip="Copy"
+                                                                    >
+                                                                    <Button.Template>
+                                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                                            <ContentPresenter />
+                                                                        </ControlTemplate>
+                                                                    </Button.Template>
+                                                                    <Button.ContentTemplate>
+                                                                        <DataTemplate>
+                                                                            <Border
+                                                                                Style="{StaticResource HoverBorder}"
+                                                                                >
+                                                                                <TextBlock 
+                                                                                    Text="{Binding Path=.}"
+                                                                                    Style="{StaticResource SmallText}"
+                                                                                    Foreground="{StaticResource TextColorBrush}"
+                                                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                                                    ap:TextBlockHighlighter.WordBreakMode="True"
+                                                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                                                    ap:TextBlockHighlighter.Forecolor="#000000" 
+                                                                                    />
+                                                                            </Border>
+                                                                        </DataTemplate>
+                                                                    </Button.ContentTemplate>
+                                                                </Button>
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                        <ListView.ItemContainerStyle>
+                                                            <Style TargetType="{x:Type ListViewItem}">
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                                            <ContentPresenter />
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </ListView.ItemContainerStyle>
+                                                    </ListView>
+                                                    <!--<TextBlock
                                                         Text="{Binding Authors}"
                                                         Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
                                                         Style="{StaticResource SmallText}"
@@ -630,7 +910,7 @@
                                                         ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
                                                         Margin="0 0 0 12"
                                                         Grid.Row="3"
-                                                        />
+                                                        />-->
                                                     <!-- Seprator -->
                                                     <Separator 
                                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
