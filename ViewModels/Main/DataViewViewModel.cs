@@ -559,7 +559,7 @@ namespace MainLib.ViewModels.Main
         }
         public void CopyWord(object input)
         {
-            Clipboard.SetText(input.ToString());
+            Clipboard.SetText(input.ToString().Replace(",", ""));
         }
 
         // Private helpers

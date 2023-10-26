@@ -29,6 +29,7 @@ namespace MainLib.ViewModels.Utils
             {
                 allowedCharacters = Properties.Settings.Default.AllowedCharacters;
                 unusualCharacters = new Regex($@"[^\x20-\x7e{allowedCharacters}]+");
+                isValidText = new Regex($@"^[\x20-\x7e{allowedCharacters}]+$");
             }
             return unusualCharacters.Matches(input).Cast<Match>().Select(match => match.Value).Distinct().ToArray();
         }
@@ -37,6 +38,7 @@ namespace MainLib.ViewModels.Utils
             if (allowedCharacters != Properties.Settings.Default.AllowedCharacters)
             {
                 allowedCharacters = Properties.Settings.Default.AllowedCharacters;
+                unusualCharacters = new Regex($@"[^\x20-\x7e{allowedCharacters}]+");
                 isValidText = new Regex($@"^[\x20-\x7e{allowedCharacters}]+$");
             }
 

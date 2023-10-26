@@ -83,9 +83,8 @@
                     <usercontrols:LoadingControl Diameter="42"
                                                  Color1="{StaticResource PrimaryColor}"
                                                  Color2="{StaticResource LavenderColor}" />
-                    <Label Content="Working..." 
-                           FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=DefaultFontSize}" 
-                           FontWeight="Bold"
+                    <TextBlock Text="Working..." 
+                           Style="{StaticResource MediumHeader}"
                            VerticalAlignment="Center"
                            Margin="5 0 0 0" />
                 </StackPanel>

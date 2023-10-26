@@ -217,7 +217,7 @@ namespace Lib.DataAccessLayer.Repositories
                     conn.Execute(@"DELETE FROM user.tblUserPersonal WHERE ArticleID=@ArticleID",
                         new { ArticleID = article.ID }, transaction);
                     // Remove abstract
-                    conn.Execute(@"DELETE FROM tblAbstract WHERE Article_ID=@AritcleID", new { ArticleID = article.ID }, transaction);
+                    conn.Execute(@"DELETE FROM tblAbstract WHERE Article_ID=@ArticleID", new { ArticleID = article.ID }, transaction);
                     transaction.Commit();
                 }
             }

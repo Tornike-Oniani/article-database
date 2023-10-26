@@ -181,7 +181,7 @@
                                     Binding ElementName=placeholder, 
                                     Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
                                 Foreground="{StaticResource RedColorBrush}"
-                                FontSize="11"
+                                FontSize="16"
                                 />
                         </Border>
                     </StackPanel>
