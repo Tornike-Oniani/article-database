@@ -98,15 +98,15 @@
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                                            From="-19" 
+                                            From="-20" 
                                             To="0"
                                             Duration="0:0:0.1"
                                             />
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="FontSize"
-                                            From="12" 
-                                            To="14"
+                                            From="14" 
+                                            To="16"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
@@ -120,14 +120,14 @@
                                             Storyboard.TargetName="watermark"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
                                             From="0" 
-                                            To="-19"
+                                            To="-20"
                                             Duration="0:0:0.1"
                                             />
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="FontSize"
-                                            From="14" 
-                                            To="12"
+                                            From="16" 
+                                            To="14"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
@@ -206,7 +206,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource Gray-BlueColorDarkBrush}" />
         <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
         <Setter Property="Padding" Value="3 3 3 3" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="16" />
         <!-- Template -->
         <Setter Property="Template">
             <Setter.Value>
@@ -264,7 +264,7 @@
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                                            From="-17" 
+                                            From="-18" 
                                             To="0"
                                             Duration="0:0:0"
                                             />
@@ -279,7 +279,7 @@
                                             Storyboard.TargetName="watermark"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
                                             From="0" 
-                                            To="-17"
+                                            To="-18"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
