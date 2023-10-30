@@ -26,9 +26,9 @@ namespace MainLib.ViewModels.Main
         private List<string> _titleSearchPhrases;
         private List<string> _abstractSearchWords;
         private List<string> _abstractSearchPhrases;
+        private bool _showAdditionalFilters;
 
         string[] dudWords = new string[] { "in", "of", "at", "to", "into", "on", "onto", "a", "the", "and" };
-
 
         // Public properties
         public string SimpleSearch
@@ -123,6 +123,24 @@ namespace MainLib.ViewModels.Main
             get { return _abstractSearchPhrases; }
             set { _abstractSearchPhrases = value; OnPropertyChanged("AbstractSearchPhrases"); }
         }
+        public bool ShowAdditionalFilters
+        {
+            get { return _showAdditionalFilters; }
+            set 
+            { 
+                _showAdditionalFilters = value;
+                if (!_showAdditionalFilters)
+                {
+                    FilterYear = null;
+                    FilterPersonalComment = null;
+                    IdFilter = null;
+                    FilterAbstract = null;
+                    AbstractSearchWords.Clear();
+                    AbstractSearchPhrases.Clear();
+                }
+                OnPropertyChanged("ShowAdditionalFilters"); 
+            }
+        }
 
         // Temporary authors and keywords highlighter
         public string TitleHighlight { get { return this._filterTitle; } }
@@ -157,7 +175,6 @@ namespace MainLib.ViewModels.Main
             FilterYear = null;
             FilterPersonalComment = null;
             IdFilter = null;
-            FilterAbstract= null;
             FilterAbstract = null;
             Articles.Clear();
             TitleSearchWords.Clear();

@@ -32,6 +32,20 @@
         <converters:SortConverter x:Key="SortConverter" />
         <converters:StringToWords x:Key="StringToWords" />
 
+        <Style TargetType="{x:Type ToolTip}">
+            <Style.Resources>
+                <Style TargetType="ContentPresenter">
+                    <Style.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap"  />
+                        </Style>
+                    </Style.Resources>
+                </Style>
+            </Style.Resources>
+            <Setter Property="MaxWidth" Value="450" />
+            <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+        </Style>
+
         <!-- Abstract animations -->
         <Storyboard x:Key="ShowAbstract">
             <!-- Show Abstract -->
@@ -369,10 +383,11 @@
                                             <DataTemplate>
                                                 <Button 
                                                     Content="{Binding}" 
-                                                    Style="{x:Null}" 
+                                                    ToolTip="Copy"
+                                                    Cursor="Hand"
                                                     Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                                     CommandParameter="{Binding}"
-                                                    ToolTip="Copy"
+                                                    Style="{x:Null}" 
                                                     >
                                                     <Button.Template>
                                                         <ControlTemplate TargetType="{x:Type Button}">
@@ -455,10 +470,11 @@
                                             <DataTemplate>
                                                 <Button 
                                                     Content="{Binding}" 
-                                                    Style="{x:Null}" 
+                                                    ToolTip="Copy"
                                                     Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                                     CommandParameter="{Binding}"
-                                                    ToolTip="Copy"
+                                                    Style="{x:Null}" 
+                                                    Cursor="Hand"
                                                     >
                                                     <Button.Template>
                                                         <ControlTemplate TargetType="{x:Type Button}">
@@ -777,10 +793,11 @@
                                                             <DataTemplate>
                                                                 <Button 
                                                                     Content="{Binding}" 
-                                                                    Style="{x:Null}" 
+                                                                    ToolTip="Copy"
                                                                     Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                                                     CommandParameter="{Binding}"
-                                                                    ToolTip="Copy"
+                                                                    Style="{x:Null}"
+                                                                    Cursor="Hand"
                                                                     >
                                                                     <Button.Template>
                                                                         <ControlTemplate TargetType="{x:Type Button}">
@@ -857,10 +874,11 @@
                                                             <DataTemplate>
                                                                 <Button 
                                                                     Content="{Binding}" 
-                                                                    Style="{x:Null}" 
+                                                                    ToolTip="Copy"
                                                                     Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                                                     CommandParameter="{Binding}"
-                                                                    ToolTip="Copy"
+                                                                    Style="{x:Null}" 
+                                                                    Cursor="Hand"
                                                                     >
                                                                     <Button.Template>
                                                                         <ControlTemplate TargetType="{x:Type Button}">
@@ -1063,99 +1081,177 @@
             <!-- Search menu -->
             <TabItem Header="Search">
                 <Grid Focusable="True">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width=".8*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
                     <Grid.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding LoadArticlesCommand}" />
                     </Grid.InputBindings>
-                    <!-- Title -->
-                    <TextBox
-                        Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource WatermarkTextBoxSmall}"
-                        aps:TextBoxHelper.Watermark="Title"
-                        VerticalAlignment="Center"
-                        Margin="0 0 6 0"
-                        Grid.Column="0"
-                        />
+
+                    <Grid 
+                        Margin="0 0 0 3"
+                        Grid.Row="0"
+                        >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Title -->
+                        <TextBox
+                            Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            aps:TextBoxHelper.Watermark="Title"
+                            VerticalAlignment="Center"
+                            Margin="0 0 6 0"
+                            Grid.Column="0"
+                            />
+                        <StackPanel 
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Grid.Column="1"
+                            >
+                            <!-- Authors -->
+                            <TextBox
+                                Text="{Binding FilterAuthors, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                aps:TextBoxHelper.Watermark="Authors"
+                                Width="150"
+                                Margin="0 0 6 0"
+                                />
+                            <!-- Keywords -->
+                            <TextBox
+                                Text="{Binding FilterKeywords, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                aps:TextBoxHelper.Watermark="Keywords"
+                                Width="150"
+                                Margin="0 0 6 0"
+                                />
+                        </StackPanel>
+
+                        <!-- Buttons -->
+                        <StackPanel
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Grid.Column="2"
+                            >
+                            <!-- Search -->
+                            <Button
+                                Command="{Binding LoadArticlesCommand}"
+                                Content="Search"
+                                Width="80"
+                                Margin="0 0 6 0"
+                                />
+                            <!-- Clear -->
+                            <Button
+                                Command="{Binding ClearCommand}"
+                                Content="Clear"
+                                Width="80"
+                                />
+                        </StackPanel>
+                    </Grid>
+
+                    <ToggleButton
+                        Content="Additional filters"
+                        IsChecked="{Binding ShowAdditionalFilters}"
+                        Style="{x:Null}"
+                        HorizontalAlignment="Left"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Cursor="Hand"
+                        Margin="0 0 0 8"
+                        Grid.Row="1"
+                        >
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                        <ToggleButton.ContentTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                        Text="{TemplateBinding Content}"
+                                        Style="{StaticResource DefaultText}"
+                                        TextDecorations="Underline"
+                                        />
+                            </DataTemplate>
+                        </ToggleButton.ContentTemplate>
+                    </ToggleButton>
+
                     <StackPanel 
                         Orientation="Horizontal"
+                        HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        Grid.Column="1"
+                        ToolTip="The default search mode filters for individual words. For instance, a search for 'Sleep deprivation in rats' retrieves articles containing these words, regardless of their order. For more specific searches, enclose your desired phrase in brackets, like this: [Sleep deprivation in rats]. This way, only articles with that exact phrase will appear. You can also combine modes, e.g., '[Sleep deprivation in rats] active avoidance' will display titles containing 'Sleep deprivation in rats' along with 'active' and 'avoidance' anywhere in the text."
+                        ToolTipService.InitialShowDelay="100"
+                        Grid.Row="1"
                         >
-                        <!-- Authors -->
-                        <TextBox
-                            Text="{Binding FilterAuthors, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
-                            aps:TextBoxHelper.Watermark="Authors"
-                            Width="150"
-                            Margin="0 0 6 0"
+                        <TextBlock
+                            Text="Help"
+                            Style="{StaticResource DefaultText}"
+                            TextDecorations="Underline"
+                            VerticalAlignment="Center"
+                            Margin="0 0 3 0"
                             />
-                        <!-- Keywords -->
-                        <TextBox
-                            Text="{Binding FilterKeywords, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
-                            aps:TextBoxHelper.Watermark="Keywords"
-                            Width="150"
-                            Margin="0 0 6 0"
-                            />
-                        <!-- Year -->
-                        <TextBox
-                            Text="{Binding FilterYear, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
-                            aps:TextBoxHelper.Watermark="Year"
-                            Width="90"
-                            Margin="0 0 6 0"
-                            />
-                        <!-- Comment -->
-                        <TextBox
-                            Text="{Binding FilterPersonalComment, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
-                            aps:TextBoxHelper.Watermark="Comment"
-                            Width="100"
-                            Margin="0 0 6 0"
-                            />
-                        <!-- Id -->
-                        <TextBox
-                            Text="{Binding IdFilter, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
-                            aps:TextBoxHelper.Watermark="Id"
-                            Width="90"
-                            Margin="0 0 6 0"
+                        <materialDesign:PackIcon 
+                            Kind="HelpBox"
+                            Width="32"
+                            Height="32"                            
                             />
                     </StackPanel>
-                    <!-- Abstract -->
-                    <TextBox
-                        Text="{Binding FilterAbstract, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource WatermarkTextBoxSmall}"
-                        aps:TextBoxHelper.Watermark="Abstract"
-                        VerticalAlignment="Center"
-                        Margin="0 0 6 0"
-                        Grid.Column="2"
-                        />
-                    <!-- Buttons -->
-                    <StackPanel
-                        Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        Grid.Column="3"
-                        >
-                        <!-- Search -->
-                        <Button
-                            Command="{Binding LoadArticlesCommand}"
-                            Content="Search"
-                            Width="80"
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel 
+                            Visibility="{Binding ShowAdditionalFilters, Converter={StaticResource BoolToVisibility}}"
+                            Orientation="Horizontal"
+                            Grid.Column="0"
+                            >
+                            <!-- Year -->
+                            <TextBox
+                                Text="{Binding FilterYear, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                aps:TextBoxHelper.Watermark="Year"
+                                Width="90"
+                                Margin="0 0 6 0"
+                                />
+                            <!-- Comment -->
+                            <TextBox
+                                Text="{Binding FilterPersonalComment, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                aps:TextBoxHelper.Watermark="Comment"
+                                Width="100"
+                                Margin="0 0 6 0"
+                                />
+                            <!-- Id -->
+                            <TextBox
+                                Text="{Binding IdFilter, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                aps:TextBoxHelper.Watermark="Id"
+                                Width="90"
+                                Margin="0 0 6 0"
+                                />
+                        </StackPanel>
+                        
+                        <!-- Abstract -->
+                        <TextBox
+                            Visibility="{Binding ShowAdditionalFilters, Converter={StaticResource BoolToVisibility}}"
+                            Text="{Binding FilterAbstract, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            aps:TextBoxHelper.Watermark="Abstract"
+                            VerticalAlignment="Center"
                             Margin="0 0 6 0"
+                            Grid.Column="1"
                             />
-                        <!-- Clear -->
-                        <Button
-                            Command="{Binding ClearCommand}"
-                            Content="Clear"
-                            Width="80"
-                            />
-                    </StackPanel>
+                    </Grid>
+
                 </Grid>
             </TabItem>
             <!-- View options -->
@@ -1173,7 +1269,6 @@
                         CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
                         IsChecked="True"
                         Style="{StaticResource RibbonRadioButtonIcon}"
-                        Width="58"
                         Margin="0 0 6 0"
                         />
                     <!-- Full view -->
