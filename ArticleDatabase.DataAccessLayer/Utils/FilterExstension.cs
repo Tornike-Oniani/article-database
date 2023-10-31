@@ -33,7 +33,8 @@ namespace Lib.DataAccessLayer.Utils
             // Append each word as wildcard
             for (int i = 0; i < words.Length; i++)
             {
-                filter.FilterQuery.Append("final.Title REGEXP " + $@"'(?i)\b{words[i]}\b'");
+                //filter.FilterQuery.Append("final.Title REGEXP " + $@"'(?i)\b{words[i]}\b'");
+                filter.FilterQuery.Append("final.Title REGEXP " + $@"'(?i)(?<!\w){words[i]}(?!\w)'");
 
                 if (i < words.Length - 1 || phrases.Length > 0)
                 {
@@ -174,7 +175,8 @@ namespace Lib.DataAccessLayer.Utils
             // Append each word as wildcard
             for (int i = 0; i < words.Length; i++)
             {
-                filter.FilterQuery.Append("abst.Body REGEXP " + $@"'(?i)\b{words[i]}\b'");
+                //filter.FilterQuery.Append("abst.Body REGEXP " + $@"'(?i)\b{words[i]}\b'");
+                filter.FilterQuery.Append("abst.Body REGEXP " + $@"'(?i)(?<!\w){words[i]}(?!\w)'");                
 
                 if (i < words.Length - 1 || phrases.Length > 0)
                 {

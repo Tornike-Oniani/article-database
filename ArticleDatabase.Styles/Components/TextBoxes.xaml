@@ -397,15 +397,15 @@
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                                            From="-19" 
+                                            From="-20" 
                                             To="0"
                                             Duration="0:0:0.1"
                                             />
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="FontSize"
-                                            From="12" 
-                                            To="14"
+                                            From="14" 
+                                            To="16"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>
@@ -419,14 +419,14 @@
                                             Storyboard.TargetName="watermark"
                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
                                             From="0" 
-                                            To="-19"
+                                            To="-20"
                                             Duration="0:0:0.1"
                                             />
                                         <DoubleAnimation 
                                             Storyboard.TargetName="watermark__text"
                                             Storyboard.TargetProperty="FontSize"
-                                            From="14" 
-                                            To="12"
+                                            From="16" 
+                                            To="14"
                                             Duration="0:0:0.1"
                                             />
                                     </Storyboard>

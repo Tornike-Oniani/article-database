@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:MainLib.Views.Popups"
              xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
+             xmlns:mainusercontrols="clr-namespace:MainLib.Views.UserControls"
              xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
              xmlns:main="clr-namespace:MainLib.Views.Main"
              xmlns:utils="clr-namespace:MainLib.Views.UserControls.HighlightTextBox"
@@ -37,7 +38,7 @@
             </AdornerDecorator>
 
             <!-- Authors -->
-            <usercontrols:CollectionBox 
+            <mainusercontrols:CollectionBox 
                 Title="Authors"
                 Text="Author" 
                 ItemsSource="{Binding ArticleForm.Authors}" 
@@ -46,7 +47,7 @@
                 />
 
             <!-- Keywords -->
-            <usercontrols:CollectionBox 
+            <mainusercontrols:CollectionBox 
                 Title="Keywords"
                 Text="Keyword" 
                 ItemsSource="{Binding ArticleForm.Keywords}" 

@@ -84,7 +84,7 @@
                                                  Color1="{StaticResource PrimaryColor}"
                                                  Color2="{StaticResource LavenderColor}" />
                     <TextBlock Text="Working..." 
-                           Style="{StaticResource MediumHeader}"
+                           Style="{StaticResource Header}"
                            VerticalAlignment="Center"
                            Margin="5 0 0 0" />
                 </StackPanel>

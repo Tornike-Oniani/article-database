@@ -384,6 +384,7 @@
                                                 <Button 
                                                     Content="{Binding}" 
                                                     ToolTip="Copy"
+                                                    ToolTipService.InitialShowDelay="10"
                                                     Cursor="Hand"
                                                     Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                                     CommandParameter="{Binding}"
@@ -471,6 +472,7 @@
                                                 <Button 
                                                     Content="{Binding}" 
                                                     ToolTip="Copy"
+                                                    ToolTipService.InitialShowDelay="10"
                                                     Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                                     CommandParameter="{Binding}"
                                                     Style="{x:Null}" 
@@ -794,6 +796,7 @@
                                                                 <Button 
                                                                     Content="{Binding}" 
                                                                     ToolTip="Copy"
+                                                                    ToolTipService.InitialShowDelay="10"
                                                                     Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                                                     CommandParameter="{Binding}"
                                                                     Style="{x:Null}"
@@ -875,6 +878,7 @@
                                                                 <Button 
                                                                     Content="{Binding}" 
                                                                     ToolTip="Copy"
+                                                                    ToolTipService.InitialShowDelay="10"
                                                                     Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                                                     CommandParameter="{Binding}"
                                                                     Style="{x:Null}" 
@@ -1119,7 +1123,7 @@
                                 Text="{Binding FilterAuthors, UpdateSourceTrigger=PropertyChanged}"
                                 Style="{StaticResource WatermarkTextBoxSmall}"
                                 aps:TextBoxHelper.Watermark="Authors"
-                                Width="150"
+                                Width="200"
                                 Margin="0 0 6 0"
                                 />
                             <!-- Keywords -->
@@ -1127,7 +1131,7 @@
                                 Text="{Binding FilterKeywords, UpdateSourceTrigger=PropertyChanged}"
                                 Style="{StaticResource WatermarkTextBoxSmall}"
                                 aps:TextBoxHelper.Watermark="Keywords"
-                                Width="150"
+                                Width="200"
                                 Margin="0 0 6 0"
                                 />
                         </StackPanel>
@@ -1181,27 +1185,31 @@
                         </ToggleButton.ContentTemplate>
                     </ToggleButton>
 
-                    <StackPanel 
-                        Orientation="Horizontal"
+                    <Border 
+                        Background="Transparent"
+                        Padding="3"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        ToolTip="The default search mode filters for individual words. For instance, a search for 'Sleep deprivation in rats' retrieves articles containing these words, regardless of their order. For more specific searches, enclose your desired phrase in brackets, like this: [Sleep deprivation in rats]. This way, only articles with that exact phrase will appear. You can also combine modes, e.g., '[Sleep deprivation in rats] active avoidance' will display titles containing 'Sleep deprivation in rats' along with 'active' and 'avoidance' anywhere in the text."
-                        ToolTipService.InitialShowDelay="100"
+                        ToolTip="The default search mode in Title and Abstract fields filters for individual words. For instance, a search for 'Sleep deprivation in rats' retrieves articles containing these words, regardless of their order. For more specific searches, enclose your desired phrase in brackets, like this: [Sleep deprivation in rats]. This way, only articles with that exact phrase will appear. You can also combine modes, e.g., '[Sleep deprivation in rats] active avoidance' will display titles containing 'Sleep deprivation in rats' along with 'active' and 'avoidance' anywhere in the text."
+                        ToolTipService.InitialShowDelay="0"
+                        ToolTipService.ShowDuration="60000"
                         Grid.Row="1"
                         >
-                        <TextBlock
-                            Text="Help"
-                            Style="{StaticResource DefaultText}"
-                            TextDecorations="Underline"
-                            VerticalAlignment="Center"
-                            Margin="0 0 3 0"
-                            />
-                        <materialDesign:PackIcon 
-                            Kind="HelpBox"
-                            Width="32"
-                            Height="32"                            
-                            />
-                    </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Text="Help"
+                                Style="{StaticResource DefaultText}"
+                                TextDecorations="Underline"
+                                VerticalAlignment="Center"
+                                Margin="0 0 3 0"
+                                />
+                            <materialDesign:PackIcon 
+                                Kind="HelpBox"
+                                Width="32"
+                                Height="32"                            
+                                />
+                        </StackPanel>
+                    </Border>
 
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
