@@ -1401,6 +1401,16 @@
                     Grid.Column="2"
                     />
             </TabItem>
+            <!-- Miscellaneous -->
+            <TabItem Header="Misc">
+                <StackPanel 
+                    Orientation="Horizontal">
+                    <Button 
+                        Content="GetDuplicateArticles"
+                        Command="{Binding GetDuplicateArticlesCommand}"
+                        />
+                </StackPanel>
+            </TabItem>
         </TabControl>
         
         <!-- Data view (compact or full) -->

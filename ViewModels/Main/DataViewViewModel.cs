@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using SimMetricsUtilities;
+using SimMetricsMetricUtilities;
 
 namespace MainLib.ViewModels.Main
 {
@@ -178,6 +180,7 @@ namespace MainLib.ViewModels.Main
         public ICommand SortFromDataGridCommand { get; set; }
         public ICommand SortFromRibbonCommand { get; set; }
         public ICommand CopyWordCommand { get; set; }
+        public ICommand GetDuplicateArticlesCommand { get; set; }
 
         // Constructor
         public DataViewViewModel()
@@ -254,6 +257,7 @@ namespace MainLib.ViewModels.Main
             SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
             CopyWordCommand = new RelayCommand(CopyWord);
+            GetDuplicateArticlesCommand = new RelayCommand(GetDuplicateArticles);
 
             InitializeSearchOptions();
             this.SelectedViewType = new CompactViewTemplate();
@@ -561,6 +565,32 @@ namespace MainLib.ViewModels.Main
         {
             Clipboard.SetText(input.ToString().Replace(",", ""));
         }
+        public async void GetDuplicateArticles(object input = null)
+        {
+            Services.IsWorking(true);
+
+            TotalPages = 1;
+            CurrentPage = 1;
+            IsThereAnyPages = true;
+
+            // 1. Clear existing data grid source
+            Articles.Clear();
+            List<Article> articles = new List<Article>();
+            await Task.Run(() =>
+            {
+                // 2. Fetch all artilces from database
+                articles = FindDuplicateArticles(new ArticleRepo().GetAllArticles(Users[UserIndex], ""));
+            });
+
+            foreach (Article article in articles)
+            {
+                this.Articles.Add(article);
+            }
+
+            GenerateButtons();
+
+            Services.IsWorking(false);
+        }
 
         // Private helpers
         private async Task PopulateArticles()
@@ -687,6 +717,48 @@ namespace MainLib.ViewModels.Main
             }
 
             SelectedPage = PageButtons.FirstOrDefault(p => p == CurrentPage.ToString());
+        }
+
+        // Levenstein
+        private List<Article> FindDuplicateArticles(List<Article> articles)
+        {
+            Dictionary<long, Article> duplicateArticles = new Dictionary<long, Article>();
+
+            for (int i = 0; i < articles.Count; i++)
+            {
+                for (int j = i + 1; j < articles.Count; j++)
+                {
+                    Services.IsWorking(true, $"Matching {i} to {j}");
+                    // If duplciate was already found
+                    if (duplicateArticles.ContainsKey((long)articles[j].ID))
+                    {
+                        continue;
+                    }
+
+                    double similarity = CalculateSimilarity(articles[i].Title, articles[j].Title);
+
+
+                    // You can adjust the threshold value based on your requirements
+                    if (similarity > 0.8)
+                    {
+                        if (!duplicateArticles.ContainsKey((long)articles[i].ID))
+                        {
+                            duplicateArticles.Add((long)articles[i].ID, articles[i]);
+                        }
+                        if (!duplicateArticles.ContainsKey((long)articles[j].ID))
+                        {
+                            duplicateArticles.Add((long)articles[j].ID, articles[j]);
+                        }
+                    }
+                }
+            }
+
+            return duplicateArticles.Values.ToList();
+        }
+        private double CalculateSimilarity(string str1, string str2)
+        {
+            Levenstein levenshtein = new Levenstein();
+            return levenshtein.GetSimilarity(str1, str2);
         }
     }
 }
