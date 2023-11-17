@@ -14,7 +14,7 @@ namespace MainLib.Views.Converters
 
             if ((bool)value)
             {
-                return Application.Current.Resources["SmallHeader"];
+                return Application.Current.Resources["MediumHeader"];
             }
 
             return null;
