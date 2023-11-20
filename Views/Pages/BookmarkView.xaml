@@ -730,7 +730,6 @@
                             CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
                             IsChecked="True"
                             Style="{StaticResource RibbonRadioButtonIcon}"
-                            Width="54"
                             Margin="0 0 6 0"
                             />
                         <RadioButton

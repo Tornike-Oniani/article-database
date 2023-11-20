@@ -728,7 +728,7 @@ namespace MainLib.ViewModels.Main
             {
                 for (int j = i + 1; j < articles.Count; j++)
                 {
-                    Services.IsWorking(true, $"Matching {i} to {j}");
+                    Services.IsWorking(true, $"Matching {i}");
                     // If duplciate was already found
                     if (duplicateArticles.ContainsKey((long)articles[j].ID))
                     {

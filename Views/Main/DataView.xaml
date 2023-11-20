@@ -778,7 +778,7 @@
                                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                                         ScrollViewer.CanContentScroll="False"
                                                         FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
-                                                        Margin="0 0 0 12"
+                                                        Margin="6 0 0 6"
                                                         Grid.Row="2"
                                                         >
                                                         <ListView.Template>
@@ -815,7 +815,7 @@
                                                                                 <TextBlock 
                                                                                     Text="{Binding Path=.}"
                                                                                     Style="{StaticResource SmallText}"
-                                                                                    Foreground="{StaticResource TextColorBrush}"
+                                                                                    Foreground="{StaticResource LabelColorBrush}"
                                                                                     ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                                                     ap:TextBlockHighlighter.WordBreakMode="True"
                                                                                     ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
