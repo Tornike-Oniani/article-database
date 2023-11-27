@@ -1411,14 +1411,25 @@
                     VerticalAlignment="Center"
                     >
                     <Button 
-                        Content="GetDuplicateArticles"
+                        Content="Get Duplicate Articles"
                         Command="{Binding GetDuplicateArticlesCommand}"
                         Margin="0 0 6 0"
                         />
                     <TextBox
                         Text="{Binding LevensteinCoefficient}"
                         Style="{StaticResource WatermarkTextBox}"
+                        aps:TextBoxHelper.Watermark="LS"
                         Width="45"
+                        Margin="0 0 12 0"
+                        />
+                    <Rectangle
+                        Width="3"
+                        Fill="{DynamicResource GrayColorBrush}"
+                        Margin="0 0 12 0"                        
+                        />
+                    <Button
+                        Content="Get Unbookmarked Articles"
+                        Command="{Binding GetUnbookmarkedArticlesCommand}"
                         />
                 </StackPanel>
             </TabItem>

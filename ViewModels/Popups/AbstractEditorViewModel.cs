@@ -22,6 +22,7 @@ namespace MainLib.ViewModels.Popups
 
         public AbstractEditorViewModel(Article article)
         {
+            this.Title = "Edit abstract...";
             this._article = article;
             this.ArticleForm = new ArticleForm();
             this.ArticleForm.Abstract = article.AbstractBody;

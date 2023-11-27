@@ -182,6 +182,7 @@ namespace MainLib.ViewModels.Main
         public ICommand SortFromRibbonCommand { get; set; }
         public ICommand CopyWordCommand { get; set; }
         public ICommand GetDuplicateArticlesCommand { get; set; }
+        public ICommand GetUnbookmarkedArticlesCommand { get; set; }
 
         // Constructor
         public DataViewViewModel()
@@ -260,6 +261,7 @@ namespace MainLib.ViewModels.Main
             UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
             CopyWordCommand = new RelayCommand(CopyWord);
             GetDuplicateArticlesCommand = new RelayCommand(GetDuplicateArticles);
+            GetUnbookmarkedArticlesCommand = new RelayCommand(GetUnbookmarkedArticles);
 
             InitializeSearchOptions();
             this.SelectedViewType = new CompactViewTemplate();
@@ -588,6 +590,30 @@ namespace MainLib.ViewModels.Main
                 bookmarkRepo.AddBookmark("Duplicates_" + LevensteinCoefficient.ToString(), 0, Users[UserIndex]);
                 Bookmark duplicatesBookmark = bookmarkRepo.GetBookmark("Duplicates_" + LevensteinCoefficient.ToString(), Users[UserIndex]);
                 bookmarkRepo.AddListOfArticlesToBookmark(duplicatesBookmark, articles);
+            });
+
+            foreach (Article article in articles)
+            {
+                this.Articles.Add(article);
+            }
+
+            GenerateButtons();
+
+            Services.IsWorking(false);
+        }
+        public async void GetUnbookmarkedArticles(object input = null)
+        {
+            Services.IsWorking(true);
+
+            TotalPages = 1;
+            CurrentPage = 1;
+            IsThereAnyPages = true;
+
+            Articles.Clear();
+            List<Article> articles = new List<Article>();
+            await Task.Run(() =>
+            {
+                articles = new BookmarkRepo().LoadUnbookmarkedArticles(Users[UserIndex]);
             });
 
             foreach (Article article in articles)
