@@ -33,9 +33,29 @@
         </Grid.RowDefinitions>
 
         <!-- Filter box -->
-        <usercontrols:FilterBox ItemsSource="{Binding _bookmarkBoxesCollection}"
-                                Margin="6 6 6 6"
-                                Grid.Row="0" />
+        <Grid
+            Margin="6 6 6 6"
+            Grid.Row="0"
+            >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <usercontrols:FilterBox 
+                ItemsSource="{Binding _bookmarkBoxesCollection}"
+                Margin="0 0 6 0"
+                Grid.Column="0"
+                />
+
+            <CheckBox 
+                Content="Sort by selected"
+                IsChecked="{Binding SortBySelection}"
+                Style="{StaticResource FlatCheckbox}"
+                FontSize="16"
+                Grid.Column="1"
+                />
+        </Grid>
 
         <!-- Bookmarks list -->
         <ListView ItemsSource="{Binding BookmarkBoxesCollection}" 

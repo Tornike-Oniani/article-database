@@ -211,7 +211,7 @@ namespace Lib.DataAccessLayer.Repositories
             List<Article> results;
 
             string query = $@"
-SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC, abst.Body AS [AbstractBody]
+SELECT final.ID, final.Title, final.Authors, final.Keywords, final.Year, final.FileName, final.PersonalComment, final.SIC, abst.Body AS [AbstractBody], ba.ID AS AddedID
 FROM
 (SELECT cmp.ID, cmp.Article AS Title, cmp.Authors, cmp.Keywords, cmp.Year, cmp.FileName AS [FileName], per.PersonalComment, IFNULL(per.SIC, 0) AS SIC
 FROM
@@ -235,7 +235,8 @@ FROM tblUserPersonal WHERE UserID = {user.ID}) AS per ON cmp.ID = per.ArticleID)
 JOIN tblBookmarkArticles as ba ON final.ID = ba.ArticleID
 JOIN tblBookmark as b ON b.ID = ba.BookmarkID 
 LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
-WHERE b.ID = {bookmark.ID}; 
+WHERE b.ID = {bookmark.ID}
+ORDER BY AddedID; 
 ";
             using (SQLiteConnection conn = new SQLiteConnection(LoadConnectionString()))
             {

@@ -1402,12 +1402,23 @@
                     />
             </TabItem>
             <!-- Miscellaneous -->
-            <TabItem Header="Misc">
+            <TabItem 
+                Header="Misc"
+                Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                >
                 <StackPanel 
-                    Orientation="Horizontal">
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    >
                     <Button 
                         Content="GetDuplicateArticles"
                         Command="{Binding GetDuplicateArticlesCommand}"
+                        Margin="0 0 6 0"
+                        />
+                    <TextBox
+                        Text="{Binding LevensteinCoefficient}"
+                        Style="{StaticResource WatermarkTextBox}"
+                        Width="45"
                         />
                 </StackPanel>
             </TabItem>

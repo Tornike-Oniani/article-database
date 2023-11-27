@@ -27,6 +27,7 @@ namespace MainLib.ViewModels.Popups
         private User _user;
         private Article _article;
         private List<Bookmark> _bookmarks;
+        private bool _sortBySelection;
         private Tracker _tracker;
         private Shared services;
 
@@ -57,6 +58,25 @@ namespace MainLib.ViewModels.Popups
             get { return _global; }
             set { _global = value; OnPropertyChanged("Global"); }
         }
+        public bool SortBySelection
+        {
+            get { return _sortBySelection; }
+            set 
+            { 
+                _sortBySelection = value;
+                if (_sortBySelection)
+                {
+                    _bookmarkBoxesCollection.SortDescriptions.Clear();
+                    _bookmarkBoxesCollection.SortDescriptions.Add(new SortDescription("IsChecked", ListSortDirection.Descending));
+                }
+                else
+                {
+                    _bookmarkBoxesCollection.SortDescriptions.Clear();
+                }
+                OnPropertyChanged("SortBySelection");
+            }
+        }
+
         public User User
         {
             get { return _user; }

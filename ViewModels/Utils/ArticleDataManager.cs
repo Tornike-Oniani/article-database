@@ -136,6 +136,7 @@ namespace MainLib.ViewModels.Utils
         }
         public void CopyTitle(object input = null)
         {
+            Console.WriteLine(SelectedArticle.Title);
             Clipboard.SetText(SelectedArticle.Title);
         }
         public void RemoveArticleFromBookmark(object input)

@@ -168,6 +168,7 @@ namespace MainLib.ViewModels.Main
             }
         }
         public string SelectedSort { get { return SelectedSortProperty + " " + SelectedSortDirection; } }
+        public double LevensteinCoefficient { get; set; }
         public Shared Services { get; set; }
 
         public ICommand SwitchDataViewCommand { get; set; }
@@ -230,6 +231,7 @@ namespace MainLib.ViewModels.Main
             this.TitleSearchPhrases = new List<string>();
             this.AbstractSearchWords = new List<string>();
             this.AbstractSearchPhrases = new List<string>();
+            this.LevensteinCoefficient = 0.7;
             OnPropertyChanged("Articles");
             CurrentPage = 1;
             ItemsPerPage = 35;
@@ -580,6 +582,12 @@ namespace MainLib.ViewModels.Main
             {
                 // 2. Fetch all artilces from database
                 articles = FindDuplicateArticles(new ArticleRepo().GetAllArticles(Users[UserIndex], ""));
+
+                Services.IsWorking(true, "Adding articles to bookmark");
+                BookmarkRepo bookmarkRepo = new BookmarkRepo();
+                bookmarkRepo.AddBookmark("Duplicates_" + LevensteinCoefficient.ToString(), 0, Users[UserIndex]);
+                Bookmark duplicatesBookmark = bookmarkRepo.GetBookmark("Duplicates_" + LevensteinCoefficient.ToString(), Users[UserIndex]);
+                bookmarkRepo.AddListOfArticlesToBookmark(duplicatesBookmark, articles);
             });
 
             foreach (Article article in articles)
@@ -739,7 +747,7 @@ namespace MainLib.ViewModels.Main
 
 
                     // You can adjust the threshold value based on your requirements
-                    if (similarity > 0.8)
+                    if (similarity > (double)LevensteinCoefficient)
                     {
                         if (!duplicateArticles.ContainsKey((long)articles[i].ID))
                         {

@@ -148,6 +148,21 @@
                             <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
                             <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
                             <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
+                            <!-- Delete article -->
+                            <MenuItem Header="Delete article" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.DeleteArticleCommand}" />
+                            <MenuItem Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}">
+                                <MenuItem.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Bookmark" Grid.Column="0" />
+                                        <TextBlock Text="Ctrl+B" Grid.Column="2" />
+                                    </Grid>
+                                </MenuItem.Header>
+                            </MenuItem>
                             <!-- Remove article -->
                             <MenuItem IsEnabled="{Binding ModifyRights}" Command="{Binding ArticleDataManager.RemoveArticleFromBookmarkCommand}" CommandParameter="{Binding Bookmark}">
                                 <MenuItem.Header>
@@ -157,13 +172,13 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Remove" Grid.Column="0" />
+                                        <TextBlock Text="Unbookmark" Grid.Column="0" />
                                         <TextBlock Text="Del" Grid.Column="2" />
                                     </Grid>
                                 </MenuItem.Header>
                             </MenuItem>
                             <!-- Copy -->
-                            <MenuItem Command="{Binding ArticleDataManager.CopyCommand}">
+                            <MenuItem Command="{Binding ArticleDataManager.CopyTitleCommand}">
                                 <MenuItem.Header>
                                     <Grid Width="130">
                                         <Grid.ColumnDefinitions>
@@ -182,6 +197,11 @@
                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ArticleDataManager.OpenFileCommand}" />
                         <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding ArticleDataManager.CopyTitleCommand}" />
                         <KeyBinding Key="Delete" Command="{Binding ArticleDataManager.RemoveArticleFromBookmarkCommand}" CommandParameter="{Binding Bookmark}" />
+                        <KeyBinding 
+                            Modifiers="Ctrl" Key="B" 
+                            Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}" 
+                            CommandParameter="{Binding ArticleDataManager.SelectedArticle}" 
+                            />
                     </DataGrid.InputBindings>
                     <!-- Data grid columns -->
                     <DataGrid.Columns>
@@ -692,6 +712,8 @@
                         <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
                         <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
                         <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
+                        <!-- Delete article -->
+                        <MenuItem Header="Delete article" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.DeleteArticleCommand}" />
                         <MenuItem Header="Remove" IsEnabled="{Binding ModifyRights}" Command="{Binding ArticleDataManager.RemoveArticleFromBookmarkCommand}" CommandParameter="{Binding Bookmark}" />
                         <MenuItem Header="Copy Title" Command="{Binding ArticleDataManager.CopyTitleCommand}" />
                     </ContextMenu>
@@ -862,6 +884,20 @@
                             VerticalAlignment="Center"
                             />
 
+                    </StackPanel>
+                </TabItem>
+                <!-- Miscellaneous -->
+                <TabItem 
+                    Header="Misc"
+                    Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                    >
+                    <StackPanel 
+                        Orientation="Horizontal"
+                        >
+                        <Button 
+                            Content="RemoveSort"
+                            Command="{Binding RemoveSortCommand}"
+                            />
                     </StackPanel>
                 </TabItem>
             </TabControl>

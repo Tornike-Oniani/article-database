@@ -98,6 +98,7 @@ namespace MainLib.ViewModels.Pages
         public ICommand UpdateExportStatusCommand { get; set; }
         public ICommand SortFromRibbonCommand { get; set; }
         public ICommand SortFromDataGridCommand { get; set; }
+        public ICommand RemoveSortCommand { get; set; }
 
         // Constructor
         public BookmarkViewViewModel(Bookmark bookmark, bool modifyRights = true)
@@ -143,8 +144,8 @@ namespace MainLib.ViewModels.Pages
                 };
             }
 
-            SelectedSortProperty = SortableProperties[0];
-            SelectedSortDirection = SortDirections[0];
+            //SelectedSortProperty = SortableProperties[0];
+            //SelectedSortDirection = SortDirections[0];
 
             // Initialize commands
             this.LoadArticlesCommand = new RelayCommand(LoadArticles);
@@ -155,6 +156,7 @@ namespace MainLib.ViewModels.Pages
             this.SwitchDataViewCommand = new RelayCommand(SwitchDataView);
             this.SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
             this.SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
+            this.RemoveSortCommand = new RelayCommand(RemoveSort);
 
             this.ArticleDataManager = new ArticleDataManager(LoadArticlesCommand);
             this.SelectedViewType = new CompactViewTemplate();
@@ -391,7 +393,6 @@ namespace MainLib.ViewModels.Pages
             OnPropertyChanged("SelectedSort");
             SortFromRibbonCommand.Execute(null);
         }
-        // Command validators
         public bool CanExport(object input = null)
         {
             List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();
@@ -403,6 +404,10 @@ namespace MainLib.ViewModels.Pages
         public bool CanExportBookmark(object input = null)
         {
             return Articles.Count > 0;
+        }
+        public void RemoveSort(object input = null)
+        {
+            ArticlesCollection.SortDescriptions.Clear();
         }
     }
 }
