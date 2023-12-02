@@ -47,6 +47,7 @@ namespace MainLib.ViewModels.Main
         private bool _isThereAnyPages;
         private int _startPageIndex = 1;
         private int _endPageIndex = 1;
+        private bool loadUnbookmarked = true;
 
         public ArticleDataManager ArticleDataManager { get; set; }
         public User User { get; set; }
@@ -286,6 +287,7 @@ namespace MainLib.ViewModels.Main
         }
         public async void LoadArticles(object input = null)
         {
+            loadUnbookmarked = false;
             OnPropertyChanged("FilterTitle");
             OnPropertyChanged("WordBreakMode");
             OnPropertyChanged("TitleHighlight");
@@ -552,7 +554,14 @@ namespace MainLib.ViewModels.Main
             _currentSort = SelectedSort;
 
             Services.IsWorking(true);
-            await PopulateArticles();
+            if (!loadUnbookmarked)
+            {
+                await PopulateArticles();
+            }
+            else
+            {
+                await PopulateUnbookmarkedArticles();
+            }
             Services.IsWorking(false);
 
             OnPropertyChanged("SelectedSort");
@@ -561,7 +570,14 @@ namespace MainLib.ViewModels.Main
         {
             _currentSort = SelectedSort;
             Services.IsWorking(true);
-            await PopulateArticles();
+            if (!loadUnbookmarked)
+            {
+                await PopulateArticles();
+            }
+            else
+            {
+                await PopulateUnbookmarkedArticles();
+            }
             Services.IsWorking(false);
             OnPropertyChanged("SelectedSort");
         }
@@ -605,21 +621,23 @@ namespace MainLib.ViewModels.Main
         {
             Services.IsWorking(true);
 
-            TotalPages = 1;
-            CurrentPage = 1;
-            IsThereAnyPages = true;
-
-            Articles.Clear();
-            List<Article> articles = new List<Article>();
             await Task.Run(() =>
             {
-                articles = new BookmarkRepo().LoadUnbookmarkedArticles(Users[UserIndex]);
+                // 2. Calculate total pages
+                int record_count = new BookmarkRepo().GetUnbookmarkedArticlesRecordCount(Users[UserIndex]);
+                if ((record_count % ItemsPerPage) == 0)
+                    TotalPages = record_count / ItemsPerPage;
+                else if (record_count == 0)
+                    TotalPages = 0;
+                else
+                    TotalPages = (record_count / ItemsPerPage) + 1;
+
+                IsThereAnyPages = TotalPages != 0;
+
+                CurrentPage = 1;
             });
 
-            foreach (Article article in articles)
-            {
-                this.Articles.Add(article);
-            }
+            await PopulateUnbookmarkedArticles();
 
             GenerateButtons();
 
@@ -629,6 +647,8 @@ namespace MainLib.ViewModels.Main
         // Private helpers
         private async Task PopulateArticles()
         {
+            loadUnbookmarked = false;
+
             List<string> filterAuthorsFromString = String.IsNullOrEmpty(FilterAuthors) ? new List<string>() : FilterAuthors.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
             List<string> filterKeywordsFromString = String.IsNullOrEmpty(FilterKeywords) ? new List<string>() : FilterKeywords.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
 
@@ -658,6 +678,32 @@ namespace MainLib.ViewModels.Main
 
                 // 2. Fetch artilces from database
                 articles = new ArticleRepo().LoadArticles(Users[UserIndex], filter.GetFilterString());
+            });
+
+            foreach (Article article in articles)
+            {
+                this.Articles.Add(article);
+            }
+
+            OnPropertyChanged("CanExportP");
+        }
+        private async Task PopulateUnbookmarkedArticles()
+        {
+            loadUnbookmarked = true;
+
+            FilterExstension.SetGlobalPairing(isLoose: false);
+            Filter filter = new Filter();
+            filter
+                .Sort(_currentSort)
+                .Paginate(ItemsPerPage, _offset);
+
+
+            // 1. Clear existing data grid source
+            Articles.Clear();
+            List<Article> articles = new List<Article>();
+            await Task.Run(() =>
+            {
+                articles = new BookmarkRepo().LoadUnbookmarkedArticles(Users[UserIndex], filter.GetFilterString());
             });
 
             foreach (Article article in articles)
@@ -698,7 +744,14 @@ namespace MainLib.ViewModels.Main
 
                 Services.IsWorking(true);
 
-                await PopulateArticles();
+                if (!loadUnbookmarked)
+                {
+                    await PopulateArticles();
+                }
+                else
+                {
+                    await PopulateUnbookmarkedArticles();
+                }
 
                 GenerateButtons();
 
