@@ -28,6 +28,7 @@ namespace MainLib.ViewModels.Main
     {
         // Public property fields
         private List<string> _columns;
+        private int _totalItems;
         private int _itemsPerPage;
         private int _totalPages;
         private int _currentPage;
@@ -88,6 +89,11 @@ namespace MainLib.ViewModels.Main
             set { _isDataViewCompact = value; OnPropertyChanged("IsDataViewCompact"); }
         }
         // Pagination
+        public int TotalItems
+        {
+            get { return _totalItems; }
+            set { _totalItems = value; OnPropertyChanged("TotalItems"); }
+        }
         public int ItemsPerPage
         {
             get { return _itemsPerPage; }
@@ -355,6 +361,7 @@ namespace MainLib.ViewModels.Main
                 {
                     // 2. Calculate total pages
                     int record_count = new ArticleRepo().GetRecordCount(Users[UserIndex], filter);
+                    this.TotalItems = record_count;
                     if ((record_count % ItemsPerPage) == 0)
                         TotalPages = record_count / ItemsPerPage;
                     else if (record_count == 0)
@@ -625,6 +632,7 @@ namespace MainLib.ViewModels.Main
             {
                 // 2. Calculate total pages
                 int record_count = new BookmarkRepo().GetUnbookmarkedArticlesRecordCount(Users[UserIndex]);
+                this.TotalItems = record_count;
                 if ((record_count % ItemsPerPage) == 0)
                     TotalPages = record_count / ItemsPerPage;
                 else if (record_count == 0)

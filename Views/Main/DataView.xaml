@@ -1497,6 +1497,18 @@
                     Grid.Column="1"
                     >
                     <TextBlock
+                        Text="Total:"
+                        Style="{StaticResource SmallHeader}"
+                        VerticalAlignment="Center"
+                        Margin="0 0 6 0"
+                        />
+                    <TextBlock
+                        Text="{Binding TotalItems}"
+                        Style="{StaticResource DefaultText}"
+                        VerticalAlignment="Center"
+                        Margin="0 0 18 0"
+                        />
+                    <TextBlock
                         Text="Displays:"
                         Style="{StaticResource SmallHeader}"
                         VerticalAlignment="Center"
