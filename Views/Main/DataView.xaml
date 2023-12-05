@@ -403,10 +403,10 @@
                                                                 <TextBlock 
                                                                     Text="{Binding Path=.}"
                                                                     TextWrapping="Wrap"
-                                                                    ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                                    ap:TextBlockHighlighter.WordBreakMode="True"
-                                                                    ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                                    ap:TextBlockHighlighter.Forecolor="#000000" 
+                                                                    ap:TextBlockHighlighterAuthors.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                                    ap:TextBlockHighlighterAuthors.WordBreakMode="True"
+                                                                    ap:TextBlockHighlighterAuthors.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                                    ap:TextBlockHighlighterAuthors.Forecolor="#000000" 
                                                                     />
                                                             </Border>
                                                         </DataTemplate>

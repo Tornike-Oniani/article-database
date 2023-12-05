@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using Lib.DataAccessLayer.Models;
 using Lib.DataAccessLayer.Repositories.Base;
+using Lib.DataAccessLayer.Utils;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
@@ -227,7 +229,7 @@ namespace Lib.DataAccessLayer.Repositories
         }
 
         // READ
-        public List<Article> LoadArticles(User user, string filter)
+        public List<Article> LoadArticles(User user, Filter filter)
         {
             // Results
             List<Article> results;
@@ -244,6 +246,7 @@ FROM
 FROM tblArticle AS art
 LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
 LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
+#AuthorFilter
 GROUP BY art.Title) AS art_ath
 JOIN
 (SELECT art.Title AS Article, group_concat(kwd.Keyword, "", "") AS Keywords
@@ -260,8 +263,19 @@ LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
             // 1. Add user id for comments and sic
             queryBuilder.Replace("#UserID", user.ID.ToString());
 
-            // 2. Add filters to template query
-            queryBuilder.Append(filter);
+            // 2. Add author filter
+            string authorQuery = filter.AuthorFilterQuery.ToString();
+            if (!String.IsNullOrEmpty(authorQuery))
+            {
+                queryBuilder.Replace("#AuthorFilter", authorQuery);
+            }
+            else
+            {
+                queryBuilder.Replace("#AuthorFilter", "");
+            }
+
+            // 3. Add filters to template query
+            queryBuilder.Append(filter.GetFilterString());
 
 
             string query = queryBuilder.ToString();
@@ -285,7 +299,7 @@ LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
 
             return results;
         }
-        public int GetRecordCount(User user, string filter)
+        public int GetRecordCount(User user, Filter filter)
         {
             int result = 1;
 
@@ -301,6 +315,7 @@ FROM
 FROM tblArticle AS art
 LEFT JOIN jntArticleAuthor AS aa ON art.ID = aa.Article_ID
 LEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID
+#AuthorFilter
 GROUP BY art.Title) AS art_ath
 JOIN
 (SELECT art.Title AS Article, group_concat(kwd.Keyword, "", "") AS Keywords
@@ -318,7 +333,18 @@ LEFT JOIN tblAbstract AS abst On abst.Article_ID = final.ID
             // 1. Add user id for comments and sic
             queryBuilder.Replace("#UserID", user.ID.ToString());
 
-            queryBuilder.Append(filter);
+            // 2. Add author filter
+            string authorQuery = filter.AuthorFilterQuery.ToString();
+            if (!String.IsNullOrEmpty(authorQuery))
+            {
+                queryBuilder.Replace("#AuthorFilter", authorQuery);
+            }
+            else
+            {
+                queryBuilder.Replace("#AuthorFilter", "");
+            }
+
+            queryBuilder.Append(filter.GetFilterString());
 
             string query = queryBuilder.ToString();
             System.Console.WriteLine(query);

@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attached Properties\AdvancedTextblockHighlighter.cs" />
+    <Compile Include="Attached Properties\TextBlockHighlihgetAuthors.cs" />
     <Compile Include="Attached Properties\TextBlockHighlighter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityInverseConverter.cs" />

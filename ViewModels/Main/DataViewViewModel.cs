@@ -354,7 +354,7 @@ namespace MainLib.ViewModels.Main
                 await Task.Run(() =>
                 {
                     // 2. Calculate total pages
-                    int record_count = new ArticleRepo().GetRecordCount(Users[UserIndex], filter.GetFilterString());
+                    int record_count = new ArticleRepo().GetRecordCount(Users[UserIndex], filter);
                     if ((record_count % ItemsPerPage) == 0)
                         TotalPages = record_count / ItemsPerPage;
                     else if (record_count == 0)
@@ -677,7 +677,7 @@ namespace MainLib.ViewModels.Main
                     _filterTitle = _filterTitle.Replace("'", "''");
 
                 // 2. Fetch artilces from database
-                articles = new ArticleRepo().LoadArticles(Users[UserIndex], filter.GetFilterString());
+                articles = new ArticleRepo().LoadArticles(Users[UserIndex], filter);
             });
 
             foreach (Article article in articles)
