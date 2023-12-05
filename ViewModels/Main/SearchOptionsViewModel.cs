@@ -150,7 +150,8 @@ namespace MainLib.ViewModels.Main
             {
                 //if (FilterAuthors.Count > 0) { return String.Join(" ", FilterAuthors); }
                 if (String.IsNullOrEmpty(FilterAuthors)) { return ""; }
-                return FilterAuthors.Replace(",", "");
+                //return FilterAuthors.Replace(",", "");
+                return FilterAuthors;
             }
         }
         public string KeywordHighlight

@@ -64,28 +64,30 @@ namespace Lib.DataAccessLayer.Utils
             // If there are no author filters return
             if (authors.Count == 0) { return filter; }
 
-            filter.AuthorFilterQuery.Append("WHERE art.ID IN\r\n(SELECT aa.Article_ID\r\nFROM jntArticleAuthor AS aa\r\nLEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID\r\nWHERE ");
+            filter.AuthorFilterQuery.Append("WHERE art.ID IN\r\n");
+            filter.AuthorFilterQuery.Append("(");
 
             string[] names;
-
-            //filter.FilterQuery.Append("(");
             foreach (string author in authors)
             {
+                filter.AuthorFilterQuery.Append("SELECT aa.Article_ID\r\nFROM jntArticleAuthor AS aa\r\nLEFT JOIN tblAuthor AS ath ON aa.Author_ID = ath.ID\r\nWHERE ");
                 names = author.Split(' ');
 
                 if (names.Length == 1)
                 {
-                    filter.AuthorFilterQuery.Append("ath.Name LIKE " + ToWildCard(author));
+                    filter.AuthorFilterQuery.Append("ath.Name LIKE " + ToWildCard(author) + "\r\n");
                 }
                 else
                 {
-                    filter.AuthorFilterQuery.Append($@"ath.Name REGEXP '(?i)\b{names[0][0]}[\w\.]*.*{names[names.Length - 1]}'");
+                    filter.AuthorFilterQuery.Append($@"ath.Name REGEXP '(?i)\b{names[0][0]}[\w\.]*.*\b{names[names.Length - 1]}\b'" + "\r\n");
                 }
                 
 
                 // If its not the last iteration add "AND"
                 if (author != authors.Last())
-                    filter.FilterQuery.Append($" {pairing} ");
+                {
+                    filter.AuthorFilterQuery.Append("INTERSECT\r\n");
+                }
             }
 
             filter.AuthorFilterQuery.Append(")");

@@ -99,7 +99,8 @@ namespace Lib.Views.Attached_Properties
             Regex regex;
             foreach (string highlightText in highlightAuthors)
             {
-                names = highlightText.Split(' ');
+                names = highlightText.Trim().Split(' ');
+
                 if (names.Length > 1)
                 {
                     regex = new Regex($@"(?i)\b{names[0][0]}[\w\.]*\s.*{names[names.Length - 1]}");
@@ -108,8 +109,7 @@ namespace Lib.Views.Attached_Properties
                 {
                     regex = new Regex($"(?i){names[0]}");
                 }
-                Console.WriteLine(regex.Match(text).Index);
-                Console.WriteLine(regex.Match(text).Value);
+
                 indexes.Add(new Tuple<int, int>(regex.Match(text).Index, regex.Match(text).Value.Length));
                 
                 //for (int index = 0; ; index += highlightText.Length)
