@@ -103,7 +103,7 @@ namespace Lib.Views.Attached_Properties
 
                 if (names.Length > 1)
                 {
-                    regex = new Regex($@"(?i)\b{names[0][0]}[\w\.]*\s.*{names[names.Length - 1]}");
+                    regex = new Regex($@"(?i)\b{names[0][0]}[\w-\.]*\s.*{names[names.Length - 1]}");
                 }
                 else
                 {

@@ -33,18 +33,9 @@
         <converters:StringToWords x:Key="StringToWords" />
 
         <Style TargetType="{x:Type ToolTip}">
-            <Style.Resources>
-                <Style TargetType="ContentPresenter">
-                    <Style.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="TextWrapping" Value="Wrap"  />
-                        </Style>
-                    </Style.Resources>
-                </Style>
-            </Style.Resources>
-            <Setter Property="MaxWidth" Value="450" />
-            <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+            <Setter Property="Background" Value="WhiteSmoke" />
         </Style>
+
 
         <!-- Abstract animations -->
         <Storyboard x:Key="ShowAbstract">
@@ -1190,11 +1181,74 @@
                         Padding="3"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        ToolTip="The default search mode in Title and Abstract fields filters for individual words. For instance, a search for 'Sleep deprivation in rats' retrieves articles containing these words, regardless of their order. For more specific searches, enclose your desired phrase in brackets, like this: [Sleep deprivation in rats]. This way, only articles with that exact phrase will appear. You can also combine modes, e.g., '[Sleep deprivation in rats] active avoidance' will display titles containing 'Sleep deprivation in rats' along with 'active' and 'avoidance' anywhere in the text."
                         ToolTipService.InitialShowDelay="0"
-                        ToolTipService.ShowDuration="60000"
+                        ToolTipService.ShowDuration="120000"
                         Grid.Row="1"
                         >
+                        <Border.ToolTip>
+                            <StackPanel
+                                MaxWidth="700"
+                                >
+                                <TextBlock
+                                    Text="Title &amp; Abstract"
+                                    Style="{StaticResource MediumHeader}"
+                                    />
+                                <TextBlock
+                                    Style="{StaticResource DefaultText}"
+                                    TextWrapping="Wrap"
+                                    >
+                                    The default search mode in Title and Abstract fields filters for individual words regardless of their order.                                    
+                                    <LineBreak />
+                                    For instance, let's say we have 5 Articles with following titles:
+                                    <LineBreak />
+                                    <LineBreak />
+                                    1. Effect of <Bold>Sleep Dperivation</Bold> in Albino <Bold>Rats</Bold>
+                                    <LineBreak />
+                                    2. REM <Bold>Sleep Deprivation</Bold> on Retention of Avoidance Learning in <Bold>Rats</Bold>
+                                    <LineBreak />
+                                    3. Unlearning has a stabilizing effect in collective memories
+                                    <LineBreak />
+                                    4. Effects of Paradoxical <Bold>Sleep Deprivation</Bold> on Visual Evoked Potentails in <Bold>Rats</Bold>
+                                    <LineBreak />
+                                    5. Physiological Correlates of Prolonged <Bold>Sleep Deprivation in Rats</Bold>
+                                    <LineBreak />
+                                    6. 48-Hour Sleep-Wake Cycles in Manic-Depressive Illness
+                                    <LineBreak />
+                                    7. Behavioral Effects Promoted by <Bold>Sleep Deprivation in Rats</Bold> Submitted to Epilepticus
+                                    <LineBreak />
+                                    <LineBreak />
+                                    If you search for <Italic>Sleep deprivation in rats</Italic> you'll get results that include articles numbered 1, 2, 4, 5 and 7 as they all contain the words of <Italic>Sleep, deprivation</Italic> and <Italic>rats</Italic>. 
+                                    If you want to narrow the search results and make them more precise, enclose the search in brackets, like this: <Italic>[Sleep deprivation in rats]</Italic>.
+                                    This focused search will only display articles 5 and 7, as it looks for the exact <Bold>sequence</Bold> of words withing the brackets.
+                                    <LineBreak />
+                                    You can also combine these search words, for example a search like '[Sleep deptivation in rats] active avoidance' will attempt to get locate articles containing the words <Italic>active</Italic> and <Italic>avoidance</Italic> anywhere, while also ensuring the title contains the precise phrase specified withing the brackets.
+                                </TextBlock>
+                                <Separator Margin="0 6 0 6" />
+                                <TextBlock
+                                    Text="Authors &amp; Keywords"
+                                    Style="{StaticResource MediumHeader}"
+                                    />
+                                <TextBlock
+                                    Style="{StaticResource DefaultText}"
+                                    TextWrapping="Wrap"
+                                    >
+                                    If you want to search for articles written by specific author you can write the author's name or surname in Author filed.
+                                    If you want to search Articles written by 2 or more specific authors you should write their names or surnames with comma separations.
+                                    For example <Italic>Kamin, Gaioni</Italic> will search for Articles written by Kamin and Gaioni <Bold>together</Bold>.
+                                </TextBlock>
+                                <Separator Margin="0 6 0 6" />
+                                <TextBlock
+                                    Text="Year"
+                                    Style="{StaticResource MediumHeader}"
+                                    />
+                                <TextBlock
+                                    Style="{StaticResource DefaultText}"
+                                    TextWrapping="Wrap"
+                                    >
+                                    You can search articles written in specific year, by writing the said year into year field. For example writing <Italic>2000</Italic> into year field will return Aritcles written in year 2000. It is also possible to specify a range, for example writing <Italic>2000-2005</Italic> will search for articles written any time between year of 2000 and 2005.
+                                </TextBlock>
+                            </StackPanel>
+                        </Border.ToolTip>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock
                                 Text="Help"
