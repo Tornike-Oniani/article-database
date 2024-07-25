@@ -42,7 +42,8 @@ namespace MainLib.ViewModels.Popups
                 new AbstractRepo().UpdateAbstractByArticleId((int)_article.ID, ArticleForm.Abstract);
 
                 // Track abstract editing
-                new Tracker(Shared.GetInstance().User).TrackCreate(new Lib.DataAccessLayer.Info.AbstractInfo() { ArticleTitle = _article.Title, AbstractBody = ArticleForm.Abstract, InfoType = "Abstract" });
+                //new Tracker(Shared.GetInstance().User).TrackCreate(new Lib.DataAccessLayer.Info.AbstractInfo() { ArticleTitle = _article.Title, AbstractBody = ArticleForm.Abstract, InfoType = "AbstractInfo" });
+                new Tracker(Shared.GetInstance().User).TrackUpdate(new Lib.DataAccessLayer.Info.AbstractInfo() { ArticleTitle = _article.Title, AbstractBody = ArticleForm.Abstract, InfoType = "AbstractInfo" }, _article.ID.ToString());
             }
             else
             // Otherwise create new abstract article relationshitp

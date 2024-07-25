@@ -24,6 +24,7 @@ namespace Lib.DataAccessLayer.Info
         public List<BookmarkInfo> Bookmarks;
         public List<ReferenceInfo> References;
         public string ChangedFile;
+        public string AbstractBody;
 
         public ArticleInfo()
         {
@@ -42,6 +43,7 @@ namespace Lib.DataAccessLayer.Info
             this.FileName = article.FileName;
             this.PersonalComment = article.PersonalComment;
             this.SIC = article.SIC;
+            this.AbstractBody = article.AbstractBody;
             this.AbstractOnly = article.AbstractOnly;
             this.Bookmarks = new List<BookmarkInfo>();
             this.References = new List<ReferenceInfo>();

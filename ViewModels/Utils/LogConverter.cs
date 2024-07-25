@@ -64,7 +64,7 @@ namespace MainLib.ViewModels.Utils
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
                     result.Add(log);
                 }
-                else if (check.Contains("\"Type\": \"Abstract\""))
+                else if (check.Contains("AbstractInfo"))
                 {
                     Log<AbstractInfo> temp = item.ToObject<Log<AbstractInfo>>();
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);

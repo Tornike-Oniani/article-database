@@ -65,13 +65,23 @@ namespace MainLib.ViewModels.Utils
                             // 1. Add article to database
                             repo.SaveArticle(article, user);
 
+                            // Get freshly added article
+                            Article dbArticle = repo.GetArticleWithTitle(local_info.Title);
+
+                            // Add Abstract
+                            if (!String.IsNullOrWhiteSpace(local_info.AbstractBody))
+                            {
+                                AbstractRepo abs_repo = new AbstractRepo();
+                                int articleId = (int)new ArticleRepo().GetArticleWithTitle(local_info.Title).ID;
+                                abs_repo.AddAbstract(articleId, local_info.AbstractBody);
+                            }                           
+
                             // 2. Copy file
                             string fileName = repo.GetFileWithTitle(local_info.Title);
                             File.Copy(
                                 Path.Combine(_filesPath, local_info.FileName + ".pdf"),
                                 Path.Combine(Path.Combine(Environment.CurrentDirectory, "Files"), fileName + ".pdf"));
 
-                            Article dbArticle = repo.GetArticleWithTitle(local_info.Title);
 
                             // 3. Add references and bookmarks
                             BookmarkRepo bookmarkRepo = new BookmarkRepo();
