@@ -226,6 +226,11 @@ namespace Lib.DataAccessLayer.Info
     {
         public string ArticleTitle { get; set; }
         public string AbstractBody { get; set; }
+
+        public AbstractInfo()
+        {
+            this.InfoType = "AbstractInfo";
+        }
     }
 
 }
