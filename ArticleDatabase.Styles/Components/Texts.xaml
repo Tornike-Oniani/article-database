@@ -3,7 +3,11 @@
                     xmlns:local="clr-namespace:Lib.Styles">
 
     <FontFamily x:Key="SourceSans">../fonts/#Source Sans Pro</FontFamily>
-    
+    <FontFamily x:Key="MotivaSansLight">../fonts/#Motiva Sans Light</FontFamily>
+    <FontFamily x:Key="MotivaSansThin">../fonts/#Motiva Sans Thin</FontFamily>
+    <FontFamily x:Key="MotivaSans">../fonts/#Motiva Sans</FontFamily>
+    <FontFamily x:Key="MotivaSansMedium">../fonts/#Motiva Sans Medium</FontFamily>
+
     <!-- Window header -->
     <Style TargetType="{x:Type TextBlock}" x:Key="WindowHeader">
         <Setter Property="Foreground" Value="{StaticResource PrimaryColorNewBrush}" />

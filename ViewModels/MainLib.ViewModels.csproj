@@ -58,6 +58,7 @@
     <Compile Include="Main\AbstractsBrowseViewModel.cs" />
     <Compile Include="Main\AbstractsEntryViewModel.cs" />
     <Compile Include="Main\AbstractsViewModel.cs" />
+    <Compile Include="Main\BrowseViewModel.cs" />
     <Compile Include="Main\SearchOptionsViewModel.cs" />
     <Compile Include="Main\SQLViewModel.cs" />
     <Compile Include="NavigationViewModel.cs" />

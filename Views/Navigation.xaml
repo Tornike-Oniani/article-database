@@ -89,6 +89,15 @@
                             Command="{Binding UpdateViewCommand}" 
                             CommandParameter="{x:Static type:ViewType.Home}" 
                             />
+                        <!-- Browse -->
+                        <RadioButton 
+                            Style="{StaticResource NavigationButton}" 
+                            Content="Browse"
+                            Tag="{x:Static materialDesign:PackIconKind.Eye}" 
+                            GroupName="Navigation" 
+                            Command="{Binding UpdateViewCommand}" 
+                            CommandParameter="{x:Static type:ViewType.Browse}" 
+                            />                        
                         <!-- Data entry -->
                         <RadioButton 
                             Style="{StaticResource NavigationButton}" 

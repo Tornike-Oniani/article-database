@@ -85,6 +85,12 @@
     <Resource Include="fonts\Inter-Light.otf" />
     <Resource Include="fonts\Inter-Regular.otf" />
     <Resource Include="fonts\Inter-SemiBold.otf" />
+    <Resource Include="fonts\MotivaSansLight.woff.ttf" />
+    <Resource Include="fonts\Wonderbar-pALD.ttf" />
+    <Resource Include="fonts\MotivaSansExtraBold.ttf" />
+    <Resource Include="fonts\MotivaSansMedium.woff.ttf" />
+    <Resource Include="fonts\MotivaSansThin.ttf" />
+    <Resource Include="fonts\MotivaSansRegular.woff.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -118,7 +118,12 @@
                     <DataTemplate DataType="{x:Type mainVM:SQLViewModel}">
                         <main:SQL />
                     </DataTemplate>
-                    
+
+                    <!-- Browse -->
+                    <DataTemplate DataType="{x:Type mainVM:BrowseViewModel}">
+                        <main:Browse />
+                    </DataTemplate>
+
                     <!-- Search dialog -->
                     <DataTemplate DataType="{x:Type popupVM:SearchDialogViewModel}">
                         <popupV:SearchDialog />

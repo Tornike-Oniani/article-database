@@ -8,6 +8,7 @@
         Bookmarks,
         References,
         Abstracts,
-        SQL
+        SQL,
+        Browse
     }
 }

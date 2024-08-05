@@ -15,8 +15,8 @@
     <Color x:Key="ComplementaryColor">#3b1065</Color>
     <SolidColorBrush x:Key="ComplementaryColorBrush" Color="{StaticResource ComplementaryColor}" />
 
-    <!-- Text highlight color -->
-    <Color x:Key="TextHighlightColor">#f0c748</Color>
+    <!-- Text highlight color f0c748 -->
+    <Color x:Key="TextHighlightColor">#fff4be</Color>
     <SolidColorBrush x:Key="TextHighlightColorBrush" Color="{StaticResource TextHighlightColor}" />
 
     <!-- Light selection color -->
@@ -33,6 +33,9 @@
     <!-- Black alt color -->
     <Color x:Key="BlackColorAlt">#212529</Color>
     <SolidColorBrush x:Key="BlackColorAltBrush" Color="{StaticResource BlackColorAlt}" />
+    <!-- Black color -->
+    <Color x:Key="BlackColor">#000000</Color>
+    <SolidColorBrush x:Key="BlackColorBrush" Color="{StaticResource BlackColor}" />
     <!-- Text color -->
     <Color x:Key="TextColor">#414141</Color>
     <SolidColorBrush x:Key="TextColorBrush" Color="{StaticResource TextColor}" />

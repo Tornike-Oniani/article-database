@@ -4,21 +4,28 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace MainLib.Views.Converters
 {
-    public class AbstractToVisibilityConverter : IValueConverter
+    internal class BoolToRenderTransofrmConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || String.IsNullOrEmpty(value.ToString()) || value.ToString().ToLower() == "no abstract" || value.ToString().ToLower() == "not recognized")
-            {
-                return Visibility.Collapsed;
-            }
+            TranslateTransform transform = new TranslateTransform();
+            transform.X = 0;
+            transform.Y = 0;
 
-            return Visibility.Visible;
+            if (value == null || (bool)value)
+            {
+                return transform;
+            }
+            else
+            {
+                transform.Y = int.Parse(parameter.ToString());
+                return transform;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

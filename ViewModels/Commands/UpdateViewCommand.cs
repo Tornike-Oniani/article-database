@@ -46,6 +46,9 @@ namespace MainLib.ViewModels.Commands
                 case ViewType.SQL:
                     _navigate(new SQLViewModel());
                     break;
+                case ViewType.Browse:
+                    _navigate(new BrowseViewModel());
+                    break;
             }
         }
     }

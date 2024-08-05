@@ -277,7 +277,9 @@
                             Padding="{TemplateBinding Padding}"
                             CornerRadius="3 3 3 3"
                             >
-                            <ContentPresenter />
+                            <ContentPresenter 
+                                HorizontalAlignment="Center"
+                                />
                         </Border>
                         <Border
                             Visibility="{TemplateBinding IsEnabled, Converter={StaticResource BoolToVisibilityInverse}}"

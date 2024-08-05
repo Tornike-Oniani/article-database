@@ -19,9 +19,23 @@ namespace MainLib.Views.Converters
 
             string[] words = value.ToString().Split(',').Select(word => word.ToString().Trim()).ToArray();
 
+            string separator = "";
+            if (parameter == null)
+            {
+                separator = ",";
+            }
+            else if (parameter.ToString() == "NoSeparator")
+            {
+                separator = "";
+            }
+            else
+            {
+                separator = ",";
+            }
+
             for (int i = 0; i < words.Length - 1; i++)
             {
-                words[i] = words[i] + ",";
+                words[i] = words[i] + separator;
             }
 
             return words;

@@ -39,7 +39,6 @@ namespace MainLib.ViewModels
             set { _workLabel = value; OnPropertyChanged("WorkLabel"); }
         }
 
-
         public ICommand UpdateViewCommand { get; set; }
         public ICommand OpenSettingsCommand { get; set; }
 

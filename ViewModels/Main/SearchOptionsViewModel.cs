@@ -1,4 +1,5 @@
 ﻿using Lib.ViewModels.Commands;
+using MainLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -52,7 +53,7 @@ namespace MainLib.ViewModels.Main
             }
             set
             {
-                _filterTitle = value;
+                _filterTitle = FormatText(value);
                 OnPropertyChanged("FilterTitle");
             }
         }
@@ -213,6 +214,15 @@ namespace MainLib.ViewModels.Main
                 this.SelectedKeywordPairing = KeywordPairings[0];
 
             this.ClearCommand = new RelayCommand(Clear, CanClear);
+        }
+        private string FormatText(string input)
+        {
+            if (String.IsNullOrWhiteSpace(input))
+            {
+                return "";
+            }
+
+            return TextFormat.RemoveUnprintableCharacters(TextFormat.RemoveSpareWhiteSpace(input));
         }
     }
 }
