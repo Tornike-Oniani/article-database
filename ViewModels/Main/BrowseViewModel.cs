@@ -90,6 +90,13 @@ namespace MainLib.ViewModels.Main
             get { return _showResults; }
             set { _showResults = value; OnPropertyChanged("ShowResults"); }
         }
+        public bool ShowNoResultsLabel
+        {
+            get
+            {
+                return ShowResults && Articles.Count == 0;
+            }
+        }
         // Pagination
         public int ItemsPerPage { get; set; }
         public int CurrentPage
@@ -152,9 +159,9 @@ namespace MainLib.ViewModels.Main
         public BrowseViewModel()
         {
             // Generic
+            this.services = Shared.GetInstance();
             this.User = Shared.GetInstance().User;
             this.Articles = new ObservableCollection<Article>();
-            this.services = Shared.GetInstance();
 
             // Pagination
             this.ItemsPerPage = 25;
@@ -195,10 +202,12 @@ namespace MainLib.ViewModels.Main
             List<string> filterAuthorsFromString = String.IsNullOrEmpty(Authors) ? new List<string>() : Authors.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
 
             // Build a filter
+            FilterExstension.SetGlobalPairing(isLoose: true);
             Filter filter = new Filter();
             filter
                 .FilterTitle(termWords.ToArray(), termPhrases.ToArray())
                 .FilterAuthors(filterAuthorsFromString, "AND")
+                .FilterKeywords(termWords, "AND")
                 .FilterYear(Year);
 
             // Fetch articles from database
@@ -213,6 +222,7 @@ namespace MainLib.ViewModels.Main
             this.CurrentPage = 1;
             this.ShowResults = true;
             OnPropertyChanged("TotalPages");
+            OnPropertyChanged("ShowNoResultsLabel");
         }
         public void NextPage(object input = null)
         {
@@ -396,6 +406,14 @@ namespace MainLib.ViewModels.Main
             else if (SortString == "Year DESC")
             {
                 this.articles = this.articles.OrderByDescending(o => o.Year).ToList();
+            }
+            else if (SortString == "Date ASC")
+            {
+                this.articles = this.articles.OrderBy(o => o.ID).ToList();
+            }
+            else if (SortString == "Date DESC")
+            {
+                this.articles = this.articles.OrderByDescending(o => o.ID).ToList();
             }
             // We want to reset the page back to 1 when we change sort
             this.CurrentPage = 1;

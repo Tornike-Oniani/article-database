@@ -71,7 +71,6 @@
             </Style.Triggers>
         </Style>
         <Style x:Key="ItemsPerPageRadio" TargetType="{x:Type RadioButton}">
-            <Setter Property="FontSize" Value="16" />
             <Setter Property="Foreground" Value="{StaticResource BlueColorBrush}" />
             <Setter Property="BorderThickness" Value="0 0 0 0" />
             <Setter Property="BorderBrush" Value="{StaticResource BlackColorAltBrush}" />
@@ -85,6 +84,7 @@
                             >
                             <TextBlock
                                 Text="{TemplateBinding Content}"
+                                Style="{StaticResource DefaultText}"
                                 Foreground="{TemplateBinding Foreground}"
                                 />
                         </Border>
@@ -116,7 +116,7 @@
             >
             <Border 
                 Padding="12 12 12 12"
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Center"                
                 >
                 <StackPanel>
                     <TextBlock
@@ -129,6 +129,7 @@
                         Background="#e5e7eb"
                         CornerRadius="4 4 4 4"
                         Padding="12 6 12 6"
+                        HorizontalAlignment="Left"
                         Margin="0 0 0 12"
                         >
                         <StackPanel 
@@ -161,9 +162,11 @@
                         Background="#e5e7eb"
                         CornerRadius="4 4 4 4"
                         Padding="12 6 12 6"
+                        HorizontalAlignment="Left"
+                        Margin="0 0 0 12"
                         >
                         <StackPanel 
-                            Orientation="Horizontal"
+                            Orientation="Horizontal"                            
                             >
                             <TextBlock 
                                 Text="Year" 
@@ -186,6 +189,37 @@
                                 CommandParameter="Year DESC"
                                 />
                         </StackPanel>
+                    </Border>
+                    <Border                        
+                        Background="#e5e7eb"
+                        CornerRadius="4 4 4 4"
+                        Padding="12 6 12 6"
+                        HorizontalAlignment="Left"
+                        >
+                        <StackPanel 
+                            Orientation="Horizontal"                            
+                            >
+                            <TextBlock                                
+                                Text="Entry date" 
+                                Style="{StaticResource DefaultText}"
+                                VerticalAlignment="Center"
+                                Margin="0 0 12 0"
+                                />
+                                <RadioButton 
+                                GroupName="Sorting" 
+                                Content="ASC" 
+                                Style="{StaticResource SortRadio}"
+                                Command="{Binding SortCommand}"
+                                CommandParameter="Date ASC"
+                                />
+                                <RadioButton 
+                                GroupName="Sorting" 
+                                Content="DESC" 
+                                Style="{StaticResource SortRadio}"
+                                Command="{Binding SortCommand}"
+                                CommandParameter="Date DESC"
+                                />
+                         </StackPanel>
                     </Border>
                 </StackPanel>
             </Border>
@@ -228,6 +262,7 @@
                     Content="Additional filters"
                     IsChecked="{Binding ShowAdditionalFilters}"
                     Style="{x:Null}"
+                    Focusable="False"
                     BorderThickness="0"
                     Background="Transparent"
                     Cursor="Hand"
@@ -268,7 +303,11 @@
                         <TextBox
                             Text="{Binding Authors, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource WatermarkTextBox}"
-                            />
+                            >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
                     </StackPanel>
                     <!-- Year -->
                     <StackPanel
@@ -281,7 +320,11 @@
                         <TextBox
                             Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource WatermarkTextBox}"
-                            />
+                            >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
                     </StackPanel>
                 </Grid>
                 <!-- Action buttons-->
@@ -413,30 +456,46 @@
                                                         >
                                                     </TextBlock>
                                                     <!-- Year -->
-                                                    <StackPanel
-                                                        Orientation="Horizontal"
+                                                    <Grid 
                                                         VerticalAlignment="Center"
                                                         Margin="0 0 0 12"
                                                         Grid.Row="1"
                                                         >
-                                                        <materialDesign:PackIcon 
-                                                            Kind="Calendar"
-                                                            Width="18"
-                                                            Height="18"
+                                                        <StackPanel
+                                                            Orientation="Horizontal"
                                                             VerticalAlignment="Center"
-                                                            Foreground="#6b7280"
-                                                            Margin="0 0 8 0"
-                                                            />
-                                                        <TextBlock
-                                                            Text="{Binding Year}"
-                                                            Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
-                                                            Style="{StaticResource DefaultText}"
-                                                            LineHeight="24"
+                                                            HorizontalAlignment="Left"
+                                                            >
+                                                            <materialDesign:PackIcon 
+                                                                Kind="Calendar"
+                                                                Width="18"
+                                                                Height="18"
+                                                                VerticalAlignment="Center"
+                                                                Foreground="#6b7280"
+                                                                Margin="0 0 8 0"
+                                                                />
+                                                            <TextBlock
+                                                                Text="{Binding Year}"
+                                                                Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
+                                                                Style="{StaticResource DefaultText}"
+                                                                LineHeight="24"
+                                                                VerticalAlignment="Center"
+                                                                Foreground="#6b7280"
+                                                                Margin="0 0 6 0"
+                                                                />
+                                                        </StackPanel>
+                                                        <StackPanel
                                                             VerticalAlignment="Center"
-                                                            Foreground="#6b7280"
-                                                            Margin="0 0 6 0"
-                                                            />
-                                                    </StackPanel>
+                                                            HorizontalAlignment="Right"
+                                                            >
+                                                            <TextBlock
+                                                                Text="{Binding FileName}"
+                                                                Visibility="{Binding User.IsAdmin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource BoolToVisibility}}"
+                                                                Style="{StaticResource DefaultText}"
+                                                                Foreground="#6b7280"
+                                                                />
+                                                        </StackPanel>
+                                                    </Grid>
                                                     <!-- Keywords -->
                                                     <ListView
                                                         ItemsSource="{Binding Keywords, Converter={StaticResource StringToWords}, ConverterParameter=NoSeparator}"
@@ -644,6 +703,37 @@
                     </Style>
                 </ListView.Style>
             </ListView>
+            <!-- No results -->
+            <StackPanel
+                Visibility="{Binding ShowNoResultsLabel, Converter={StaticResource BoolToVisibility}}"
+                Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                Grid.Row="1"
+                >
+                <materialDesign:PackIcon 
+                    Kind="FileDocumentBoxSearch"
+                    Width="28"
+                    Height="28"
+                    VerticalAlignment="Center"
+                    Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                    Margin="0 0 12 0"
+                    />
+                <StackPanel
+                    VerticalAlignment="Center"
+                    Margin="0 18 0 0"
+                    >
+                    <TextBlock 
+                        Text="No results found"
+                        Style="{StaticResource Header}"                        
+                        Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                        />
+                    <TextBlock
+                        Text="Try different terms"
+                        Style="{StaticResource DefaultText}"
+                        Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                        />
+                </StackPanel>
+            </StackPanel>
                 
             <!-- Pagination -->
             <Grid 
