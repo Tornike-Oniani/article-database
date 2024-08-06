@@ -206,6 +206,7 @@ namespace MainLib.ViewModels.Main
             Filter filter = new Filter();
             filter
                 .FilterTitle(termWords.ToArray(), termPhrases.ToArray())
+                .FilterAbstract(termWords.ToArray(), termPhrases.ToArray())
                 .FilterAuthors(filterAuthorsFromString, "AND")
                 .FilterKeywords(termWords, "AND")
                 .FilterYear(Year);

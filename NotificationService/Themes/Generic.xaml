@@ -61,13 +61,14 @@
                         <Setter TargetName="Icon" Property="Content" Value="{StaticResource InfoIcon}"/>
                         <Setter TargetName="Border" Property="Background" Value="CornflowerBlue"/>
                     </DataTrigger>
+                    <!-- FF4A0B5A -->
                     <DataTrigger Binding="{Binding Type}" Value="Success">
                         <Setter TargetName="Icon" Property="Content" Value="{StaticResource SuccessIcon}"/>
-                        <Setter TargetName="Border" Property="Background" Value="#FF4A0B5A"/>
+                        <Setter TargetName="Border" Property="Background" Value="#4BB543 "/>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Type}" Value="Warning">
                         <Setter TargetName="Icon" Property="Content" Value="{StaticResource WarningIcon}"/>
-                        <Setter TargetName="Border" Property="Background" Value="#FF4A0B5A"/>
+                        <Setter TargetName="Border" Property="Background" Value="CornflowerBlue"/>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Type}" Value="Error">
                         <Setter TargetName="Icon" Property="Content" Value="{StaticResource ErrorIcon}"/>
