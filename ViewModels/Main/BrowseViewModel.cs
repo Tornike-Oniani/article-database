@@ -163,6 +163,10 @@ namespace MainLib.ViewModels.Main
             this.User = Shared.GetInstance().User;
             this.Articles = new ObservableCollection<Article>();
 
+            // Highlight
+            this.TermsWordsHighlight = new List<string>();
+            this.TermsPhrasesHighlight = new List<string>();
+
             // Pagination
             this.ItemsPerPage = 25;
             this.CurrentPage = 1;

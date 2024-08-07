@@ -361,7 +361,7 @@
                                     MaxWidth="950"
                                     >
                                     <TextBlock
-                                        Text="Title &amp; Abstract"
+                                        Text="სათაური და აბსტრაქტი"
                                         Style="{StaticResource MediumHeader}"
                                         />
                                     <TextBlock
