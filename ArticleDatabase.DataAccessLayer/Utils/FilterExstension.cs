@@ -34,7 +34,7 @@ namespace Lib.DataAccessLayer.Utils
             for (int i = 0; i < words.Length; i++)
             {
                 //filter.FilterQuery.Append("final.Title REGEXP " + $@"'(?i)\b{words[i]}\b'");
-                filter.FilterQuery.Append("final.Title REGEXP " + $@"'(?i)(?<!\w){words[i]}(?!\w)'");
+                filter.FilterQuery.Append("final.Title REGEXP " + $@"'(?i)(?<!\w){words[i].Replace("(", "\\(").Replace(")", "\\)")}(?!\w)'");
 
                 if (i < words.Length - 1 || phrases.Length > 0)
                 {

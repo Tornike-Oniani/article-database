@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MainLib.ViewModels.Main;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,24 @@ namespace MainLib.Views.Main
     /// </summary>
     public partial class Browse : UserControl
     {
+        private ScrollViewer _resultsListScrollViewer;
+
         public Browse()
         {
             InitializeComponent();
+            this.Loaded += Browse_Loaded;
+        }
+
+        private void Browse_Loaded(object sender, RoutedEventArgs e)
+        {
+            this._resultsListScrollViewer = (ScrollViewer)ResultsList.Template.FindName("PART_ScrollViewer", ResultsList);
+            BrowseViewModel dataContext = this.DataContext as BrowseViewModel;
+            dataContext.ScrollToTopRequested += DataContext_ScrollToTopRequested;
+        }
+
+        private void DataContext_ScrollToTopRequested(object sender, EventArgs e)
+        {
+            _resultsListScrollViewer.ScrollToTop();
         }
     }
 }

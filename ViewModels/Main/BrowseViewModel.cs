@@ -77,7 +77,7 @@ namespace MainLib.ViewModels.Main
             }
         }
         // Generic
-        public ObservableCollection<Article> Articles { get; set; }
+        public List<Article> Articles { get; set; }
         public User User { get; set; }
         // Visibility
         public bool ShowAdditionalFilters
@@ -155,13 +155,21 @@ namespace MainLib.ViewModels.Main
         public ICommand ChangeItemsPerPageCommand { get; set; }
         #endregion
 
+        #region Events
+        public event EventHandler ScrollToTopRequested;
+        protected virtual void OnScrollTopRequested()
+        {
+            this.ScrollToTopRequested?.Invoke(this, EventArgs.Empty);
+        }
+        #endregion
+
         #region Constructors
         public BrowseViewModel()
         {
             // Generic
             this.services = Shared.GetInstance();
             this.User = Shared.GetInstance().User;
-            this.Articles = new ObservableCollection<Article>();
+            this.Articles = new List<Article>();
 
             // Highlight
             this.TermsWordsHighlight = new List<string>();
@@ -383,7 +391,7 @@ namespace MainLib.ViewModels.Main
         #region Private helpers
         private void PopulateArticles()
         {
-            this.Articles.Clear();
+            List<Article> freshArticles = new List<Article>();
             int offset = (this.CurrentPage - 1) * this.ItemsPerPage;
             for (int i = offset; i < this.CurrentPage * this.ItemsPerPage; i++)
             {
@@ -391,8 +399,11 @@ namespace MainLib.ViewModels.Main
                 {
                     break;
                 }
-                this.Articles.Add(this.articles[i]);
+                freshArticles.Add(this.articles[i]);
             }
+            this.Articles = freshArticles;
+            OnPropertyChanged("Articles");
+            OnScrollTopRequested();
         }
         private void SortArticles()
         {

@@ -348,7 +348,7 @@
                     <!-- Help -->
                     <Border 
                         Background="Transparent"
-                        Padding="3"
+                        Padding="3 3 3 3"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         ToolTipService.InitialShowDelay="0"
@@ -460,7 +460,8 @@
             </StackPanel>
 
             <!-- Results -->
-            <ListView 
+            <ListView
+                x:Name="ResultsList"
                 ItemsSource="{Binding Articles}"
                 Visibility="{Binding ShowResults, Converter={StaticResource BooleanToVisibilityConverter}}"
                 VirtualizingPanel.IsVirtualizing="True"
@@ -475,7 +476,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListView}">
-                                    <ScrollViewer>
+                                    <ScrollViewer x:Name="PART_ScrollViewer">
                                         <Grid 
                                             Background="{DynamicResource WhiteColorBrush}"
                                             >
