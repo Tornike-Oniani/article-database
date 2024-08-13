@@ -23,6 +23,10 @@ namespace MainLib.ViewModels.Utils
         {
             return unprintableCharacters.Replace(input, "");
         }
+        public static string RemoveLineBreaks(string input)
+        {
+            return input.Replace("\r\n", "").Replace("\n", "").Replace("\r", "");
+        }
         public static string[] GetUnusualCharacters(string input)
         {
             if (allowedCharacters != Properties.Settings.Default.AllowedCharacters)

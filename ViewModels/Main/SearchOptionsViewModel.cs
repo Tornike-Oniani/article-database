@@ -102,7 +102,7 @@ namespace MainLib.ViewModels.Main
         public string FilterAbstract
         {
             get { return _filterAbstract; }
-            set { _filterAbstract = value; OnPropertyChanged("FilterAbstract"); }
+            set { _filterAbstract = FormatText(value); OnPropertyChanged("FilterAbstract"); }
         }      
         public List<string> TitleSearchWords
         {
@@ -222,7 +222,7 @@ namespace MainLib.ViewModels.Main
                 return "";
             }
 
-            return TextFormat.RemoveUnprintableCharacters(TextFormat.RemoveSpareWhiteSpace(input));
+            return TextFormat.RemoveUnprintableCharacters(TextFormat.RemoveSpareWhiteSpace(TextFormat.RemoveLineBreaks(input)));
         }
     }
 }

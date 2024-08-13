@@ -129,7 +129,7 @@ namespace MainLib.ViewModels.UIStructs
                 return "";
             }
 
-            return TextFormat.RemoveUnprintableCharacters(TextFormat.RemoveSpareWhiteSpace(input));
+            return TextFormat.RemoveUnprintableCharacters(TextFormat.RemoveSpareWhiteSpace(TextFormat.RemoveLineBreaks(input)));
         }
 
         // IDataErrorInfo implementation

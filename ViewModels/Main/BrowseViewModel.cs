@@ -442,7 +442,7 @@ namespace MainLib.ViewModels.Main
                 return "";
             }
 
-            return TextFormat.RemoveUnprintableCharacters(TextFormat.RemoveSpareWhiteSpace(input));
+            return TextFormat.RemoveUnprintableCharacters(TextFormat.RemoveSpareWhiteSpace(TextFormat.RemoveLineBreaks(input)));
         }
         #endregion
     }
