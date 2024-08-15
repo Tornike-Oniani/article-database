@@ -40,7 +40,7 @@ namespace MainLib.ViewModels.Utils
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
                     result.Add(log);
                 }
-                else if (check.Contains("\"Type\": \"Couple\""))
+                else if (check.Contains("\"Type\": \"Coupling\""))
                 {
                     Log<Couple> temp = item.ToObject<Log<Couple>>();
                     Log<IInfo> log = new Log<IInfo>(temp.Type, temp.Username, temp.Info, temp.Changed);
