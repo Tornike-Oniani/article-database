@@ -25,7 +25,7 @@ namespace MainLib.ViewModels.Utils
         }
         public static string RemoveLineBreaks(string input)
         {
-            return input.Replace("\r\n", "").Replace("\n", "").Replace("\r", "");
+            return input.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " ");
         }
         public static string[] GetUnusualCharacters(string input)
         {
