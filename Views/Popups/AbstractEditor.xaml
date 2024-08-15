@@ -6,9 +6,15 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MainLib.Views.Popups"
              xmlns:highlighter="clr-namespace:MainLib.Views.UserControls.HighlightTextBox"
+             xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="12 12 12 12">
+    <ScrollViewer
+        MaxHeight="500"
+        >
+        <Grid 
+            Margin="12 12 12 12"
+            >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -26,10 +32,10 @@
                 HighlightWords="{Binding ArticleForm.UnusualCharactersInAbstract}"
                 HighlightColor="{StaticResource RedColorBrush}"
                 Style="{StaticResource WatermarkTextBox}"
+                FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=AbstractBoxFontSize}"
                 MinHeight="200"
 		        TextWrapping="Wrap"
                 AcceptsReturn="True"
-		        FontSize="14"
                 FontFamily="Verdana"
                 SpellCheck.IsEnabled="True"            
                 Margin="0 12 0 18"                
@@ -57,4 +63,5 @@
                 />
         </StackPanel>
     </Grid>
+    </ScrollViewer>
 </UserControl>

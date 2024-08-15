@@ -268,7 +268,7 @@ namespace MainLib.ViewModels.Utils
                                 currentLogCount++;
                                 return;
                             }
-                            repo.UpdateAbstract(articleId, local_info.AbstractBody);
+                            repo.UpdateAbstractByArticleId(articleId, local_info.AbstractBody);
                         }
                         break;
                     case "Coupling":

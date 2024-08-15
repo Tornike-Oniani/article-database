@@ -121,6 +121,24 @@
 
                 <Separator Margin="0 6 0 6" />
 
+                <!-- Button font size -->
+                <Grid>
+                    <TextBlock 
+                        Text="Abstract editing box font size:"
+                        Style="{StaticResource MediumHeader}"
+                        VerticalAlignment="Center"
+                        />
+                    <TextBox 
+                        Text="{Binding AbstractBoxFontSize}"
+                        Style="{StaticResource WatermarkTextBoxSmall}"
+                        HorizontalAlignment="Right"
+                        Width="35"
+                        Margin="6 0 0 0" 
+                        />
+                </Grid>
+
+                <Separator Margin="0 6 0 6" />
+
                 <!-- Sync name -->
                 <Grid Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}">
                     <TextBlock 

@@ -10,6 +10,7 @@
              xmlns:mainusercontrols="clr-namespace:MainLib.Views.UserControls"
              xmlns:ap="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
              xmlns:highlighter="clr-namespace:MainLib.Views.UserControls.HighlightTextBox"
+             xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="700">
     <UserControl.Resources>
@@ -456,8 +457,13 @@
                             </Button.Content>
                         </Button>
                     </Border>
-                    <ScrollViewer Grid.Row="1">
-                        <Border Padding="12 12 12 12">
+                    <ScrollViewer 
+                        MaxHeight="350"
+                        Grid.Row="1"
+                        >
+                        <Border 
+                            Padding="12 12 12 12"
+                            >
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
@@ -481,7 +487,7 @@
                                         Style="{StaticResource WatermarkTextBox}"                                
                                         TextWrapping="Wrap" 
                                         AcceptsReturn="True"
-                                        FontSize="14"
+                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=AbstractBoxFontSize}"
                                         SpellCheck.IsEnabled="True"
                                         FontFamily="Verdana"
                                         Width="750px"

@@ -16,6 +16,7 @@ namespace MainLib.ViewModels.Popups
         private int _textFontSize;
         private int _smallTextFontSize;
         private int _buttonFontSize;
+        private int _abstractBoxFontSize;
         private int _inputTextFontSize;
         private string _syncName;
         private string _allowedCharacters;
@@ -51,7 +52,12 @@ namespace MainLib.ViewModels.Popups
         {
             get { return _buttonFontSize; }
             set { _buttonFontSize = value; OnPropertyChanged("BigHeaderFontSize"); }
-        }      
+        }       
+        public int AbstractBoxFontSize
+        {
+            get { return _abstractBoxFontSize; }
+            set { _abstractBoxFontSize = value; OnPropertyChanged("AbstractBoxFontSize"); }
+        }
         public int InputTextFontSize
         {
             get { return _inputTextFontSize; }
@@ -95,6 +101,7 @@ namespace MainLib.ViewModels.Popups
             this.TextFontSize = Properties.Settings.Default.TextFontSize;
             this.SmallTextFontSize = Properties.Settings.Default.SmallTextFontSize;
             this.ButtonFontSize = Properties.Settings.Default.ButtonFontSize;
+            this.AbstractBoxFontSize = Properties.Settings.Default.AbstractBoxFontSize;
             this.InputTextFontSize = Properties.Settings.Default.InputTextFontSize;
             this.SyncName = Properties.Settings.Default.SyncName;
             this.AllowedCharacters = Properties.Settings.Default.AllowedCharacters;
@@ -119,6 +126,7 @@ namespace MainLib.ViewModels.Popups
             Properties.Settings.Default.TextFontSize = TextFontSize;
             Properties.Settings.Default.SmallTextFontSize = SmallTextFontSize;
             Properties.Settings.Default.ButtonFontSize = ButtonFontSize;
+            Properties.Settings.Default.AbstractBoxFontSize = AbstractBoxFontSize;
             Properties.Settings.Default.InputTextFontSize = InputTextFontSize;
             Properties.Settings.Default.SyncName = SyncName;
             Properties.Settings.Default.AllowedCharacters = AllowedCharacters;
