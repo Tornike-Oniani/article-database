@@ -136,6 +136,7 @@ namespace MainLib.ViewModels.Main
         { 
             get { return this.CurrentPage > 1; } 
         }
+        public int ResultsCount { get { return this.articles.Count; } }
         // Sorting
         public string SortString
         {
@@ -202,8 +203,10 @@ namespace MainLib.ViewModels.Main
             List<string> termPhrases = new List<string>();
             if (!String.IsNullOrWhiteSpace(Terms))
             {
-                termWords = Regex.Matches(Terms, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
-                termPhrases = Regex.Replace(Terms, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords).ToList();
+                //termWords = Regex.Matches(Terms, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
+                //termPhrases = Regex.Replace(Terms, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords, StringComparer.OrdinalIgnoreCase).ToList();
+                termWords = Regex.Replace(Terms, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords, StringComparer.OrdinalIgnoreCase).ToList();
+                termPhrases = Regex.Matches(Terms, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
             }
 
             // Set up words to be highlighted
@@ -227,7 +230,9 @@ namespace MainLib.ViewModels.Main
             services.IsWorking(true);
             await Task.Run(() =>
             {
+                ExtraFilter extraFilter = new ExtraFilter();
                 this.articles = new ArticleRepo().LoadArticles(User, filter);
+                this.articles = extraFilter.FilterArticlesWithTerms(articles, termWords, termPhrases);
             });
             services.IsWorking(false);
 
@@ -403,6 +408,7 @@ namespace MainLib.ViewModels.Main
             }
             this.Articles = freshArticles;
             OnPropertyChanged("Articles");
+            OnPropertyChanged("ResultsCount");
             OnScrollTopRequested();
         }
         private void SortArticles()

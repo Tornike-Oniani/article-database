@@ -458,7 +458,7 @@
                         </Button>
                     </Border>
                     <ScrollViewer 
-                        MaxHeight="350"
+                        MaxHeight="500"
                         Grid.Row="1"
                         >
                         <Border 
@@ -505,7 +505,6 @@
                             </Grid>
                         </Border>
                     </ScrollViewer>
-                    
                 </Grid>
             </Border>
         </Grid>

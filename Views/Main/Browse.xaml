@@ -23,6 +23,11 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:BoolToRenderTransofrmConverter x:Key="BoolToRenderTransform" />
 
+        <FrameworkElement 
+            x:Key="ProxyElementForDataContext"
+            DataContext="{Binding}"
+            />
+
         <Style TargetType="{x:Type ToolTip}">
             <Setter Property="Background" Value="WhiteSmoke" />
         </Style>
@@ -239,6 +244,7 @@
             </Border>
         </Grid>
 
+        <!-- Filters, results and pagination -->
         <Grid 
             Margin="42 0 0 0"
             Grid.Column="1"
@@ -251,6 +257,12 @@
                 <!-- Pagination -->
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+
+            <!-- We have to do this because otherwise ProxyElementForDataContext will be loaded lazily and bindings that depend on it won't work, this forces the proxy to be fully realized and initialized -->
+            <ContentControl
+                Visibility="Collapsed"
+                Content="{StaticResource ProxyElementForDataContext}"
+                />
 
             <!-- Filters -->
             <StackPanel 
@@ -474,6 +486,15 @@
                     <Style TargetType="{x:Type ListView}">
                         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
                         <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel" />
+                        <Setter Property="ItemsPanel">
+                            <Setter.Value>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel>
+                                        
+                                    </VirtualizingStackPanel>
+                                </ItemsPanelTemplate>
+                            </Setter.Value>
+                        </Setter>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListView}">
@@ -500,6 +521,32 @@
                         <Setter Property="ItemContainerStyle">
                             <Setter.Value>
                                 <Style TargetType="{x:Type ListViewItem}">
+                                    <Style.Resources>
+                                        <Style x:Key="ActionButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+                                            <Style.Resources>
+                                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultText}">
+
+                                                </Style>
+                                            </Style.Resources>
+                                            <Setter Property="Foreground" Value="#4b5563" />
+                                            <Setter Property="Background" Value="#e5e7eb" />
+                                            <Setter Property="BorderThickness" Value="0 0 0 0" />
+                                            <Setter Property="Cursor" Value="Hand" />
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type Button}">
+                                                        <Border
+                                                            Background="{TemplateBinding Background}"
+                                                            Padding="16 8 16 8"
+                                                            CornerRadius="4 4 4 4"                                                                                    
+                                                            >
+                                                            <ContentPresenter />
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Style.Resources>
                                     <Setter Property="Padding" Value="18 12 18 12" />
                                     <Setter Property="Template">
                                         <Setter.Value>
@@ -559,10 +606,10 @@
                                                         FontFamily="{StaticResource MotivaSansMedium}"
                                                         TextWrapping="Wrap"
                                                         LineHeight="28"
-                                                        ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.TermsWordsHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                        ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.TermsPhrasesHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                        ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                        ap:AdvancedTextblockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}"
+                                                        ap:RegexTextBlockHighlighter.WordSelection="{Binding DataContext.TermsWordsHighlight, Source={StaticResource ProxyElementForDataContext}}"
+                                                        ap:RegexTextBlockHighlighter.PhraseSelection="{Binding DataContext.TermsPhrasesHighlight, Source={StaticResource ProxyElementForDataContext}}"
+                                                        ap:RegexTextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                        ap:RegexTextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}"
                                                         Margin="0 0 0 8"
                                                         Grid.Row="0"
                                                         >
@@ -602,17 +649,16 @@
                                                             >
                                                             <TextBlock
                                                                 Text="{Binding FileName}"
-                                                                Visibility="{Binding User.IsAdmin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource BoolToVisibility}}"
+                                                                Visibility="{Binding DataContext.User.IsAdmin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource BoolToVisibility}}"
                                                                 Style="{StaticResource DefaultText}"
                                                                 Foreground="#6b7280"
                                                                 />
                                                         </StackPanel>
                                                     </Grid>
                                                     <!-- Keywords -->
-                                                    <ListView
+                                                    <ItemsControl
                                                         ItemsSource="{Binding Keywords, Converter={StaticResource StringToWords}, ConverterParameter=NoSeparator}"
                                                         Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
-                                                        BorderThickness="1"
                                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                                         ScrollViewer.CanContentScroll="False"
@@ -620,23 +666,18 @@
                                                         Margin="0 0 0 8"
                                                         Grid.Row="2"
                                                         >
-                                                        <ListView.Template>
-                                                            <ControlTemplate TargetType="{x:Type ListView}">
-                                                                <ItemsPresenter />
-                                                            </ControlTemplate>
-                                                        </ListView.Template>
-                                                        <ListView.ItemsPanel>
+                                                        <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
                                                                 <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
                                                             </ItemsPanelTemplate>
-                                                        </ListView.ItemsPanel>
-                                                        <ListView.ItemTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
                                                                 <Border
-                                                                    Padding="12 4 12 4"
-                                                                    CornerRadius="12 12 12 12"
-                                                                    Margin="0 0 8 8"
-                                                                    >
+                                                                  Padding="12 4 12 4"
+                                                                  CornerRadius="12 12 12 12"
+                                                                  Margin="0 0 8 8"
+                                                                  >
                                                                     <Border.Style>
                                                                         <Style TargetType="{x:Type Border}">
                                                                             <Setter Property="Padding" Value="12 4 12 4" />
@@ -646,9 +687,9 @@
                                                                                 <Setter.Value>
                                                                                     <MultiBinding Converter="{StaticResource KeywordHighlight}">
                                                                                         <Binding 
-                                                                                            Path="DataContext.Terms" 
-                                                                                            RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}" 
-                                                                                            />
+                                                                                          Path="DataContext.Terms" 
+                                                                                          Source="{StaticResource ProxyElementForDataContext}"
+                                                                                          />
                                                                                         <Binding Path="." />
                                                                                     </MultiBinding>
                                                                                 </Setter.Value>
@@ -656,32 +697,21 @@
                                                                         </Style>
                                                                     </Border.Style>
                                                                     <TextBlock                                                                        
-                                                                        Text="{Binding Path=.}"
-                                                                        Style="{StaticResource DefaultText}"
-                                                                        Foreground="#374151"
-                                                                        />
+                                                                      Text="{Binding Path=.}"
+                                                                      Style="{StaticResource DefaultText}"
+                                                                      Foreground="#374151"
+                                                                      />
                                                                 </Border>
                                                             </DataTemplate>
-                                                        </ListView.ItemTemplate>
-                                                        <ListView.ItemContainerStyle>
-                                                            <Style TargetType="{x:Type ListViewItem}">
-                                                                <Setter Property="Template">
-                                                                    <Setter.Value>
-                                                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                                                            <ContentPresenter />
-                                                                        </ControlTemplate>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                            </Style>
-                                                        </ListView.ItemContainerStyle>
-                                                    </ListView>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
                                                     <!-- Authors -->
                                                     <TextBlock
                                                         Text="{Binding Authors}"
                                                         Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
                                                         Style="{StaticResource DefaultText}"
                                                         Foreground="{StaticResource TextColorBrush}"
-                                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
                                                         ap:TextBlockHighlighter.WordBreakMode="True"
                                                         ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
                                                         ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
@@ -699,10 +729,10 @@
                                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
                                                         Style="{StaticResource DefaultText}"
                                                         Foreground="{StaticResource BlackColorAltBrush}"
-                                                        ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.TermsWordsHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                        ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.TermsPhrasesHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                        ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                        ap:AdvancedTextblockHighlighter.Forecolor="{StaticResource TextColorBrush}"           
+                                                        ap:RegexTextBlockHighlighter.WordSelection="{Binding DataContext.TermsWordsHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
+                                                        ap:RegexTextBlockHighlighter.PhraseSelection="{Binding DataContext.TermsPhrasesHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
+                                                        ap:RegexTextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                        ap:RegexTextBlockHighlighter.Forecolor="{StaticResource TextColorBrush}"           
                                                         TextWrapping="Wrap"
                                                         Margin="0 0 0 18"
                                                         Grid.Row="5"
@@ -713,96 +743,49 @@
                                                         Grid.Row="6"
                                                         >
                                                         <Button 
-                                                            Content="View"
+                                                            Style="{StaticResource ActionButton}"
                                                             Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                            CommandParameter="{Binding}"                                                        
+                                                            CommandParameter="{Binding}"
+                                                            Margin="0 0 12 0"
                                                             >
-                                                            <Button.Style>
-                                                                <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
-                                                                    <Setter Property="Foreground" Value="#4b5563" />
-                                                                    <Setter Property="Background" Value="#e5e7eb" />
-                                                                    <Setter Property="BorderThickness" Value="0 0 0 0" />
-                                                                    <Setter Property="Cursor" Value="Hand" />
-                                                                    <Setter Property="Margin" Value="0 0 16 0" />
-                                                                    <Setter Property="Template">
-                                                                        <Setter.Value>
-                                                                            <ControlTemplate TargetType="{x:Type Button}">
-                                                                                <Border
-                                                                                    Background="{TemplateBinding Background}"
-                                                                                    Padding="16 8 16 8"
-                                                                                    CornerRadius="4 4 4 4"
-                                                                                    >
-                                                                                    <StackPanel 
-                                                                                        Orientation="Horizontal" 
-                                                                                        Background="Transparent"
-                                                                                        >
-                                                                                        <materialDesign:PackIcon
-                                                                                            Kind="Eye"
-                                                                                            Width="18"
-                                                                                            Height="18"
-                                                                                            Foreground="{TemplateBinding Foreground}"
-                                                                                            VerticalAlignment="Center"
-                                                                                            Margin="0 0 6 0"
-                                                                                            />
-                                                                                        <TextBlock
-                                                                                            Text="{TemplateBinding Content}"
-                                                                                            Style="{StaticResource DefaultText}"
-                                                                                            Foreground="{TemplateBinding Foreground}"
-                                                                                            VerticalAlignment="Center"
-                                                                                            />
-                                                                                    </StackPanel>
-                                                                                </Border>
-                                                                            </ControlTemplate>
-                                                                        </Setter.Value>
-                                                                    </Setter>
-                                                                </Style>
-                                                            </Button.Style>
+                                                            <StackPanel 
+                                                                Orientation="Horizontal" 
+                                                                Background="Transparent"
+                                                                >
+                                                                <materialDesign:PackIcon
+                                                                    Kind="Eye"
+                                                                    Width="18"
+                                                                    Height="18"
+                                                                    Margin="0 0 6 0"
+                                                                    />
+                                                                <TextBlock
+                                                                    Text="View"
+                                                                    VerticalAlignment="Center"
+                                                                    />
+                                                            </StackPanel>
                                                         </Button>
+                                                        <!-- Download file -->
                                                         <Button 
-                                                            Content="Download"
+                                                            Style="{StaticResource ActionButton}"
                                                             Command="{Binding DataContext.DownloadFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                             CommandParameter="{Binding}"                                                        
                                                             >
-                                                            <Button.Style>
-                                                                <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
-                                                                    <Setter Property="Foreground" Value="#4b5563" />
-                                                                    <Setter Property="Background" Value="#e5e7eb" />
-                                                                    <Setter Property="BorderThickness" Value="0 0 0 0" />
-                                                                    <Setter Property="Cursor" Value="Hand" />
-                                                                    <Setter Property="Margin" Value="0 0 16 0" />
-                                                                    <Setter Property="Template">
-                                                                        <Setter.Value>
-                                                                            <ControlTemplate TargetType="{x:Type Button}">
-                                                                                <Border
-                                                                                    Background="{TemplateBinding Background}"
-                                                                                    Padding="16 8 16 8"
-                                                                                    CornerRadius="4 4 4 4"                                                                                    
-                                                                                    >
-                                                                                    <StackPanel 
-                                                                                        Orientation="Horizontal" 
-                                                                                        Background="Transparent"
-                                                                                        >
-                                                                                        <materialDesign:PackIcon
-                                                                                            Kind="Download"
-                                                                                            Width="18"
-                                                                                            Height="18"
-                                                                                            Foreground="{TemplateBinding Foreground}"
-                                                                                            VerticalAlignment="Center"
-                                                                                            Margin="0 0 6 0"
-                                                                                            />
-                                                                                        <TextBlock
-                                                                                            Text="{TemplateBinding Content}"
-                                                                                            Style="{StaticResource DefaultText}"
-                                                                                            Foreground="{TemplateBinding Foreground}"
-                                                                                            VerticalAlignment="Center"
-                                                                                            />
-                                                                                    </StackPanel>
-                                                                                </Border>
-                                                                            </ControlTemplate>
-                                                                        </Setter.Value>
-                                                                    </Setter>
-                                                                </Style>
-                                                            </Button.Style>
+                                                            <StackPanel 
+                                                                Orientation="Horizontal" 
+                                                                Background="Transparent"
+                                                                >
+                                                                <materialDesign:PackIcon
+                                                                    Kind="Download"
+                                                                    Width="18"
+                                                                    Height="18"
+                                                                    VerticalAlignment="Center"
+                                                                    Margin="0 0 6 0"
+                                                                    />
+                                                                <TextBlock
+                                                                    Text="Download"
+                                                                    VerticalAlignment="Center"
+                                                                    />
+                                                            </StackPanel>
                                                         </Button>
                                                     </StackPanel>
                                                 </Grid>
@@ -853,10 +836,16 @@
                 Margin="0 24 0 24"
                 Grid.Row="2"
                 >
+                <TextBlock
+                    Text="{Binding ResultsCount, FallbackValue=0}"
+                    Style="{StaticResource DefaultText}"
+                    HorizontalAlignment="Left"
+                    />
                 <!-- Items per page-->
                 <StackPanel
                     Orientation="Horizontal"
                     HorizontalAlignment="Left"
+                    Visibility="Collapsed"
                     >
                     <TextBlock
                         Text="Displays:"

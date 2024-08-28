@@ -76,6 +76,7 @@
     <Compile Include="Repositories\SQLiteConnectionExtension.cs" />
     <Compile Include="Repositories\SQLiteRegexFunction.cs" />
     <Compile Include="Repositories\UserRepo.cs" />
+    <Compile Include="Utils\ExtraFilter.cs" />
     <Compile Include="Utils\Filter.cs" />
     <Compile Include="Utils\FilterExstension.cs" />
   </ItemGroup>

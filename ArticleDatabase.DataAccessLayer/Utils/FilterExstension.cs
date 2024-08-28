@@ -7,6 +7,10 @@ namespace Lib.DataAccessLayer.Utils
 {
     public static class FilterExstension
     {
+        //(?i)(?<!\w)(?:\w?{word}|{word}\w?)(?!\w)
+        //(?i)(?<!\w){word}(?!\w)
+        private static string wordRegex = @"'(?i)(?<!\w)(?:\w?{word}|{word}\w?)(?!\w)'";
+
         // Usually pairing between different criterias is AND, for example
         // when we set both title and author, we want the pairing to be AND 
         // between them, but in simple search we want to change it to OR
@@ -34,7 +38,12 @@ namespace Lib.DataAccessLayer.Utils
             for (int i = 0; i < words.Length; i++)
             {
                 //filter.FilterQuery.Append("final.Title REGEXP " + $@"'(?i)\b{words[i]}\b'");
-                filter.FilterQuery.Append("final.Title REGEXP " + $@"'(?i)(?<!\w){words[i].Replace("(", "\\(").Replace(")", "\\)")}(?!\w)'");
+                //filter.FilterQuery.Append("final.Title REGEXP " + $@"'(?i)(?<!\w){words[i].Replace("(", "\\(").Replace(")", "\\)")}(?!\w)'");
+                //(?i)\b[a-z]?{words[i].Replace("(", "\\(").Replace(")", "\\)")}[a-z]?\b
+                //(?i)(?<!\w)(?:\w?{words[i].Replace("(", "\\(").Replace(")", "\\)")}|{words[i].Replace("(", "\\(").Replace(")", "\\)")}\w?)(?!\w)
+                //(?i)(?<=^|[^a-z]|\b[a-z])({words[i].Replace("(", "\\(").Replace(")", "\\)")})(?=$|[^a-z]|[a-z]\b)
+                string escapeWord = Regex.Escape(words[i]);
+                filter.FilterQuery.Append("final.Title REGEXP " + wordRegex.Replace("{word}", escapeWord));
 
                 if (i < words.Length - 1 || phrases.Length > 0)
                 {
@@ -189,7 +198,12 @@ namespace Lib.DataAccessLayer.Utils
             for (int i = 0; i < words.Length; i++)
             {
                 //filter.FilterQuery.Append("abst.Body REGEXP " + $@"'(?i)\b{words[i]}\b'");
-                filter.FilterQuery.Append("abst.Body REGEXP " + $@"'(?i)(?<!\w){words[i]}(?!\w)'");                
+                //filter.FilterQuery.Append("abst.Body REGEXP " + $@"'(?i)(?<!\w){words[i]}(?!\w)'");
+                //(?i)\b[a-z]?{words[i]}[a-z]?\b
+                //(?i)(?<!\w)(?:\w?{words[i]}|{words[i]}\w?)(?!\w)
+                //(?i)(?<=^|[^a-z]|\b[a-z])({words[i]})(?=$|[^a-z]|[a-z]\b)
+                string escapeWord = Regex.Escape(words[i]);
+                filter.FilterQuery.Append("abst.Body REGEXP " + wordRegex.Replace("{word}", escapeWord));
 
                 if (i < words.Length - 1 || phrases.Length > 0)
                 {
