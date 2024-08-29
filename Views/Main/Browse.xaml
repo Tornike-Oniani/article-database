@@ -836,16 +836,17 @@
                 Margin="0 24 0 24"
                 Grid.Row="2"
                 >
+                <!-- Total results -->
                 <TextBlock
                     Text="{Binding ResultsCount, FallbackValue=0}"
                     Style="{StaticResource DefaultText}"
                     HorizontalAlignment="Left"
+                    Visibility="Collapsed"
                     />
                 <!-- Items per page-->
                 <StackPanel
                     Orientation="Horizontal"
                     HorizontalAlignment="Left"
-                    Visibility="Collapsed"
                     >
                     <TextBlock
                         Text="Displays:"
