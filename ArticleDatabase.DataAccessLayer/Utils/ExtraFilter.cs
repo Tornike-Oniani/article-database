@@ -27,11 +27,11 @@ namespace Lib.DataAccessLayer.Utils
 
             return articles
                 .Where(article => 
-                (termWords.All(word => Regex.IsMatch(article.Title, Regexify(word)) ||
-                                       Regex.IsMatch(article.AbstractBody, $@"(?i)(?<!\w){word}(?!\w)"))) 
+                (termWords.All(word => Regex.IsMatch(article.Title, Regexify(word), RegexOptions.IgnoreCase) ||
+                                       Regex.IsMatch(article.AbstractBody, $@"(?i)(?<!\w){word}(?!\w)", RegexOptions.IgnoreCase))) 
                 &&
-                (termPhrases.All(phrase => article.Title.Contains(phrase) ||
-                                            article.AbstractBody.Contains(phrase)))
+                (termPhrases.All(phrase => article.Title.IndexOf(phrase, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                                            article.AbstractBody.IndexOf(phrase, StringComparison.OrdinalIgnoreCase) >= 0))
                 ).ToList();
         }
         #endregion

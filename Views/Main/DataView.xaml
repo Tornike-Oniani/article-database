@@ -1104,7 +1104,11 @@
                             VerticalAlignment="Center"
                             Margin="0 0 6 0"
                             Grid.Column="0"
-                            />
+                            >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding LoadArticlesCommand}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
                         <StackPanel 
                             Orientation="Horizontal"
                             VerticalAlignment="Center"
@@ -1313,7 +1317,11 @@
                             VerticalAlignment="Center"
                             Margin="0 0 6 0"
                             Grid.Column="1"
-                            />
+                            >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding LoadArticlesCommand}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
                     </Grid>
 
                 </Grid>
