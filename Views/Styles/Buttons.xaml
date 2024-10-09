@@ -291,5 +291,16 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    <!-- Secondary button -->
+    <Style x:Key="SecondaryButton" TargetType="{x:Type Button}" BasedOn="{StaticResource GenericButton}">
+        <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
+        <Setter Property="BorderThickness" Value="1 1 1 1" />
+        <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
+    </Style>
+    <Style x:Key="SecondaryButtonAlt" TargetType="{x:Type Button}" BasedOn="{StaticResource GenericButton}">
+        <Setter Property="Background" Value="{DynamicResource GrayColorBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
 </ResourceDictionary>

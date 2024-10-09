@@ -1147,7 +1147,8 @@
                                 />
                             <!-- Clear -->
                             <Button
-                                Command="{Binding ClearCommand}"
+                                Style="{StaticResource SecondaryButtonAlt}"
+                                Command="{Binding ClearCommand}"                                
                                 Content="Clear"
                                 Width="80"
                                 />

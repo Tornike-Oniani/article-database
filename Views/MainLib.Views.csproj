@@ -71,10 +71,12 @@
     <Compile Include="Converters\EmptyStringToVisibilityConverter.cs" />
     <Compile Include="Converters\IntToFontWeightConverter.cs" />
     <Compile Include="Converters\IntToVisibilityConverter.cs" />
+    <Compile Include="Converters\IsCheckedToStarIconConverter.cs" />
     <Compile Include="Converters\IsIntToBoolConverter.cs" />
     <Compile Include="Converters\KeywordMatchColorConverter.cs" />
     <Compile Include="Converters\ListCountToBoolConverter.cs" />
     <Compile Include="Converters\ListCountToVisibilityConverter.cs" />
+    <Compile Include="Converters\RecentSearchToLabelConverter.cs" />
     <Compile Include="Converters\SortConverter.cs" />
     <Compile Include="Converters\StringToWords.cs" />
     <Compile Include="LoginWindow.xaml.cs">
@@ -180,6 +182,9 @@
     <Compile Include="UserControls\HighlightTextBox\GenericAdorner.cs" />
     <Compile Include="UserControls\HighlightTextBox\HighlightTextBox.cs" />
     <Compile Include="UserControls\HighlightTextBox\HighlightTextBoxExtension.cs" />
+    <Compile Include="UserControls\RecentSearchesList.xaml.cs">
+      <DependentUpon>RecentSearchesList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\SelectableTextBlock.cs" />
     <Compile Include="Utils\ThemeService.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -360,6 +365,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\FilterBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\RecentSearchesList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

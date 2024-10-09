@@ -4,6 +4,7 @@ using Lib.DataAccessLayer.Utils;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Classes;
 using MainLib.ViewModels.Utils;
 using NotificationService;
 using System;
@@ -143,6 +144,10 @@ namespace MainLib.ViewModels.Main
             get { return _sortString; }
             set { _sortString = value; OnPropertyChanged("SortString"); }
         }
+        // Search history
+        public SearchHistoryManager SearchHistoryManager { get; set; }
+        public ObservableCollection<SearchEntry> RecentSearches { get; set; }
+        public ObservableCollection<SearchEntry> FavoriteSearches { get; set; }
         #endregion
 
         #region Commands
@@ -154,6 +159,9 @@ namespace MainLib.ViewModels.Main
         public ICommand OpenFileCommand { get; set; }
         public ICommand DownloadFileCommand { get; set; }
         public ICommand ChangeItemsPerPageCommand { get; set; }
+        public ICommand ApplyRecentSearchCommand { get; set; }
+        public ICommand ClearRecentSearchesCommand { get; set; }
+        public ICommand ToggleFavoriteSearchCommand { get; set; }
         #endregion
 
         #region Events
@@ -183,6 +191,11 @@ namespace MainLib.ViewModels.Main
             // Sorting
             this.SortString = "Title ASC";
 
+            // Search historu
+            this.SearchHistoryManager = new SearchHistoryManager();
+            this.RecentSearches = new ObservableCollection<SearchEntry>(SearchHistoryManager.SearchHistory.RecentSearches);
+            this.FavoriteSearches = new ObservableCollection<SearchEntry>(SearchHistoryManager.SearchHistory.FavoriteSearches);
+
             // Commands
             this.SearchCommand = new RelayCommand(Search, CanSearch);
             this.NextPageCommand = new RelayCommand(NextPage, CanNextPage);
@@ -192,11 +205,14 @@ namespace MainLib.ViewModels.Main
             this.OpenFileCommand = new RelayCommand(OpenFile);
             this.DownloadFileCommand = new RelayCommand(DownloadFile);
             this.ChangeItemsPerPageCommand = new RelayCommand(ChangeItemsPerPage);
+            this.ApplyRecentSearchCommand = new RelayCommand(ApplyRecentSearch);
+            this.ClearRecentSearchesCommand = new RelayCommand(ClearRecentSearches);
+            this.ToggleFavoriteSearchCommand = new RelayCommand(ToggleFavoriteSearch);
         }
         #endregion
 
         #region Command actions
-        public async void Search(object input = null)
+        public async void Search(object input)
         {
             // Extract words and phrases from terms (they are distinguished by if they are inside brackets or not)
             List<string> termWords = new List<string>();
@@ -241,6 +257,23 @@ namespace MainLib.ViewModels.Main
             this.ShowResults = true;
             OnPropertyChanged("TotalPages");
             OnPropertyChanged("ShowNoResultsLabel");
+
+            // If search contains authors or years make the additional filters visible (usually required when applying recent search)
+            if (!String.IsNullOrEmpty(Authors) || !String.IsNullOrEmpty(Year))
+            {
+                this.ShowAdditionalFilters = true;
+            }
+
+            // Add search to history
+            if ((!String.IsNullOrEmpty(this.Terms) || !String.IsNullOrEmpty(this.Authors) || !String.IsNullOrEmpty(this.Year)) && (string)input != "RecentSearch")
+            {
+                SearchEntry newSearchEntry = new SearchEntry() { Terms = this.Terms, Authors = this.Authors, Year = this.Year };
+                SearchHistoryManager.AddSearchToHistory(newSearchEntry);
+                if (!RecentSearches.Contains(newSearchEntry, new SearchEntryComparer()))
+                {
+                    RecentSearches.Insert(0, newSearchEntry);
+                }
+            }
         }
         public void NextPage(object input = null)
         {
@@ -267,7 +300,6 @@ namespace MainLib.ViewModels.Main
             this.TermsPhrasesHighlight.Clear();
             this.CurrentPage = 1;
             this.articles.Clear();
-            this.Articles.Clear();
             this.ShowResults = false;
         }
         public void OpenFile(object input)
@@ -390,6 +422,42 @@ namespace MainLib.ViewModels.Main
         public bool CanPreviousPage(object input = null)
         {
             return this.CurrentPage > 1;
+        }
+        public void ApplyRecentSearch(object input)
+        {
+            SearchEntry searchEntry = input as SearchEntry;
+            this.Terms = searchEntry.Terms;
+            this.Authors = searchEntry.Authors;
+            this.Year = searchEntry.Year;
+            this.SearchCommand.Execute("RecentSearch");
+        }
+        public void ClearRecentSearches(object input = null)
+        {
+            this.SearchHistoryManager.ClearSearchHistory();
+            this.RecentSearches.Clear();
+        }
+        public void ToggleFavoriteSearch(object input)
+        {
+            SearchEntry searchEntry = input as SearchEntry;
+            // We have to reverse here because the ToggleButton first switches the IsFavorite property and then this command is run
+            if (searchEntry.IsFavorite)
+            {
+                this.SearchHistoryManager.AddSearchToFavorites(searchEntry);
+                this.FavoriteSearches.Insert(0, searchEntry);
+            }
+            else
+            {
+                this.SearchHistoryManager.RemoveSearchFromFavorites(searchEntry);
+                SearchEntry searchEntryToRemove = this.FavoriteSearches.Single(item => new SearchEntryComparer().Equals(item, searchEntry));
+                this.FavoriteSearches.Remove(searchEntryToRemove);
+                // If we remove favorite from favorites list we have to make sure the IsFavorite property is also set to false to recent search item equivalent
+                SearchEntry searchEntryToUnfavorite = this.RecentSearches.Single(item => new SearchEntryComparer().Equals(item, searchEntry));
+                if (searchEntryToUnfavorite.IsFavorite)
+                {
+                    searchEntryToUnfavorite.IsFavorite = false;
+                }
+            }
+            
         }
         #endregion
 

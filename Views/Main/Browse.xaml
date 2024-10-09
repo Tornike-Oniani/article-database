@@ -8,6 +8,7 @@
              xmlns:ap="clr-namespace:Lib.Views.Attached_Properties;assembly=Lib.Views"
              xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
              xmlns:converters="clr-namespace:MainLib.Views.Converters"
+             xmlns:usercontrols="clr-namespace:MainLib.Views.UserControls"
              xmlns:commonConverters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:notifications="clr-namespace:NotificationService.Controls;assembly=NotificationService"
              xmlns:utils="clr-namespace:MainLib.Views.Utils"
@@ -21,7 +22,9 @@
         <converters:StringToWords x:Key="StringToWords" />
         <converters:KeywordMatchColorConverter x:Key="KeywordHighlight" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:BoolToVisibilityInverseConverter x:Key="BoolToVisibilityInverse" />
         <converters:BoolToRenderTransofrmConverter x:Key="BoolToRenderTransform" />
+        <converters:RecentSearchToLabelConverter x:Key="RecentSearchToLabel" />
 
         <FrameworkElement 
             x:Key="ProxyElementForDataContext"
@@ -224,22 +227,30 @@
                                 VerticalAlignment="Center"
                                 Margin="0 0 12 0"
                                 />
-                                <RadioButton 
+                            <RadioButton 
                                 GroupName="Sorting" 
                                 Content="ASC" 
                                 Style="{StaticResource SortRadio}"
                                 Command="{Binding SortCommand}"
                                 CommandParameter="Date ASC"
                                 />
-                                <RadioButton 
+                            <RadioButton 
                                 GroupName="Sorting" 
                                 Content="DESC" 
                                 Style="{StaticResource SortRadio}"
                                 Command="{Binding SortCommand}"
                                 CommandParameter="Date DESC"
                                 />
-                         </StackPanel>
+                        </StackPanel>
                     </Border>
+                    <!-- Recent Searches sidebar -->
+                    <usercontrols:RecentSearchesList
+                        Margin="0 24 0 0"
+                        RecentSearchesItemSource="{Binding RecentSearches}"
+                        FavoriteSearchesItemSource="{Binding FavoriteSearches}"
+                        ApplyRecentSearchCommand="{Binding ApplyRecentSearchCommand}"
+                        ToggleFavoriteSearchCommand="{Binding ToggleFavoriteSearchCommand}"
+                        />
                 </StackPanel>
             </Border>
         </Grid>
@@ -368,7 +379,6 @@
                         ToolTipService.ShowDuration="120000"
                         >
                         <Border.ToolTip>
-
                             <ScrollViewer>
                                 <StackPanel
                                     MaxWidth="950"
@@ -429,7 +439,7 @@
                                         Style="{StaticResource DefaultText}"
                                         TextWrapping="Wrap"
                                         >
-                                        შეგიძლია ასევე მოძებნო სტატიები, რომლებიც გამოქვეყნებულია კონკრეტულ წელს და ამისათვის უბრალოდ უნდა ჩაწერო სასურველი წელი Year ველში. მაგალითად <Italic>2000</Italic>-ის ჩაწერა ველში დააბრუნებს მხოლოდ ინ სტატიებს, რომლებიც გამოქვეყნებულია 2000 წელს. ასევე შესაძლებელია წლების დიაპაზონის დაზუსტება, მაგალითად <Italic>2000-2005</Italic>-ის ჩაწერა დააბრუნებს სტატიებს, რომლებიც გამოქვეყნებულია 2000-იდან 2005 წლის ჩათვლით.  
+                                        შეგიძლია ასევე მოძებნო სტატიები, რომლებიც გამოქვეყნებულია კონკრეტულ წელს და ამისათვის უბრალოდ უნდა ჩაწერო სასურველი წელი Year ველში. მაგალითად <Italic>2000</Italic>-ის ჩაწერა ველში დააბრუნებს მხოლოდ ინ სტატიებს, რომლებიც გამოქვეყნებულია 2000 წელს. ასევე შესაძლებელია წლების დიაპაზონის დაზუსტება, მაგალითად <Italic>2000-2005</Italic>-ის ჩაწერა დააბრუნებს სტატიებს, რომლებიც გამოქვეყნებულია 2000-იდან 2005 წლის ჩათვლით.
                                     </TextBlock>
                                 </StackPanel>
                             </ScrollViewer>
@@ -457,18 +467,44 @@
                         >
                         <Button                         
                             Style="{StaticResource GenericButton}" 
-                            Content="Clear"
-                            Width="100"
-                            Command="{Binding ClearCommand}"
-                            Margin="0 0 12 0"
-                            />
-                        <Button                         
-                            Style="{StaticResource GenericButton}" 
                             Content="Search"
                             Width="100"
                             Command="{Binding SearchCommand}"                    
+                            Margin="0 0 12 0"
+                            />
+                        <Button                         
+                            Style="{StaticResource SecondaryButtonAlt}" 
+                            Content="Clear"
+                            Width="100"
+                            Command="{Binding ClearCommand}"
                             />
                     </StackPanel>
+                </Grid>
+                <!-- Recent searches -->
+                <Grid
+                    Margin="0 18 0 0"
+                    >
+                    <Border 
+                        Background="White"
+                        CornerRadius="6 6 6 6"
+                        >
+                        <Border.Effect>
+                            <DropShadowEffect
+                                Color="Black"
+                                Direction="0"
+                                ShadowDepth="1"
+                                Opacity="0.2"
+                                BlurRadius="8" 
+                                />
+                        </Border.Effect>
+                    </Border>
+                    <usercontrols:RecentSearchesList
+                        Visibility="{Binding ShowResults, Converter={StaticResource BoolToVisibilityInverse}}"
+                        RecentSearchesItemSource="{Binding RecentSearches}"
+                        FavoriteSearchesItemSource="{Binding FavoriteSearches}"
+                        ApplyRecentSearchCommand="{Binding ApplyRecentSearchCommand}"
+                        ToggleFavoriteSearchCommand="{Binding ToggleFavoriteSearchCommand}"
+                        />
                 </Grid>
             </StackPanel>
 
@@ -490,7 +526,7 @@
                             <Setter.Value>
                                 <ItemsPanelTemplate>
                                     <VirtualizingStackPanel>
-                                        
+
                                     </VirtualizingStackPanel>
                                 </ItemsPanelTemplate>
                             </Setter.Value>
@@ -559,7 +595,8 @@
                                                                 Direction="0"
                                                                 ShadowDepth="1"
                                                                 Opacity="0.3"
-                                                                BlurRadius="6"/>
+                                                                BlurRadius="6" 
+                                                                />
                                                         </Border.Effect>
                                                     </Border>
                                                     <Border
@@ -829,7 +866,7 @@
                         />
                 </StackPanel>
             </StackPanel>
-                
+
             <!-- Pagination -->
             <Grid 
                 Visibility="{Binding ShowResults, Converter={StaticResource BoolToVisibility}}"

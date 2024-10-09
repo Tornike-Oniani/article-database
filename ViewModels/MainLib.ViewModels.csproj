@@ -53,6 +53,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\SearchEntry.cs" />
+    <Compile Include="Classes\SearchEntryComparer.cs" />
+    <Compile Include="Classes\SearchHistory.cs" />
+    <Compile Include="Classes\SearchHistoryManager.cs" />
     <Compile Include="Commands\UpdateViewCommand.cs" />
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="Main\AbstractsBrowseViewModel.cs" />
@@ -102,6 +106,7 @@
     <Compile Include="Utils\CompactViewTemplate.cs" />
     <Compile Include="Utils\FullViewTemplate.cs" />
     <Compile Include="Utils\IThemeService.cs" />
+    <Compile Include="Utils\JSONWriterReader.cs" />
     <Compile Include="Utils\LogConverter.cs" />
     <Compile Include="Utils\LogReader.cs" />
     <Compile Include="UIStructs\PageButtonModel.cs" />
