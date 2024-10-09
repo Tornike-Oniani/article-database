@@ -587,7 +587,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Lib.DataAccessLayer, Version=5.3.8.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Lib.DataAccessLayer, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_2BC8652E5A49C8E07299FCFA937DE4A3"
@@ -782,7 +782,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MainLib.Views, Version=5.3.9.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MainLib.Views, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_716FD84E5297BB5868758D20E3C72275"
@@ -1169,15 +1169,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Article Database"
-        "ProductCode" = "8:{C03B512A-6024-46A2-9116-4D37CB688C9B}"
-        "PackageCode" = "8:{6CD05859-9E53-4164-95FF-50C599A2791E}"
+        "ProductCode" = "8:{AF5B5397-30BF-45B1-9613-93CCE1EF021A}"
+        "PackageCode" = "8:{9D56E1F7-FB29-4368-807D-12FDCBF97F6F}"
         "UpgradeCode" = "8:{D9CF4364-FEF5-43C0-86F5-FD264AB82DF8}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:5.4.0"
+        "ProductVersion" = "8:5.5.0"
         "Manufacturer" = "8:NikasLab"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1729,7 +1729,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_CAD2DEBC9154418898C356F2207BF30B"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\ArticleDatabase\\obj\\Release\\Main.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_061458CCD7004B60B51B05105D1766B6"
