@@ -160,8 +160,9 @@ namespace MainLib.ViewModels.Main
         public ICommand DownloadFileCommand { get; set; }
         public ICommand ChangeItemsPerPageCommand { get; set; }
         public ICommand ApplyRecentSearchCommand { get; set; }
-        public ICommand ClearRecentSearchesCommand { get; set; }
         public ICommand ToggleFavoriteSearchCommand { get; set; }
+        public ICommand DeleteRecentSearchCommand { get; set; }
+        public ICommand ClearRecentSearchesCommand { get; set; }
         #endregion
 
         #region Events
@@ -206,8 +207,9 @@ namespace MainLib.ViewModels.Main
             this.DownloadFileCommand = new RelayCommand(DownloadFile);
             this.ChangeItemsPerPageCommand = new RelayCommand(ChangeItemsPerPage);
             this.ApplyRecentSearchCommand = new RelayCommand(ApplyRecentSearch);
-            this.ClearRecentSearchesCommand = new RelayCommand(ClearRecentSearches);
             this.ToggleFavoriteSearchCommand = new RelayCommand(ToggleFavoriteSearch);
+            this.DeleteRecentSearchCommand = new RelayCommand(DeleteRecentSearch);
+            this.ClearRecentSearchesCommand = new RelayCommand(ClearRecentSearches);
         }
         #endregion
 
@@ -408,21 +410,6 @@ namespace MainLib.ViewModels.Main
             OnPropertyChanged("TotalPages");
             PopulateArticles();
         }
-        #endregion
-
-        #region Command validators
-        public bool CanSearch(object input = null)
-        {
-            return true;
-        }
-        public bool CanNextPage(object input = null)
-        {
-            return this.CurrentPage < this.TotalPages;
-        }
-        public bool CanPreviousPage(object input = null)
-        {
-            return this.CurrentPage > 1;
-        }
         public void ApplyRecentSearch(object input)
         {
             SearchEntry searchEntry = input as SearchEntry;
@@ -430,11 +417,6 @@ namespace MainLib.ViewModels.Main
             this.Authors = searchEntry.Authors;
             this.Year = searchEntry.Year;
             this.SearchCommand.Execute("RecentSearch");
-        }
-        public void ClearRecentSearches(object input = null)
-        {
-            this.SearchHistoryManager.ClearSearchHistory();
-            this.RecentSearches.Clear();
         }
         public void ToggleFavoriteSearch(object input)
         {
@@ -451,13 +433,39 @@ namespace MainLib.ViewModels.Main
                 SearchEntry searchEntryToRemove = this.FavoriteSearches.Single(item => new SearchEntryComparer().Equals(item, searchEntry));
                 this.FavoriteSearches.Remove(searchEntryToRemove);
                 // If we remove favorite from favorites list we have to make sure the IsFavorite property is also set to false to recent search item equivalent
-                SearchEntry searchEntryToUnfavorite = this.RecentSearches.Single(item => new SearchEntryComparer().Equals(item, searchEntry));
-                if (searchEntryToUnfavorite.IsFavorite)
+                SearchEntry searchEntryToUnfavorite = this.RecentSearches.SingleOrDefault(item => new SearchEntryComparer().Equals(item, searchEntry));
+                if (searchEntryToUnfavorite != null && searchEntryToUnfavorite.IsFavorite)
                 {
                     searchEntryToUnfavorite.IsFavorite = false;
                 }
             }
-            
+
+        }
+        public void DeleteRecentSearch(object input)
+        {
+            SearchEntry searchEntry = input as SearchEntry;
+            this.RecentSearches.Remove(searchEntry);
+            this.SearchHistoryManager.DeleteSearchFromHstory(searchEntry);
+        }
+        public void ClearRecentSearches(object input = null)
+        {
+            this.RecentSearches.Clear();
+            this.SearchHistoryManager.ClearSearchHistory();
+        }
+        #endregion
+
+        #region Command validators
+        public bool CanSearch(object input = null)
+        {
+            return true;
+        }
+        public bool CanNextPage(object input = null)
+        {
+            return this.CurrentPage < this.TotalPages;
+        }
+        public bool CanPreviousPage(object input = null)
+        {
+            return this.CurrentPage > 1;
         }
         #endregion
 

@@ -24,13 +24,37 @@
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
                         <Border
                             Background="{TemplateBinding Background}"
-                            Padding="12 8 12 8"
+                            Padding="8 6 8 6"
                             >
                             <ContentPresenter />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <Style x:Key="DeleteRecentSearchButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource Gray-BlueColorDarkBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            Padding="8 6 8 6"
+                            >
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource RedColorBrush}" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="SearchHistoryList" TargetType="{x:Type ListView}">
@@ -182,22 +206,43 @@
                                                 </StackPanel>
                                             </Border>
                                         </Button>
-                                        <!-- Favorite button -->
-                                        <ToggleButton
-                                            IsChecked="{Binding IsFavorite}"
-                                            Style="{StaticResource FavoriteButtonToggle}"
-                                            Command="{Binding ToggleFavoriteSearchCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                            CommandParameter="{Binding}"
+                                        <!-- Buttons -->
+                                        <StackPanel 
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
                                             Grid.Column="1"
                                             >
-                                            <materialDesign:PackIcon
-                                                Kind="{Binding IsFavorite, Converter={StaticResource IsCheckedToStarIcon}}"
-                                                Width="22"
-                                                Height="22"
-                                                Foreground="{DynamicResource Gray-BlueColorDarkBrush}"
-                                                VerticalAlignment="Center"
-                                                />
-                                        </ToggleButton>
+                                            <!-- Favorite button -->
+                                            <ToggleButton
+                                                IsChecked="{Binding IsFavorite}"
+                                                Style="{StaticResource FavoriteButtonToggle}"
+                                                Command="{Binding ToggleFavoriteSearchCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                CommandParameter="{Binding}"
+                                                >
+                                                <materialDesign:PackIcon
+                                                    Kind="{Binding IsFavorite, Converter={StaticResource IsCheckedToStarIcon}}"
+                                                    Width="22"
+                                                    Height="22"
+                                                    Foreground="{DynamicResource Gray-BlueColorDarkBrush}"
+                                                    VerticalAlignment="Center"
+                                                    />
+                                            </ToggleButton>
+                                            <!-- Delete button -->
+                                            <Button
+                                                Visibility="{Binding Tag, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}, Converter={StaticResource EmptyStringToVisibility}}"
+                                                Style="{StaticResource DeleteRecentSearchButton}"
+                                                Command="{Binding DeleteRecentSearchCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                CommandParameter="{Binding}"
+                                                >
+                                                <materialDesign:PackIcon
+                                                    Kind="Close"
+                                                    Width="22"
+                                                    Height="22"
+                                                    Foreground="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}"
+                                                    VerticalAlignment="Center"
+                                                    />
+                                            </Button>
+                                        </StackPanel>
                                     </Grid>
                                 </DataTemplate>
                             </Setter.Value>
@@ -208,9 +253,15 @@
         </Style>
     </UserControl.Resources>
 
-    <StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <!-- Favorite searches -->
-        <Grid>
+        <Grid
+            Grid.Row="0"
+            >
             <Border 
                 Background="White"
                 CornerRadius="6 6 6 6"
@@ -259,6 +310,7 @@
         <!-- Recent searches -->
         <Grid
             Margin="0 24 0 0"
+            Grid.Row="1"
             >
             <Border 
                 Background="White"
@@ -274,36 +326,54 @@
                         />
                 </Border.Effect>
             </Border>
-            <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <Border
                     Padding="12 8 12 8"
                     Background="{DynamicResource GrayColorLightBrush}"
                     CornerRadius="6 6 0 0"
+                    Grid.Row="0"
                     >
-                    <StackPanel 
-                        Orientation="Horizontal"
-                        >
-                        <materialDesign:PackIcon 
-                        Kind="ClockOutline"
-                        Foreground="{StaticResource Gray-BlueColorDarkBrush}"
-                        VerticalAlignment="Center"
-                        Height="18"
-                        Width="18"
-                        Margin="0 0 8 0"
-                        />
-                        <TextBlock 
-                        Text="Recent Searches" 
-                        Style="{StaticResource DefaultText}"
-                        FontWeight="SemiBold"
-                        VerticalAlignment="Center"
-                        />
-                    </StackPanel>
+                    <Grid>
+                        <StackPanel 
+                            Orientation="Horizontal"
+                            >
+                            <materialDesign:PackIcon 
+                            Kind="ClockOutline"
+                            Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                            VerticalAlignment="Center"
+                            Height="18"
+                            Width="18"
+                            Margin="0 0 8 0"
+                            />
+                            <TextBlock 
+                            Text="Recent Searches" 
+                            Style="{StaticResource DefaultText}"
+                            FontWeight="SemiBold"
+                            VerticalAlignment="Center"
+                            />
+                        </StackPanel>
+                        <Button
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource TextButton}"
+                            Background="Transparent"
+                            Cursor="Hand"
+                            Command="{Binding ClearRecentSearchesCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                            >
+                            Clear
+                        </Button>
+                    </Grid>
                 </Border>
                 <ListView
                     ItemsSource="{Binding RecentSearchesItemSource, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Tag="DeleteVisible"
                     Style="{StaticResource SearchHistoryList}"
+                    Grid.Row="1"
                     />
-            </StackPanel>
+            </Grid>
         </Grid>
-    </StackPanel>
+    </Grid>
 </UserControl>

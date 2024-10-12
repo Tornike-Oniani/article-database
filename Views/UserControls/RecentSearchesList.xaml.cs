@@ -58,6 +58,24 @@ DependencyProperty.Register("ToggleFavoriteSearchCommand", typeof(ICommand), typ
             set { SetValue(ToggleFavoriteSearchCommandProperty, value); }
         }
 
+        private static readonly DependencyProperty DeleteRecentSearchCommandProperty =
+DependencyProperty.Register("DeleteRecentSearchCommand", typeof(ICommand), typeof(RecentSearchesList));
+
+        public ICommand DeleteRecentSearchCommand
+        {
+            get { return (ICommand)GetValue(DeleteRecentSearchCommandProperty); }
+            set { SetValue(DeleteRecentSearchCommandProperty, value); }
+        }
+
+        private static readonly DependencyProperty ClearRecentSearchesCommandProperty =
+DependencyProperty.Register("ClearRecentSearchesCommand", typeof(ICommand), typeof(RecentSearchesList));
+
+        public ICommand ClearRecentSearchesCommand
+        {
+            get { return (ICommand)GetValue(ClearRecentSearchesCommandProperty); }
+            set { SetValue(ClearRecentSearchesCommandProperty, value); }
+        }
+
         public RecentSearchesList()
         {
             InitializeComponent();

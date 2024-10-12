@@ -116,9 +116,9 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition Width="0.4*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition Width="0.4*" />
         </Grid.ColumnDefinitions>
 
         <notifications:NotificationArea 
@@ -138,7 +138,7 @@
             >
             <Border 
                 Padding="12 12 12 12"
-                HorizontalAlignment="Center"                
+                HorizontalAlignment="Stretch"                
                 >
                 <StackPanel>
                     <TextBlock
@@ -244,20 +244,24 @@
                         </StackPanel>
                     </Border>
                     <!-- Recent Searches sidebar -->
-                    <usercontrols:RecentSearchesList
-                        Margin="0 24 0 0"
-                        RecentSearchesItemSource="{Binding RecentSearches}"
-                        FavoriteSearchesItemSource="{Binding FavoriteSearches}"
-                        ApplyRecentSearchCommand="{Binding ApplyRecentSearchCommand}"
-                        ToggleFavoriteSearchCommand="{Binding ToggleFavoriteSearchCommand}"
-                        />
+                    <Grid>
+                        <usercontrols:RecentSearchesList
+                            Margin="0 24 0 0"
+                            RecentSearchesItemSource="{Binding RecentSearches}"
+                            FavoriteSearchesItemSource="{Binding FavoriteSearches}"
+                            ApplyRecentSearchCommand="{Binding ApplyRecentSearchCommand}"
+                            ToggleFavoriteSearchCommand="{Binding ToggleFavoriteSearchCommand}"
+                            DeleteRecentSearchCommand="{Binding DeleteRecentSearchCommand}"
+                            ClearRecentSearchesCommand="{Binding ClearRecentSearchesCommand}"
+                            />
+                    </Grid>
                 </StackPanel>
             </Border>
         </Grid>
 
         <!-- Filters, results and pagination -->
         <Grid 
-            Margin="42 0 0 0"
+            Margin="22 0 0 0"
             Grid.Column="1"
             >
             <Grid.RowDefinitions>
@@ -277,7 +281,7 @@
 
             <!-- Filters -->
             <StackPanel 
-                RenderTransform="{Binding ShowResults, Converter={StaticResource BoolToRenderTransform}, ConverterParameter=200}"
+                RenderTransform="{Binding ShowResults, Converter={StaticResource BoolToRenderTransform}, ConverterParameter=150}"
                 Grid.Row="0"
                 >
                 <!-- Terms -->
@@ -504,6 +508,8 @@
                         FavoriteSearchesItemSource="{Binding FavoriteSearches}"
                         ApplyRecentSearchCommand="{Binding ApplyRecentSearchCommand}"
                         ToggleFavoriteSearchCommand="{Binding ToggleFavoriteSearchCommand}"
+                        DeleteRecentSearchCommand="{Binding DeleteRecentSearchCommand}"
+                        ClearRecentSearchesCommand="{Binding ClearRecentSearchesCommand}"
                         />
                 </Grid>
             </StackPanel>

@@ -60,11 +60,17 @@ namespace MainLib.ViewModels.Classes
             SearchEntry searchEntryToRemove = this.SearchHistory.FavoriteSearches.Single(item => new SearchEntryComparer().Equals(item, searchEntry));
             this.SearchHistory.FavoriteSearches.Remove(searchEntryToRemove);
             // If we remove favorite from favorites list we have to make sure the IsFavorite property is also set to false to recent search item equivalent
-            SearchEntry searchEntryToUnFavorite = this.SearchHistory.RecentSearches.Single(item => new SearchEntryComparer().Equals(item, searchEntry));
-            if (searchEntryToUnFavorite.IsFavorite)
+            SearchEntry searchEntryToUnFavorite = this.SearchHistory.RecentSearches.SingleOrDefault(item => new SearchEntryComparer().Equals(item, searchEntry));
+            if (searchEntryToUnFavorite != null && searchEntryToUnFavorite.IsFavorite)
             {
                 searchEntryToUnFavorite.IsFavorite = false;
             }
+            jsonWriterReader.WriteData(SearchHistory);
+        }
+        public void DeleteSearchFromHstory(SearchEntry searchEntry)
+        {
+            SearchEntry searchEntryToRemove = this.SearchHistory.RecentSearches.Single(item => new SearchEntryComparer().Equals(item, searchEntry));
+            this.SearchHistory.RecentSearches.Remove(searchEntryToRemove);
             jsonWriterReader.WriteData(SearchHistory);
         }
         public void ClearSearchHistory()
