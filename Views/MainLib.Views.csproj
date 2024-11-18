@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Converters\AbstractToVisibilityConverter.cs" />
     <Compile Include="Converters\ActiveStatusToStyleConverter.cs" />
+    <Compile Include="Converters\ArticleExistsInListToBoolConverter.cs" />
     <Compile Include="Converters\BoolToRenderTransofrmConverter.cs" />
     <Compile Include="Converters\BoolToTextHeaderStyleConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />

@@ -79,5 +79,82 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <Style x:Key="OutlineFlatCheckbox" BasedOn="{StaticResource FlatCheckbox}" TargetType="{x:Type CheckBox}">
+        <Setter Property="Padding" Value="18 12 18 12" />
+        <Setter Property="BorderThickness" Value="1 1 1 1" />
+        <Setter Property="BorderBrush" Value="#e5e7eb" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Border                        
+                        Padding="{TemplateBinding Padding}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        CornerRadius="4 4 4 4"
+                        Background="Transparent"
+                        >
+                        <BulletDecorator 
+                            Background="Transparent" 
+                            VerticalAlignment="Center"
+                            >
+                            <BulletDecorator.Bullet>
+                                <Border 
+                                    x:Name="Border"
+                                    Width="18"
+                                    Height="18"
+                                    CornerRadius="3"
+                                    Background="{StaticResource WhiteColorBrush}"
+                                    BorderThickness="1 1 1 1"
+                                    BorderBrush="{StaticResource LabelColorBrush}"
+                                    ClipToBounds="True"
+                                    >
+                                    <Path 
+                                        x:Name="CheckMark"
+                                        Width="10"
+                                        Height="10"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Data="M27.903015,0L32,4.0970465 12.369019,23.728029 11.685974,24.520998 0,14.441042 3.7819824,10.054994 11.330017,16.567019z"
+                                        Fill="{StaticResource LabelColorBrush}"
+                                        Stretch="Fill"
+                                        Stroke="{StaticResource LabelColorBrush}"
+                                        StrokeEndLineCap="Round"
+                                        StrokeStartLineCap="Round"
+                                        StrokeThickness="1" 
+                                        />
+                                </Border>
+                            </BulletDecorator.Bullet>
+                            <ContentPresenter 
+                                Margin="6 0 0 0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                RecognizesAccessKey="True" 
+                                />
+                        </BulletDecorator>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="false">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="Border" Property="BorderThickness" Value="0 0 0 0" />
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+                            <Setter TargetName="CheckMark" Property="Fill" Value="{StaticResource WhiteColorBrush}" />
+                            <Setter TargetName="CheckMark" Property="Stroke" Value="{StaticResource WhiteColorBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="BorderBrush" Value="{StaticResource GrayColorBrush}" />
+                            <Setter TargetName="CheckMark" Property="Stroke" Value="{StaticResource GrayColorBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

@@ -9,6 +9,7 @@
              xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
              xmlns:converters="clr-namespace:MainLib.Views.Converters"
              xmlns:usercontrols="clr-namespace:MainLib.Views.UserControls"
+             xmlns:commonusercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
              xmlns:commonConverters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:notifications="clr-namespace:NotificationService.Controls;assembly=NotificationService"
              xmlns:utils="clr-namespace:MainLib.Views.Utils"
@@ -25,6 +26,7 @@
         <converters:BoolToVisibilityInverseConverter x:Key="BoolToVisibilityInverse" />
         <converters:BoolToRenderTransofrmConverter x:Key="BoolToRenderTransform" />
         <converters:RecentSearchToLabelConverter x:Key="RecentSearchToLabel" />
+        <converters:ArticleExistsInListToBoolConverter x:Key="ArticleExistsInListToBool" />
 
         <FrameworkElement 
             x:Key="ProxyElementForDataContext"
@@ -142,7 +144,7 @@
                 >
                 <StackPanel>
                     <TextBlock
-                        Text="Sort by:"
+                        Text="Sort by"
                         Style="{StaticResource Header}"
                         FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
                         Margin="0 0 0 12"
@@ -243,10 +245,32 @@
                                 />
                         </StackPanel>
                     </Border>
+                    <!-- Batch export -->
+                    <TextBlock
+                        Text="Export"
+                        Style="{StaticResource Header}"
+                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
+                        Margin="0 12 0 12"
+                        />
+                    <commonusercontrols:PendingButton
+                        StartText="Export article PDFs"
+                        PendingText="Check articles you want to export..."
+                        ActionText="Export selected"
+                        IsPending="{Binding IsBatchExporting}"
+                        CanRunAction="{Binding CanBatchExport}"
+                        InitialCommand="{Binding StartBatchExportCommand}"
+                        ActionCommand="{Binding BatchExportCommand}"
+                        CancelCommand="{Binding CancelBatchExportCommand}"
+                        />
                     <!-- Recent Searches sidebar -->
+                    <TextBlock
+                        Text="Searches"
+                        Style="{StaticResource Header}"
+                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
+                        Margin="0 24 0 12"
+                        />
                     <Grid>
                         <usercontrols:RecentSearchesList
-                            Margin="0 24 0 0"
                             RecentSearchesItemSource="{Binding RecentSearches}"
                             FavoriteSearchesItemSource="{Binding FavoriteSearches}"
                             ApplyRecentSearchCommand="{Binding ApplyRecentSearchCommand}"
@@ -780,11 +804,12 @@
                                                         Margin="0 0 0 18"
                                                         Grid.Row="5"
                                                         />
-                                                    <!-- Open file-->
+                                                    <!-- Action buttons -->
                                                     <StackPanel 
                                                         Orientation="Horizontal"
                                                         Grid.Row="6"
                                                         >
+                                                        <!-- Open file-->
                                                         <Button 
                                                             Style="{StaticResource ActionButton}"
                                                             Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
@@ -811,7 +836,8 @@
                                                         <Button 
                                                             Style="{StaticResource ActionButton}"
                                                             Command="{Binding DataContext.DownloadFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                            CommandParameter="{Binding}"                                                        
+                                                            CommandParameter="{Binding}"
+                                                            Margin="0 0 12 0"
                                                             >
                                                             <StackPanel 
                                                                 Orientation="Horizontal" 
@@ -830,6 +856,26 @@
                                                                     />
                                                             </StackPanel>
                                                         </Button>
+                                                        <!-- Export check -->
+                                                        <CheckBox
+                                                            Content="Select for export"
+                                                            Visibility="{Binding DataContext.IsBatchExporting, Source={StaticResource ProxyElementForDataContext}, Converter={StaticResource BoolToVisibility}}"
+                                                            Command="{Binding DataContext.MarkArticleForBatchExportCommand, Source={StaticResource ProxyElementForDataContext}}"
+                                                            CommandParameter="{Binding}"
+                                                            >
+                                                            <CheckBox.Style>
+                                                                <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource OutlineFlatCheckbox}">
+                                                                    <Setter Property="IsChecked">
+                                                                        <Setter.Value>
+                                                                            <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}">
+                                                                                <Binding Path="DataContext.ArticlesToBeExported" Source="{StaticResource ProxyElementForDataContext}" />
+                                                                                <Binding Path="." />
+                                                                            </MultiBinding>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </CheckBox.Style>
+                                                        </CheckBox>
                                                     </StackPanel>
                                                 </Grid>
                                             </DataTemplate>

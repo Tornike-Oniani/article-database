@@ -39,6 +39,7 @@ namespace MainLib.ViewModels.Main
         private bool _showResults;
         private int _currentPage;
         private string _sortString;
+        private bool _isBatchExporting;
         #endregion
 
         #region Public properties
@@ -148,6 +149,20 @@ namespace MainLib.ViewModels.Main
         public SearchHistoryManager SearchHistoryManager { get; set; }
         public ObservableCollection<SearchEntry> RecentSearches { get; set; }
         public ObservableCollection<SearchEntry> FavoriteSearches { get; set; }
+        // Export
+        public List<Article> ArticlesToBeExported { get; set; }
+        public bool IsBatchExporting
+        {
+            get { return _isBatchExporting; }
+            set { _isBatchExporting = value; OnPropertyChanged("IsBatchExporting"); }
+        }
+        public bool CanBatchExport
+        {
+            get
+            {
+                return ArticlesToBeExported.Count > 0;
+            }
+        }
         #endregion
 
         #region Commands
@@ -163,6 +178,10 @@ namespace MainLib.ViewModels.Main
         public ICommand ToggleFavoriteSearchCommand { get; set; }
         public ICommand DeleteRecentSearchCommand { get; set; }
         public ICommand ClearRecentSearchesCommand { get; set; }
+        public ICommand StartBatchExportCommand { get; set; }
+        public ICommand BatchExportCommand { get; set; }
+        public ICommand CancelBatchExportCommand { get; set; }
+        public ICommand MarkArticleForBatchExportCommand { get; set; }
         #endregion
 
         #region Events
@@ -192,10 +211,13 @@ namespace MainLib.ViewModels.Main
             // Sorting
             this.SortString = "Title ASC";
 
-            // Search historu
+            // Search history
             this.SearchHistoryManager = new SearchHistoryManager();
             this.RecentSearches = new ObservableCollection<SearchEntry>(SearchHistoryManager.SearchHistory.RecentSearches);
             this.FavoriteSearches = new ObservableCollection<SearchEntry>(SearchHistoryManager.SearchHistory.FavoriteSearches);
+
+            // Export
+            this.ArticlesToBeExported = new List<Article>();
 
             // Commands
             this.SearchCommand = new RelayCommand(Search, CanSearch);
@@ -210,6 +232,10 @@ namespace MainLib.ViewModels.Main
             this.ToggleFavoriteSearchCommand = new RelayCommand(ToggleFavoriteSearch);
             this.DeleteRecentSearchCommand = new RelayCommand(DeleteRecentSearch);
             this.ClearRecentSearchesCommand = new RelayCommand(ClearRecentSearches);
+            this.StartBatchExportCommand = new RelayCommand(StartBatchExport);
+            this.BatchExportCommand = new RelayCommand(BatchExport);
+            this.CancelBatchExportCommand = new RelayCommand(CancelBatchExport);
+            this.MarkArticleForBatchExportCommand = new RelayCommand(MarkArticleForBatchExport);
         }
         #endregion
 
@@ -302,6 +328,7 @@ namespace MainLib.ViewModels.Main
             this.TermsPhrasesHighlight.Clear();
             this.CurrentPage = 1;
             this.articles.Clear();
+            this.ArticlesToBeExported.Clear();
             this.ShowResults = false;
         }
         public void OpenFile(object input)
@@ -451,6 +478,108 @@ namespace MainLib.ViewModels.Main
         {
             this.RecentSearches.Clear();
             this.SearchHistoryManager.ClearSearchHistory();
+        }
+        public void StartBatchExport(object input = null)
+        {
+            this.IsBatchExporting = true;
+        }
+        public async void BatchExport(object input = null)
+        {
+            try
+            {
+                bool fileNotFound = false;
+                string fileRootPath = String.Empty;
+
+                // Destination will be the path chosen from dialog box (Where files should be exported)
+                string destination = null;
+
+                destination = services.BrowserService.OpenFolderDialog(services.LastExportFolderPath);
+
+                // If path was chosen from the dialog box
+                if (destination != null)
+                {
+                    services.SaveExportPath(destination);
+
+                    services.IsWorking(true);
+
+                    await Task.Run(() =>
+                    {
+                        // 2. Get the list of articles which were checked for export
+                        foreach (Article article in ArticlesToBeExported)
+                        {
+                            if (!string.IsNullOrEmpty(article.FileName))
+                            {
+                                // If title is too long just get the substring to name the .pdf file
+                                if (article.Title.Length > 40)
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title.Substring(0, 40), "");
+                                    fileRootPath = Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf";
+                                    if (!File.Exists(fileRootPath))
+                                    {
+                                        fileNotFound = true;
+                                    }
+                                    File.Copy(fileRootPath, destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
+                                else
+                                {
+                                    string regexSearch = new string(System.IO.Path.GetInvalidFileNameChars());
+                                    Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+                                    string validName = r.Replace(article.Title, "");
+                                    fileRootPath = Path.Combine(Environment.CurrentDirectory, "Files\\") + article.FileName + ".pdf";
+                                    if (!File.Exists(fileRootPath))
+                                    {
+                                        fileNotFound = true;
+                                    }
+                                    File.Copy(fileRootPath, destination + "\\" + validName + "(" + article.FileName + ")" + ".pdf", true);
+                                }
+                            }
+                        }
+                    });
+
+                    services.IsWorking(false);
+
+                    if (fileNotFound)
+                    {
+                        services.ShowNotification($"File couldn't be found, validate the database.", "Download", NotificationType.Error, "DataViewNotificationArea", new TimeSpan(0, 0, 4));
+                        return;
+                    }
+
+                    services.ShowNotification($"File downloaded successfully.", "Download", NotificationType.Success, "DataViewNotificationArea", new TimeSpan(0, 0, 2));
+                }
+            }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Data View", "Export", e.Message, e.StackTrace);
+                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                services.IsWorking(false);
+            }
+        }
+        public void CancelBatchExport(object input = null)
+        {
+            this.ArticlesToBeExported.Clear();
+            this.IsBatchExporting = false;
+            OnPropertyChanged("ArticlesToBeExported");
+            OnPropertyChanged("CanBatchExport");
+        }
+        public void MarkArticleForBatchExport(object input)
+        {
+            Article article = input as Article;
+            if (ArticlesToBeExported.Exists(a => a.ID == article.ID))
+            {
+                Article articleToRemove = ArticlesToBeExported.SingleOrDefault(a => a.ID == article.ID);
+                ArticlesToBeExported.Remove(articleToRemove);
+            }
+            else
+            {
+                ArticlesToBeExported.Add(article);
+            }
+            OnPropertyChanged("ArticlesToBeExported");
+            OnPropertyChanged("CanBatchExport");
         }
         #endregion
 
