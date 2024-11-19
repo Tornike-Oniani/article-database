@@ -44,7 +44,7 @@ namespace MainLib.Views.Popups
 
             double occupiedSpace = 0;
 
-            for (int i = 0; i < articlesToBePrinted.Count - 1; i++)
+            for (int i = 0; i < articlesToBePrinted.Count; i++)
             {
                 var item = ResultsList.Items[i];
                 ListViewItem container = ResultsList.ItemContainerGenerator.ContainerFromItem(item) as ListViewItem;
@@ -57,13 +57,17 @@ namespace MainLib.Views.Popups
                     if (occupiedSpace <= a4Height)
                     {
                         currentPageArticles.Add(articlesToBePrinted[i]);
+                        // We have to account for margin between items as well
+                        occupiedSpace += 12;
                     }
                     // Otherwise create a new page with separate listview and add the item there
                     else
                     {
-                        occupiedSpace = 0;
+                        occupiedSpace = container.ActualHeight;
                         CreateNewPage();
                         this.currentPageArticles.Add(articlesToBePrinted[i]);
+                        // We have to account for margin between items as well
+                        occupiedSpace += 12;
                     }
                 }
             }
