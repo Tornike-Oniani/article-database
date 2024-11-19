@@ -184,6 +184,11 @@
                         <popupV:SettingsDialog />
                     </DataTemplate>
 
+                    <!-- Settings -->
+                    <DataTemplate DataType="{x:Type popupVM:ReportsViewerViewModel}">
+                        <popupV:ReportsViewer />
+                    </DataTemplate>
+
                     <!-- Progress -->
                     <DataTemplate DataType="{x:Type popupVM:ImportViewModel}">
                         <popupVG:Progress />

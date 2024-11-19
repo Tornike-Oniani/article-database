@@ -22,16 +22,6 @@ namespace Lib.Views.Services.Windows
         public MediumWindow()
         {
             InitializeComponent();
-
-            this.Loaded += (s, e) =>
-            {
-                Application.Current.MainWindow = this;
-            };
-
-            this.Closing += (s, e) =>
-            {
-                Application.Current.Shutdown();
-            };
         }
     }
 }

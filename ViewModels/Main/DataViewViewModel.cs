@@ -588,7 +588,7 @@ namespace MainLib.ViewModels.Main
             Services.IsWorking(false);
             OnPropertyChanged("SelectedSort");
         }
-        public void CopyWord(object input)
+        public static void CopyWord(object input)
         {
             Clipboard.SetText(input.ToString().Replace(",", ""));
         }
@@ -721,7 +721,7 @@ namespace MainLib.ViewModels.Main
 
             OnPropertyChanged("CanExportP");
         }
-        private int[] GetFilterIds(string filterId)
+        private static int[] GetFilterIds(string filterId)
         {
             if (String.IsNullOrEmpty(filterId)) return null;
 
@@ -850,7 +850,7 @@ namespace MainLib.ViewModels.Main
 
             return duplicateArticles.Values.ToList();
         }
-        private double CalculateSimilarity(string str1, string str2)
+        private static double CalculateSimilarity(string str1, string str2)
         {
             Levenstein levenshtein = new Levenstein();
             return levenshtein.GetSimilarity(str1, str2);

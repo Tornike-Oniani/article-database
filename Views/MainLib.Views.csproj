@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -151,6 +152,9 @@
     </Compile>
     <Compile Include="Popups\ReferenceManager.xaml.cs">
       <DependentUpon>ReferenceManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Popups\ReportsViewer.xaml.cs">
+      <DependentUpon>ReportsViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Popups\SearchDialog.xaml.cs">
       <DependentUpon>SearchDialog.xaml</DependentUpon>
@@ -318,6 +322,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Popups\ReferenceManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popups\ReportsViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

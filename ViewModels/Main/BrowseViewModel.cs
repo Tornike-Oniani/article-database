@@ -5,6 +5,7 @@ using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
 using MainLib.ViewModels.Classes;
+using MainLib.ViewModels.Popups;
 using MainLib.ViewModels.Utils;
 using NotificationService;
 using System;
@@ -17,6 +18,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MainLib.ViewModels.Main
@@ -182,6 +184,7 @@ namespace MainLib.ViewModels.Main
         public ICommand BatchExportCommand { get; set; }
         public ICommand CancelBatchExportCommand { get; set; }
         public ICommand MarkArticleForBatchExportCommand { get; set; }
+        public ICommand OpenReportsViewerCommand { get; set; }
         #endregion
 
         #region Events
@@ -236,6 +239,7 @@ namespace MainLib.ViewModels.Main
             this.BatchExportCommand = new RelayCommand(BatchExport);
             this.CancelBatchExportCommand = new RelayCommand(CancelBatchExport);
             this.MarkArticleForBatchExportCommand = new RelayCommand(MarkArticleForBatchExport);
+            this.OpenReportsViewerCommand = new RelayCommand(OpenReportsViewer);
         }
         #endregion
 
@@ -580,6 +584,10 @@ namespace MainLib.ViewModels.Main
             }
             OnPropertyChanged("ArticlesToBeExported");
             OnPropertyChanged("CanBatchExport");
+        }
+        public void OpenReportsViewer(object input = null)
+        {
+            Shared.GetInstance().WindowService.OpenWindow(new ReportsViewerViewModel(this.Articles), Lib.ViewModels.Services.Windows.WindowType.Medium);
         }
         #endregion
 

@@ -87,6 +87,7 @@
     <Compile Include="Popups\MassBookmarkManagerViewModel.cs" />
     <Compile Include="Popups\ReferenceEditorViewModel.cs" />
     <Compile Include="Popups\ReferenceManagerViewModel.cs" />
+    <Compile Include="Popups\ReportsViewerViewModel.cs" />
     <Compile Include="Popups\SearchDialogViewModel.cs" />
     <Compile Include="Popups\SettingsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

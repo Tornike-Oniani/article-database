@@ -112,7 +112,7 @@
                 <ControlTemplate TargetType="{x:Type Window}">
                     <!-- Outer border with a drop shadow margin -->
                     <Border Padding="{Binding OuterMarginSizeThickness, FallbackValue=10, 
-                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+                                              RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
                         <!-- Main window outline-->
                         <Grid>
                             <!-- Window with border and drop shadow -->
@@ -127,7 +127,7 @@
                                 <Grid.RowDefinitions>
                                     <!-- Title bar -->
                                     <RowDefinition Height="{Binding TitleHeightGridLength, FallbackValue=30, 
-                                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                                                                    RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
                                     <!-- Drop shadow-->
                                     <RowDefinition Height="Auto" />
                                     <!-- Window Content -->
@@ -173,7 +173,6 @@
                                 </Border>
 
                             </Grid>
-
                         </Grid>
                     </Border>
                 </ControlTemplate>
