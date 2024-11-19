@@ -289,6 +289,7 @@ namespace MainLib.ViewModels.Main
             this.ShowResults = true;
             OnPropertyChanged("TotalPages");
             OnPropertyChanged("ShowNoResultsLabel");
+            SortArticles();
 
             // If search contains authors or years make the additional filters visible (usually required when applying recent search)
             if (!String.IsNullOrEmpty(Authors) || !String.IsNullOrEmpty(Year))
