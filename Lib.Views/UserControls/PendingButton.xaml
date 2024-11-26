@@ -44,7 +44,7 @@
         </Style>
         <Style x:Key="PendingLabel" TargetType="{x:Type Label}">
             <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
-            <Setter Property="Background" Value="#ffffff" />
+            <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
             <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
             <Setter Property="BorderThickness" Value="1 1 1 1" />
             <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
@@ -102,6 +102,7 @@
                     Converter={StaticResource InverseBoolToVisConverter}}"
                 Style="{StaticResource PendingLabel}"
                 VerticalAlignment="Center"
+                Margin="0 0 8 0"
                 Grid.Column="0"
                 />
             <!-- Action button -->
@@ -111,18 +112,45 @@
                 Visibility="{
                     Binding CanRunAction, 
                     Converter={StaticResource BoolToVisibility}}"
-                FontSize="12"
+                FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
+                Margin="0 0 8 0"
                 Grid.Column="0"
                 />
             <!-- Cancel button -->
             <ToggleButton
                 IsChecked="{Binding IsPending}"
+                Padding="4 0 4 0"
+                BorderThickness="0 0 0 0"
+                Background="{StaticResource WhiteColorBrush}"
+                Cursor="Hand"
                 Command="{Binding CancelCommand}"
-                Style="{StaticResource MaterialDesignIconButton}"
-                Foreground="#e45649"
                 Grid.Column="1"
                 >
-                <materialDesign:PackIcon Kind="Cancel" />
+                <ToggleButton.Style>
+                    <Style TargetType="{x:Type ToggleButton}" BasedOn="{x:Null}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                    <Border
+                                        Background="{TemplateBinding Background}"
+                                        Padding="{TemplateBinding Padding}"
+                                        >
+                                        <ContentPresenter 
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ToggleButton.Style>
+                <materialDesign:PackIcon 
+                    Kind="Cancel"
+                    Foreground="#e45649"
+                    Width="24"
+                    Height="24"
+                    />
             </ToggleButton>
         </Grid>
     </Grid>

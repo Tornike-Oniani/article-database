@@ -10,5 +10,6 @@ namespace Lib.ViewModels.Services.Browser
     {
         string OpenFileDialog(string defaultEx, string filter);
         string OpenFolderDialog(string savedPath);
+        string OpenSaveFileDialog(string filter, string defaultEx, string fileName, string savedPath = null);
     }
 }

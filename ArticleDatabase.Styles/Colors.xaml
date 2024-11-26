@@ -2,6 +2,34 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Lib.Styles">
 
+    <!-- Shadcn black -->
+    <Color x:Key="ShadcnBlackColor">#18181b</Color>
+    <SolidColorBrush x:Key="ShadcnBlackColorBrush" Color="{StaticResource ShadcnBlackColor}" />
+    
+    <!-- Shadcn light black-->
+    <Color x:Key="ShadcnBlackLightColor">#2f2f31</Color>
+    <SolidColorBrush x:Key="ShadcnBlackLightColorBrush" Color="{StaticResource ShadcnBlackLightColor}" />
+    
+    <!-- Shadcn gray -->
+    <Color x:Key="ShadcnGrayColor">#f4f4f5</Color>
+    <SolidColorBrush x:Key="ShadcnGrayColorBrush" Color="{StaticResource ShadcnGrayColor}" />
+
+    <!-- Shadcn light gray -->
+    <Color x:Key="ShadcnGrayLightColor">#f6f6f7</Color>
+    <SolidColorBrush x:Key="ShadcnGrayLightColorBrush" Color="{StaticResource ShadcnGrayLightColor}" />
+    
+    <!-- Shadcn text color -->
+    <Color x:Key="ShadcnTextColor">#09090b</Color>
+    <SolidColorBrush x:Key="ShadcnTextColorBrush" Color="{StaticResource ShadcnTextColor}" />
+
+    <!-- Shadcn light text color -->
+    <Color x:Key="ShadcnTextLightColor">#71717a</Color>
+    <SolidColorBrush x:Key="ShadcnTextLightColorBrush" Color="{StaticResource ShadcnTextLightColor}" />
+    
+    <!-- Shadcn border color -->
+    <Color x:Key="ShadcnBorderColor">#e4e4e7</Color>
+    <SolidColorBrush x:Key="ShadcnBorderColorBrush" Color="{StaticResource ShadcnBorderColor}" />
+
     <!-- Primary color -->
     <Color x:Key="PrimaryColor">#17a2b8</Color>
     <SolidColorBrush x:Key="PrimaryColorBrush" Color="{StaticResource PrimaryColor}" />

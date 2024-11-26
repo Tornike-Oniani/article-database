@@ -18,7 +18,7 @@
         <KeyBinding Command="{Binding OkCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Key="Enter" />
     </UserControl.InputBindings>
     
-    <Grid Margin="12">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -29,34 +29,40 @@
         </Grid.RowDefinitions>
 
         <!-- Icon -->
-        <materialDesign:PackIcon Kind="{Binding Type, Converter={StaticResource DialogTypeToIcon}}"
-                                 Foreground="{Binding Type, Converter={StaticResource DialogTypeToColor}}"
-                                 Height="35"
-                                 Width="35"
-                                 VerticalAlignment="Center"
-                                 Margin="0 0 10 0"
-                                 Grid.Column="0"
-                                 Grid.Row="0" />
+        <materialDesign:PackIcon 
+            Kind="{Binding Type, Converter={StaticResource DialogTypeToIcon}}"
+            Foreground="{StaticResource ShadcnBlackColorBrush}"
+            Height="30"
+            Width="30"
+            VerticalAlignment="Center"
+            Margin="0 0 24 0"
+            Grid.Column="0"
+            Grid.Row="0" 
+            />
         <!-- Text -->
-        <TextBlock Text="{Binding Text,FallbackValue=SampleText}"
-                   FontSize="14"
-                   VerticalAlignment="Center"
-                   TextWrapping="Wrap"
-                   Grid.Column="1"
-                   Grid.Row="0" />
+        <TextBlock 
+            Text="{Binding Text,FallbackValue=SampleText}"
+            FontSize="14"
+            VerticalAlignment="Center"
+            TextWrapping="Wrap"
+            Grid.Column="1"
+            Grid.Row="0" 
+            />
         <!-- Buttons -->
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0 15 0 0"
-                    Grid.Column="1"
-                    Grid.Row="1">
-            <Button Content="Ok"
-                    Background="{Binding Type, Converter={StaticResource DialogTypeToColor}}"
-                    BorderBrush="{Binding Type, Converter={StaticResource DialogTypeToColor}}"
-                    Width="80"
-                    Margin="0 0 0 0"
-                    Command="{Binding OkCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+        <StackPanel 
+            Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            Margin="0 24 0 0"
+            Grid.Column="1"
+            Grid.Row="1"
+            >
+            <Button 
+                Content="Ok"
+                Style="{StaticResource ShadcnButtonPrimary}"
+                Width="80"
+                Command="{Binding OkCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                />
         </StackPanel>
     </Grid>
 </UserControl>

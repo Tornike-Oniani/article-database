@@ -26,6 +26,7 @@ namespace MainLib.ViewModels.Utils
         private string _selectedTheme;
 
         private Action<bool, string> _isWorkingAction;
+        private Action<bool> _isShowingDialogAction;
         private INotificationManager _notificationManager;
 
         public IDialogService DialogService { get; private set; }
@@ -59,6 +60,10 @@ namespace MainLib.ViewModels.Utils
         {
             this.User = user;
         }
+        public void SetShowDialogAction(Action<bool> isShowingDialogAction)
+        {
+            this._isShowingDialogAction = isShowingDialogAction;
+        }
 
         public void SaveExportPath(string path)
         {
@@ -72,12 +77,23 @@ namespace MainLib.ViewModels.Utils
         {
             this._isWorkingAction.Invoke(isWorking, label);
         }
+        public void IsShowingDialog(bool isShowingDialog)
+        {
+            this._isShowingDialogAction.Invoke(isShowingDialog);
+        }
         public void ShowNotification(string message, string title, NotificationType type, string areaName, TimeSpan? expirationTime = null)
         {
             // If expiration time was provided set it to default 5 seconds
             TimeSpan? et = expirationTime == null ? new TimeSpan(0, 0, 5) : expirationTime;
 
             _notificationManager.Show(new NotificationContent { Message = message, Title = title, Type = type }, areaName: areaName, expirationTime: expirationTime);
+        }
+        public bool ShowDialogWithOverlay(DialogViewModelBase vm)
+        {
+            this.IsShowingDialog(true);
+            bool result = this.DialogService.OpenDialog(vm);
+            this.IsShowingDialog(false);
+            return result;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

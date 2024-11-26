@@ -20,17 +20,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
-                        <materialDesign:PackIcon x:Name="icon"
-                                                 Kind="{TemplateBinding Tag}" 
-                                                 VerticalAlignment="Center"
-                                                 HorizontalAlignment="Center" />
+                        <materialDesign:PackIcon 
+                            x:Name="icon"
+                            Kind="{TemplateBinding Tag}" 
+                            Foreground="{TemplateBinding Foreground}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center" 
+                            />
                     </Border>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="icon" Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -38,6 +35,7 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource SecondaryColorBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{DynamicResource GrayColorLightBrush}" />
@@ -48,6 +46,16 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource RedColorBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="DialogCloseButton" TargetType="{x:Type Button}" BasedOn="{StaticResource WindowControlButton}">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Foreground" Value="{StaticResource ShadcnBlackLightColorBrush}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource ShadcnBlackColorBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -82,6 +90,77 @@
     <Style TargetType="{x:Type Button}" x:Key="SystemIconButton" BasedOn="{StaticResource Hoverless}">
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
         <Setter Property="Padding" Value="5" />
+    </Style>
+
+    <Style x:Key="ShadcnButtonPrimary" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+        <Setter Property="Padding" Value="16 8 16 8" />
+        <Setter Property="Background" Value="{StaticResource ShadcnBlackColorBrush}" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}" >
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        CornerRadius="4 4 4 4"
+                        >
+                        <ContentPresenter 
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ShadcnBlackLightColorBrush}" />
+            </Trigger> 
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="ShadcnButtonSecondary" TargetType="{x:Type Button}" BasedOn="{StaticResource ShadcnButtonPrimary}">
+        <Setter Property="Background" Value="{StaticResource ShadcnGrayColorBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource ShadcnBlackColorBrush}" />
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ShadcnGrayLightColorBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="ShadcnGhostButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+        <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="Padding" Value="12 8 12 8" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        CornerRadius="4 4 4 4">
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource GrayColorBrush}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

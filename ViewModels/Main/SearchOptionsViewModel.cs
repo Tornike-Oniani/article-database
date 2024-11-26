@@ -213,7 +213,7 @@ namespace MainLib.ViewModels.Main
             if (String.IsNullOrWhiteSpace(SelectedKeywordPairing))
                 this.SelectedKeywordPairing = KeywordPairings[0];
 
-            this.ClearCommand = new RelayCommand(Clear, CanClear);
+            this.ClearCommand = new RelayCommand(Clear);
         }
         private string FormatText(string input)
         {

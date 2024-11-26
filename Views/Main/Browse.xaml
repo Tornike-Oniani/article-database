@@ -26,7 +26,7 @@
         <converters:BoolToVisibilityInverseConverter x:Key="BoolToVisibilityInverse" />
         <converters:BoolToRenderTransofrmConverter x:Key="BoolToRenderTransform" />
         <converters:RecentSearchToLabelConverter x:Key="RecentSearchToLabel" />
-        <converters:ArticleExistsInListToBoolConverter x:Key="ArticleExistsInListToBool" />
+        <converters:ArticleExistsInListToBoolConverter x:Key="ArticleExistsInListToBool" x:Shared="False" />
 
         <FrameworkElement 
             x:Key="ProxyElementForDataContext"
@@ -113,6 +113,30 @@
                     <Setter Property="BorderThickness" Value="0 0 0 1" />
                 </Trigger>
             </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PendingLabel" TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="{StaticResource ShadcnTextColorBrush}" />
+            <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ShadcnBlackColorBrush}" />
+            <Setter Property="BorderThickness" Value="1 1 1 1" />
+            <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+            <Setter Property="Padding" Value="12 6 12 6" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding Padding}"
+                            CornerRadius="4 4 4 4"
+                            >
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
 
@@ -250,7 +274,7 @@
                         Text="Export"
                         Style="{StaticResource Header}"
                         FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
-                        Margin="0 12 0 12"
+                        Margin="0 24 0 12"
                         />
                     <commonusercontrols:PendingButton
                         StartText="Export article PDFs"
@@ -267,12 +291,106 @@
                         Text="Reports"
                         Style="{StaticResource Header}"
                         FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
-                        Margin="0 12 0 12"
+                        Margin="0 24 0 12"
                         />
-                    <Button
+                    <commonusercontrols:Accordion
+                        Header="Generate report"
+                        >
+                        <commonusercontrols:Accordion.DropdownContent>
+                            <Grid>
+                                <StackPanel>
+                                    <Button
+                                        Style="{StaticResource ShadcnGhostButton}"
+                                        Command="{Binding PrintCurrentPageCommand}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon
+                                                Kind="KeyboardArrowRight"
+                                                Width="20"
+                                                Height="20"
+                                                VerticalAlignment="Center"
+                                                Margin="0 0 12 0"
+                                                />
+                                            <TextBlock
+                                                Text="Print current page"
+                                                Style="{StaticResource DefaultText}"
+                                                />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button
+                                        Style="{StaticResource ShadcnGhostButton}"
+                                        Command="{Binding PrintAllResultsCommand}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon
+                                                Kind="KeyboardArrowRight"
+                                                Width="20"
+                                                Height="20"
+                                                VerticalAlignment="Center"
+                                                Margin="0 0 12 0"
+                                                />
+                                            <TextBlock
+                                                Text="Print all results"
+                                                Style="{StaticResource DefaultText}"
+                                                />
+                                        </StackPanel>
+                                    </Button>
+                                    <Grid>
+                                        <Button
+                                            Style="{StaticResource ShadcnGhostButton}"
+                                            Command="{Binding SelectArticlesToPrintCommand}"
+                                            Visibility="{Binding IsSelectingArticlesForPrinting, Converter={StaticResource BoolToVisibilityInverse}}"
+                                            >
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon
+                                                    Kind="KeyboardArrowRight"
+                                                    Width="20"
+                                                    Height="20"
+                                                    VerticalAlignment="Center"
+                                                    Margin="0 0 12 0"
+                                                    />
+                                                <TextBlock
+                                                    Text="Select articles to print"
+                                                    Style="{StaticResource DefaultText}"
+                                                    />
+                                            </StackPanel>
+                                        </Button>
+                                        <Border
+                                            Visibility="{Binding IsSelectingArticlesForPrinting, Converter={StaticResource BoolToVisibility}}"
+                                            Padding="12 0 0 0"
+                                            >
+                                            <StackPanel
+                                                Orientation="Horizontal"
+                                                >
+                                                <materialDesign:PackIcon
+                                                    Kind="KeyboardArrowRight"
+                                                    Width="20"
+                                                    Height="20"
+                                                    VerticalAlignment="Center"
+                                                    Padding="0 0 12 0"
+                                                    Margin="0 0 12 0"
+                                                    />
+                                                <commonusercontrols:PendingButton
+                                                    StartText="Select articles to print"
+                                                    PendingText="Check articles you want to print..."
+                                                    ActionText="Print selected"
+                                                    IsPending="{Binding IsSelectingArticlesForPrinting}"
+                                                    CanRunAction="{Binding CanPrintSelectedArticles}"
+                                                    InitialCommand="{Binding SelectArticlesToPrintCommand}"
+                                                    ActionCommand="{Binding PrintSelectedArticlesCommand}"
+                                                    CancelCommand="{Binding CancelSelectingArticlesToPrintCommand}"
+                                                    />
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </commonusercontrols:Accordion.DropdownContent>
+                    </commonusercontrols:Accordion>
+                    <!--<Button
                         Content="Generate report"
                         Command="{Binding OpenReportsViewerCommand}"
-                        />
+                        />-->
                     <!-- Recent Searches sidebar -->
                     <TextBlock
                         Text="Searches"
@@ -430,7 +548,7 @@
                                         Style="{StaticResource DefaultText}"
                                         TextWrapping="Wrap"
                                         >
-                                        ძებნის დროს პროგრამას გამოაქვს სტატიები, რომლების სათაური ან აბსტრაქტი შეიცავენ ყველა ჩაწერილ სიტყვას <Bold>მათი მიმდევრობის მიუხედავად</Bold>
+                                        ძებნის დროს პროგრამას გამოაქვს სტატიები, რომლების სათაური ან აბსტრაქტი შეიცავს ყველა ჩაწერილ სიტყვას <Bold>მათი მიმდევრობის მიუხედავად</Bold>
                                         <LineBreak />
                                         მაგალითად, ვთქვათ ბაზაში გვაქვს შემდეგი 5 სტატია:
                                         <LineBreak />
@@ -450,9 +568,9 @@
                                         7. Behavioral Effects Promoted by <Bold>Sleep Deprivation in Rats</Bold> Submitted to Epilepticus
                                         <LineBreak />
                                         <LineBreak />
-                                        თუ ძებნის ველში ჩაწერ <Italic>Sleep deprivation in rats</Italic> მაშინ პროგრამა გამოივანს სტატიებს: 1, 2, 4, 5 და 7 რადგან ყველა მათგანი შეიცავს სიტყბებს <Italic>Sleep, deprivation</Italic> და <Italic>rats</Italic>.
+                                        თუ ძებნის ველში ჩაწერ <Italic>Sleep deprivation in rats</Italic> მაშინ პროგრამა გამოივანს სტატიებს: 1, 2, 4, 5 და 7 რადგან ყველა მათგანი შეიცავს სიტყვებს <Italic>Sleep, deprivation</Italic> და <Italic>rats</Italic>.
                                         იმ შემთხვევაში, თუ გინდა, რომ ძებნა უფრო ზუსტი იყოს შეგიძლია საძიებო სიტყვები ჩასვა კვადრატულ ფრჩხილებში, როგორც ესე: <Italic>[Sleep deprivation in rats]</Italic>.
-                                        ამგვარი ძებნა გამოიყვანს მხოლოდ მე-5 და მე-7 სტატიებს რადგან პროგრამა ამჟამად ეძებს სტატიებს, რომლებიც შეცავენ ჩაწერილი სიტყვებს და მათი ზუსტი <Bold>მიმდევრობით</Bold>.
+                                        ამგვარი ძებნა გამოიყვანს მხოლოდ მე-5 და მე-7 სტატიებს რადგან პროგრამა ამჟამად ეძებს სტატიებს, რომლებიც შეცავენ ჩაწერილ სიტყვებს მათი ზუსტი <Bold>მიმდევრობით</Bold>.
                                         <LineBreak />
                                         შესაძლებელია ამ ორი ძიების რეჟიმის ერთდროულად გამოყენება. მაგალითად, ამგვარი ძიებისას "[Sleep deptivation in rats] active avoidance" პროგრამა გამოიყვანს სტატიებს რომლებიც შეიცავენ სიტყვებს <Italic>active</Italic> და <Italic>avoidance</Italic> ნებისმიერ ადგილას, და ამავდროულად ზუსტად შეიცავენ კვადრატულ ფრჩხილებში მოთავსებულ ფრაზას.
                                     </TextBlock>
@@ -465,8 +583,8 @@
                                         Style="{StaticResource DefaultText}"
                                         TextWrapping="Wrap"
                                         >
-                                        თუ გინდა მოძებნო კონკრეტული ავტორის მიერ დაწერილი სტატიები, მაშინ შეგიძლია სასურველი ავტორის სახელი ან გვარი ჩაჭერო Authors ველში.
-                                        იმ შემთხვევაში, თუ გინდა მოძებნო კონკრეტულად 2 ან მეტი ავტორის მიერ დაწერილი სტატიები, მაშინ ჩაწერე თითოეულის სახელი ან გვარი მძიმა ადგილის გამოტოვებით.
+                                        თუ გინდა მოძებნო კონკრეტული ავტორის მიერ დაწერილი სტატიები, მაშინ შეგიძლია სასურველი ავტორის სახელი ან გვარი ჩაჭერო Authors ველში, რომელიც შეგიძლია გამოაჩინო <Bold>Additional filters</Bold>-ზე დაჭერით.
+                                        იმ შემთხვევაში, თუ გინდა მოძებნო კონკრეტულად 2 ან მეტი ავტორის მიერ დაწერილი სტატიები, მაშინ ჩაწერე სასურველი ავტორები მძიმე ადგილის გამოტოვებით.
                                         მაგალითად <Italic>Kamin, Gaioni</Italic> მოძებნის სტატიებს სადაც Kamin და Gaioni არიან თანაავტორები.
                                     </TextBlock>
                                     <Separator Margin="0 6 0 6" />
@@ -478,7 +596,7 @@
                                         Style="{StaticResource DefaultText}"
                                         TextWrapping="Wrap"
                                         >
-                                        შეგიძლია ასევე მოძებნო სტატიები, რომლებიც გამოქვეყნებულია კონკრეტულ წელს და ამისათვის უბრალოდ უნდა ჩაწერო სასურველი წელი Year ველში. მაგალითად <Italic>2000</Italic>-ის ჩაწერა ველში დააბრუნებს მხოლოდ ინ სტატიებს, რომლებიც გამოქვეყნებულია 2000 წელს. ასევე შესაძლებელია წლების დიაპაზონის დაზუსტება, მაგალითად <Italic>2000-2005</Italic>-ის ჩაწერა დააბრუნებს სტატიებს, რომლებიც გამოქვეყნებულია 2000-იდან 2005 წლის ჩათვლით.
+                                        შეგიძლია ასევე მოძებნო სტატიები, რომლებიც გამოქვეყნებულია კონკრეტულ წელს და ამისათვის უბრალოდ უნდა ჩაწერო სასურველი წელი Year ველში, რომელიც შეგიძლია გამოაჩინო <Bold>Additional filters</Bold>-ზე დაჭერით. მაგალითად <Italic>2000</Italic>-ის ჩაწერა ველში დააბრუნებს მხოლოდ 2000 წელს გამოქვეყნებულ სტატიებს. ასევე შესაძლებელია წლების დიაპაზონის ჩაწერა, მაგალითად <Italic>2000-2005</Italic>-ის ჩაწერა დააბრუნებს სტატიებს, რომლებიც გამოქვეყნებულია 2000-იდან 2005 წლის ჩათვლით.
                                     </TextBlock>
                                 </StackPanel>
                             </ScrollViewer>
@@ -505,7 +623,7 @@
                         HorizontalAlignment="Right"
                         >
                         <Button                         
-                            Style="{StaticResource GenericButton}" 
+                            Style="{StaticResource GenericButton}"
                             Content="Search"
                             Width="100"
                             Command="{Binding SearchCommand}"                    
@@ -835,6 +953,7 @@
                                                                     Kind="Eye"
                                                                     Width="18"
                                                                     Height="18"
+                                                                    VerticalAlignment="Center"
                                                                     Margin="0 0 6 0"
                                                                     />
                                                                 <TextBlock
@@ -871,6 +990,7 @@
                                                         <CheckBox
                                                             Content="Select for export"
                                                             Visibility="{Binding DataContext.IsBatchExporting, Source={StaticResource ProxyElementForDataContext}, Converter={StaticResource BoolToVisibility}}"
+                                                            Margin="0 0 12 0"
                                                             Command="{Binding DataContext.MarkArticleForBatchExportCommand, Source={StaticResource ProxyElementForDataContext}}"
                                                             CommandParameter="{Binding}"
                                                             >
@@ -880,6 +1000,26 @@
                                                                         <Setter.Value>
                                                                             <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}">
                                                                                 <Binding Path="DataContext.ArticlesToBeExported" Source="{StaticResource ProxyElementForDataContext}" />
+                                                                                <Binding Path="." />
+                                                                            </MultiBinding>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </CheckBox.Style>
+                                                        </CheckBox>
+                                                        <!-- Print check -->
+                                                        <CheckBox
+                                                            Content="Select for printing"
+                                                            Visibility="{Binding DataContext.IsSelectingArticlesForPrinting, Source={StaticResource ProxyElementForDataContext}, Converter={StaticResource BoolToVisibility}}"
+                                                            Command="{Binding DataContext.MarkArticleForPrintCommand, Source={StaticResource ProxyElementForDataContext}}"
+                                                            CommandParameter="{Binding}"
+                                                            >
+                                                            <CheckBox.Style>
+                                                                <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource OutlineFlatCheckbox}">
+                                                                    <Setter Property="IsChecked">
+                                                                        <Setter.Value>
+                                                                            <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}">
+                                                                                <Binding Path="DataContext.ArticlesToBePrinted" Source="{StaticResource ProxyElementForDataContext}" />
                                                                                 <Binding Path="." />
                                                                             </MultiBinding>
                                                                         </Setter.Value>

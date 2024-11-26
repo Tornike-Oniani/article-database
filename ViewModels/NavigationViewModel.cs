@@ -15,8 +15,9 @@ namespace MainLib.ViewModels
         private BaseViewModel _selectedViewModel;
         private User _user;
         private bool _isBusy;
-        private Shared services;
+        private readonly Shared services;
         private string _workLabel;
+        private bool _isShowingDialog;
 
         public BaseViewModel SelectedViewModel
         {
@@ -38,6 +39,11 @@ namespace MainLib.ViewModels
             get { return _workLabel; }
             set { _workLabel = value; OnPropertyChanged("WorkLabel"); }
         }
+        public bool IsShowingDialog
+        {
+            get { return _isShowingDialog; }
+            set { _isShowingDialog = value; OnPropertyChanged("IsShowingDialog"); }
+        }
 
         public ICommand UpdateViewCommand { get; set; }
         public ICommand OpenSettingsCommand { get; set; }
@@ -46,6 +52,7 @@ namespace MainLib.ViewModels
         {
             this.services = Shared.GetInstance();
             services.SetWorkingStatusAction(WorkStatus);
+            services.SetShowDialogAction(SetDialogOverlayStatus);
             this.User = services.User;
             services.ThemeService.ChangeTheme(Properties.Settings.Default.Theme);
 
@@ -71,6 +78,10 @@ namespace MainLib.ViewModels
         {
             this.IsBusy = isWorking;
             this.WorkLabel = label;
+        }
+        public void SetDialogOverlayStatus(bool isShowingDialog)
+        {
+            this.IsShowingDialog = isShowingDialog;
         }
     }
 }

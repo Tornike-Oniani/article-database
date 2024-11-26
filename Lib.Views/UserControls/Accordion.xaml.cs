@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -21,7 +22,17 @@ namespace Lib.Views.UserControls
     /// </summary>
     public partial class Accordion : UserControl, INotifyPropertyChanged
     {
-        public static readonly DependencyProperty DropdownContentProperty = DependencyProperty.Register("DropdownContent", typeof(Grid), typeof(Accordion));
+        private static readonly DependencyProperty HeaderProperty =
+            DependencyProperty.Register("Header", typeof(string), typeof(Accordion), new PropertyMetadata(null));
+
+        public string Header
+        {
+            get { return (string)GetValue(HeaderProperty); }
+            set { SetValue(HeaderProperty, value); }
+        }
+
+        public static readonly DependencyProperty DropdownContentProperty = 
+            DependencyProperty.Register("DropdownContent", typeof(Grid), typeof(Accordion));
 
         public Grid DropdownContent
         {
@@ -50,6 +61,35 @@ DependencyProperty.Register("IsOpened", typeof(bool), typeof(Accordion), new Fra
         public Accordion()
         {
             InitializeComponent();
+        }
+
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            AnimateAccordion();
+        }
+
+        private void AnimateAccordion()
+        {
+            double targetHeight = 0;
+
+            if (IsOpened)
+            {
+                if (accordion__dropdown.Child is FrameworkElement content)
+                {
+                    content.Measure(new Size(accordion__dropdown.ActualWidth, double.PositiveInfinity));
+                    targetHeight = content.DesiredSize.Height;
+                }
+            }
+
+            var animation = new DoubleAnimation()
+            {
+                From = accordion__dropdown.ActualHeight,
+                To = targetHeight,
+                Duration = TimeSpan.FromMilliseconds(100),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+            };
+
+            accordion__dropdown.BeginAnimation(HeightProperty, animation);
         }
 
         // INotifyPropertyChanged implementation

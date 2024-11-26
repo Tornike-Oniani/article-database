@@ -1,20 +1,18 @@
 ﻿using Lib.DataAccessLayer.Models;
-using Lib.ViewModels.Base;
-using Lib.ViewModels.Commands;
 using MainLib.ViewModels.Utils;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Windows.Input;
+using System.Threading.Tasks;
 
-namespace MainLib.ViewModels.Popups
+namespace MainLib.ViewModels.Classes
 {
-    public class ReportsViewerViewModel : BaseViewModel
+    public class PdfCreator
     {
-        private string diaogSavedPath = String.Empty;
+        private readonly Shared services = Shared.GetInstance();
+        private readonly string diaogSavedPath = String.Empty;
         private Document document;
-        private PdfDocumentRenderer documentRenderer;
         private readonly Unit spaceAfterTitle = Unit.FromCentimeter(0.4);
         private readonly Unit spaceAfterRegular = Unit.FromCentimeter(0.2);
         private readonly Unit spaceAfterParagraph = Unit.FromCentimeter(1);
@@ -22,32 +20,13 @@ namespace MainLib.ViewModels.Popups
         private readonly int titleFontSize = 16;
         private readonly int regularFontSize = 12;
 
-        public List<Article> Articles { get; set; }
-
-        public ICommand PrintCommand { get; set; }
-
-        public ReportsViewerViewModel(List<Article> articles)
+        public PdfCreator()
         {
-            this.Title = "Reports Viewer";
-            this.Articles = articles;
-            InitializeDocument();            
-
-            this.PrintCommand = new RelayCommand(Print);
+            InitializeDocument();
         }
 
-        public void Print(object input = null)
+        public async Task Print(List<Article> articles)
         {
-            Section section = this.document.AddSection();
-
-            foreach(Article article in this.Articles)
-            {
-                WriteArticle(article, section);
-            }
-
-            this.documentRenderer = new PdfDocumentRenderer();
-            this.documentRenderer.Document = this.document.Clone();
-            this.documentRenderer.RenderDocument();
-
             string path = Shared.GetInstance().BrowserService.OpenSaveFileDialog
                 (
                     filter: "PDF files (*.pdf)|*.pdf",
@@ -56,7 +35,30 @@ namespace MainLib.ViewModels.Popups
                     savedPath: this.diaogSavedPath
                 );
 
-            this.documentRenderer.Save(path);
+            if (String.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            services.IsWorking(true);
+
+            await Task.Run(() =>
+            {
+                Section section = this.document.AddSection();
+
+                foreach (Article article in articles)
+                {
+                    WriteArticle(article, section);
+                }
+
+                PdfDocumentRenderer documentRenderer = new PdfDocumentRenderer();
+                documentRenderer.Document = this.document.Clone();
+                documentRenderer.RenderDocument();
+
+                documentRenderer.Save(path);
+            });
+
+            services.IsWorking(false);
         }
 
         private void InitializeDocument()
@@ -67,21 +69,28 @@ namespace MainLib.ViewModels.Popups
             titleStyle.Font.Size = this.titleFontSize;
             titleStyle.Font.Bold = true;
             titleStyle.ParagraphFormat.SpaceAfter = this.spaceAfterTitle;
+            titleStyle.ParagraphFormat.KeepTogether = true;
+            titleStyle.ParagraphFormat.KeepWithNext = true;
             // Year
             Style yearStyle = document.Styles.AddStyle("Year", "Normal");
             yearStyle.Font.Size = this.regularFontSize;
             yearStyle.Font.Color = Colors.Gray;
             yearStyle.ParagraphFormat.SpaceAfter = this.spaceAfterRegular;
+            yearStyle.ParagraphFormat.KeepTogether = true;
+            yearStyle.ParagraphFormat.KeepWithNext = true;
             // Keyword
             Style keywordStyle = document.Styles.AddStyle("Keyword", "Normal");
             keywordStyle.Font.Size = this.regularFontSize;
             keywordStyle.Font.Italic = true;
             keywordStyle.ParagraphFormat.SpaceAfter = this.spaceAfterRegular;
             keywordStyle.ParagraphFormat.LeftIndent = this.keywordIndentation;
+            keywordStyle.ParagraphFormat.KeepTogether = true;
+            keywordStyle.ParagraphFormat.KeepWithNext = true;
             // Authors
-            Style authorStyle= document.Styles.AddStyle("Author", "Normal");
+            Style authorStyle = document.Styles.AddStyle("Author", "Normal");
             authorStyle.Font.Size = this.regularFontSize;
             authorStyle.ParagraphFormat.SpaceAfter = this.spaceAfterRegular;
+            authorStyle.ParagraphFormat.KeepTogether = true;
             // Abstarct
             Style abstractStyle = document.Styles.AddStyle("Abstract", "Normal");
             abstractStyle.Font.Size = this.regularFontSize;

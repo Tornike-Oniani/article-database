@@ -180,7 +180,7 @@
     <StackPanel>
         <Button
             Content="Print"
-            Command="{Binding PrintCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+            Command="{Binding PrintCommand}"
             />
         <ListView
             x:Name="ResultsList"

@@ -13,22 +13,27 @@ namespace MainLib.Views.Converters
     public class ArticleExistsInListToBoolConverter : IMultiValueConverter
     {
 
-        private List<Article> _articles;
-        private Article _article;
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if (values == null || values[0] == null || values[1] == null)
+            {
+                return null;
+            }
+
             List<Article> articles = values[0] as List<Article>;
             Article article = values[1] as Article;
 
-            this._articles = articles;
-            this._article = article;
+            if (articles == null || article == null)
+            {
+                return null;
+            }
 
             return articles.Exists(a => a.ID == article.ID);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            return new object[2] { _articles, _article };
+            return null;
         }
     }
 }

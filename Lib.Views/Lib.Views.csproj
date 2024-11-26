@@ -128,6 +128,9 @@
     <Compile Include="UserControls\PendingButton.xaml.cs">
       <DependentUpon>PendingButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\PopupButton.xaml.cs">
+      <DependentUpon>PopupButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Widget.xaml.cs">
       <DependentUpon>Widget.xaml</DependentUpon>
     </Compile>
@@ -137,6 +140,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -197,6 +201,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\PendingButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PopupButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

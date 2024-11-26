@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Lib.ViewModels.Services.Browser;
 
 namespace Lib.Views.Services.Browser
@@ -50,6 +51,30 @@ namespace Lib.Views.Services.Browser
             }
 
             return destination;
+        }
+
+        public string OpenSaveFileDialog(string filter, string defaultEx, string fileName, string savedPath = null)
+        {
+            string result = null;
+
+            SaveFileDialog dlg = new SaveFileDialog()
+            {
+                Filter = filter,
+                DefaultExt = defaultEx,
+                FileName = fileName
+            };
+
+            if (!String.IsNullOrEmpty(savedPath))
+            {
+                dlg.InitialDirectory = savedPath;
+            }
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                result = dlg.FileName;
+            }
+
+            return result;
         }
     }
 }
