@@ -5,7 +5,7 @@
     
     <!-- Big header -->
     <Style x:Key="BigHeader" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource shadcn_foreground_brush}" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontFamily" Value="{StaticResource Inter}" />
         <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=BigHeaderFontSize}" />
@@ -29,16 +29,16 @@
     <!-- Default text -->
     <Style x:Key="DefaultText" TargetType="{x:Type TextBlock}">
         <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
-        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource shadcn_foreground_brush}" />
     </Style>
     <!-- Small text -->
     <Style x:Key="SmallText" TargetType="{x:Type TextBlock}">
         <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=SmallTextFontSize}" />
-        <Setter Property="Foreground" Value="{StaticResource GrayColorDarkBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource shadcn_muted_foreground_brush}" />
     </Style>
     <!-- Label -->
     <Style x:Key="Label" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="{StaticResource TextColorBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource shadcn_foreground_brush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FontFamily" Value="{StaticResource Inter}" />
         <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />

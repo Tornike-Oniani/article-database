@@ -109,7 +109,8 @@ namespace MainLib.ViewModels.Popups
             this.Themes = new ObservableCollection<string>()
             {
                 "Standard",
-                "Dim Monitor"
+                "Dim Monitor",
+                "Dark"
             };
             this.SelectedTheme = Properties.Settings.Default.Theme;
 

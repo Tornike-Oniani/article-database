@@ -32,6 +32,5 @@
     <ContentPresenter 
         x:Name="ContentPresenter" 
         Content="{Binding}"
-        Margin="0 6 0 6"
         />
 </base:WindowBase>

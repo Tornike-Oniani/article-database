@@ -49,7 +49,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                    
+
                         <!-- Header -->
                         <TextBlock 
                             Text="Article Information" 
@@ -83,7 +83,7 @@
                             Style="{StaticResource Label}"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
-                            Margin="0 12 12 18"
+                            Margin="0 9 12 18"
                             Grid.Column="1"
                             Grid.Row="2"
                             />
@@ -102,7 +102,7 @@
                                 Text="{Binding ArticleForm.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
                                 HighlightWords="{Binding ArticleForm.UnusualCharactersInTitle}"
                                 HighlightColor="{StaticResource RedColorBrush}"
-                                Style="{StaticResource WatermarkTextBox}"
+                                Style="{StaticResource ShadcnTextBox}"
                                 TextWrapping="Wrap" 
                                 AcceptsReturn="True"
                                 SpellCheck.IsEnabled="True"
@@ -193,7 +193,7 @@
                             />
                         <TextBox 
                             Text="{Binding ArticleForm.Year, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBox}"
+                            Style="{StaticResource ShadcnTextBox}"
                             Width="200"
                             HorizontalAlignment="Left"
                             PreviewTextInput="TextBox_PreviewTextInput" 
@@ -224,13 +224,15 @@
                                     ValidatesOnDataErrors=True, 
                                     UpdateSourceTrigger=PropertyChanged, 
                                     Converter={StaticResource PathToName}}" 
-                                Style="{StaticResource WatermarkTextBox}"
+                                Style="{StaticResource ShadcnTextBox}"
                                 Width="200" 
                                 IsReadOnly="True" 
                                 IsTabStop="False" 
                                 />
                             <Button 
                                 Content="Select File"
+                                Style="{StaticResource ShadcnButtonPrimary}"
+                                VerticalAlignment="Center"
                                 Margin="12 0 12 0" 
                                 Command="{Binding SelectFileCommand}" 
                                 />
@@ -257,18 +259,19 @@
                             >
                             <CheckBox 
                                 IsChecked="{Binding ArticleForm.HasNoAbstract}"
-                                Content="No abstract"
-                                Command="{Binding SetNoAbstractCommand}"
+                                Content="No abstract"                                
                                 Style="{StaticResource FlatCheckbox}"
+                                Command="{Binding SetNoAbstractCommand}"
                                 Margin="0 0 12 0" 
                                 />
                             <Button 
                                 Content="Abstract"
+                                Visibility="{Binding ArticleForm.HasNoAbstract, Converter={StaticResource BoolToVisibilityInverse}}"
                                 Command="{Binding ShowAbstractFieldCommand}"
                                 Margin="0 0 12 0"
                                 >
                                 <Button.Style>
-                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ShadcnButtonOutline}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding ElementName=txbAbstract, Path=(Validation.HasError)}" Value="True">
                                                 <Setter Property="Foreground" Value="{StaticResource RedColorBrush}" />
@@ -328,7 +331,7 @@
 
                         <TextBox 
                             Text="{Binding ArticleForm.PersonalComment}" 
-                            Style="{StaticResource WatermarkTextBox}"
+                            Style="{StaticResource ShadcnTextBox}"
                             TextWrapping="Wrap"
                             AcceptsReturn="True"
                             FontFamily="Verdana" 
@@ -360,12 +363,14 @@
                             <!-- Bookmark -->
                             <Button 
                                 Content="Bookmarks"
+                                Style="{StaticResource ShadcnButtonSecondary}"
                                 Command="{Binding OpenBookmarkManagerCommand}" 
                                 Margin="0 0 12 0"
                                 />
                             <!-- Reference -->
                             <Button 
                                 Content="References"
+                                Style="{StaticResource ShadcnButtonSecondary}"
                                 Command="{Binding OpenReferenceManagerCommand}" 
                                 />
                         </StackPanel>
@@ -387,6 +392,7 @@
                             <Button 
                                 Content="Add" 
                                 Command="{Binding SaveArticleCommand}" 
+                                Style="{StaticResource ShadcnButtonPrimary}"
                                 Click="Button_Click" 
                                 Margin="0 0 5 0" 
                                 Grid.Column="1"
@@ -394,6 +400,7 @@
                             <Button 
                                 Content="Clear" 
                                 Command="{Binding ClearArticleAttributesCommand}"
+                                Style="{StaticResource ShadcnButtonSecondary}"
                                 Click="Button_Click" 
                                 Margin="5 0 0 0" 
                                 Grid.Column="2"
@@ -404,12 +411,9 @@
             </Grid>
         </ScrollViewer>
         <Grid 
-            Visibility="{Binding IsAbstractFieldVisible, Converter={StaticResource BoolToVisibility}, FallbackValue=Hidden}"
+            Visibility="{Binding IsAbstractFieldVisible, Converter={StaticResource BoolToVisibility}, FallbackValue=Visible}"
             Focusable="True"
             >
-            <Grid.Background>
-                <SolidColorBrush Color="{StaticResource BlackColorAlt}" Opacity="0.6" />
-            </Grid.Background>
             <Grid.InputBindings>
                 <KeyBinding Key="Esc" Command="{Binding HideAbstractFieldCommand}" />
             </Grid.InputBindings>
@@ -424,8 +428,29 @@
                 <RowDefinition Height="0.1*" />
             </Grid.RowDefinitions>
             <Border
+                Background="{StaticResource shadcn_background_brush}"
+                CornerRadius="6 6 6 6"
+                Height="{Binding ActualHeight, ElementName=abstract_window}"
+                Width="{Binding ActualWidth, ElementName=abstract_window}"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Center"
+                Grid.Column="1"
+                Grid.Row="1"
+                >
+                <Border.Effect>
+                    <DropShadowEffect 
+                        ShadowDepth="0" 
+                        BlurRadius="5"
+                        Opacity="0.25" 
+                        />
+                </Border.Effect>
+            </Border>
+            <Border
+                x:Name="abstract_window"
+                BorderThickness="1 1 1 1"
+                BorderBrush="{StaticResource shadcn_border_brush}"
                 Background="{StaticResource WhiteColorBrush}"
-                CornerRadius="6"
+                CornerRadius="6 6 6 6"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Center"
                 Grid.Column="1"
@@ -438,31 +463,24 @@
                     </Grid.RowDefinitions>
 
                     <Border 
-                        Background="{StaticResource PopupWindowHeaderColorBrush}"
+                        Background="{StaticResource shadcn_background_brush}"
                         Grid.Row="0"
                         >
                         <Button 
-                            Style="{StaticResource SystemIconButton}"
+                            Tag="{x:Static materialDesign:PackIconKind.WindowClose}" 
+                            Style="{StaticResource DialogCloseButton}"
                             HorizontalAlignment="Right"
                             Command="{Binding HideAbstractFieldCommand}"
                             Cursor="Hand"
-                            >
-                            <Button.Content>
-                                <materialDesign:PackIcon 
-                                    Kind="Close" 
-                                    Width="24"
-                                    Height="24"
-                                    Foreground="{DynamicResource WhiteColorBrush}"
-                                    />
-                            </Button.Content>
-                        </Button>
+                            />
+
                     </Border>
                     <ScrollViewer 
                         MaxHeight="500"
                         Grid.Row="1"
                         >
                         <Border 
-                            Padding="12 12 12 12"
+                            Padding="12 0 12 12"
                             >
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -470,7 +488,6 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <StackPanel 
-                                    Orientation="Horizontal"
                                     Grid.Row="0"
                                     >
                                     <TextBlock 
@@ -497,6 +514,7 @@
                                 </StackPanel>
                                 <Button 
                                     Content="Ok"
+                                    Style="{StaticResource ShadcnButtonPrimary}"
                                     Command="{Binding HideAbstractFieldCommand}"
                                     HorizontalAlignment="Right"
                                     Width="100"

@@ -131,7 +131,7 @@
                             x:Name="txbUsername" 
                             Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" 
                             ap:TextBoxHelper.Watermark="Username"
-                            Style="{StaticResource WatermarkTextBox}"
+                            Style="{StaticResource ShadcnTextBox}"
                             attachedProperties:FocusExtension.IsFocused="{Binding LoginFocus}"
                             FontSize="16"
                             Grid.Column="1" 
@@ -144,14 +144,14 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        
+
                         <usercontrols:Badge 
                             Icon="{x:Static materialDesign:PackIconKind.Key}"
                             Background="{StaticResource GrayColorDarkBrush}"
                             Foreground="{StaticResource WhiteColorBrush}"
                             Margin="0 0 8 0" 
                             />
-                        
+
                         <PasswordBox 
                             x:Name="txbPassword"
                             PasswordChanged="txbPassword_PasswordChanged"
@@ -169,16 +169,18 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Content="Log In" 
+                        <Button Content="Log In"
+                                Style="{StaticResource ShadcnButtonPrimary}"
                                 Command="{Binding LoginCommand}" 
                                 CommandParameter="{Binding ElementName=txbPassword}"
                                 Margin="0 0 5 0"
                                 Grid.Column="0">
                         </Button>
                         <Button Content="Register" 
+                                Style="{StaticResource ShadcnButtonOutline}"
                                 Command="{Binding ShowRegisterCommand}"
                                 CommandParameter="{Binding ElementName=txbPassword}"
-                                Margin="5 0 0 0" 
+                                Margin="6 0 0 0" 
                                 Grid.Column="2" />
                     </Grid>
                 </StackPanel>

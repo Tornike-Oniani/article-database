@@ -13,10 +13,10 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
         
         <Style x:Key="PendingStartButton" TargetType="{x:Type ToggleButton}" BasedOn="{x:Null}">
-            <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+            <Setter Property="Background" Value="{StaticResource shadcn_primary_brush}" />
             <Setter Property="BorderThickness" Value="0 0 0 0" />
-            <Setter Property="Foreground" Value="#ffffff" />
-            <Setter Property="Padding" Value="12 6 12 6" />
+            <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+            <Setter Property="Padding" Value="16 8 16 8" />
             <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ButtonFontSize}" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
@@ -27,7 +27,7 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             Padding="{TemplateBinding Padding}"
-                            CornerRadius="3 3 3 3"
+                            CornerRadius="4 4 4 4"
                             >
                             <ContentPresenter />
                         </Border>
@@ -37,15 +37,22 @@
 
             <!-- Style triggers -->
             <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{StaticResource shadcn_primary}" Opacity="0.9" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
                 <Trigger Property="IsChecked" Value="True">
                     <Setter Property="Visibility" Value="Collapsed" />
                 </Trigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="PendingLabel" TargetType="{x:Type Label}">
-            <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource shadcn_primary_brush}" />
             <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource shadcn_primary_brush}" />
             <Setter Property="BorderThickness" Value="1 1 1 1" />
             <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
             <Setter Property="Padding" Value="12 6 12 6" />
@@ -64,6 +71,40 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style x:Key="ActionButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+            <Setter Property="Background" Value="{StaticResource shadcn_primary_brush}" />
+            <Setter Property="BorderThickness" Value="0 0 0 0" />
+            <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+            <Setter Property="Padding" Value="16 8 16 8" />
+            <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ButtonFontSize}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border 
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding Padding}"
+                            CornerRadius="4 4 4 4"
+                            >
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!-- Style triggers -->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{StaticResource shadcn_primary}" Opacity="0.9" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
     <Grid 
@@ -108,11 +149,12 @@
             <!-- Action button -->
             <Button
                 Content="{Binding ActionText}"
-                Command="{Binding ActionCommand}"
+                Style="{StaticResource ActionButton}"
                 Visibility="{
                     Binding CanRunAction, 
                     Converter={StaticResource BoolToVisibility}}"
                 FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
+                Command="{Binding ActionCommand}"
                 Margin="0 0 8 0"
                 Grid.Column="0"
                 />

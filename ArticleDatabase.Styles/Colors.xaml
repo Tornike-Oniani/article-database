@@ -2,6 +2,70 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Lib.Styles">
 
+    <Color x:Key="gray_100">#f3f4f6</Color>
+    <SolidColorBrush x:Key="gray_100_brush" Color="{StaticResource gray_100}" />
+    
+    <Color x:Key="shadcn_background">#ffffff</Color>
+    <Color x:Key="shadcn_foreground">#0f172a</Color>
+    <Color x:Key="shadcn_muted">#f1f5f9</Color>
+    <Color x:Key="shadcn_muted_foreground">#64748b</Color>
+    <Color x:Key="shadcn_popover">#ffffff</Color>
+    <Color x:Key="shadcn_popover_foreground">#0f172a</Color>
+    <Color x:Key="shadcn_primary">#0f172a</Color>
+    <Color x:Key="shadcn_primary_foreground">#f8fafc</Color>
+    <Color x:Key="shadcn_secondary">#f1f5f9</Color>
+    <Color x:Key="shadcn_secondary_foreground">#0f172a</Color>
+    <Color x:Key="shadcn_accent">#f1f5f9</Color>
+    <Color x:Key="shadcn_accent_foreground">#0f172a</Color>
+    <Color x:Key="shadcn_destructive">#ff0000</Color>
+    <Color x:Key="shadcn_destructive_foreground">#f8fafc</Color>
+    <Color x:Key="shadcn_border">#e2e8f0</Color>
+    <Color x:Key="shadcn_ring">#94a3b8</Color>
+
+    <Color x:Key="shadcn_background_dark">#030711</Color>
+    <Color x:Key="shadcn_foreground_dark">#e1e7ef</Color>
+    <Color x:Key="shadcn_muted_dark">#0f1629</Color>
+    <Color x:Key="shadcn_muted_foreground_dark">#7f8ea3</Color>
+    <Color x:Key="shadcn_popover_dark">#030711</Color>
+    <Color x:Key="shadcn_popover_foreground_dark">#94a3b8</Color>
+    <Color x:Key="shadcn_primary_dark">#f8fafc</Color>
+    <Color x:Key="shadcn_primary_foreground_dark">#020205</Color>
+    <Color x:Key="shadcn_secondary_dark">#0f172a</Color>
+    <Color x:Key="shadcn_secondary_foreground_dark">#f8fafc</Color>
+    <Color x:Key="shadcn_accent_dark">#1d283a</Color>
+    <Color x:Key="shadcn_accent_foreground_dark">#f8fafc</Color>
+    <Color x:Key="shadcn_destructive_dark">#811d1d</Color>
+    <Color x:Key="shadcn_destructive_foreground_dark">#f8fafc</Color>
+    <Color x:Key="shadcn_border_dark">#1d283a</Color>
+    <Color x:Key="shadcn_ring_dark">#1d283a</Color>
+
+    <SolidColorBrush x:Key="shadcn_background_brush" Color="{DynamicResource shadcn_background}" />
+    <SolidColorBrush x:Key="shadcn_foreground_brush" Color="{DynamicResource shadcn_foreground}" />
+
+    <SolidColorBrush x:Key="shadcn_muted_brush" Color="{DynamicResource shadcn_muted}" />
+    <SolidColorBrush x:Key="shadcn_muted_foreground_brush" Color="{DynamicResource shadcn_muted_foreground}" />
+
+    <SolidColorBrush x:Key="shadcn_popover_brush" Color="{DynamicResource shadcn_popover}" />
+    <SolidColorBrush x:Key="shadcn_popover_foreground_brush" Color="{DynamicResource shadcn_popover_foreground}" />
+
+    <SolidColorBrush x:Key="shadcn_primary_brush" Color="{DynamicResource shadcn_primary}" />
+    <SolidColorBrush x:Key="shadcn_primary_brush_hover" Color="{DynamicResource shadcn_primary}" Opacity="0.9" />
+    <SolidColorBrush x:Key="shadcn_primary_foreground_brush" Color="{DynamicResource shadcn_primary_foreground}" />
+
+    <SolidColorBrush x:Key="shadcn_secondary_brush" Color="{DynamicResource shadcn_secondary}" />
+    <SolidColorBrush x:Key="shadcn_secondary_brush_hover" Color="{DynamicResource shadcn_secondary}" Opacity="0.9" />
+    <SolidColorBrush x:Key="shadcn_secondary_foreground_brush" Color="{DynamicResource shadcn_secondary_foreground}" />
+
+    <SolidColorBrush x:Key="shadcn_accent_brush" Color="{DynamicResource shadcn_accent}" />
+    <SolidColorBrush x:Key="shadcn_accent_foreground_brush" Color="{DynamicResource shadcn_accent_foreground}" />
+
+    <SolidColorBrush x:Key="shadcn_destructive_brush" Color="{DynamicResource shadcn_destructive}" />
+    <SolidColorBrush x:Key="shadcn_destructive_foreground_brush" Color="{DynamicResource shadcn_destructive_foreground}" />
+   
+    <SolidColorBrush x:Key="shadcn_border_brush" Color="{DynamicResource shadcn_border}" />
+
+    <SolidColorBrush x:Key="shadcn_ring_brush" Color="{DynamicResource shadcn_ring}" />
+
     <!-- Shadcn black -->
     <Color x:Key="ShadcnBlackColor">#18181b</Color>
     <SolidColorBrush x:Key="ShadcnBlackColorBrush" Color="{StaticResource ShadcnBlackColor}" />
@@ -10,6 +74,10 @@
     <Color x:Key="ShadcnBlackLightColor">#2f2f31</Color>
     <SolidColorBrush x:Key="ShadcnBlackLightColorBrush" Color="{StaticResource ShadcnBlackLightColor}" />
     
+    <!-- Shadcn disabled black -->
+    <Color x:Key="ShadcnBlackDisabledColor">#8c8c8d</Color>
+    <SolidColorBrush x:Key="ShadcnBlackDisabledColorBrush" Color="{StaticResource ShadcnBlackDisabledColor}" />
+
     <!-- Shadcn gray -->
     <Color x:Key="ShadcnGrayColor">#f4f4f5</Color>
     <SolidColorBrush x:Key="ShadcnGrayColorBrush" Color="{StaticResource ShadcnGrayColor}" />
@@ -18,6 +86,10 @@
     <Color x:Key="ShadcnGrayLightColor">#f6f6f7</Color>
     <SolidColorBrush x:Key="ShadcnGrayLightColorBrush" Color="{StaticResource ShadcnGrayLightColor}" />
     
+    <!-- Shadcn background gray -->
+    <Color x:Key="ShadcnGrayBackgroundColor">#fafafa</Color>
+    <SolidColorBrush x:Key="ShadcnGrayBackgroundColorBrush" Color="{StaticResource ShadcnGrayBackgroundColor}" />
+
     <!-- Shadcn text color -->
     <Color x:Key="ShadcnTextColor">#09090b</Color>
     <SolidColorBrush x:Key="ShadcnTextColorBrush" Color="{StaticResource ShadcnTextColor}" />

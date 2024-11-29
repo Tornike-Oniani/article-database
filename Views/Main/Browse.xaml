@@ -58,7 +58,7 @@
         
         <Style x:Key="SortRadio" TargetType="{x:Type RadioButton}">
             <Setter Property="FontSize" Value="16" />
-            <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource shadcn_primary_brush}" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
@@ -80,7 +80,7 @@
 
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+                    <Setter Property="Background" Value="{StaticResource ShadcnBlackColorBrush}" />
                     <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
                 </Trigger>
             </Style.Triggers>
@@ -142,27 +142,19 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.4*" />
+            <ColumnDefinition Width="0.45*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="0.4*" />
+            <ColumnDefinition Width="0.35*" />
         </Grid.ColumnDefinitions>
-
-        <notifications:NotificationArea 
-            x:Name="DataViewNotificationArea" 
-            Position="BottomRight" 
-            MaxItems="3"
-            Margin="0 0 0 6"
-            Grid.Column="0"
-            Grid.ColumnSpan="3"
-            />
 
         <!-- Sorting-->
         <Grid 
             Visibility="{Binding ShowResults, Converter={StaticResource BoolToVisibility}, ConverterParameter=Soft}"
-            Margin="0 100 0 0" 
+            Margin="0 25 0 0" 
             Grid.Column="0"
             >
-            <Border 
+            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                <Border 
                 Padding="12 12 12 12"
                 HorizontalAlignment="Stretch"                
                 >
@@ -174,7 +166,7 @@
                         Margin="0 0 0 12"
                         />
                     <Border
-                        Background="#e5e7eb"
+                        Background="{StaticResource shadcn_secondary_brush}"
                         CornerRadius="4 4 4 4"
                         Padding="12 6 12 6"
                         HorizontalAlignment="Left"
@@ -207,7 +199,7 @@
                         </StackPanel>
                     </Border>
                     <Border                        
-                        Background="#e5e7eb"
+                        Background="{StaticResource shadcn_secondary_brush}"
                         CornerRadius="4 4 4 4"
                         Padding="12 6 12 6"
                         HorizontalAlignment="Left"
@@ -239,7 +231,7 @@
                         </StackPanel>
                     </Border>
                     <Border                        
-                        Background="#e5e7eb"
+                        Background="{StaticResource shadcn_secondary_brush}"
                         CornerRadius="4 4 4 4"
                         Padding="12 6 12 6"
                         HorizontalAlignment="Left"
@@ -277,7 +269,7 @@
                         Margin="0 24 0 12"
                         />
                     <commonusercontrols:PendingButton
-                        StartText="Export article PDFs"
+                        StartText="Export articles"
                         PendingText="Check articles you want to export..."
                         ActionText="Export selected"
                         IsPending="{Binding IsBatchExporting}"
@@ -410,6 +402,7 @@
                     </Grid>
                 </StackPanel>
             </Border>
+            </ScrollViewer>
         </Grid>
 
         <!-- Filters, results and pagination -->
@@ -444,7 +437,7 @@
                     />
                 <TextBox 
                     Text="{Binding Terms, UpdateSourceTrigger=PropertyChanged}"
-                    Style="{StaticResource WatermarkTextBox}" 
+                    Style="{StaticResource ShadcnTextBox}" 
                     AcceptsReturn="True"
                     Margin="0 0 0 6"
                     >
@@ -497,7 +490,7 @@
                             />
                         <TextBox
                             Text="{Binding Authors, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBox}"
+                            Style="{StaticResource ShadcnTextBox}"
                             >
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
@@ -514,7 +507,7 @@
                             />
                         <TextBox
                             Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBox}"
+                            Style="{StaticResource ShadcnTextBox}"
                             >
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
@@ -623,14 +616,14 @@
                         HorizontalAlignment="Right"
                         >
                         <Button                         
-                            Style="{StaticResource GenericButton}"
+                            Style="{StaticResource ShadcnButtonPrimary}"
                             Content="Search"
                             Width="100"
                             Command="{Binding SearchCommand}"                    
                             Margin="0 0 12 0"
                             />
                         <Button                         
-                            Style="{StaticResource SecondaryButtonAlt}" 
+                            Style="{StaticResource ShadcnButtonSecondary}" 
                             Content="Clear"
                             Width="100"
                             Command="{Binding ClearCommand}"
@@ -641,20 +634,6 @@
                 <Grid
                     Margin="0 18 0 0"
                     >
-                    <Border 
-                        Background="White"
-                        CornerRadius="6 6 6 6"
-                        >
-                        <Border.Effect>
-                            <DropShadowEffect
-                                Color="Black"
-                                Direction="0"
-                                ShadowDepth="1"
-                                Opacity="0.2"
-                                BlurRadius="8" 
-                                />
-                        </Border.Effect>
-                    </Border>
                     <usercontrols:RecentSearchesList
                         Visibility="{Binding ShowResults, Converter={StaticResource BoolToVisibilityInverse}}"
                         RecentSearchesItemSource="{Binding RecentSearches}"
@@ -1050,7 +1029,7 @@
                     Width="28"
                     Height="28"
                     VerticalAlignment="Center"
-                    Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                    Foreground="{StaticResource shadcn_muted_foreground_brush}"
                     Margin="0 0 12 0"
                     />
                 <StackPanel
@@ -1060,12 +1039,12 @@
                     <TextBlock 
                         Text="No results found"
                         Style="{StaticResource Header}"                        
-                        Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                        Foreground="{StaticResource shadcn_muted_foreground_brush}"
                         />
                     <TextBlock
                         Text="Try different terms"
                         Style="{StaticResource DefaultText}"
-                        Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                        Foreground="{StaticResource shadcn_muted_foreground_brush}"
                         />
                 </StackPanel>
             </StackPanel>

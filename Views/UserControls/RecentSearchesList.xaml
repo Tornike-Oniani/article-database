@@ -36,7 +36,7 @@
         <Style x:Key="DeleteRecentSearchButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{DynamicResource Gray-BlueColorDarkBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -87,23 +87,23 @@
                                     <Grid>
                                         <Border
                                             x:Name="wrapper"
-                                            Background="{StaticResource WhiteColorBrush}"
+                                            Background="{StaticResource shadcn_background_brush}"
                                             BorderThickness="0 0 0 1"
-                                            BorderBrush="{DynamicResource GrayColorBrush}"
+                                            BorderBrush="{DynamicResource shadcn_border_brush}"
                                             >
                                             <ContentPresenter />
                                         </Border>
                                         <Rectangle
                                             x:Name="sideblock"
                                             Width="0"
-                                            Fill="{StaticResource PrimaryColorBrush}"
+                                            Fill="{StaticResource shadcn_primary_brush}"
                                             HorizontalAlignment="Left"
                                             />
                                     </Grid>
 
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="wrapper" Property="Background" Value="{DynamicResource GrayColorSuperLightBrush}" />
+                                            <Setter TargetName="wrapper" Property="Background" Value="{DynamicResource shadcn_secondary_brush}" />
                                             <Setter TargetName="sideblock" Property="Width" Value="4" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
@@ -150,7 +150,7 @@
                                                         >
                                                         <materialDesign:PackIcon
                                                             Kind="Search"
-                                                            Foreground="{DynamicResource Gray-BlueColorDarkBrush}"
+                                                            Foreground="{DynamicResource shadcn_foreground_brush}"
                                                             Width="18"
                                                             Height="18"
                                                             Margin="0 0 4 0"
@@ -170,7 +170,7 @@
                                                         >
                                                         <materialDesign:PackIcon
                                                             Kind="PersonOutline"
-                                                            Foreground="#6b728f"
+                                                            Foreground="{StaticResource shadcn_muted_foreground_brush}"
                                                             Width="18"
                                                             Height="18"
                                                             Margin="0 0 4 0"
@@ -179,7 +179,7 @@
                                                         <TextBlock
                                                             Text="{Binding Authors}"
                                                             Style="{StaticResource DefaultText}"
-                                                            Foreground="#6b728f"
+                                                            Foreground="{StaticResource shadcn_muted_foreground_brush}"
                                                             VerticalAlignment="Center"
                                                             />
                                                     </StackPanel>
@@ -190,7 +190,7 @@
                                                         >
                                                         <materialDesign:PackIcon
                                                             Kind="CalendarAccountOutline"
-                                                            Foreground="#6b728f"
+                                                            Foreground="{StaticResource shadcn_muted_foreground_brush}"
                                                             Width="18"
                                                             Height="18"
                                                             Margin="0 0 4 0"
@@ -199,7 +199,7 @@
                                                         <TextBlock
                                                             Text="{Binding Year}"
                                                             Style="{StaticResource DefaultText}"
-                                                            Foreground="#6b728f"
+                                                            Foreground="{StaticResource shadcn_muted_foreground_brush}"
                                                             VerticalAlignment="Center"
                                                             />
                                                     </StackPanel>
@@ -223,7 +223,7 @@
                                                     Kind="{Binding IsFavorite, Converter={StaticResource IsCheckedToStarIcon}}"
                                                     Width="22"
                                                     Height="22"
-                                                    Foreground="{DynamicResource Gray-BlueColorDarkBrush}"
+                                                    Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                                                     VerticalAlignment="Center"
                                                     />
                                             </ToggleButton>
@@ -272,14 +272,14 @@
                         Direction="0"
                         ShadowDepth="1"
                         Opacity="0.2"
-                        BlurRadius="12" 
+                        BlurRadius="5" 
                         />
                 </Border.Effect>
             </Border>
             <StackPanel>
                 <Border
                     Padding="12 8 12 8"
-                    Background="{DynamicResource GrayColorLightBrush}"
+                    Background="{DynamicResource shadcn_secondary_brush}"
                     CornerRadius="6 6 0 0"
                     >
                     <StackPanel 
@@ -287,7 +287,7 @@
                         >
                         <materialDesign:PackIcon 
                             Kind="FavoriteOutline"
-                            Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                            Foreground="{StaticResource shadcn_muted_foreground_brush}"
                             VerticalAlignment="Center"
                             Height="18"
                             Width="18"
@@ -313,7 +313,7 @@
             Grid.Row="1"
             >
             <Border 
-                Background="White"
+                Background="{StaticResource shadcn_background_brush}"
                 CornerRadius="6 6 6 6"
                 >
                 <Border.Effect>
@@ -322,7 +322,7 @@
                         Direction="0"
                         ShadowDepth="1"
                         Opacity="0.2"
-                        BlurRadius="12" 
+                        BlurRadius="5" 
                         />
                 </Border.Effect>
             </Border>
@@ -333,7 +333,7 @@
                 </Grid.RowDefinitions>
                 <Border
                     Padding="12 8 12 8"
-                    Background="{DynamicResource GrayColorLightBrush}"
+                    Background="{DynamicResource shadcn_secondary_brush}"
                     CornerRadius="6 6 0 0"
                     Grid.Row="0"
                     >
@@ -342,19 +342,19 @@
                             Orientation="Horizontal"
                             >
                             <materialDesign:PackIcon 
-                            Kind="ClockOutline"
-                            Foreground="{StaticResource Gray-BlueColorDarkBrush}"
-                            VerticalAlignment="Center"
-                            Height="18"
-                            Width="18"
-                            Margin="0 0 8 0"
-                            />
+                                Kind="ClockOutline"
+                                Foreground="{StaticResource shadcn_muted_foreground_brush}"
+                                VerticalAlignment="Center"
+                                Height="18"
+                                Width="18"
+                                Margin="0 0 8 0"
+                                />
                             <TextBlock 
-                            Text="Recent Searches" 
-                            Style="{StaticResource DefaultText}"
-                            FontWeight="SemiBold"
-                            VerticalAlignment="Center"
-                            />
+                                Text="Recent Searches" 
+                                Style="{StaticResource DefaultText}"
+                                FontWeight="SemiBold"
+                                VerticalAlignment="Center"
+                                />
                         </StackPanel>
                         <Button
                             HorizontalAlignment="Right"

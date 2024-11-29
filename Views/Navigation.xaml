@@ -16,22 +16,22 @@
     </UserControl.Resources>
     <Grid>
         <Grid
-            Visibility="{Binding IsShowingDialog, Converter={StaticResource BoolToVisibility}}"
+            Visibility="{Binding IsShowingDialog, Converter={StaticResource BoolToVisibility}, FallbackValue=Hidden}"
             Panel.ZIndex="2"
             >
             <Rectangle
-                Fill="{StaticResource BlackColorAltBrush}"
+                Fill="{DynamicResource shadcn_background_brush}"
                 Opacity="0.7"
                 />
         </Grid>
 
         <!-- Working overlay -->
-        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}"
+        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}, FallbackValue=Hidden}"
               Panel.ZIndex="1">
-            <Rectangle Fill="{StaticResource WhiteColorBrush}"
+            <Rectangle Fill="{DynamicResource shadcn_background_brush}"
                        Opacity="0.7" />
             <Border BorderThickness="0 0 0 3"
-                    BorderBrush="{StaticResource PrimaryColorBrush}"
+                    BorderBrush="{DynamicResource shadcn_primary_brush}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Padding="10">
@@ -39,8 +39,8 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
                     <usercontrols:LoadingControl Diameter="50"
-                                                 Color1="{StaticResource PrimaryColor}"
-                                                 Color2="{StaticResource LavenderColor}" />
+                                                 Color1="{DynamicResource shadcn_primary}"
+                                                 Color2="{DynamicResource shadcn_secondary}" />
                     <TextBlock 
                         Text="{Binding WorkLabel, FallbackValue=Working...}" 
                         Style="{StaticResource Header}"
@@ -64,11 +64,15 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Border Padding="10"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Grid.RowSpan="2">
-                <Border.Background>
+            <Border 
+                Padding="12 12 12 12"
+                BorderThickness="0 0 1 0"
+                BorderBrush="{DynamicResource shadcn_border_brush}"
+                Background="{DynamicResource shadcn_background_brush}"
+                Grid.Column="0"
+                Grid.Row="0"
+                Grid.RowSpan="2">
+                <!--<Border.Background>
                     <LinearGradientBrush StartPoint="0 1" EndPoint="0 0">
                         <LinearGradientBrush.GradientStops>
                             <GradientStop Offset="0" Color="#3a0647" />
@@ -76,33 +80,42 @@
                             <GradientStop Offset="1" Color="#052767" />
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
-                </Border.Background>
+                </Border.Background>-->
 
-                <Grid Style="{StaticResource NavigationWrapper}" 
-                  Grid.Column="0">
+                <Grid 
+                    Width="175"
+                    Grid.Column="0"
+                    >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50px" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <!-- Navigation -->
-                    <StackPanel Grid.Row="1">
+                    <StackPanel 
+                        Grid.Row="1"
+                        >
+                        <TextBlock
+                            Text="Application"
+                            Style="{StaticResource SmallText}"
+                            Margin="0 0 0 6"
+                            />
                         <!-- Home -->
                         <RadioButton 
                             Style="{StaticResource NavigationButton}"
                             Content="Home" 
-                            Tag="{x:Static materialDesign:PackIconKind.Home}" 
+                            Tag="{x:Static materialDesign:PackIconKind.HomeOutline}" 
                             GroupName="Navigation" 
                             IsChecked="True" 
                             Command="{Binding UpdateViewCommand}" 
-                            CommandParameter="{x:Static type:ViewType.Home}" 
+                            CommandParameter="{x:Static type:ViewType.Home}"
                             />
                         <!-- Browse -->
                         <RadioButton 
                             Style="{StaticResource NavigationButton}" 
                             Content="Browse"
-                            Tag="{x:Static materialDesign:PackIconKind.Eye}" 
+                            Tag="{x:Static materialDesign:PackIconKind.EyeOutline}" 
                             GroupName="Navigation" 
                             Command="{Binding UpdateViewCommand}" 
                             CommandParameter="{x:Static type:ViewType.Browse}" 
@@ -113,7 +126,7 @@
                             IsEnabled="{Binding User.IsAdmin}"
                             Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Content="Data Entry" 
-                            Tag="{x:Static materialDesign:PackIconKind.FilePlus}" 
+                            Tag="{x:Static materialDesign:PackIconKind.FilePlusOutline}" 
                             GroupName="Navigation" 
                             Command="{Binding UpdateViewCommand}" 
                             CommandParameter="{x:Static type:ViewType.DataEntry}" 
@@ -132,7 +145,7 @@
                         <RadioButton 
                             Style="{StaticResource NavigationButton}"
                             Content="Bookmarks"
-                            Tag="{x:Static materialDesign:PackIconKind.Bookmark}"
+                            Tag="{x:Static materialDesign:PackIconKind.BookmarkOutline}"
                             GroupName="Navigation"
                             Command="{Binding UpdateViewCommand}" 
                             CommandParameter="{x:Static type:ViewType.Bookmarks}" 
@@ -146,55 +159,102 @@
                             Command="{Binding UpdateViewCommand}" 
                             CommandParameter="{x:Static type:ViewType.References}" 
                             />
-                        <!-- SQL -->
-                        <RadioButton 
-                            Style="{StaticResource NavigationButton}"
-                            IsEnabled="{Binding User.IsAdmin}"
-                            Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Content="SQL"
-                            Tag="{x:Static materialDesign:PackIconKind.SqlQuery}"
-                            GroupName="Navigation"
-                            Command="{Binding UpdateViewCommand}" 
-                            CommandParameter="{x:Static type:ViewType.SQL}" 
-                            />
                     </StackPanel>
 
-                    <Border Grid.Row="2">
-                        <Button 
-                            Style="{x:Null}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"
-                            Cursor="Hand"
-                            Margin="4 0 0 4"
-                            Command="{Binding OpenSettingsCommand}"
-                            >
-                            <Button.Template>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border 
-                                        Padding="6"
-                                        Background="Transparent"
-                                        >
-                                        <materialDesign:PackIcon 
-                                            Kind="Gear"
-                                            Width="25"
-                                            Height="25"
-                                            Foreground="{StaticResource WhiteColorBrush}" 
-                                            />
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
+                    <Border 
+                        Margin="0 24 0 0"
+                        Grid.Row="2"
+                        >
+                        <StackPanel>
+                            <TextBlock
+                                Text="Miscellaneous"
+                                Style="{StaticResource SmallText}"
+                                Margin="0 0 0 6"
+                                />
+                            <!-- SQL -->
+                            <RadioButton 
+                                Style="{StaticResource NavigationButton}"
+                                IsEnabled="{Binding User.IsAdmin}"
+                                Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Content="SQL"
+                                Tag="{x:Static materialDesign:PackIconKind.SqlQuery}"
+                                GroupName="Navigation"
+                                Command="{Binding UpdateViewCommand}" 
+                                CommandParameter="{x:Static type:ViewType.SQL}" 
+                                />
+                            <RadioButton 
+                                Style="{StaticResource NavigationButton}"
+                                IsEnabled="{Binding User.IsAdmin}"
+                                Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Content="Settings"
+                                Tag="{x:Static materialDesign:PackIconKind.Gear}"
+                                GroupName="Other"
+                                Command="{Binding OpenSettingsCommand}" 
+                                />
+                            <!--<Button 
+                                Style="{x:Null}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Cursor="Hand"
+                                Margin="4 0 0 4"
+                                Command="{Binding }"
+                                >
+                                <Button.Template>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border 
+                                            Padding="6"
+                                            Background="Transparent"
+                                            >
+                                            <materialDesign:PackIcon 
+                                                Kind="Gear"
+                                                Width="25"
+                                                Height="25"
+                                                Foreground="{StaticResource ShadcnTextColorBrush}" 
+                                                />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>-->
+                        </StackPanel>
                     </Border>
                 </Grid>
             </Border>
 
             <!-- Content -->
-            <ContentControl 
-                Content="{Binding SelectedViewModel}" 
+            <Border
+                Padding="24 24 24 24"
+                Background="{DynamicResource shadcn_muted_brush}"
                 Grid.Column="1" 
                 Grid.Row="0" 
                 Grid.RowSpan="2" 
-                />
+                >
+                <Grid>
+                    <Border
+                        CornerRadius="8 8 8 8"
+                        Background="White"
+                        >
+                        <Border.Effect>
+                            <DropShadowEffect
+                                BlurRadius="5"
+                                ShadowDepth="0"
+                                Opacity="0.5"
+                                >
+                            </DropShadowEffect>
+                        </Border.Effect>
+                    </Border>
+                    <Border
+                        Padding="24 24 24 24"
+                        Background="{DynamicResource shadcn_background_brush}"
+                        BorderThickness="1 1 1 1"
+                        BorderBrush="{DynamicResource shadcn_border_brush}"
+                        CornerRadius="8 8 8 8"
+                        >
+                        <ContentControl 
+                            Content="{Binding SelectedViewModel}"                         
+                            />
+                    </Border>
+                </Grid>
+            </Border>
             <notifications:NotificationArea 
                 x:Name="NotificationArea" 
                 Position="BottomRight" 

@@ -31,7 +31,7 @@
             <!-- Generic styling -->
             <Setter Property="BorderThickness" Value="0 0 0 0" />
             <Setter Property="Background" Value="{DynamicResource WhiteColorBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource shadcn_primary_brush}" />
             <Setter Property="Padding" Value="0 0 0 8" />
             <Setter Property="Cursor" Value="Hand" />
             <!-- Template -->

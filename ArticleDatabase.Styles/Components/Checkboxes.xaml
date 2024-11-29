@@ -5,6 +5,7 @@
     <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MaterialDesignCheckBox}">
         <Setter Property="FontSize" Value="16" />
     </Style>
+    
     <Style x:Key="FlatCheckbox" TargetType="CheckBox">
         <Setter Property="SnapsToDevicePixels" Value="False" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -65,7 +66,7 @@
                         </Trigger>
                         <Trigger Property="IsChecked" Value="true">
                             <Setter Property="BorderThickness" Value="0 0 0 0" />
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource ShadcnBlackColorBrush}" />
                             <Setter TargetName="CheckMark" Property="Fill" Value="{StaticResource WhiteColorBrush}" />
                             <Setter TargetName="CheckMark" Property="Stroke" Value="{StaticResource WhiteColorBrush}" />
                         </Trigger>

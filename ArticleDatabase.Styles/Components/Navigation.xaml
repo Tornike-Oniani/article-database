@@ -21,54 +21,47 @@
     <!-- Removes button and leaves only TextBlock when clicked its Background is set to blue and Text to white -->
     <Style x:Key="NavigationButton" TargetType="{x:Type RadioButton}">
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Foreground" Value="#d7d7d7" />
-        <Setter Property="Margin" Value="0 0 0 7" />
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_primary_brush}" />
+        <Setter Property="Margin" Value="0 0 0 8" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RadioButton}">
                     <!-- Body -->
                     <Border x:Name="wrapper" 
-                            Padding="10"
+                            Padding="8 8 8 8"
                             CornerRadius="4">
                         <StackPanel x:Name="spMain" Orientation="Horizontal" Background="Transparent">
-                            <materialDesign:PackIcon x:Name="icon"
-                                                     Kind="{TemplateBinding Tag}"
-                                                     Height="25"
-                                                     Width="25"
-                                                     VerticalAlignment="Center" 
-                                                     Margin="0 0 8 0"/>
-                            <TextBlock x:Name="tbMain" 
-                                       Text="{TemplateBinding Content}" 
-                                       FontSize="16" 
-                                       FontWeight="SemiBold"
-                                       VerticalAlignment="Center" />
+                            <materialDesign:PackIcon 
+                                x:Name="icon"
+                                Kind="{TemplateBinding Tag}"
+                                Height="20"
+                                Width="20"
+                                VerticalAlignment="Center" 
+                                Margin="0 0 6 0"/>
+                            <TextBlock 
+                                x:Name="tbMain" 
+                                Text="{TemplateBinding Content}" 
+                                FontSize="16" 
+                                VerticalAlignment="Center" 
+                                />
                         </StackPanel>
                     </Border>
                     <!-- Triggers -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="wrapper" Property="Background">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="{StaticResource WhiteColor}" Opacity="0.1" />
-                                </Setter.Value>
-                            </Setter>
-                            <Setter TargetName="tbMain" Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-                            <Setter TargetName="icon" Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-                            <Setter TargetName="icon" Property="Margin" Value="0 0 10 0" />
+                            <Setter TargetName="wrapper" Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
+                            <Setter TargetName="tbMain" Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                            <Setter TargetName="icon" Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                            <Setter TargetName="icon" Property="Margin" Value="0 0 8 0" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="wrapper" Property="Background">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="{StaticResource WhiteColor}" Opacity="0.25" />
-                                </Setter.Value>
-                            </Setter>
-                            <Setter TargetName="tbMain" Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-                            <Setter TargetName="icon" Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-                            <Setter TargetName="icon" Property="Margin" Value="0 0 10 0" />
+                            <Setter TargetName="wrapper" Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
+                            <Setter TargetName="tbMain" Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                            <Setter TargetName="icon" Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                            <Setter TargetName="icon" Property="Margin" Value="0 0 8 0" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="tbMain" Property="Foreground" Value="{StaticResource GrayColorLightBrush}" />
-                            <Setter TargetName="icon" Property="Foreground" Value="{StaticResource GrayColorLightBrush}" />
+                            <Setter Property="Opacity" Value="0.5" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
