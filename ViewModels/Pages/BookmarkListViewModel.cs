@@ -68,11 +68,11 @@ namespace MainLib.ViewModels.Pages
          */
         public void AddNewBookmark(object input = null)
         {
-            services.WindowService.OpenWindow(new AddNewBookmarkViewModel(this), passWindow: true);
+            this.services.ShowWindowWithOverlay(new AddNewBookmarkViewModel(this), passWindow: true);
         }
         public void EditBookmark(object input)
         {
-            services.WindowService.OpenWindow(new BookmarkEditorViewModel(input as Bookmark, this));
+            this.services.ShowWindowWithOverlay(new BookmarkEditorViewModel(input as Bookmark, this));
         }
         public void DeleteBookmark(object input)
         {
@@ -82,7 +82,7 @@ namespace MainLib.ViewModels.Pages
                 Bookmark selected_bookmark = input as Bookmark;
 
                 // 2. Ask user if they are sure
-                if (services.DialogService.OpenDialog(new DialogYesNoViewModel("Delete selected bookmark?", "Check", DialogType.Question)))
+                if (services.ShowDialogWithOverlay(new DialogYesNoViewModel("Delete selected bookmark?", "Check", DialogType.Question)))
                 {
                     // 3. Delete bookmark record from database
                     new BookmarkRepo().DeleteBookmark(selected_bookmark);
@@ -97,7 +97,7 @@ namespace MainLib.ViewModels.Pages
             catch (Exception e)
             {
                 new BugTracker().Track("Bookmark List", "Delete bookmark", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
 
@@ -125,7 +125,7 @@ namespace MainLib.ViewModels.Pages
             catch (Exception e)
             {
                 new BugTracker().Track("Bookmark List", "Populate Bookmarks", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {

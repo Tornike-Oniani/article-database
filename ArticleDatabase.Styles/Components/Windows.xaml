@@ -15,7 +15,7 @@
                         <Grid>
 
                             <!-- Window with border and drop shadow -->
-                            <Border Background="White">
+                            <Border Background="{DynamicResource shadcn_background_brush}">
                                 <Border.Effect>
                                     <DropShadowEffect ShadowDepth="0" Opacity="1" />
                                 </Border.Effect>
@@ -47,8 +47,8 @@
 
                                     <!-- Title text -->
                                     <Border BorderThickness="0 0 1 0"
-                                            BorderBrush="{StaticResource GrayColorLightBrush}"  
-                                            Background="{StaticResource ShadcnGrayBackgroundColorBrush}"
+                                            BorderBrush="{DynamicResource shadcn_border_brush}"  
+                                            Background="{DynamicResource shadcn_background_brush}"
                                             Padding="12 12 12 12" 
                                             Grid.Column="0">
                                         <StackPanel Orientation="Horizontal">
@@ -61,7 +61,7 @@
                                             <TextBlock 
                                                 Style="{StaticResource WindowHeader}" 
                                                 Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue=DummyText}"
-                                                Foreground="{StaticResource ShadcnTextColorBrush}"
+                                                Foreground="{DynamicResource shadcn_foreground_brush}"
                                                 HorizontalAlignment="Left" 
                                                 />
                                         </StackPanel>
@@ -72,7 +72,7 @@
 
                                     <!-- Window control buttons -->
                                     <Border BorderThickness="0 0 0 1" 
-                                            BorderBrush="{StaticResource GrayColorLightBrush}" 
+                                            BorderBrush="{DynamicResource shadcn_background_brush}" 
                                             Grid.Column="1" 
                                             Grid.ColumnSpan="2">
                                         <Border.InputBindings>
@@ -82,14 +82,17 @@
                                                 />
                                         </Border.InputBindings>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <Button Style="{StaticResource WindowControlButton}" 
+                                            <Button 
                                                 Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}" 
+                                                Style="{StaticResource WindowControlButton}" 
                                                 Command="{Binding MinimizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
-                                            <Button Style="{StaticResource WindowControlButton}" 
+                                            <Button 
                                                 Tag="{x:Static materialDesign:PackIconKind.WindowMaximize}" 
+                                                Style="{StaticResource WindowControlButton}" 
                                                 Command="{Binding MaximizeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
-                                            <Button Style="{StaticResource WindowCloseButton}" 
+                                            <Button 
                                                 Tag="{x:Static materialDesign:PackIconKind.WindowClose}" 
+                                                Style="{StaticResource WindowCloseButton}" 
                                                 Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
                                         </StackPanel>
                                     </Border>
@@ -195,7 +198,7 @@
                         <Grid>
 
                             <!-- Window with border and drop shadow -->
-                            <Border Background="White">
+                            <Border Background="{DynamicResource shadcn_background_brush}">
                                 <Border.Effect>
                                     <DropShadowEffect ShadowDepth="0" Opacity="1" />
                                 </Border.Effect>

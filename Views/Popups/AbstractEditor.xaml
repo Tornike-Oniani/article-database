@@ -12,56 +12,57 @@
     <ScrollViewer
         MaxHeight="500"
         >
-        <Grid 
-            Margin="12 12 12 12"
-            >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <TextBlock
-            Text="Abstract:"
-            Style="{StaticResource MediumHeader}"
-            Grid.Row="0"
-            />
-        <AdornerDecorator Grid.Row="1">
-            <highlighter:HighlightTextBox
-                Text="{Binding ArticleForm.Abstract, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
-                HighlightWords="{Binding ArticleForm.UnusualCharactersInAbstract}"
-                HighlightColor="{StaticResource RedColorBrush}"
-                Style="{StaticResource WatermarkTextBox}"
-                FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=AbstractBoxFontSize}"
-                MinHeight="200"
-		        TextWrapping="Wrap"
-                AcceptsReturn="True"
-                FontFamily="Verdana"
-                SpellCheck.IsEnabled="True"            
-                Margin="0 12 0 18"                
+            <TextBlock
+                Text="Abstract:"
+                Style="{StaticResource Label}"
+                Grid.Row="0"
+                />
+            <AdornerDecorator 
+                Grid.Row="1"
                 >
-                <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding SaveCommand}" />
-                </TextBox.InputBindings>
-            </highlighter:HighlightTextBox>
-        </AdornerDecorator>
-        <StackPanel
-            Orientation="Horizontal"
-            HorizontalAlignment="Right"            
-            Grid.Row="2"
-            >
-            <Button 
-                Content="Save"
-                Command="{Binding SaveCommand}"
-                Width="100"
-                Margin="0 0 6 0"
-                />
-            <Button 
-                Content="Cancel"
-                Command="{Binding CancelCommand}"
-                Width="100"
-                />
-        </StackPanel>
-    </Grid>
+                <highlighter:HighlightTextBox
+                    Text="{Binding ArticleForm.Abstract, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    HighlightWords="{Binding ArticleForm.UnusualCharactersInAbstract}"
+                    HighlightColor="{StaticResource RedColorBrush}"
+                    Style="{StaticResource ShadcnTextBox}"
+                    FontSize="16"
+                    MinHeight="200"
+		            TextWrapping="Wrap"
+                    AcceptsReturn="True"
+                    SpellCheck.IsEnabled="True"            
+                    Margin="0 12 0 24"                
+                    >
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding SaveCommand}" />
+                    </TextBox.InputBindings>
+                </highlighter:HighlightTextBox>
+            </AdornerDecorator>
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"            
+                Grid.Row="2"                
+                >
+                <Button 
+                    Content="Save"
+                    Style="{StaticResource ShadcnButtonPrimary}"
+                    Width="100"
+                    Command="{Binding SaveCommand}"
+                    Margin="0 0 12 0"
+                    />
+                <Button 
+                    Content="Cancel"
+                    Width="100"
+                    Style="{StaticResource ShadcnButtonSecondary}"
+                    Command="{Binding CancelCommand}"
+                    />
+            </StackPanel>
+        </Grid>
     </ScrollViewer>
 </UserControl>

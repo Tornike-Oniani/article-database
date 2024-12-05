@@ -84,7 +84,7 @@ namespace MainLib.ViewModels.Main
             // 3. Catch if file doesn't exist physically
             catch
             {
-                services.DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
         public async void AddAbstract(object input)
@@ -103,7 +103,7 @@ namespace MainLib.ViewModels.Main
                 Regex unusualCharacters = new Regex("^[A-Za-z0-9 .,'()+/_?:\"\\&*%$#@<>{}!=;-]+$");
                 if (!unusualCharacters.IsMatch(currentAbstract.Body))
                 {
-                    Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("This input contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
+                    Shared.GetInstance().ShowDialogWithOverlay(new DialogOkViewModel("This input contains unusual characters, please retype it manually. (Don't copy & paste!)", "Error", DialogType.Error));
                     currentAbstract.Body = null;
                     return;
                 }

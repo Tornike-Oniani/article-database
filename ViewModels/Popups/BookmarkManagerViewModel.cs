@@ -167,7 +167,7 @@ namespace MainLib.ViewModels.Popups
                 Global = 0;
 
                 if (!duplicate_check)
-                    services.DialogService.OpenDialog(new DialogOkViewModel("This bookmark already exists.", "Warning", DialogType.Warning));
+                    services.ShowDialogWithOverlay(new DialogOkViewModel("This bookmark already exists.", "Warning", DialogType.Warning));
             }
             catch (Exception e)
             {

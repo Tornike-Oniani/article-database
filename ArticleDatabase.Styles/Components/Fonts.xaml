@@ -1,9 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Lib.Styles.Components">
-    <FontFamily x:Key="SourseSansPro">../fonts/SourceSansPro-Regular.ttf #Source Sans Pro</FontFamily>
-    <FontFamily x:Key="SourseSansProSemiBold">../fonts/SourceSansPro-SemiBold.ttf #Source Sans Pro</FontFamily>
-    <FontFamily x:Key="SourseSansProBold">../fonts/SourceSansPro-Bold.ttf #Source Sans Pro</FontFamily>
+    <FontFamily x:Key="SourseSansPro">../fonts/#Source Sans Pro</FontFamily>
+    <FontFamily x:Key="SourseSansProSemiBold">../fonts/#Source Sans Pro</FontFamily>
+    <FontFamily x:Key="SourseSansProBold">../fonts/#Source Sans Pro</FontFamily>
     <FontFamily x:Key="Inter">../fonts/#Inter</FontFamily>
     <FontFamily x:Key="InterLight">../fonts/#Inter Light</FontFamily>
+    <FontFamily x:Key="YujiMai">../fonts/#Yuji Mai</FontFamily>
+    <FontFamily x:Key="MotivaSans">../fonts/#Motiva Sans</FontFamily>
+    <FontFamily x:Key="Helvetica">../fonts/#Helvetica</FontFamily>
+    <FontFamily x:Key="Figtree">../fonts/#Figtree</FontFamily>
+    <FontFamily x:Key="Lexend">../fonts/#Lexend</FontFamily>
 </ResourceDictionary>

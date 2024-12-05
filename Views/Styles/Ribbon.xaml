@@ -7,37 +7,67 @@
         <!-- Tab item styling -->
         <Style.Resources>
             <Style TargetType="{x:Type TabItem}">
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Padding" Value="12 6 12 6" />
-                <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+                <Setter Property="Background" Value="{DynamicResource shadcn_accent_brush}" />
+                <Setter Property="Padding" Value="12 8 12 8" />
+                <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
                 <Setter Property="BorderThickness" Value="0 0 0 0" />
+                <Setter Property="Cursor" Value="Hand" />
                 <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=SmallTextFontSize}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">
-                            <Border
+                            <Grid
+                                Margin="0 0 4 0"
+                                >
+                                <Border
+                                    x:Name="Shadow"
+                                    Visibility="Collapsed"
+                                    Background="{DynamicResource shadcn_background_brush}"
+                                    CornerRadius="6 6 6 6"
+                                    >
+                                    <Border.Effect>
+                                        <DropShadowEffect
+                                            Color="{DynamicResource shadcn_primary}"
+                                            BlurRadius="1"
+                                            ShadowDepth="0"
+                                            Opacity="0.25"
+                                            />
+                                    </Border.Effect>
+                                </Border>
+                                <Border
                                     Padding="{TemplateBinding Padding}"
                                     Background="{TemplateBinding Background}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6 6 6 6"
                                     >
-                                <ContentPresenter ContentSource="Header" />
-                            </Border>
+                                    <ContentPresenter 
+                                        ContentSource="Header"
+                                        />
+                                </Border>
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Shadow" Property="Visibility" Value="Visible" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
 
                 <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{StaticResource SecondaryColorDarkBrush}" />
-                    </Trigger>
                     <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="{StaticResource GrayColorLightBrush}" />
-                        <Setter Property="Foreground" Value="{StaticResource LabelColorBrush}" />
+                        <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </Style.Resources>
-        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="BorderThickness" Value="1 1 1 1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource shadcn_border_brush}" />
+        <Setter Property="Background" Value="{DynamicResource shadcn_accent_brush}" />
+        <Setter Property="Padding" Value="4 4 4 4" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabControl}">
@@ -49,22 +79,44 @@
 
                         <!-- Headers -->
                         <Border
-                                Background="{StaticResource SecondaryColorBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Grid.Row="0"
-                                >
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6 6 6 6"
+                            Margin="0 0 0 6"
+                            Grid.Row="0"
+                            >
                             <TabPanel IsItemsHost="True" />
                         </Border>
 
                         <!-- Tab content -->
-                        <Border
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Background="{DynamicResource GrayColorLightBrush}"
-                                Padding="6 6 6 6"
-                                Grid.Row="1"
+                        <Grid
+                            Grid.Row="1"
+                            >
+                            <Border
+                                Background="{DynamicResource shadcn_background_brush}"
+                                CornerRadius="6 6 6 6"
                                 >
-                            <ContentPresenter ContentSource="SelectedContent" />
-                        </Border>
+                                <Border.Effect>
+                                    <DropShadowEffect
+                                            Color="{DynamicResource shadcn_primary}"
+                                            BlurRadius="1"
+                                            ShadowDepth="0"
+                                            Opacity="0.25"
+                                            />
+                                </Border.Effect>
+                            </Border>
+                            <Border
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Background="{DynamicResource shadcn_background_brush}"
+                                Padding="12 8 12 8"
+                                CornerRadius="6 6 6 6"
+                                
+                                >
+                                <ContentPresenter ContentSource="SelectedContent" />
+                            </Border>
+                        </Grid>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

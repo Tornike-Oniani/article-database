@@ -44,7 +44,7 @@
 
             <usercontrols:FilterBox 
                 ItemsSource="{Binding _bookmarkBoxesCollection}"
-                Margin="0 0 6 0"
+                Margin="0 0 12 0"
                 Grid.Column="0"
                 />
 
@@ -58,71 +58,92 @@
         </Grid>
 
         <!-- Bookmarks list -->
-        <ListView ItemsSource="{Binding BookmarkBoxesCollection}" 
-                  Style="{StaticResource BookmarkManagerList}"
-                  Grid.Row="1" />
+        <ListView 
+            ItemsSource="{Binding BookmarkBoxesCollection}" 
+            Style="{StaticResource BookmarkManagerList}"
+            Grid.Row="1" 
+            />
 
         <!-- Add bookmark -->
-        <Button Style="{x:Null}"
-                Cursor="Hand"
-                Command="{Binding CreateNewBookmarkCommand}"
-                Grid.Row="2">
+        <Button 
+            Style="{x:Null}"
+            Cursor="Hand"
+            Command="{Binding CreateNewBookmarkCommand}"
+            Margin="0 0 0 24"
+            Grid.Row="2"
+            >
             <Button.Template>
                 <ControlTemplate>
                     <Grid>
-                        <StackPanel Visibility="{Binding NewBookmarkVisibility}">
-                            <Separator Margin="0 0 0 1" />
-                            <StackPanel Orientation="Horizontal" Margin="8">
+                        <StackPanel 
+                            Visibility="{Binding NewBookmarkVisibility}"
+                            >
+                            <Separator 
+                                Margin="0 0 0 1" 
+                                />
+                            <StackPanel 
+                                Orientation="Horizontal" 
+                                Margin="8 8 8 8"
+                                >
                                 <materialDesign:PackIcon 
                                     Kind="Plus" 
-                                    Margin="0 0 5 0"
-                                    Foreground="{StaticResource GrayColorDarkBrush}"
+                                    Margin="0 0 6 0"
+                                    Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                                     VerticalAlignment="Center" 
-                                    Width="23"
-                                    Height="23" 
+                                    Width="20"
+                                    Height="20" 
                                     />
                                 <TextBlock 
                                     Text="Create new bookmark" 
-                                    Foreground="{StaticResource GrayColorDarkBrush}"
-                                    FontSize="18"
+                                    Style="{StaticResource DefaultText}"
+                                    Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                                     VerticalAlignment="Center" 
                                     />
                             </StackPanel>
                             <Separator />
                         </StackPanel>
-                        <StackPanel Visibility="{Binding CreateVisibility}">
-                            <Separator Margin="0 0 0 1" />
-                            <StackPanel Margin="12">
+                        <StackPanel 
+                            Visibility="{Binding CreateVisibility}"
+                            >
+                            <Separator 
+                                Margin="0 0 0 1" 
+                                />
+                            <StackPanel 
+                                Margin="12 12 12 12"
+                                >
                                 <TextBox 
                                     x:Name="txbBookmarkName"
                                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                    Style="{StaticResource WatermarkTextBox}"
+                                    Style="{StaticResource ShadcnTextBox}"
                                     ap:TextBoxHelper.Watermark="Bookmark name"
                                     IsVisibleChanged="txbBookmarkName_IsVisibleChanged" 
+                                    Margin="0 0 0 12"
                                     />
                                 <CheckBox 
                                     Content="Global"
                                     Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
                                     IsChecked="{Binding Global}"
                                     Style="{StaticResource FlatCheckbox}"
-                                    Margin="0 12 0 0"
+                                    Margin="0 0 0 24"
                                     />
                                 <!-- Buttons -->
                                 <StackPanel
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right"
-                                    Margin="0 12 0 0"
                                     >
                                     <Button 
                                         Content="Create" 
+                                        Style="{StaticResource ShadcnButtonPrimary}"
+                                        Width="100"
                                         Command="{Binding CreateCommand}" 
                                         Margin="0 0 6 0"
                                         />
                                     <Button 
                                         Content="Cancel" 
+                                        Style="{StaticResource ShadcnButtonSecondary}"
+                                        Width="100"
                                         Command="{Binding CancelCommand}"                                        
                                         />
-                                    
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -132,13 +153,15 @@
         </Button>
 
         <!-- Ok button -->
-        <Button Content="Ok"
-                Width="80"
-                HorizontalAlignment="Left" 
-                Margin="10 10 0 10" 
-                IsCancel="True"
-                Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                Grid.Row="23" />
-
+        <Button 
+            Content="Ok"
+            Width="100"
+            Style="{StaticResource ShadcnButtonPrimary}"
+            HorizontalAlignment="Left" 
+            Margin="12 12 12 0" 
+            IsCancel="True"
+            Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+            Grid.Row="4" 
+            />
     </Grid>
 </UserControl>

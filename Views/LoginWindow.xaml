@@ -8,6 +8,7 @@
         xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
         xmlns:base="clr-namespace:Lib.Views;assembly=Lib.Views"
         xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
+        xmlns:localUsercontrols="clr-namespace:MainLib.Views.UserControls"
         xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
         xmlns:localConverters="clr-namespace:MainLib.Views.Converters"
         xmlns:attachedProperties="clr-namespace:Lib.ViewModels.AttachedProperties;assembly=Lib.ViewModels"         
@@ -66,23 +67,26 @@
             />
     </WindowChrome.WindowChrome>
 
-    <Grid>
+    <Grid
+        Background="{DynamicResource shadcn_background_brush}"
+        >
         <!-- Working overlay -->
-        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}, FallbackValue=Collapsed}"
+        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}, FallbackValue=Visible}"
               Panel.ZIndex="1">
-            <Rectangle Fill="{StaticResource WhiteColorBrush}"
+            <Rectangle Fill="{DynamicResource shadcn_background_brush}"
                        Opacity="0.7" />
             <Border BorderThickness="0 0 0 3"
-                    BorderBrush="{StaticResource PrimaryColorBrush}"
+                    BorderBrush="{DynamicResource shadcn_primary_brush}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Padding="8">
+                    Padding="8 8 8 8">
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
-                    <usercontrols:LoadingControl Diameter="42"
-                                                 Color1="{StaticResource PrimaryColor}"
-                                                 Color2="{StaticResource LavenderColor}" />
+                    <localUsercontrols:Spinner />
+                    <!--<usercontrols:LoadingControl Diameter="42"
+                                                 Color1="{DynamicResource shadcn_primary}"
+                                                 Color2="{StaticResource shadcn_secondary}" />-->
                     <TextBlock Text="Working..." 
                            Style="{StaticResource Header}"
                            VerticalAlignment="Center"
@@ -122,8 +126,8 @@
                         
                         <usercontrols:Badge 
                             Icon="{x:Static materialDesign:PackIconKind.Account}"
-                            Background="{StaticResource GrayColorDarkBrush}"
-                            Foreground="{StaticResource WhiteColorBrush}"
+                            Background="{DynamicResource shadcn_muted_brush}"
+                            Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                             Margin="0 0 8 0"
                             Grid.Column="0" />
 
@@ -131,8 +135,8 @@
                             x:Name="txbUsername" 
                             Text="{Binding CurrentUser.Username, UpdateSourceTrigger=PropertyChanged}" 
                             ap:TextBoxHelper.Watermark="Username"
-                            Style="{StaticResource ShadcnTextBox}"
                             attachedProperties:FocusExtension.IsFocused="{Binding LoginFocus}"
+                            Style="{StaticResource ShadcnTextBox}"
                             FontSize="16"
                             Grid.Column="1" 
                             />
@@ -147,8 +151,8 @@
 
                         <usercontrols:Badge 
                             Icon="{x:Static materialDesign:PackIconKind.Key}"
-                            Background="{StaticResource GrayColorDarkBrush}"
-                            Foreground="{StaticResource WhiteColorBrush}"
+                            Background="{DynamicResource shadcn_muted_brush}"
+                            Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                             Margin="0 0 8 0" 
                             />
 
@@ -156,7 +160,7 @@
                             x:Name="txbPassword"
                             PasswordChanged="txbPassword_PasswordChanged"
                             ap:TextBoxHelper.Watermark="Password"
-                            Style="{StaticResource WatermarkPasswordBox}"
+                            Style="{StaticResource ShadcnPasswordBox}"
                             FontSize="16"
                             Grid.Column="1" 
                             />
@@ -205,10 +209,10 @@
                     <!-- Register logo -->
                     <materialDesign:PackIcon 
                         Kind="UserAdd"
-                        Foreground="{StaticResource PrimaryColorBrush}" 
+                        Foreground="{DynamicResource shadcn_primary_brush}" 
                         Width="56"
                         Height="56"
-                        Margin="0"
+                        Margin="0 0 0 0"
                         Padding="0"
                         />
 
@@ -216,7 +220,7 @@
                     <TextBlock 
                         Text="Register new Account"
                         Style="{StaticResource Header}"
-                        Margin="0 10 0 25"
+                        Margin="0 10 0 24"
                         />
 
                     <!-- Username -->
@@ -228,15 +232,15 @@
 
                         <usercontrols:Badge
                             Icon="{x:Static materialDesign:PackIconKind.Account}"
-                            Background="{StaticResource GrayColorDarkBrush}"
-                            Foreground="{StaticResource WhiteColorBrush}"
+                            Background="{DynamicResource shadcn_muted_brush}"
+                            Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                             Margin="0 0 8 0" 
                             />
                         <TextBox x:Name="txbRegisterUsername"
                                  Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
                                  ap:TextBoxHelper.Watermark="Username"
-                                 Style="{StaticResource WatermarkTextBox}"
                                  attachedProperties:FocusExtension.IsFocused="{Binding RegisterFocus}"
+                                 Style="{StaticResource ShadcnTextBox}"
                                  FontSize="16"
                                  Grid.Column="1" />
                     </Grid>
@@ -250,14 +254,14 @@
 
                         <usercontrols:Badge
                             Icon="{x:Static materialDesign:PackIconKind.Key}"
-                            Background="{StaticResource GrayColorDarkBrush}"
-                            Foreground="{StaticResource WhiteColorBrush}"
+                            Background="{DynamicResource shadcn_muted_brush}"
+                            Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                             Margin="0 0 8 0" 
                             />
 
                         <TextBox Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
                                  ap:TextBoxHelper.Watermark="Password"
-                                 Style="{StaticResource WatermarkTextBox}"
+                                 Style="{StaticResource ShadcnTextBox}"
                                  FontSize="16"
                                  Grid.Column="1" />
                     </Grid>
@@ -271,31 +275,33 @@
 
                         <usercontrols:Badge
                             Icon="{x:Static materialDesign:PackIconKind.KeyAdd}"
-                            Background="{StaticResource GrayColorDarkBrush}"
-                            Foreground="{StaticResource WhiteColorBrush}"
+                            Background="{DynamicResource shadcn_muted_brush}"
+                            Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                             Margin="0 0 8 0" 
                             />
 
                         <TextBox Text="{Binding PasswordConfirm, UpdateSourceTrigger=PropertyChanged}"
                                  ap:TextBoxHelper.Watermark="Confirm Password"
-                                 Style="{StaticResource WatermarkTextBox}"
+                                 Style="{StaticResource ShadcnTextBox}"
                                  FontSize="16"
                                  Grid.Column="1" />
                     </Grid>
 
                     <!-- Buttons -->
-                    <Grid Margin="0 20 0 25">
+                    <Grid Margin="0 24 0 24">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <Button Content="Register" 
+                                Style="{StaticResource ShadcnButtonPrimary}"
                                 Command="{Binding RegisterCommand}" 
                                 Margin="0 0 5 0" 
                                 Grid.Column="0">
                         </Button>
                         <Button Content="Cancel" 
+                                Style="{StaticResource ShadcnButtonSecondary}"
                                 Command="{Binding CancelCommand}" 
                                 Margin="5 0 0 0" 
                                 Grid.Column="2" />

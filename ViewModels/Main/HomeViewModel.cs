@@ -133,7 +133,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("App", "Validate", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
@@ -190,7 +190,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("App", "Import", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
@@ -214,7 +214,7 @@ namespace MainLib.ViewModels.Main
                     !File.Exists(Path.Combine(destination, "sync.json"))
                     )
                 {
-                    services.DialogService.OpenDialog(new DialogOkViewModel("Please select a valid folder", "Sync", DialogType.Error));
+                    services.ShowDialogWithOverlay(new DialogOkViewModel("Please select a valid folder", "Sync", DialogType.Error));
                     return;
                 }
 
@@ -232,7 +232,7 @@ namespace MainLib.ViewModels.Main
 
                 if (syncInfo.Syncs.FindIndex((el) => el.Name == sync.Name && el.Number == sync.Number) >= 0)
                 {
-                    services.DialogService.OpenDialog(new DialogOkViewModel("This synchronisation was already imported", "Synchronisation", DialogType.Error));
+                    services.ShowDialogWithOverlay(new DialogOkViewModel("This synchronisation was already imported", "Synchronisation", DialogType.Error));
                     return;
                 }
 
@@ -276,7 +276,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("App", "Sync", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
@@ -387,7 +387,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("App", "Export Sync", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
@@ -438,7 +438,7 @@ namespace MainLib.ViewModels.Main
             // 3. If the wrong folder was selected return with an error messagebox
             if (IsFolderCorrupt(destination))
             {
-                services.DialogService.OpenDialog(new DialogOkViewModel("Please select a correct folder.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Please select a correct folder.", "Error", DialogType.Error));
                 return false;
             }
 

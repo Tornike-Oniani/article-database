@@ -15,29 +15,12 @@
     <Color x:Key="shadcn_primary_foreground">#f8fafc</Color>
     <Color x:Key="shadcn_secondary">#f1f5f9</Color>
     <Color x:Key="shadcn_secondary_foreground">#0f172a</Color>
-    <Color x:Key="shadcn_accent">#f1f5f9</Color>
+    <Color x:Key="shadcn_accent">#f4f4f5</Color>
     <Color x:Key="shadcn_accent_foreground">#0f172a</Color>
     <Color x:Key="shadcn_destructive">#ff0000</Color>
     <Color x:Key="shadcn_destructive_foreground">#f8fafc</Color>
     <Color x:Key="shadcn_border">#e2e8f0</Color>
     <Color x:Key="shadcn_ring">#94a3b8</Color>
-
-    <Color x:Key="shadcn_background_dark">#030711</Color>
-    <Color x:Key="shadcn_foreground_dark">#e1e7ef</Color>
-    <Color x:Key="shadcn_muted_dark">#0f1629</Color>
-    <Color x:Key="shadcn_muted_foreground_dark">#7f8ea3</Color>
-    <Color x:Key="shadcn_popover_dark">#030711</Color>
-    <Color x:Key="shadcn_popover_foreground_dark">#94a3b8</Color>
-    <Color x:Key="shadcn_primary_dark">#f8fafc</Color>
-    <Color x:Key="shadcn_primary_foreground_dark">#020205</Color>
-    <Color x:Key="shadcn_secondary_dark">#0f172a</Color>
-    <Color x:Key="shadcn_secondary_foreground_dark">#f8fafc</Color>
-    <Color x:Key="shadcn_accent_dark">#1d283a</Color>
-    <Color x:Key="shadcn_accent_foreground_dark">#f8fafc</Color>
-    <Color x:Key="shadcn_destructive_dark">#811d1d</Color>
-    <Color x:Key="shadcn_destructive_foreground_dark">#f8fafc</Color>
-    <Color x:Key="shadcn_border_dark">#1d283a</Color>
-    <Color x:Key="shadcn_ring_dark">#1d283a</Color>
 
     <SolidColorBrush x:Key="shadcn_background_brush" Color="{DynamicResource shadcn_background}" />
     <SolidColorBrush x:Key="shadcn_foreground_brush" Color="{DynamicResource shadcn_foreground}" />
@@ -117,7 +100,7 @@
 
     <!-- Text highlight color f0c748 -->
     <Color x:Key="TextHighlightColor">#fff4be</Color>
-    <SolidColorBrush x:Key="TextHighlightColorBrush" Color="{StaticResource TextHighlightColor}" />
+    <SolidColorBrush x:Key="TextHighlightColorBrush" Color="{DynamicResource TextHighlightColor}" />
 
     <!-- Light selection color -->
     <Color x:Key="LightSelectionColor">#cbe8f6</Color>

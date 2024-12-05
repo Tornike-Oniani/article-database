@@ -20,44 +20,43 @@
         <TextBox
             x:Name="txbReferenceName"
             Text="{Binding ReferenceName, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource WatermarkTextBox}"
             ap:TextBoxHelper.Watermark="Reference name"
+            Style="{StaticResource ShadcnTextBox}"
             Margin="0 0 0 12"
             />
         <!-- Main article title -->
         <TextBox
             Text="{Binding MainArticleTitle, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-            materialDesign:HintAssist.Hint="Main article title" 
-            materialDesign:HintAssist.IsFloating="True"
+            ap:TextBoxHelper.Watermark="Main article title"
+            Style="{StaticResource ShadcnTextBox}"
             AcceptsReturn="True" 
             TextWrapping="Wrap" 
-            Margin="0 0 0 12"
+            Margin="0 0 0 24"
             />
         <!-- Buttons -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <!-- Create column -->
-                <ColumnDefinition Width="*" />
-                <!-- Gap -->
-                <ColumnDefinition Width="12px" />
-                <!-- Cancel column -->
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <StackPanel
+            Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            >
             <!-- Create button -->
             <Button
                 Content="Create"
+                Style="{StaticResource ShadcnButtonPrimary}"
                 Command="{Binding CreateCommand}"
                 CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                Width="100"
+                Margin="0 0 12 0"
                 Grid.Column="0"
                 />
             <!-- Cancel button -->
             <Button
                 Content="Cancel"
+                Style="{StaticResource ShadcnButtonSecondary}"
                 Command="{Binding CancelCommand}"
                 CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                Width="100"
                 Grid.Column="2"
                 />
-        </Grid>
+        </StackPanel>
     </StackPanel>
 </UserControl>

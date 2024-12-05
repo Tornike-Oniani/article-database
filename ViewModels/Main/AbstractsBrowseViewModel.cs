@@ -77,7 +77,7 @@ namespace MainLib.ViewModels.Main
             // 3. Catch if file doesn't exist physically
             catch
             {
-                services.DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
         public void ChangeAbstractToEditMode(object input)

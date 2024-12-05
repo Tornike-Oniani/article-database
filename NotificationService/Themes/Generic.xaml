@@ -241,7 +241,7 @@
         <Setter Property="BorderBrush" Value="#e4e4e7" />
         <Setter Property="Template" Value="{StaticResource NotificationTemplate}"/>
         <Setter Property="ContentTemplateSelector" Value="{StaticResource NotificationTemplateSelector}"/>
-        <Setter Property="Margin" Value="0 0 24 24" />
+        <Setter Property="Margin" Value="0 0 18 18" />
         <Setter Property="LayoutTransform">
             <Setter.Value>
                 <ScaleTransform />

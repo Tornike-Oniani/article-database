@@ -49,6 +49,9 @@ namespace MainLib.ViewModels.Commands
                 case ViewType.Browse:
                     _navigate(new BrowseViewModel());
                     break;
+                case ViewType.Settings:
+                    _navigate(new SettingsViewModel());
+                    break;
             }
         }
     }

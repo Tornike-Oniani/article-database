@@ -10,7 +10,7 @@
 
     <!-- Window header -->
     <Style TargetType="{x:Type TextBlock}" x:Key="WindowHeader">
-        <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="VerticalAlignment" Value="Center" />

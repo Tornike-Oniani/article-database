@@ -30,8 +30,8 @@
         <Style x:Key="Accordion" TargetType="{x:Type ToggleButton}" BasedOn="{x:Null}">
             <!-- Generic styling -->
             <Setter Property="BorderThickness" Value="0 0 0 0" />
-            <Setter Property="Background" Value="{DynamicResource WhiteColorBrush}" />
-            <Setter Property="Foreground" Value="{StaticResource shadcn_primary_brush}" />
+            <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
             <Setter Property="Padding" Value="0 0 0 8" />
             <Setter Property="Cursor" Value="Hand" />
             <!-- Template -->
@@ -47,8 +47,7 @@
                                 <TextBlock 
                                     x:Name="text"
                                     Text="{TemplateBinding Content}"
-                                    Foreground="{TemplateBinding Foreground}"
-                                    FontSize="16"
+                                    Style="{StaticResource DefaultText}"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left"
                                     />

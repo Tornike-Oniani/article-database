@@ -8,6 +8,7 @@
              xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
              xmlns:type="clr-namespace:MainLib.ViewModels.Main;assembly=MainLib.ViewModels"
              xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
+             xmlns:localUsercontrols="clr-namespace:MainLib.Views.UserControls"
              xmlns:notifications="clr-namespace:NotificationService.Controls;assembly=NotificationService"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -38,13 +39,13 @@
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
-                    <usercontrols:LoadingControl Diameter="50"
+                    <localUsercontrols:Spinner />
+                    <!--<usercontrols:LoadingControl Diameter="50"
                                                  Color1="{DynamicResource shadcn_primary}"
-                                                 Color2="{DynamicResource shadcn_secondary}" />
+                                                 Color2="{DynamicResource shadcn_secondary}" />-->
                     <TextBlock 
                         Text="{Binding WorkLabel, FallbackValue=Working...}" 
                         Style="{StaticResource Header}"
-                        Foreground="{StaticResource LabelColorBrush}"
                         VerticalAlignment="Center"
                         Margin="8 0 0 0" 
                         />
@@ -83,7 +84,7 @@
                 </Border.Background>-->
 
                 <Grid 
-                    Width="175"
+                    Width="176"
                     Grid.Column="0"
                     >
                     <Grid.RowDefinitions>
@@ -184,37 +185,12 @@
                                 />
                             <RadioButton 
                                 Style="{StaticResource NavigationButton}"
-                                IsEnabled="{Binding User.IsAdmin}"
-                                Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Content="Settings"
                                 Tag="{x:Static materialDesign:PackIconKind.Gear}"
-                                GroupName="Other"
-                                Command="{Binding OpenSettingsCommand}" 
+                                GroupName="Navigation"
+                                Command="{Binding UpdateViewCommand}" 
+                                CommandParameter="{x:Static type:ViewType.Settings}" 
                                 />
-                            <!--<Button 
-                                Style="{x:Null}"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Left"
-                                Cursor="Hand"
-                                Margin="4 0 0 4"
-                                Command="{Binding }"
-                                >
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Border 
-                                            Padding="6"
-                                            Background="Transparent"
-                                            >
-                                            <materialDesign:PackIcon 
-                                                Kind="Gear"
-                                                Width="25"
-                                                Height="25"
-                                                Foreground="{StaticResource ShadcnTextColorBrush}" 
-                                                />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>-->
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -231,11 +207,11 @@
                 <Grid>
                     <Border
                         CornerRadius="8 8 8 8"
-                        Background="White"
+                        Background="{DynamicResource shadcn_background_brush}"
                         >
                         <Border.Effect>
                             <DropShadowEffect
-                                BlurRadius="5"
+                                BlurRadius="1"
                                 ShadowDepth="0"
                                 Opacity="0.5"
                                 >

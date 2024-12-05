@@ -5,41 +5,53 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MainLib.Views.Popups"
+             xmlns:aps="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Border Padding="10">
         <StackPanel>
             <!-- Name textbox -->
-            <TextBox Text="{Binding Reference.Name, UpdateSourceTrigger=PropertyChanged}"
-                     materialDesign:HintAssist.Hint="Name"
-                     materialDesign:HintAssist.IsFloating="True"
-                     Margin="0 0 0 10"/>
+            <TextBox 
+                Text="{Binding Reference.Name, UpdateSourceTrigger=PropertyChanged}"
+                aps:TextBoxHelper.Watermark="Name"
+                Style="{StaticResource ShadcnTextBox}"
+                Margin="0 0 0 12" 
+                />
 
             <!-- Main article textbox -->
-            <TextBox Text="{Binding MainArticleTitle, UpdateSourceTrigger=PropertyChanged}" 
-                     materialDesign:HintAssist.Hint="Main article" 
-                     materialDesign:HintAssist.IsFloating="True"
-                     Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                     AcceptsReturn="True" 
-                     TextWrapping="Wrap" 
-                     Margin="0 10 0 10"/>
+            <TextBox 
+                Text="{Binding MainArticleTitle, UpdateSourceTrigger=PropertyChanged}" 
+                aps:TextBoxHelper.Watermark="Main article"
+                Style="{StaticResource ShadcnTextBox}"
+                AcceptsReturn="True" 
+                TextWrapping="Wrap" 
+                Margin="0 0 0 24"
+                />
 
             <!-- Buttons wrapper -->
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Right">
+            <StackPanel 
+                Orientation="Horizontal"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                >
                 <!-- Save button -->
-                <Button Content="Save" 
-                        Width="80"
-                        Margin="0 0 10 0" 
-                        Command="{Binding SaveReferenceCommand}" 
-                        CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+                <Button 
+                    Content="Save" 
+                    Style="{StaticResource ShadcnButtonPrimary}"
+                    Width="100"
+                    Command="{Binding SaveReferenceCommand}" 
+                    CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                    Margin="0 0 12 0" 
+                    />
                 <!-- Cancel button -->
-                <Button Content="Cancel" 
-                        IsCancel="True"
-                        Width="80" 
-                        Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                <Button 
+                    Content="Cancel" 
+                    IsCancel="True"
+                    Style="{StaticResource ShadcnButtonSecondary}"
+                    Width="100" 
+                    Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                    />
             </StackPanel>
         </StackPanel>
     </Border>

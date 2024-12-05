@@ -388,7 +388,7 @@ namespace MainLib.ViewModels.Main
             // 4. Catch if file doesn't exist physically
             catch
             {
-                this.services.DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
+                this.services.ShowDialogWithOverlay(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
         public async void DownloadFile(object input)
@@ -460,7 +460,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Export", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
@@ -591,7 +591,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Export", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {

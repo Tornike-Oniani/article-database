@@ -5,24 +5,32 @@
                     >
 
     <Style x:Key="InfoBox" TargetType="{x:Type Border}">
-        <Setter Property="Background" Value="{DynamicResource GrayColorLightBrush}" />
+        <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
         <Setter Property="Padding" Value="12 12 12 12" />
         <Setter Property="CornerRadius" Value="7" />
 
         <Style.Resources>
             <!-- Textblock -->
-            <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="Foreground" Value="{StaticResource LabelColorBrush}" />
+            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultText}">
+                <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
                 <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
                 <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
             <!-- Icon -->
             <Style TargetType="{x:Type materialDesign:PackIcon}">
-                <Setter Property="Foreground" Value="{StaticResource LabelColorBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
         </Style.Resources>
     </Style>
+
+    <DropShadowEffect
+        x:Key="shadow_sm"
+        BlurRadius="1"
+        ShadowDepth="0"
+        Opacity="0.5"
+        >
+    </DropShadowEffect>
 
 </ResourceDictionary>

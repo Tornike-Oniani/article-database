@@ -4,47 +4,49 @@
                     >
 
     <Style x:Key="DefaultColumnHeader" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+        <Setter Property="Padding" Value="12 8 12 8" />
+        <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
         <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
-        <Setter Property="Padding" Value="6 6 6 6" />
-        <Setter Property="Background" Value="{StaticResource LavenderColorBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-        <Setter Property="BorderThickness" Value="0 0 1 0" />
-        <Setter Property="BorderBrush" Value="{StaticResource LavenderColorDarkBrush}" />
+        <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
+        <Setter Property="BorderThickness" Value="0 0 0 1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource shadcn_border_brush}" />
         <Setter Property="Command" Value="{Binding DataContext.SortFromDataGridCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
         <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Cursor" Value="Hand" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
             </Trigger>
             <Trigger Property="SortDirection" Value="Ascending">
-                <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-                <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
             </Trigger>
             <Trigger Property="SortDirection" Value="Descending">
-                <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-                <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="{x:Type DataGridRow}" x:Key="ArticleRowStyle">
+    <Style x:Key="ArticleRowStyle" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource shadcn_border_brush}" />
         <Setter Property="BorderThickness" Value="0 0 0 0" />
         <Style.Triggers>
             <Trigger Property="AlternationIndex" Value="0">
-                <Setter Property="Background" Value="{DynamicResource WhiteColorBrush}" />
+                <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
             </Trigger>
             <Trigger Property="AlternationIndex" Value="1">
-                <Setter Property="Background" Value="{DynamicResource GrayColorLightBrush}" />
+                <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource BlueColorLightBrush}" />
+                <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style TargetType="{x:Type DataGridRow}" x:Key="ArticleRowStyleBM">
+    
+    <Style x:Key="ArticleRowStyleBM" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{StaticResource PrimaryColorBrush}" />
         <Setter Property="BorderThickness" Value="0 0 0 0" />
@@ -63,6 +65,8 @@
     </Style>
 
     <Style x:Key="ArticleGrid" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource MaterialDesignDataGrid}">
+        <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
         <Setter Property="FontFamily" Value="Verdana" />
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="AutoGenerateColumns" Value="False" />
@@ -73,8 +77,8 @@
         <Setter Property="CanUserReorderColumns" Value="False" />
         <Setter Property="CanUserResizeColumns" Value="False" />
         <Setter Property="GridLinesVisibility" Value="All" />
-        <Setter Property="VerticalGridLinesBrush" Value="#e4e4e4" />
-        <Setter Property="HorizontalGridLinesBrush" Value="#efefef" />
+        <Setter Property="VerticalGridLinesBrush" Value="Transparent" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource shadcn_border_brush}" />
         <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True" />
         <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Standard" />
         <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel" />

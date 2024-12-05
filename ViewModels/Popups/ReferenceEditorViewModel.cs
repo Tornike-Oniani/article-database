@@ -74,7 +74,7 @@ namespace MainLib.ViewModels.Popups
                 if (e.Message.Contains("UNIQUE"))
                 {
                     if (
-                        Shared.GetInstance().DialogService.OpenDialog(new DialogYesNoViewModel("Reference with that name already exists, do you want to merge?", "Merge reference", DialogType.Question))
+                        Shared.GetInstance().ShowDialogWithOverlay(new DialogYesNoViewModel("Reference with that name already exists, do you want to merge?", "Merge reference", DialogType.Question))
                        )
                     {
                         ReferenceRepo repo = new ReferenceRepo();

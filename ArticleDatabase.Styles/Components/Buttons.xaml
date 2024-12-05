@@ -11,10 +11,10 @@
     <Style TargetType="{x:Type Button}" x:Key="WindowControlButton">
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="10" />
+        <Setter Property="Padding" Value="8 8 8 8" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{StaticResource GrayColorDarkBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -34,11 +34,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource SecondaryColorBrush}" />
-                <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+                <Setter Property="Background" Value="{DynamicResource shadcn_secondary_brush}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{DynamicResource GrayColorLightBrush}" />
+                <Setter Property="Opacity" Value="0.3" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -51,13 +50,7 @@
     </Style>
     <Style x:Key="DialogCloseButton" TargetType="{x:Type Button}" BasedOn="{StaticResource WindowControlButton}">
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Foreground" Value="{StaticResource ShadcnBlackLightColorBrush}" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
-                <Setter Property="Foreground" Value="{StaticResource ShadcnBlackColorBrush}" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="Foreground" Value="{StaticResource shadcn_foreground_brush}" />
     </Style>
     <Style TargetType="{x:Type Button}" x:Key="WindowControlButtonAlt" BasedOn="{StaticResource WindowControlButton}">
         <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
@@ -97,6 +90,7 @@
         <Setter Property="Background" Value="{DynamicResource shadcn_primary_brush}" />
         <Setter Property="BorderThickness" Value="0 0 0 0" />
         <Setter Property="Foreground" Value="{DynamicResource shadcn_primary_foreground_brush}" />
+        <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
@@ -123,7 +117,7 @@
                 <Setter Property="Background" Value="{DynamicResource shadcn_primary_brush_hover}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Opacity" Value="0.5" />
+                <Setter Property="Opacity" Value="0.3" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -176,6 +170,49 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource shadcn_secondary_brush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ViewPDFButtonStyle" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="BorderBrush" Value="{StaticResource TextHighlightColorBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <StackPanel 
+                        Orientation="Horizontal" 
+                        Background="Transparent"
+                        >
+                        <materialDesign:PackIcon
+                            Kind="FilePdf"
+                            Width="24"
+                            Height="24"
+                            Foreground="{TemplateBinding Foreground}"
+                            Margin="0 0 6 0"
+                            />
+                        <Border
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            VerticalAlignment="Center"
+                            >
+                            <TextBlock
+                                Text="{TemplateBinding Content}"
+                                Style="{StaticResource DefaultText}"
+                                Foreground="{TemplateBinding Foreground}"
+                                />
+                        </Border>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                <Setter Property="BorderThickness" Value="0 0 0 2" />
             </Trigger>
         </Style.Triggers>
     </Style>

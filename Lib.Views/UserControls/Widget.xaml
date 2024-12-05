@@ -7,55 +7,79 @@
              xmlns:local="clr-namespace:Lib.Views.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
-    <Button Style="{x:Null}" 
-            Command="{Binding Command, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
-            Click="widget_click">
-        <Button.Template>
-            <ControlTemplate TargetType="{x:Type Button}">
-                <!-- 1px border around the widget -->
+    <!-- 1px border around the widget -->
+    <Grid>
+        <Border
+            Background="{DynamicResource shadcn_background_brush}"
+            Width="{Binding ActualWidth, ElementName=wrapper}"
+            CornerRadius="6 6 6 6"
+            >
+            <Border.Effect>
+                <DropShadowEffect
+                    Color="{DynamicResource shadcn_primary}"
+                    BlurRadius="1"
+                    ShadowDepth="0"
+                    Opacity="0.25"
+                    />
+            </Border.Effect>
+        </Border>
+        <Border 
+            x:Name="wrapper" 
+            Width="180"
+            BorderBrush="{DynamicResource shadcn_border_brush}" 
+            BorderThickness="1 1 1 1"
+            CornerRadius="6 6 6 6"
+            >
+            <!-- Stackpanel consisting of icon and content -->
+            <StackPanel 
+                Width="180" 
+                Height="Auto" 
+                Background="{DynamicResource shadcn_background_brush}"
+                >
+                <materialDesign:PackIcon 
+                    Kind="{Binding Icon, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                    Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Width="42"
+                    Height="42"
+                    Margin="0 12 0 6"
+                    />
+                <TextBlock 
+                    Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=Lorem}" 
+                    Style="{StaticResource MediumHeader}"
+                    FontWeight="Bold"
+                    TextAlignment="Center" 
+                    />
+                <!-- Title and description -->
                 <Border 
-                    x:Name="wrapper" 
-                    BorderThickness="1 1 1 1" 
-                    Width="180"
-                    BorderBrush="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                    Margin="10"
-                    Cursor="Hand"
+                    Padding="12 12 12 12"
                     >
-                    <!-- Stackpanel consisting of icon and content -->
-                    <StackPanel Width="180" Height="Auto" Background="#ffffff">
-                        <Border Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Padding="10">
-                            <materialDesign:PackIcon 
-                                Kind="{Binding Icon, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                                Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Width="72"
-                                Height="72" 
-                                />
-                        </Border>
-                        <!-- Title and description -->
-                        <Border Padding="10">
-                            <StackPanel>
-                                <TextBlock Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=Lorem}" 
-                                           Foreground="{StaticResource LabelColorBrush}"
-                                           FontSize="{TemplateBinding FontSize}"
-                                           FontWeight="Bold"
-                                           TextAlignment="Center" />
-                                <TextBlock Text="{Binding Description, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=LoremIpsum}" 
-                                           Foreground="{StaticResource LabelColorSemiLightBrush}"
-                                           FontSize="{TemplateBinding FontSize}"
-                                           TextWrapping="Wrap" 
-                                           TextAlignment="Center" />
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock 
+                            Text="{Binding Description, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=LoremIpsum}" 
+                            Style="{StaticResource SmallText}"
+                            TextWrapping="Wrap" 
+                            TextAlignment="Center"
+                            Margin="0 0 0 12"
+                            Grid.Row="0"
+                            />
+                        <Button
+                            Content="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=Lorem}"
+                            Style="{StaticResource ShadcnButtonOutline}"
+                            Command="{Binding Command, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+                            Click="widget_click"
+                            VerticalAlignment="Bottom"
+                            Grid.Row="1"
+                            >
+                        </Button>
+                    </Grid>
                 </Border>
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter TargetName="wrapper" Property="Opacity" Value="0.3" />
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-        </Button.Template>
-    </Button>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>

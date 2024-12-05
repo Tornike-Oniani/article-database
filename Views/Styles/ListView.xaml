@@ -14,7 +14,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="BorderThickness" Value="0 0 0 0" />
-        <Setter Property="Background" Value="{DynamicResource GrayColorLightBrush}" />
+        <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
         <Setter Property="Padding" Value="6 6 9 0" />
         <Setter Property="ItemTemplate">
             <Setter.Value>
@@ -36,13 +36,14 @@
             <Setter.Value>
                 <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignListBoxItem}">
                     <Setter Property="Padding" Value="12 0 0 0" />
-                    <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
+                    <Setter Property="Background" Value="{StaticResource shadcn_background_brush}" />
+                    <Setter Property="Cursor" Value="Hand" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
                                 <Border
                                     Padding="{TemplateBinding Padding}"
-                                    CornerRadius="4"
+                                    CornerRadius="4 4 4 4"
                                     Background="{TemplateBinding Background}"
                                     Margin="0 0 0 6"
                                     >
@@ -51,11 +52,6 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource BlueColorLightBrush}" />
-                        </Trigger>
-                    </Style.Triggers>
                 </Style>
             </Setter.Value>
         </Setter>
@@ -119,9 +115,9 @@
         </Style.Triggers>
     </Style>
     <Style x:Key="CleanItem" TargetType="{x:Type ListViewItem}">
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Margin" Value="0 0 0 0" />
+        <Setter Property="Padding" Value="0 0 0 0" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
@@ -149,9 +145,20 @@
     <!-- Bookmark list -->
     <Style x:Key="BookmarkList" TargetType="{x:Type ListView}" BasedOn="{x:Null}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="AlternationCount" Value="2" />
+        <Setter Property="AlternationCount" Value="0" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListView}">
+                    <ScrollViewer 
+                        Grid.Row="1"
+                        >
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <!-- Removes padding and margin from items (So that mouse double click will be caught without clicking exactly on text) -->
         <Setter Property="ItemContainerStyle" Value="{StaticResource CleanItem}" />
         <!-- Item template on how to show bound data-->
@@ -160,14 +167,15 @@
                 <DataTemplate>
                     <!-- Wrapper -->
                     <Border 
-                        Padding="12" 
-                        Background="Transparent" 
+                        Padding="12 12 12 12" 
+                        Background="{DynamicResource shadcn_background_brush}" 
                         BorderThickness="0 0 0 1" 
-                        BorderBrush="{DynamicResource GrayColorBrush}"
+                        BorderBrush="{DynamicResource shadcn_border_brush}"
+                        Cursor="Hand"
                         >
                         <!-- Command binding to mouse double click -->
                         <Border.InputBindings>
-                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.OpenBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}" CommandParameter="{Binding}" />
+                            <MouseBinding Gesture="LeftClick" Command="{Binding DataContext.OpenBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}" CommandParameter="{Binding}" />
                         </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -185,16 +193,14 @@
                                     TextWrapping="Wrap"
                                     />
                                 <TextBlock 
-                                    x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
-                                    Style="{StaticResource SmallText}"                                    
-                                    Visibility="Collapsed"
-                                    Opacity="0.0" 
+                                    x:Name="articlesCount" 
+                                    Text="{Binding ArticlesCount, StringFormat='{}{0} articles'}"
+                                    Style="{StaticResource SmallText}"
                                     />
                             </StackPanel>
                             <!-- Buttons -->
                             <StackPanel
                                 x:Name="Buttons"
-                                Opacity="0.0"
                                 Visibility="Collapsed"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right"
@@ -210,7 +216,7 @@
                                             RelativeSource FindAncestor, 
                                             AncestorType=Page}}"
                                     CommandParameter="{Binding}"
-                                    Margin="0 0 10 0"
+                                    Margin="0 0 12 0"
                                     />
                                 <!-- Delete button -->
                                 <Button
@@ -231,43 +237,6 @@
                         <!-- Mouse over show action buttons and article count -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Buttons" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="articlesCount" Property="Visibility" Value="Visible" />
-                            <Trigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ThicknessAnimation Storyboard.TargetName="articlesCount"
-                                                            Storyboard.TargetProperty="Margin"
-                                                            To="0 5 10 5"
-                                                            Duration="0:0:0.3" />
-                                        <DoubleAnimation Storyboard.TargetName="Buttons"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0"
-                                                         Duration="0:0:0.3" />
-                                        <DoubleAnimation Storyboard.TargetName="articlesCount"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0"
-                                                         Duration="0:0:0.3" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ThicknessAnimation Storyboard.TargetName="articlesCount"
-                                                            Storyboard.TargetProperty="Margin"
-                                                            To="0"
-                                                            Duration="0:0:0" />
-                                        <DoubleAnimation Storyboard.TargetName="articlesCount"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0"
-                                                         Duration="0:0:0" />
-                                        <DoubleAnimation Storyboard.TargetName="Buttons"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0"
-                                                         Duration="0:0:0" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.ExitActions>
                         </Trigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
@@ -277,9 +246,20 @@
     <!-- Global Bookmark list -->
     <Style x:Key="GlobalBookmarkList" TargetType="{x:Type ListView}" BasedOn="{x:Null}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="AlternationCount" Value="2" />
+        <Setter Property="AlternationCount" Value="0" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListView}">
+                    <ScrollViewer 
+                        Grid.Row="1"
+                        >
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <!-- Removes padding and margin from items (So that mouse double click will be caught without clicking exactly on text) -->
         <Setter Property="ItemContainerStyle" Value="{StaticResource CleanItem}" />
         <!-- Item template on how to show bound data-->
@@ -288,14 +268,15 @@
                 <DataTemplate>
                     <!-- Wrapper -->
                     <Border 
-                        Padding="12" 
-                        Background="Transparent" 
+                        Padding="12 12 12 12" 
+                        Background="{DynamicResource shadcn_background_brush}" 
                         BorderThickness="0 0 0 1" 
-                        BorderBrush="{DynamicResource GrayColorBrush}"
+                        BorderBrush="{DynamicResource shadcn_border_brush}"
+                        Cursor="Hand"
                         >
                         <!-- Command binding to mouse double click -->
                         <Border.InputBindings>
-                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.OpenBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}" CommandParameter="{Binding}" />
+                            <MouseBinding Gesture="LeftClick" Command="{Binding DataContext.OpenBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}" CommandParameter="{Binding}" />
                         </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -314,14 +295,12 @@
                                     />
                                 <TextBlock 
                                     x:Name="articlesCount" 
-                                    Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
+                                    Text="{Binding ArticlesCount, StringFormat='{}{0} articles'}"
                                     Style="{StaticResource SmallText}"
-                                    Visibility="Collapsed"
-                                    Opacity="0.0" 
                                     />
                             </StackPanel>
                             <!-- Buttons -->
-                            <StackPanel 
+                            <StackPanel
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right"
                                 Visibility="{Binding DataContext.User.IsAdmin, Converter={StaticResource BoolToVisibility}, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
@@ -329,21 +308,19 @@
                                 <!-- Edit button-->
                                 <Button 
                                     x:Name="EditButton"
-                                    Style="{StaticResource ItemActionButton}"
                                     Tag="{x:Static materialDesign:PackIconKind.Edit}"
-                                    Opacity="0.0"
+                                    Style="{StaticResource ItemActionButton}"
                                     Visibility="Hidden"
                                     Command="{Binding DataContext.EditBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
                                     CommandParameter="{Binding}"
-                                    Margin="0 0 10 0"
+                                    Margin="0 0 12 0"
                                     >
                                 </Button>
                                 <!-- Delete button -->
                                 <Button 
                                     x:Name="DeleteButton"
-                                    Style="{StaticResource ItemActionButton}"
                                     Tag="{x:Static materialDesign:PackIconKind.MinusCircleOutline}"
-                                    Opacity="0.0"
+                                    Style="{StaticResource ItemActionButton}"
                                     Visibility="Hidden"
                                     Command="{Binding DataContext.DeleteBookmarkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
                                     CommandParameter="{Binding}"
@@ -354,54 +331,10 @@
                     </Border>
                     <!-- Trigger -->
                     <DataTemplate.Triggers>
+                        <!-- Mouse over show action buttons and article count -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="DeleteButton" Property="Visibility" Value="Visible" />
                             <Setter TargetName="EditButton" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="articlesCount" Property="Visibility" Value="Visible" />
-                            <Trigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ThicknessAnimation Storyboard.TargetName="articlesCount"
-                                                            Storyboard.TargetProperty="Margin"
-                                                            To="0 5 10 5"
-                                                            Duration="0:0:0.3" />
-                                        <DoubleAnimation Storyboard.TargetName="EditButton"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0"
-                                                         Duration="0:0:0.3" />
-                                        <DoubleAnimation Storyboard.TargetName="DeleteButton"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0"
-                                                         Duration="0:0:0.3" />
-                                        <DoubleAnimation Storyboard.TargetName="articlesCount"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="1.0"
-                                                         Duration="0:0:0.3" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ThicknessAnimation Storyboard.TargetName="articlesCount"
-                                                            Storyboard.TargetProperty="Margin"
-                                                            To="0"
-                                                            Duration="0:0:0" />
-                                        <DoubleAnimation Storyboard.TargetName="articlesCount"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0"
-                                                         Duration="0:0:0" />
-                                        <DoubleAnimation Storyboard.TargetName="EditButton"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0"
-                                                         Duration="0:0:0" />
-                                        <DoubleAnimation Storyboard.TargetName="DeleteButton"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.0"
-                                                         Duration="0:0:0" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.ExitActions>
+                            <Setter TargetName="DeleteButton" Property="Visibility" Value="Visible" />
                         </Trigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
@@ -410,8 +343,8 @@
     </Style>
     <!-- Pagination-->
     <Style x:Key="PaginationWrapper" TargetType="{x:Type ListBox}">
-        <Setter Property="BorderThickness" Value="1 1 0 1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource GrayColorBrush}" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="BorderBrush" Value="{DynamicResource shadcn_border_brush}" />
         <!-- Items host -->
         <Setter Property="ItemsPanel">
             <Setter.Value>
@@ -428,9 +361,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
                     <Border
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            >
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        >
                         <ItemsPresenter />
                     </Border>
                 </ControlTemplate>
@@ -440,23 +373,29 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
-                    <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                    <Setter Property="BorderThickness" Value="0 0 0 0" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource shadcn_border_brush}" />
                     <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
                     <Setter Property="Cursor" Value="Hand" />
                     <Setter Property="IsEnabled" Value="{Binding Converter={StaticResource IsIntToBool}}" />
+                    <Setter Property="Margin" Value="0 0 2 0" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                 <Border
-                                        Background="{TemplateBinding Background}"
-                                        BorderThickness="0 0 1 0"
-                                        BorderBrush="{DynamicResource GrayColorBrush}"
-                                        Padding="12 6 12 6">
+                                    Background="{TemplateBinding Background}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    BorderBrush="{DynamicResource shadcn_border_brush}"
+                                    Margin="{TemplateBinding Margin}"
+                                    Padding="12 6 12 6"
+                                    CornerRadius="4 4 4 4"
+                                    >
                                     <ContentPresenter
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                />
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        />
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
@@ -465,14 +404,13 @@
                     <!-- Item triggers -->
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource GrayColorLightBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource shadcn_secondary_brush}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
-                            <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+                            <Setter Property="BorderThickness" Value="1 1 1 1" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -481,7 +419,7 @@
     </Style>
     <!-- Import history list view-->
     <Style x:Key="ImportHistoryList" TargetType="{x:Type ListView}">
-        <Setter Property="Background" Value="{DynamicResource GrayColorLightBrush}" />
+        <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
         <Setter Property="BorderThickness" Value="0 0 0 0" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Padding" Value="9 6 9 6" />
@@ -519,8 +457,8 @@
             <Setter.Value>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=SmallTextFontSize}" />
-                    <Setter Property="Foreground" Value="{StaticResource LabelColorBrush}" />
-                    <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
+                    <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
                     <Setter Property="Padding" Value="8 8 8 8" />
                     <Setter Property="Margin" Value="0 0 0 8" />
                     <Setter Property="Template">

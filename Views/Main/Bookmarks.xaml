@@ -13,12 +13,13 @@
             <DockPanel>
                 <!-- Buttons wrapper -->
                 <StackPanel 
-                    Margin="12 12 12 12"
+                    Margin="0 0 0 12"
                     Orientation="Horizontal"
                     DockPanel.Dock="Top"
                     >
                     <!-- Back button -->
                     <Button 
+                        Style="{StaticResource ShadcnButtonPrimary}"
                         Command="{x:Static NavigationCommands.BrowseBack}" 
                         IsEnabled="{TemplateBinding CanGoBack}"
                         >
@@ -29,7 +30,7 @@
                 </StackPanel>
 
                 <!-- Content wrapper -->
-                <Border Padding="10 10 10 0">
+                <Border>
                     <!-- Content -->
                     <ContentPresenter />
                 </Border>

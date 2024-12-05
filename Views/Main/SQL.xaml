@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MainLib.Views.Main"
+             xmlns:aps="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -21,9 +22,9 @@
 
             <TextBox
                 Text="{Binding SqlQuery}"
-                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                materialDesign:HintAssist.Hint="SQL query"
-                materialDesign:HintAssist.IsFloating="True"
+                aps:TextBoxHelper.Watermark="SQL query"
+                aps:TextBoxHelper.WatermarkVerticalAlignment="Top"
+                Style="{StaticResource ShadcnTextBox}"
                 AcceptsReturn="True"
                 TextWrapping="Wrap"
                 FontSize="14"
@@ -37,15 +38,17 @@
                 Grid.Row="1">
                 <Button
                     Content="Execute"
-                    Command="{Binding ExecuteSQLCommand}"
-                    HorizontalAlignment="Right"
+                    Style="{StaticResource ShadcnButtonPrimary}"
                     Width="100"
-                    Margin="0 0 6 0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding ExecuteSQLCommand}"
+                    Margin="0 0 12 0"
                     />
                 <Button
                     Content="Query"
-                    Command="{Binding QuerySQLCommand}"
+                    Style="{StaticResource ShadcnButtonPrimary}"
                     Width="100"
+                    Command="{Binding QuerySQLCommand}"
                     />
             </StackPanel>
         </Grid>
@@ -56,8 +59,34 @@
             />
         <DataGrid
             ItemsSource="{Binding Items}"
+            Background="{DynamicResource shadcn_background_brush}"
+            Foreground="{DynamicResource shadcn_foreground_brush}"
             ColumnHeaderStyle="{StaticResource DefaultColumnHeader}"
             Grid.Row="2"
-            />
+            >
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Padding" Value="18 18 18 18" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter VerticalAlignment="Stretch" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                    <Style.Triggers>
+                        <!-- We need this because on default it sets foreground to white -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+        </DataGrid>
     </Grid>
 </UserControl>

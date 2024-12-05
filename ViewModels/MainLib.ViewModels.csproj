@@ -139,6 +139,7 @@
     <Compile Include="Main\AbstractsViewModel.cs" />
     <Compile Include="Main\BrowseViewModel.cs" />
     <Compile Include="Main\SearchOptionsViewModel.cs" />
+    <Compile Include="Main\SettingsViewModel.cs" />
     <Compile Include="Main\SQLViewModel.cs" />
     <Compile Include="NavigationViewModel.cs" />
     <Compile Include="Main\BookmarksViewModel.cs" />
@@ -162,9 +163,6 @@
     <Compile Include="Popups\MassBookmarkManagerViewModel.cs" />
     <Compile Include="Popups\ReferenceEditorViewModel.cs" />
     <Compile Include="Popups\ReferenceManagerViewModel.cs" />
-    <Compile Include="Popups\ReportsViewerViewModel.cs" />
-    <Compile Include="Popups\SearchDialogViewModel.cs" />
-    <Compile Include="Popups\SettingsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

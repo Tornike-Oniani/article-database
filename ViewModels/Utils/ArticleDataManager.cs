@@ -94,7 +94,7 @@ namespace MainLib.ViewModels.Utils
             // 4. Catch if file doesn't exist physically
             catch
             {
-                _services.DialogService.OpenDialog(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
+                _services.ShowDialogWithOverlay(new DialogOkViewModel("File was not found", "Error", DialogType.Error));
             }
         }
         public void DeleteArticle(object input = null)
@@ -102,7 +102,7 @@ namespace MainLib.ViewModels.Utils
             try
             {
                 // 1. Ask user if they are sure
-                if (_services.DialogService.OpenDialog(
+                if (_services.ShowDialogWithOverlay(
                     new DialogYesNoViewModel("Are you sure you want to delete selected article?", "Warning", DialogType.Question)
                    ))
                 {
@@ -186,23 +186,23 @@ namespace MainLib.ViewModels.Utils
         // Dialog command actions
         public void OpenAddPersonalEditor(object input)
         {
-            _services.WindowService.OpenWindow(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle));
+            _services.ShowWindowWithOverlay(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle));
         }
         public void OpenBookmarkManager(object input = null)
         {
-            _services.WindowService.OpenWindow(new BookmarkManagerViewModel(ViewType.DataView, SelectedArticle));
+            _services.ShowWindowWithOverlay(new BookmarkManagerViewModel(ViewType.DataView, SelectedArticle));
         }
         public void OpenEditorDialog(object input = null)
         {
-            _services.WindowService.OpenWindow(new ArticleEditorViewModel(SelectedArticle, LoadArticlesCommand));
+            _services.ShowWindowWithOverlay(new ArticleEditorViewModel(SelectedArticle, LoadArticlesCommand));
         }
         public void OpenAbstractEditor(object input)
         {
-            _services.WindowService.OpenWindow(new AbstractEditorViewModel(SelectedArticle), passWindow: true);
+            _services.ShowWindowWithOverlay(new AbstractEditorViewModel(SelectedArticle), passWindow: true);
         }
         public void OpenReferenceManager(object input)
         {
-            _services.WindowService.OpenWindow(new ReferenceManagerViewModel(ViewType.DataView, SelectedArticle));
+            _services.ShowWindowWithOverlay(new ReferenceManagerViewModel(ViewType.DataView, SelectedArticle));
         }
         // Command validators
         public bool IsArticleSelected(object input = null)

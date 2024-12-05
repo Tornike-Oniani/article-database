@@ -2,15 +2,24 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
                     >
-    
-    <!-- Big header -->
-    <Style x:Key="BigHeader" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="{StaticResource shadcn_foreground_brush}" />
-        <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="FontFamily" Value="{StaticResource Inter}" />
-        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=BigHeaderFontSize}" />
+
+    <!-- Base style for font -->
+    <FontFamily x:Key="UIFont">Verdana</FontFamily>
+    <Style x:Key="BaseUIText" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
     </Style>
 
+    <FontFamily x:Key="ArticleFont">Verdana</FontFamily>
+    <Style x:Key="BaseArticleText" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="{DynamicResource ArticleFont}" />
+    </Style>
+
+    <!-- Big header -->
+    <Style x:Key="BigHeader" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseUIText}">
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=BigHeaderFontSize}" />
+    </Style>
     <!-- Generic header -->
     <Style x:Key="Header" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BigHeader}">
         <Setter Property="FontWeight" Value="SemiBold" />
@@ -27,21 +36,34 @@
         <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=SmallTextFontSize}" />
     </Style>
     <!-- Default text -->
-    <Style x:Key="DefaultText" TargetType="{x:Type TextBlock}">
+    <Style x:Key="DefaultText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BigHeader}">
         <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
-        <Setter Property="Foreground" Value="{StaticResource shadcn_foreground_brush}" />
+        <Setter Property="FontWeight" Value="Normal" />
     </Style>
     <!-- Small text -->
-    <Style x:Key="SmallText" TargetType="{x:Type TextBlock}">
+    <Style x:Key="SmallText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultText}">
         <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=SmallTextFontSize}" />
-        <Setter Property="Foreground" Value="{StaticResource shadcn_muted_foreground_brush}" />
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
     </Style>
     <!-- Label -->
-    <Style x:Key="Label" TargetType="{x:Type TextBlock}">
-        <Setter Property="Foreground" Value="{StaticResource shadcn_foreground_brush}" />
+    <Style x:Key="Label" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BigHeader}">
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="FontFamily" Value="{StaticResource Inter}" />
         <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+    </Style>
+        
+    <!-- Data header-->
+    <Style x:Key="ArticleHeader" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseArticleText}">
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleHeaderFontSize}" />
+    </Style>
+    <Style x:Key="ArticleText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ArticleHeader}">
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}" />
+    </Style>
+    <Style x:Key="ArticleSmallText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource ArticleText}">
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
     </Style>
 
 </ResourceDictionary>

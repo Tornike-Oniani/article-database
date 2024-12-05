@@ -18,34 +18,44 @@
             <!-- Name textbox -->
             <TextBox 
                 Text="{Binding Bookmark.Name, UpdateSourceTrigger=PropertyChanged}" 
-                Style="{StaticResource WatermarkTextBox}"
+                Style="{StaticResource ShadcnTextBox}"
                 ap:TextBoxHelper.Watermark="Bookmark name"
-                Margin="0 0 0 10" 
+                Margin="0 0 0 12" 
                 />
 
             <!-- Global checkbox -->
-            <CheckBox Content="Global"
-                      Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
-                      IsChecked="{Binding Bookmark.Global}"
-                      Style="{StaticResource FlatCheckbox}"
-                      HorizontalAlignment="Left"
-                      Margin="0 5 0 10" />
+            <CheckBox 
+                Content="Global"
+                Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                IsChecked="{Binding Bookmark.Global}"
+                Style="{StaticResource FlatCheckbox}"
+                HorizontalAlignment="Left"
+                Margin="0 0 0 24" 
+                />
 
             <!-- Buttons wrapper -->
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Right">
+            <StackPanel 
+                Orientation="Horizontal"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                >
                 <!-- Save button -->
-                <Button Content="Save" 
-                        Width="80"
-                        Margin="0 0 10 0" 
-                        Command="{Binding SaveBookmarkCommand}" 
-                        CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+                <Button 
+                    Content="Save" 
+                    Style="{StaticResource ShadcnButtonPrimary}"
+                    Width="100"
+                    Command="{Binding SaveBookmarkCommand}" 
+                    CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                    Margin="0 0 12 0" 
+                    />
                 <!-- Cancel button -->
-                <Button Content="Cancel" 
-                        Width="80" 
-                        IsCancel="True"
-                        Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                <Button 
+                    Content="Cancel" 
+                    IsCancel="True"
+                    Style="{StaticResource ShadcnButtonSecondary}"
+                    Width="100" 
+                    Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                    />
             </StackPanel>
         </StackPanel>
     </Border>

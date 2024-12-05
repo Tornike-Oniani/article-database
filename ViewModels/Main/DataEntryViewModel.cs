@@ -83,7 +83,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("Data Entry", "Select file", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public async void SaveArticle(object input = null)
@@ -171,7 +171,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("Data Entry", "Add article", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
@@ -193,7 +193,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("Data Entry", "Clear Article Attributes", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
         public void ClearTitle(object input = null)
@@ -202,11 +202,11 @@ namespace MainLib.ViewModels.Main
         }
         public void OpenBookmarkManager(object input = null)
         {
-            services.WindowService.OpenWindow(new BookmarkManagerViewModel(ViewType.DataEntry, bookmarks: Bookmarks));
+            services.ShowWindowWithOverlay(new BookmarkManagerViewModel(ViewType.DataEntry, bookmarks: Bookmarks));
         }
         public void OpenReferenceManager(object input = null)
         {
-            services.WindowService.OpenWindow(new ReferenceManagerViewModel(ViewType.DataEntry, references: References));
+            services.ShowWindowWithOverlay(new ReferenceManagerViewModel(ViewType.DataEntry, references: References));
         }
         public void ShowAbstractField(object input = null)
         {

@@ -84,7 +84,7 @@ namespace MainLib.ViewModels.Popups
                 if (e.Message.Contains("UNIQUE"))
                 {
                     if (
-                        Shared.GetInstance().DialogService.OpenDialog(new DialogYesNoViewModel("Bookmark with that name already exists, do you want to merge?", "Merge reference", DialogType.Question))
+                        Shared.GetInstance().ShowDialogWithOverlay(new DialogYesNoViewModel("Bookmark with that name already exists, do you want to merge?", "Merge reference", DialogType.Question))
                        )
                     {
                         BookmarkRepo repo = new BookmarkRepo();
@@ -106,7 +106,7 @@ namespace MainLib.ViewModels.Popups
                 else
                 {
                     new BugTracker().Track("Bookmark Editor", "Save Bookmark", e.Message, e.StackTrace);
-                    Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    Shared.GetInstance().ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
             finally

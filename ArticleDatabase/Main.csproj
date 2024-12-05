@@ -47,6 +47,9 @@
     <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
+      <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=1.2.6.1513, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.2.6\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -233,6 +236,10 @@
     <ProjectReference Include="..\Lib.Views\Lib.Views.csproj">
       <Project>{6293c9d0-2fed-45b5-b143-ced8f086371a}</Project>
       <Name>Lib.Views</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SliderControl\SliderControl.csproj">
+      <Project>{70736d5b-0990-41ef-85db-e6ed5c37caa5}</Project>
+      <Name>SliderControl</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViewModels\MainLib.ViewModels.csproj">
       <Project>{4414eb2f-7ab3-46f4-92c3-c4ecbcbe7b35}</Project>

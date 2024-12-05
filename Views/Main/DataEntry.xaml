@@ -411,7 +411,7 @@
             </Grid>
         </ScrollViewer>
         <Grid 
-            Visibility="{Binding IsAbstractFieldVisible, Converter={StaticResource BoolToVisibility}, FallbackValue=Visible}"
+            Visibility="{Binding IsAbstractFieldVisible, Converter={StaticResource BoolToVisibility}, FallbackValue=Hidden}"
             Focusable="True"
             >
             <Grid.InputBindings>
@@ -477,6 +477,7 @@
                     </Border>
                     <ScrollViewer 
                         MaxHeight="500"
+                        Background="{DynamicResource shadcn_background_brush}"
                         Grid.Row="1"
                         >
                         <Border 
@@ -501,10 +502,10 @@
                                         Text="{Binding ArticleForm.Abstract, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
                                         HighlightWords="{Binding ArticleForm.UnusualCharactersInAbstract}"
                                         HighlightColor="{StaticResource RedColorBrush}"
-                                        Style="{StaticResource WatermarkTextBox}"                                
+                                        Style="{StaticResource ShadcnTextBox}"
                                         TextWrapping="Wrap" 
                                         AcceptsReturn="True"
-                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=AbstractBoxFontSize}"
+                                        FontSize="16"
                                         SpellCheck.IsEnabled="True"
                                         FontFamily="Verdana"
                                         Width="750px"

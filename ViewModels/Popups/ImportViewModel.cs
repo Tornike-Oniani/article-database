@@ -68,7 +68,7 @@ namespace MainLib.ViewModels.Popups
             // Delete the temp query file
             File.Delete(Environment.CurrentDirectory + "\\" + "temp_query.txt");
 
-            Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Imported successfully", "Result", DialogType.Success));
+            Shared.GetInstance().ShowDialogWithOverlay(new DialogOkViewModel("Imported successfully", "Result", DialogType.Success));
 
             // Close progress window
             Window.Close();

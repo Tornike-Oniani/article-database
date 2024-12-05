@@ -27,7 +27,7 @@
         <!--Foreground="{Binding Type, Converter={StaticResource DialogTypeToColor}}"-->
         <materialDesign:PackIcon 
             Kind="{Binding Type, Converter={StaticResource DialogTypeToIcon}}"
-            Foreground="{StaticResource ShadcnBlackColorBrush}"
+            Foreground="{DynamicResource shadcn_foreground_brush}"
             Height="30"
             Width="30"
             VerticalAlignment="Center"
@@ -38,7 +38,7 @@
         <!-- Text -->
         <TextBlock 
             Text="{Binding Text,FallbackValue=SampleText}"
-            FontSize="14"
+            Style="{StaticResource DefaultText}"
             VerticalAlignment="Center"
             TextWrapping="Wrap"
             Grid.Column="1"
@@ -62,7 +62,7 @@
             <Button 
                 Content="Yes"
                 Style="{StaticResource ShadcnButtonPrimary}"
-                Width="80"
+                Width="100"
                 Margin="0 0 12 0"
                 Command="{Binding YesCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
@@ -78,7 +78,7 @@
             <Button 
                 Content="No"
                 Style="{StaticResource ShadcnButtonSecondary}"
-                Width="80"
+                Width="100"
                 Command="{Binding NoCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
                 />

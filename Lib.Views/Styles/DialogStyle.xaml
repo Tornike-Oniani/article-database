@@ -19,7 +19,7 @@
                         <Grid>
                             <!-- Window with border and drop shadow -->
                             <Border 
-                                Background="{StaticResource WhiteColorBrush}"
+                                Background="{DynamicResource shadcn_background_brush}"
                                 CornerRadius="4 4 4 4"
                                 >
                                 <Border.Effect>
@@ -28,7 +28,9 @@
                             </Border>
 
                             <!-- Main window content -->
-                            <Grid>
+                            <Grid
+                                Background="{DynamicResource shadcn_background_brush}"
+                                >
                                 <Grid.RowDefinitions>
                                     <!-- Title bar -->
                                     <RowDefinition Height="Auto" />
@@ -55,9 +57,7 @@
 
                                         <TextBlock 
                                             Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title,FallbackValue=DummyText}"
-                                            FontSize="18"
-                                            FontWeight="Bold"
-                                            Foreground="{StaticResource ShadcnTextColorBrush}"
+                                            Style="{DynamicResource Header}"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Left"
                                             Grid.Column="0" 

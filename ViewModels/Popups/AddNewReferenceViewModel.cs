@@ -45,14 +45,14 @@ namespace MainLib.ViewModels.Popups
             // Check if reference name or article is blank
             if (String.IsNullOrEmpty(ReferenceName) || String.IsNullOrEmpty(MainArticleTitle))
             {
-                _services.DialogService.OpenDialog(new DialogOkViewModel("Reference name and main article can't be blank.", "Error", DialogType.Error));
+                _services.ShowDialogWithOverlay(new DialogOkViewModel("Reference name and main article can't be blank.", "Error", DialogType.Error));
                 return;
             }
 
             // 1. Check if main article exists
             if (!new ArticleRepo().Exists(MainArticleTitle, out _))
             {
-                _services.DialogService.OpenDialog(new DialogOkViewModel("Article with that title doesn't exists, recheck main article name.", "Error", DialogType.Error));
+                _services.ShowDialogWithOverlay(new DialogOkViewModel("Article with that title doesn't exists, recheck main article name.", "Error", DialogType.Error));
                 return;
             }
 
@@ -60,7 +60,7 @@ namespace MainLib.ViewModels.Popups
             // 2. Create new Reference and check if it already exists
             if (!repo.AddReference(ReferenceName))
             {
-                _services.DialogService.OpenDialog(new DialogOkViewModel("Reference already exists", "Error", DialogType.Error));
+                _services.ShowDialogWithOverlay(new DialogOkViewModel("Reference already exists", "Error", DialogType.Error));
                 return;
             }
 

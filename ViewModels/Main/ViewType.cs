@@ -9,6 +9,7 @@
         References,
         Abstracts,
         SQL,
-        Browse
+        Browse,
+        Settings
     }
 }

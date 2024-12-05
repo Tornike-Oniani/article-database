@@ -23,8 +23,8 @@
         <TextBox
             x:Name="txbBookmarkName"
             Text="{Binding BookmarkName, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource WatermarkTextBox}"
             ap:TextBoxHelper.Watermark="Bookmark name"
+            Style="{StaticResource ShadcnTextBox}"
             Margin="0 0 0 12"
             />
         <!-- Is global -->
@@ -33,30 +33,30 @@
             Content="Global"
             Style="{StaticResource FlatCheckbox}"
             Visibility="{Binding User.IsAdmin, Converter={StaticResource BoolToVisibility}}"
-            Margin="0 0 0 12"
+            Margin="0 0 0 24"
             />
         <!-- Buttons -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <!-- Create column -->
-                <ColumnDefinition Width="*" />
-                <!-- Gap -->
-                <ColumnDefinition Width="12px" />
-                <!-- Cancel column -->
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <StackPanel
+            Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            >
             <!-- Create button -->
             <Button
                 Content="Create"
+                Style="{StaticResource ShadcnButtonPrimary}"
+                Width="100"
                 Command="{Binding CreateCommand}"
+                Margin="0 0 12 0"
                 Grid.Column="0"
                 />
             <!-- Cancel button -->
             <Button
                 Content="Cancel"
+                Style="{StaticResource ShadcnButtonSecondary}"
+                Width="100"
                 Command="{Binding CancelCommand}"
                 Grid.Column="2"
                 />
-        </Grid>
+        </StackPanel>
     </StackPanel>
 </UserControl>

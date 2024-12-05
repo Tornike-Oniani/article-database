@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MainLib.ViewModels.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="FontSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
     <Setting Name="SyncName" Type="System.String" Scope="User">
       <Value Profile="(Default)">Default</Value>
     </Setting>
@@ -14,11 +11,17 @@
     <Setting Name="AllowedCharacters" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ButtonFontSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">16</Value>
+    <Setting Name="UIFontFamily" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Verdana</Value>
+    </Setting>
+    <Setting Name="ArticleFontFamily" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Verdana</Value>
+    </Setting>
+    <Setting Name="BigHeaderFontSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="HeaderFontSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
+      <Value Profile="(Default)">18</Value>
     </Setting>
     <Setting Name="TextFontSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">16</Value>
@@ -26,11 +29,11 @@
     <Setting Name="SmallTextFontSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">14</Value>
     </Setting>
-    <Setting Name="InputTextFontSize" Type="System.Int32" Scope="User">
+    <Setting Name="ArticleHeaderFontSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">16</Value>
     </Setting>
-    <Setting Name="AbstractBoxFontSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">16</Value>
+    <Setting Name="ArticleTextFontSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">14</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -63,6 +63,9 @@
 
                 <!-- Misc resource dictionary -->
                 <ResourceDictionary Source="/MainLib.Views;component/Styles/Misc.xaml" />
+                
+                <!-- ComboBox resource dictionary -->
+                <ResourceDictionary Source="/MainLib.Views;component/Styles/ComboBoxes.xaml" />
 
                 <!-- Dialog resource dictionary -->
                 <ResourceDictionary Source="/Lib.Views;component/Styles/DialogStyle.xaml" />
@@ -124,11 +127,11 @@
                         <main:Browse />
                     </DataTemplate>
 
-                    <!-- Search dialog -->
-                    <DataTemplate DataType="{x:Type popupVM:SearchDialogViewModel}">
-                        <popupV:SearchDialog />
+                    <!-- Settings -->
+                    <DataTemplate DataType="{x:Type mainVM:SettingsViewModel}">
+                        <main:Settings />
                     </DataTemplate>
-                    
+
                     <!-- AddPersonal -->
                     <DataTemplate DataType="{x:Type popupVM:AddPersonalDialogViewModel}">
                         <popupVG:AddPersonal />
@@ -177,16 +180,6 @@
                     <!-- Reference editor -->
                     <DataTemplate DataType="{x:Type popupVM:ReferenceEditorViewModel}">
                         <popupV:ReferenceEditor />
-                    </DataTemplate>
-
-                    <!-- Settings -->
-                    <DataTemplate DataType="{x:Type popupVM:SettingsViewModel}">
-                        <popupV:SettingsDialog />
-                    </DataTemplate>
-
-                    <!-- Settings -->
-                    <DataTemplate DataType="{x:Type popupVM:ReportsViewerViewModel}">
-                        <popupV:ReportsViewer />
                     </DataTemplate>
 
                     <!-- Progress -->

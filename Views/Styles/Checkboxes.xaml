@@ -13,6 +13,7 @@
         <Setter Property="BorderThickness" Value="1 1 1 1" />
         <Setter Property="BorderBrush" Value="{StaticResource shadcn_muted_foreground_brush}" />
         <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+        <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
         <Setter Property="Foreground" Value="{StaticResource shadcn_foreground_brush}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -79,7 +80,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="OutlineFlatCheckbox" BasedOn="{StaticResource FlatCheckbox}" TargetType="{x:Type CheckBox}">
+    <Style x:Key="OutlineFlatCheckbox" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource FlatCheckbox}">
         <Setter Property="Padding" Value="18 12 18 12" />
         <Setter Property="BorderThickness" Value="1 1 1 1" />
         <Setter Property="BorderBrush" Value="{StaticResource shadcn_border_brush}" />

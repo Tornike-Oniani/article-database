@@ -51,14 +51,14 @@ namespace MainLib.ViewModels.Popups
             // Check for blank bookmark title
             if (String.IsNullOrEmpty(BookmarkName))
             {
-                _services.DialogService.OpenDialog(new DialogOkViewModel("Bookmark name can not be blank", "Error", DialogType.Error));
+                _services.ShowDialogWithOverlay(new DialogOkViewModel("Bookmark name can not be blank", "Error", DialogType.Error));
                 return;
             }
 
             // Check if bookmark already exists
             if (repo.GetBookmark(BookmarkName, _services.User) != null)
             {
-                _services.DialogService.OpenDialog(new DialogOkViewModel("Bookmark already exists", "Error", DialogType.Error));
+                _services.ShowDialogWithOverlay(new DialogOkViewModel("Bookmark already exists", "Error", DialogType.Error));
                 return;
             }
 

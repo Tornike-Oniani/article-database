@@ -20,7 +20,11 @@
                 From="0"
                 To="300"
                 Duration="0:0:0.15"
-                />
+                >
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
         </Storyboard>
         <Storyboard x:Key="CloseHistoryList">
             <DoubleAnimation
@@ -29,7 +33,11 @@
                 From="300"
                 To="0"
                 Duration="0:0:0.15"
-                />
+                >
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
         </Storyboard>
         <Storyboard x:Key="RotateArrow">
             <DoubleAnimation 
@@ -38,7 +46,11 @@
                 From="180"
                 To="0"
                 Duration="0:0:0.15"
-                />
+                >
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
         </Storyboard>
         <Storyboard x:Key="UnrotateArrow">
             <DoubleAnimation 
@@ -47,7 +59,11 @@
                 From="0"
                 To="180"
                 Duration="0:0:0.15"
-                />
+                >
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseInOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
         </Storyboard>
     </UserControl.Resources>
     
@@ -57,15 +73,18 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <WrapPanel HorizontalAlignment="Center" Grid.Row="0">
+        <WrapPanel 
+            HorizontalAlignment="Center" 
+            Grid.Row="0"
+            >
             <usercontrols:Widget 
                 Icon="{x:Static materialDesign:PackIconKind.Account}" 
                 FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=SmallTextFontSize}"
                 Title="Change Account" 
-                Description="Go back to login window" 
-                Background="#3baae1" 
-                Foreground="#ffffff" 
-                Click="ChangeAccount_Click" 
+                Description="Log out from your account" 
+                Foreground="#3baae1" 
+                Click="ChangeAccount_Click"
+                Margin="0 0 12 12"
                 />
             <usercontrols:Widget 
                 Icon="{x:Static materialDesign:PackIconKind.Import}" 
@@ -73,9 +92,9 @@
                 IsEnabled="{Binding User.IsAdmin}"
                 Title="Import Section" 
                 Description="Imports data from selected section" 
-                Background="#55bc75" 
-                Foreground="#ffffff"
+                Foreground="#55bc75"
                 Command="{Binding ImportCommand}" 
+                Margin="0 0 12 12"
                 />
             <usercontrols:Widget 
                 Icon="{x:Static materialDesign:PackIconKind.TableSearch}" 
@@ -83,9 +102,9 @@
                 IsEnabled="{Binding User.IsAdmin}"
                 Title="Validate" 
                 Description="Checks if all records have valid .pdf file" 
-                Background="#eac85d" 
-                Foreground="#ffffff" 
+                Foreground="#eac85d" 
                 Command="{Binding ValidateCommand}" 
+                Margin="0 0 12 12"
                 />
             <usercontrols:Widget 
                 Icon="{x:Static materialDesign:PackIconKind.DatabaseSync}" 
@@ -93,9 +112,9 @@
                 IsEnabled="{Binding User.IsAdmin}"
                 Title="Sync" 
                 Description="Synchronize information from json" 
-                Background="#FF31B4AE" 
-                Foreground="#ffffff" 
+                Foreground="#FF31B4AE" 
                 Command="{Binding SyncCommand}" 
+                Margin="0 0 12 12"
                 />
             <usercontrols:Widget 
                 Icon="{x:Static materialDesign:PackIconKind.DatabaseExport}" 
@@ -103,9 +122,9 @@
                 IsEnabled="{Binding ExportSyncStatus}"
                 Title="Export Sync" 
                 Description="Export synchronization json file" 
-                Background="#FFB94A69" 
-                Foreground="#ffffff" 
-                Command="{Binding ExportSyncCommand}" 
+                Foreground="#FFB94A69" 
+                Command="{Binding ExportSyncCommand}"
+                Margin="0 0 12 12"
                 />
         </WrapPanel>
 
@@ -120,7 +139,7 @@
         <!-- Sync information -->
         <Border 
             BorderThickness="0 1 0 0" 
-            BorderBrush="{DynamicResource GrayColorLightBrush}"
+            BorderBrush="{DynamicResource shadcn_muted_brush}"
             Padding="20 15 20 15"
             Grid.Row="1"
             >

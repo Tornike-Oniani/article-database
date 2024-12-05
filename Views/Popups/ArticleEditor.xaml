@@ -17,7 +17,7 @@
         <converters:PathToNameConverter x:Key="PathToName" />
     </UserControl.Resources>
 
-    <Border Padding="20 5 20 5">
+    <Border>
         <StackPanel>
             <!-- Title -->
             <AdornerDecorator>
@@ -27,7 +27,7 @@
                     HighlightWords="{Binding ArticleForm.UnusualCharactersInTitle}"
                     HighlightColor="{StaticResource RedColorBrush}"
                     ap:TextBoxHelper.Watermark="Title"
-                    Style="{StaticResource WatermarkTextBox}" 
+                    Style="{StaticResource ShadcnTextBox}" 
                     AcceptsReturn="True" 
                     TextWrapping="Wrap"
                     SpellCheck.IsEnabled="True" 
@@ -60,10 +60,10 @@
                 <TextBox 
                     Text="{Binding ArticleForm.Year, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
                     ap:TextBoxHelper.Watermark="Year"
-                    Style="{StaticResource WatermarkTextBox}"
+                    Style="{StaticResource ShadcnTextBox}"
                     Width="200" 
                     HorizontalAlignment="Left"
-                    Margin="0 0 0 26"
+                    Margin="0 0 0 24"
                     />
             </AdornerDecorator>
 
@@ -71,7 +71,7 @@
             <TextBox 
                 Text="{Binding ArticleForm.PersonalComment}" 
                 ap:TextBoxHelper.Watermark="Personal comment"
-                Style="{StaticResource WatermarkTextBox}"
+                Style="{StaticResource ShadcnTextBox}"
                 FontFamily="Verdana"
                 Margin="0 0 0 12" 
                 />
@@ -93,22 +93,42 @@
                 <StackPanel>
                     <!--File name label-->
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="File name:" />
-                        <TextBlock Text="{Binding Article.FileName}" Margin="5 0 0 0" />
+                        <TextBlock 
+                            Text="File name:" 
+                            Style="{StaticResource SmallText}"
+                            Margin="0 0 6 0"
+                            />
+                        <TextBlock 
+                            Text="{Binding Article.FileName}" 
+                            Style="{StaticResource SmallText}"
+                            />
                     </StackPanel>
 
                     <!-- File text box -->
                     <AdornerDecorator>
-                        <TextBox Text="{Binding SelectedFile, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource PathToName}}" materialDesign:HintAssist.Hint="file.pdf" Width="200" IsReadOnly="True" IsTabStop="False" />
+                        <TextBox 
+                            Text="{Binding SelectedFile, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource PathToName}}" 
+                            Style="{StaticResource ShadcnTextBox}"
+                            Width="200" 
+                            IsReadOnly="True" 
+                            IsTabStop="False" 
+                            />
                     </AdornerDecorator>
                 </StackPanel>
-                <Button Content="Select File" Width="150" Margin="10 0 0 0" Command="{Binding SelectFileCommand}" />
+                <Button 
+                    Content="Select File" 
+                    Style="{StaticResource ShadcnButtonPrimary}"
+                    Width="150" 
+                    VerticalAlignment="Bottom"
+                    Command="{Binding SelectFileCommand}" 
+                    Margin="12 0 0 0" 
+                    />
                 <CheckBox
                     IsChecked="{Binding ArticleForm.FileContainsOnlyAbstract}"
                     Content="File contains only abstract"
                     Style="{StaticResource FlatCheckbox}"
                     VerticalAlignment="Bottom"
-                    Margin="12 0 0 6"
+                    Margin="12 0 0 0"
                     />
             </StackPanel>
 
@@ -125,16 +145,18 @@
 
                 <Button 
                     Content="Update" 
+                    Style="{StaticResource ShadcnButtonPrimary}"
                     Command="{Binding UpdateArticleCommand}"
                     CommandParameter="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                    Margin="0 0 5 0" 
+                    Margin="0 0 6 0" 
                     Grid.Column="1" 
                     />
                 <Button 
                     Content="Cancel" 
                     IsCancel="True"
-                    Margin="6 0 0 0" 
+                    Style="{StaticResource ShadcnButtonSecondary}"
                     Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" 
+                    Margin="6 0 0 0" 
                     Grid.Column="2" 
                     />
             </Grid>

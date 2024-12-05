@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:MainLib.Views.Pages"
+      xmlns:aps="clr-namespace:Lib.Styles.Attached_Properties;assembly=Lib.Styles"
       xmlns:converters="clr-namespace:MainLib.Views.Converters"
       xmlns:usercontrols="clr-namespace:MainLib.Views.UserControls"
       mc:Ignorable="d" 
@@ -14,9 +15,11 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
     </Page.Resources>
 
-    <Grid Margin="0 0 0 24">
+    <Grid>
         <Grid.RowDefinitions>
             <!-- Top menu row-->
+            <RowDefinition Height="Auto" />
+            <!-- Search row -->
             <RowDefinition Height="Auto" />
             <!-- Bookmarks row -->
             <RowDefinition Height="*" />
@@ -24,17 +27,66 @@
         
         <!-- Top menu -->
         <Grid 
-            Margin="0 0 0 12"
+            Margin="0 0 0 24"
             Grid.Row="0"
             >
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Left">
+                <materialDesign:PackIcon
+                    Kind="BookmarkOutline"
+                    Width="24"
+                    Height="24"
+                    Foreground="{DynamicResource shadcn_foreground_brush}"
+                    VerticalAlignment="Center"
+                    Margin="0 0 12 0"
+                    />
+                <TextBlock
+                    Text="Bookmarks"
+                    Style="{StaticResource Header}"
+                    VerticalAlignment="Center"
+                    />
+            </StackPanel>
             <Button
-                Content="Create new"
+                Style="{StaticResource ShadcnButtonPrimary}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
                 Command="{Binding AddNewBookmarkCommand}"
-                HorizontalAlignment="Left"
-                />
+                >
+                <Button.Content>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        >
+                        <materialDesign:PackIcon
+                            Kind="AddCircleOutline"
+                            Width="16"
+                            Height="16"
+                            Foreground="{DynamicResource shadcn_primary_foreground_brush}"
+                            VerticalAlignment="Center"
+                            Margin="0 0 8 0"
+                            />
+                        <TextBlock
+                            Text="Create Bookmark"
+                            Style="{StaticResource DefaultText}"
+                            Foreground="{DynamicResource shadcn_primary_foreground_brush}"
+                            VerticalAlignment="Center"
+                            />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
         </Grid>
+        <!-- Search -->
+        <TextBox
+            Text="{Binding SearchString}"
+            aps:TextBoxHelper.Watermark="Search bookmarks..."
+            Style="{StaticResource ShadcnTextBox}"
+            Margin="0 0 0 24"
+            Grid.Row="1"
+            />
         <!-- Bookmarks -->
-        <Grid Grid.Row="1">
+        <Grid 
+            Grid.Row="2"
+            >
             <Grid.ColumnDefinitions>
                 <!-- My bookmarks column -->
                 <ColumnDefinition Width="*" />
@@ -45,134 +97,92 @@
             </Grid.ColumnDefinitions>
 
             <!-- MY BOOKMARKS -->
-            <Border
-                Background="{DynamicResource GrayColorLightBrush}"
-                BorderThickness="1 1 1 1"
-                BorderBrush="{DynamicResource GrayColorBrush}"
-                CornerRadius="6 6 6 6"
+            <Grid
                 Grid.Column="0"
                 >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <!-- Title column -->
-                        <RowDefinition Height="Auto" />
-                        <!-- Listview column -->
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-
-                    <!-- Title -->
-                    <Grid Margin="12 6 12 6" Grid.Row="0">
-                        <Grid.ColumnDefinitions>
+                <Border
+                    Background="{DynamicResource shadcn_background_brush}"
+                    CornerRadius="6 6 6 6"
+                    Effect="{StaticResource shadow_sm}"
+                    />
+                <Border
+                    Background="{DynamicResource shadcn_background_brush}"                
+                    BorderThickness="1 1 1 1"
+                    BorderBrush="{DynamicResource shadcn_border_brush}"
+                    Padding="18 18 18 18"
+                    CornerRadius="6 6 6 6"
+                    >
+                    <Grid>
+                        <Grid.RowDefinitions>
                             <!-- Title column -->
-                            <ColumnDefinition Width="Auto" />
-                            <!-- Search column -->
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <!-- Listview column -->
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-                        <StackPanel Orientation="Horizontal"
-                        Grid.Column="0">
-                            <materialDesign:PackIcon 
-                                Kind="BookmarkMultiple"
-                                VerticalAlignment="Center"
-                                Foreground="{StaticResource TextColorBrush}"
-                                Height="24"
-                                Width="24"
-                                Margin="0 0 5 0"
-                                Grid.Row="0"
-                                Grid.Column="2" 
-                                />
-                            <TextBlock 
-                                Text="My bookmarks:"
-                                Style="{StaticResource MediumHeader}"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                />
-                        </StackPanel>
+                        <!-- Title -->
+                        <TextBlock 
+                            Text="My bookmarks:"
+                            Style="{StaticResource MediumHeader}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="0 0 0 12"
+                            />
 
-                        <!-- Filter box column -->
-                        <usercontrols:FilterBox
-                            ItemsSource="{Binding _bookmarksCollection}"
-                            Width="200"
-                            HorizontalAlignment="Right"
-                            Margin="0 0 0 5"
-                            Grid.Column="1"
+                        <!-- Bookmarks list view -->
+                        <ListView
+                            ItemsSource="{Binding BookmarksCollection}"
+                            Style="{StaticResource BookmarkList}"
+                            LostFocus="ListView_LostFocus"
+                            Grid.Row="1" 
                             />
                     </Grid>
-
-                    <!-- Bookmarks list view -->
-                    <ListView
-                        ItemsSource="{Binding BookmarksCollection}"
-                        Style="{StaticResource BookmarkList}"
-                        LostFocus="ListView_LostFocus"
-                        Grid.Row="1" 
-                        />
-                </Grid>
-            </Border>
+                </Border>
+            </Grid>
 
             <!-- GLOBAL BOOKMARKS -->
-            <Border
-                Background="{DynamicResource GrayColorLightBrush}"
-                BorderThickness="1 1 1 1"
-                BorderBrush="{DynamicResource GrayColorBrush}"
-                CornerRadius="6 6 6 6"
+            <Grid
                 Grid.Column="2"
                 >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <!-- Title column -->
-                        <RowDefinition Height="Auto" />
-                        <!-- Listview column -->
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+                <Border
+                    Background="{DynamicResource shadcn_background_brush}"
+                    CornerRadius="6 6 6 6"
+                    Effect="{StaticResource shadow_sm}"
+                    />
+                <Border
+                    Background="{DynamicResource shadcn_background_brush}"                
+                    BorderThickness="1 1 1 1"
+                    BorderBrush="{DynamicResource shadcn_border_brush}"
+                    Padding="18 18 18 18"
+                    CornerRadius="6 6 6 6"
+                    >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <!-- Title column -->
+                                <RowDefinition Height="Auto" />
+                                <!-- Listview column -->
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
 
-                    <!-- Title -->
-                    <Grid Margin="12 6 12 6" Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <!-- Title column -->
-                            <ColumnDefinition Width="Auto" />
-                            <!-- Search column -->
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel 
-                            Orientation="Horizontal"
-                            Grid.Column="0"
-                            >
-                            <materialDesign:PackIcon 
-                                Kind="Globe"
-                                VerticalAlignment="Center"
-                                Foreground="{StaticResource TextColorBrush}"
-                                Height="25"
-                                Width="25"
-                                Margin="0 0 5 0"
-                                />
+                            <!-- Title -->
                             <TextBlock 
                                 Text="Global bookmarks:"
                                 Style="{StaticResource MediumHeader}"
-                                HorizontalAlignment="Left" 
+                                HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
+                                Margin="0 0 0 12"
                                 />
-                        </StackPanel>
 
-                        <!-- Filter box column -->
-                        <usercontrols:FilterBox 
-                            ItemsSource="{Binding _globalBookmarksCollection}"
-                            Width="200"
-                            HorizontalAlignment="Right"
-                            Margin="0 0 0 5"
-                            Grid.Column="1" 
-                            />
+                            <!-- Bookmarks list view -->
+                            <ListView 
+                                ItemsSource="{Binding GlobalBookmarksCollection}"
+                                Style="{StaticResource GlobalBookmarkList}"
+                                LostFocus="ListView_LostFocus"
+                                Grid.Row="1" 
+                                />
                     </Grid>
-
-                    <!-- Bookmarks list view -->
-                    <ListView 
-                        ItemsSource="{Binding GlobalBookmarksCollection}"
-                        Style="{StaticResource GlobalBookmarkList}"
-                        LostFocus="ListView_LostFocus"
-                        Grid.Row="1" 
-                        />
-                </Grid>
-            </Border>
+                    </Border>
+            </Grid>
         </Grid>
     </Grid>
     

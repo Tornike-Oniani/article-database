@@ -139,13 +139,13 @@ namespace MainLib.ViewModels.Popups
                 // Message = "constraint failed\r\nUNIQUE constraint failed: tblArticle.Title"
                 if (e.Message.Contains("UNIQUE") && e.Message.Contains("Title"))
                 {
-                    services.DialogService.OpenDialog(new DialogOkViewModel("Article with that name already exists", "Duplicate", DialogType.Warning));
+                    services.ShowDialogWithOverlay(new DialogOkViewModel("Article with that name already exists", "Duplicate", DialogType.Warning));
 
                 }
                 else
                 {
                     new BugTracker().Track("Data View (sub window)", "Update Article", e.Message, e.StackTrace);
-                    services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                    services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
                 }
             }
 

@@ -80,7 +80,11 @@
                 </Grid.RowDefinitions>
                 
                 <!-- Proxy element to change datagrid columns' DataContext -->
-                <ContentControl Visibility="Collapsed" Content="{StaticResource ProxyElement}" Grid.Row="0" />
+                <ContentControl 
+                    Visibility="Collapsed" 
+                    Content="{StaticResource ProxyElement}" 
+                    Grid.Row="0" 
+                    />
 
                 <DataGrid 
                     ItemsSource="{Binding ArticlesCollection}"
@@ -92,33 +96,34 @@
                     >
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                            <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
-                        <Setter Property="Padding" Value="6 6 6 6" />
-                        <Setter Property="Background" Value="{StaticResource LavenderColorBrush}" />
-                        <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-                        <Setter Property="BorderThickness" Value="0 0 1 0" />
-                        <Setter Property="BorderBrush" Value="{StaticResource LavenderColorDarkBrush}" />
+                        <Setter Property="Padding" Value="12 8 12 8" />
+                        <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
+                        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+                        <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
+                        <Setter Property="BorderThickness" Value="0 0 0 1" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource shadcn_border_brush}" />
                         <Setter Property="Command" Value="{Binding DataContext.SortFromDataGridCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
                         <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
                         <Setter Property="Cursor" Value="Hand" />
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
                             </Trigger>
                             <Trigger Property="SortDirection" Value="Ascending">
-                                <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-                                <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                                <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
                             </Trigger>
                             <Trigger Property="SortDirection" Value="Descending">
-                                <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
-                                <Setter Property="Background" Value="{StaticResource PrimaryColorBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                                <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.CellStyle>
                     <Style TargetType="{x:Type DataGridCell}">
-                        <Setter Property="Padding" Value="10" />
+                        <Setter Property="Padding" Value="18 18 18 18" />
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="Template">
                             <Setter.Value>
@@ -129,9 +134,11 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
+
                         <Style.Triggers>
+                            <!-- We need this because on default it sets foreground to white -->
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -141,7 +148,7 @@
                         <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
                             <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
                             <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
-                        <!-- Remove article -->
+                            <!-- Remove article -->
                             <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.RemoveArticleFromReferenceCommand}" CommandParameter="{Binding Reference}">
                             <MenuItem.Header>
                                 <Grid>
@@ -154,21 +161,21 @@
                                     <TextBlock Text="Del" Grid.Column="2" />
                                 </Grid>
                             </MenuItem.Header>
-                        </MenuItem>
+                         </MenuItem>
                         <!-- Copy -->
-                            <MenuItem Command="{Binding ArticleDataManager.CopyTitleCommand}">
-                            <MenuItem.Header>
-                                <Grid Width="130">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Copy Title" Grid.Column="0" />
-                                    <TextBlock Text="Ctrl+C" Grid.Column="2" />
-                                </Grid>
-                            </MenuItem.Header>
-                        </MenuItem>
+                        <MenuItem Command="{Binding ArticleDataManager.CopyTitleCommand}">
+                        <MenuItem.Header>
+                            <Grid Width="130">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Copy Title" Grid.Column="0" />
+                                <TextBlock Text="Ctrl+C" Grid.Column="2" />
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.InputBindings>
@@ -183,11 +190,7 @@
                         Header="Title" 
                         Width="*" 
                         SortMemberPath="Title"
-                        SortDirection="{
-                            Binding DataContext.SelectedSort, 
-                            Source={StaticResource ProxyElement},
-                            Converter={StaticResource SortConverter}, 
-                            ConverterParameter=Title}"
+                        SortDirection="{Binding DataContext.SelectedSort, Source={StaticResource ProxyElement}, Converter={StaticResource SortConverter}, ConverterParameter=Title}"
                         >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -203,28 +206,28 @@
                                     </Grid.RowDefinitions>
                                     <!-- Title -->
                                     <TextBlock 
-                                    Text="{Binding Title}"
-                                    Style="{Binding AbstractShown, Converter={StaticResource BoolToTextHeaderStyle}}"
-                                    TextWrapping="Wrap"
-                                    Grid.Column="0"
-                                    Grid.Row="0"
-                                    />
+                                        Text="{Binding Title}"
+                                        Style="{StaticResource ArticleText}"
+                                        TextWrapping="Wrap"
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        />
                                     <!-- File contains only abstract label -->
                                     <Border
-                                    Visibility="{Binding AbstractOnly, Converter={StaticResource IntToVisibility}}"
-                                    Padding="6 3 6 3"
-                                    CornerRadius="6"
-                                    Background="{StaticResource PrimaryColorBrush}"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Bottom"
-                                    Margin="0 0 -7 -7"
-                                    Grid.Column="0"
-                                    Grid.Row="0"
-                                    >
+                                        Visibility="{Binding AbstractOnly, Converter={StaticResource IntToVisibility}}"
+                                        Padding="8 4 8 4"
+                                        CornerRadius="6 6 6 6"
+                                        Background="{DynamicResource shadcn_primary_brush}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0 0 -7 -7"
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        >
                                         <TextBlock
-                                        Text="AO"                                        
-                                        Foreground="{StaticResource WhiteColorBrush}"
-                                        FontSize="12"
+                                            Text="AO"                                        
+                                            Foreground="{StaticResource shadcn_primary_foreground_brush}"
+                                            FontSize="12"
                                         />
                                     </Border>
                                     <!-- Show/Hide abstract button -->
@@ -232,7 +235,8 @@
                                         IsChecked="{Binding AbstractShown, UpdateSourceTrigger=PropertyChanged}"
                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"                                    
                                         Style="{x:Null}"
-                                        Foreground="{StaticResource PrimaryColorBrush}"
+                                        Foreground="{DynamicResource shadcn_primary_brush}"
+                                        BorderBrush="{DynamicResource shadcn_border_brush}"
                                         Cursor="Hand"
                                         VerticalAlignment="Top"
                                         Margin="6 0 0 0"
@@ -242,29 +246,29 @@
                                         <ToggleButton.Template>
                                             <ControlTemplate TargetType="{x:Type ToggleButton}">
                                                 <Border
-                                                BorderThickness="1 1 1 1"
-                                                BorderBrush="{StaticResource PrimaryColorBrush}"                                                
-                                                CornerRadius="6"
-                                                Background="Transparent"
-                                                Padding="6 6 6 6"
-                                                >
+                                                    BorderThickness="1 1 1 1"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"                                                
+                                                    CornerRadius="6 6 6 6"
+                                                    Background="Transparent"
+                                                    Padding="6 6 6 6"
+                                                    >
                                                     <ContentPresenter />
                                                 </Border>
                                             </ControlTemplate>
                                         </ToggleButton.Template>
                                         <ToggleButton.Content>
                                             <materialDesign:PackIcon 
-                                            x:Name="AbstractShowArrow"
-                                            Kind="ArrowDown"                                            
-                                            Height="14"
-                                            Width="14"
-                                            >
+                                                x:Name="AbstractShowArrow"
+                                                Kind="ArrowDown"                                            
+                                                Height="14"
+                                                Width="14"
+                                                >
                                                 <materialDesign:PackIcon.RenderTransform>
                                                     <RotateTransform 
-                                                    Angle="0" 
-                                                    CenterX="7" 
-                                                    CenterY="7" 
-                                                    />
+                                                        Angle="0" 
+                                                        CenterX="7" 
+                                                        CenterY="7" 
+                                                        />
                                                 </materialDesign:PackIcon.RenderTransform>
                                             </materialDesign:PackIcon>
                                         </ToggleButton.Content>
@@ -281,22 +285,23 @@
                                     </ToggleButton>
                                     <!-- Abstract body -->
                                     <Border
-                                    x:Name="AbstractWrapper"
-                                    Visibility="{Binding AbstractShown, Converter={StaticResource BoolToVisibility}}"
-                                    Margin="0 6 0 0"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="2"
-                                    Grid.Row="1"
-                                    >
+                                        x:Name="AbstractWrapper"
+                                        Visibility="{Binding AbstractShown, Converter={StaticResource BoolToVisibility}}"
+                                        Margin="0 6 0 0"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Grid.Row="1"
+                                        >
                                         <Border.RenderTransform>
                                             <ScaleTransform ScaleY="0" />
                                         </Border.RenderTransform>
                                         <TextBlock
-                                        Text="{Binding AbstractBody}"
-                                        TextWrapping="Wrap"
-                                        TextAlignment="Justify"
-                                        Grid.Row="1"
-                                        />
+                                            Text="{Binding AbstractBody}"
+                                            Style="{StaticResource ArticleText}"
+                                            TextWrapping="Wrap"
+                                            TextAlignment="Justify"
+                                            Grid.Row="1"
+                                            />
                                     </Border>
                                 </Grid>
                             </DataTemplate>
@@ -314,7 +319,11 @@
                         >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Authors}" TextWrapping="Wrap" />
+                                <TextBlock 
+                                    Text="{Binding Authors}" 
+                                    Style="{StaticResource ArticleText}"
+                                    TextWrapping="Wrap" 
+                                    />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -330,7 +339,11 @@
                         >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Keywords}" TextWrapping="Wrap" />
+                                <TextBlock 
+                                    Text="{Binding Keywords}" 
+                                    Style="{StaticResource ArticleText}"
+                                    TextWrapping="Wrap" 
+                                    />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -353,7 +366,11 @@
                         >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Year}" TextWrapping="Wrap" />
+                                <TextBlock 
+                                    Text="{Binding Year}" 
+                                    Style="{StaticResource ArticleText}"
+                                    TextWrapping="Wrap" 
+                                    />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -376,7 +393,11 @@
                         >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" />
+                                <TextBlock 
+                                    Text="{Binding FileName}" 
+                                    Style="{StaticResource ArticleText}"
+                                    TextWrapping="Wrap" 
+                                    />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -398,7 +419,11 @@
                         >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding PersonalComment}" TextWrapping="Wrap" />
+                                <TextBlock 
+                                    Text="{Binding PersonalComment}" 
+                                    Style="{StaticResource ArticleText}"
+                                    TextWrapping="Wrap" 
+                                    />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -416,7 +441,11 @@
                         >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding SIC, Converter={StaticResource NumberToSIC}}" TextWrapping="Wrap" />
+                                <TextBlock 
+                                    Text="{Binding SIC, Converter={StaticResource NumberToSIC}}" 
+                                    Style="{StaticResource ArticleText}"
+                                    TextWrapping="Wrap" 
+                                    />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -478,7 +507,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListView}">
-                                    <Grid Background="{DynamicResource GrayColorBrush}">
+                                    <Grid Background="{DynamicResource shadcn_muted_brush}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width=".3*" />
                                             <ColumnDefinition Width="*" />
@@ -499,9 +528,9 @@
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListViewItem}">
                                                 <Border
-                                                    Background="{StaticResource WhiteColorBrush}"
+                                                    Background="{DynamicResource shadcn_background_brush}"
                                                     Padding="{TemplateBinding Padding}"
-                                                    CornerRadius="3 3 3 3"
+                                                    CornerRadius="4 4 4 4"
                                                     Margin="0 0 0 12"
                                                     >
                                                     <ContentPresenter />
@@ -555,7 +584,7 @@
                                                     <!-- Title -->
                                                     <TextBlock
                                                         Text="{Binding Title}"
-                                                        Style="{StaticResource Header}"
+                                                        Style="{StaticResource ArticleHeader}"
                                                         FontFamily="Verdana"
                                                         TextWrapping="Wrap"
                                                         Margin="0 0 0 6"
@@ -570,9 +599,8 @@
                                                         <TextBlock
                                                             Text="{Binding Year}"
                                                             Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
-                                                            Style="{StaticResource SmallText}"
+                                                            Style="{StaticResource ArticleSmallText}"
                                                             FontStyle="Italic"
-                                                            Foreground="{StaticResource BlackColorAltBrush}"                                                                                                        
                                                             Margin="0 0 6 0"
                                                             />
                                                         <TextBlock
@@ -583,15 +611,14 @@
                                                                 RelativeSource FindAncestor, 
                                                                 AncestorType={x:Type Page}}, 
                                                                 Converter={StaticResource BoolToVisibility}}"
-                                                            FontSize="14"
+                                                            Style="{StaticResource ArticleSmallText}"
                                                             />
                                                     </StackPanel>
                                                     <!-- Keywords -->
                                                     <TextBlock
                                                         Text="{Binding Keywords}"
                                                         Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
-                                                        Style="{StaticResource SmallText}"
-                                                        Foreground="{StaticResource LabelColorBrush}"
+                                                        Style="{StaticResource ArticleSmallText}"
                                                         Margin="6 0 0 6"
                                                         Grid.Row="2"
                                                         />
@@ -599,78 +626,34 @@
                                                     <TextBlock
                                                         Text="{Binding Authors}"
                                                         Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
-                                                        Style="{StaticResource SmallText}"
-                                                        Foreground="{StaticResource BlackColorAltBrush}"
+                                                        Style="{StaticResource ArticleSmallText}"
+                                                        Foreground="{DynamicResource shadcn_foreground_brush}"
                                                         Margin="0 0 0 12"
                                                         Grid.Row="3"
                                                         />
                                                     <!-- Seprator -->
                                                     <Separator 
                                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
+                                                        Margin="0 0 0 2"
                                                         Grid.Row="4" 
                                                         />
                                                     <!-- Abstract -->
                                                     <TextBlock
                                                         Text="{Binding AbstractBody}"
                                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
-                                                        Style="{StaticResource DefaultText}"
+                                                        Style="{StaticResource ArticleText}"
                                                         TextWrapping="Wrap"
-                                                        Foreground="{StaticResource BlackColorAltBrush}"
                                                         Margin="0 0 0 12"
                                                         Grid.Row="5"
                                                         />
                                                     <!-- Open file-->
                                                     <Button 
                                                         Content="View PDF"
+                                                        Style="{StaticResource ViewPDFButtonStyle}"
                                                         Command="{Binding DataContext.ArticleDataManager.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"
                                                         CommandParameter="{Binding}"
                                                         Grid.Row="6"
-                                                        >
-                                                        <Button.Style>
-                                                            <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
-                                                                <Setter Property="Foreground" Value="{StaticResource BlueColorBrush}" />
-                                                                <Setter Property="BorderThickness" Value="0 0 0 0" />
-                                                                <Setter Property="BorderBrush" Value="{StaticResource TextHighlightColorBrush}" />
-                                                                <Setter Property="Cursor" Value="Hand" />
-                                                                <Setter Property="Template">
-                                                                    <Setter.Value>
-                                                                        <ControlTemplate TargetType="{x:Type Button}">
-                                                                            <StackPanel 
-                                                                            Orientation="Horizontal" 
-                                                                            Background="Transparent"
-                                                                            >
-                                                                                <materialDesign:PackIcon
-                                                                                Kind="FilePdf"
-                                                                                Width="24"
-                                                                                Height="24"
-                                                                                Foreground="{StaticResource LabelColorBrush}"
-                                                                                Margin="0 0 6 0"
-                                                                                />
-                                                                                <Border
-                                                                                BorderThickness="{TemplateBinding BorderThickness}"
-                                                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                                                VerticalAlignment="Center"
-                                                                                >
-                                                                                    <TextBlock
-                                                                                    Text="{TemplateBinding Content}"
-                                                                                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
-                                                                                    Foreground="{TemplateBinding Foreground}"
-                                                                                    />
-                                                                                </Border>
-                                                                            </StackPanel>
-                                                                        </ControlTemplate>
-                                                                    </Setter.Value>
-                                                                </Setter>
-
-                                                                <Style.Triggers>
-                                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
-                                                                        <Setter Property="BorderThickness" Value="0 0 0 2" />
-                                                                    </Trigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Button.Style>
-                                                    </Button>
+                                                        />
                                                 </Grid>
                                             </DataTemplate>
                                         </Setter.Value>
@@ -702,7 +685,9 @@
         </Grid.RowDefinitions>
 
         <!-- Ribbon -->
-        <Grid Grid.Row="0">
+        <Grid 
+            Grid.Row="0"
+            >
             <TabControl
                 Style="{StaticResource Ribbon}"
                 MinHeight="105"
@@ -795,25 +780,29 @@
                             >
                             <TextBlock 
                                 Text="Sort by:"
-                                FontSize="12"
-                                Foreground="{StaticResource LabelColorBrush}" 
+                                Style="{StaticResource DefaultText}"
                                 VerticalAlignment="Center"
                                 Margin="0 0 6 0"
                                 />
                             <ComboBox 
                                 ItemsSource="{Binding SortableProperties}" 
                                 SelectedItem="{Binding SelectedSortProperty}"
-                                MinWidth="70"
+                                Style="{StaticResource ShadcnSelectStyle}"
+                                MinWidth="80"
+                                VerticalAlignment="Center"
                                 Margin="0 0 6 0"
                                 />
                             <ComboBox 
                                 ItemsSource="{Binding SortDirections}" 
                                 SelectedItem="{Binding SelectedSortDirection}"
-                                MinWidth="45"
+                                Style="{StaticResource ShadcnSelectStyle}"
+                                MinWidth="65"
+                                VerticalAlignment="Center"
                                 Margin="0 0 6 0"
                                 />
                             <Button 
-                                Style="{StaticResource MaterialDesignIconButton}"
+                                Style="{StaticResource ShadcnGhostButton}"
+                                VerticalAlignment="Center"
                                 Command="{Binding SortFromRibbonCommand}"
                                 >
                                 <Button.Content>
@@ -846,9 +835,9 @@
                             />
                         <Button
                             Content="Export whole reference PDFs"
-                            Command="{Binding ExportReferenceCommand}"
-                            Style="{StaticResource GenericButton}"
+                            Style="{StaticResource ShadcnButtonPrimary}"
                             VerticalAlignment="Center"
+                            Command="{Binding ExportReferenceCommand}"
                             />
                     </StackPanel>
                 </TabItem>
@@ -857,20 +846,15 @@
                     <Grid>
                         <Button
                             Content="{Binding Reference.Article.Title}"
-                            Command="{Binding OpenMainArticleCommand}"
-                            Style="{x:Null}"
-                            FontSize="14"
-                            Cursor="Hand"
-                            Margin="6 0 0 0"
+                            Style="{StaticResource ShadcnGhostButton}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
+                            Command="{Binding OpenMainArticleCommand}"
+                            Margin="6 0 0 0"
                             >
                             <Button.Template>
                                 <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border
-                                        BorderThickness="0 0 0 1"
-                                        BorderBrush="{StaticResource PrimaryColorBrush}"
-                                        >
+                                    <Border>
                                         <TextBlock Text="{TemplateBinding Content}" />
                                     </Border>
                                 </ControlTemplate>
@@ -881,11 +865,9 @@
             </TabControl>
             <!-- Reference name -->
             <TextBlock 
-                Text="{Binding Reference.Name,FallbackValue=BindingWentWrong}" 
-                FontSize="12" 
-                FontWeight="Bold"
+                Text="{Binding Reference.Name,FallbackValue=SampleTitle}" 
+                Style="{StaticResource SmallText}"
                 FontFamily="Verdana"
-                Foreground="{StaticResource WhiteColorBrush}"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Right"
                 Margin="0 6 6 0"

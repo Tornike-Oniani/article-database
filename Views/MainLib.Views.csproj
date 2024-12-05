@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
+      <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=1.2.6.1513, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.2.6\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -79,6 +82,7 @@
     <Compile Include="Converters\ListCountToBoolConverter.cs" />
     <Compile Include="Converters\ListCountToVisibilityConverter.cs" />
     <Compile Include="Converters\RecentSearchToLabelConverter.cs" />
+    <Compile Include="Converters\SliderToValueConverter.cs" />
     <Compile Include="Converters\SortConverter.cs" />
     <Compile Include="Converters\StringToWords.cs" />
     <Compile Include="LoginWindow.xaml.cs">
@@ -95,6 +99,9 @@
     </Compile>
     <Compile Include="Main\Browse.xaml.cs">
       <DependentUpon>Browse.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main\SQL.xaml.cs">
       <DependentUpon>SQL.xaml</DependentUpon>
@@ -153,15 +160,6 @@
     <Compile Include="Popups\ReferenceManager.xaml.cs">
       <DependentUpon>ReferenceManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Popups\ReportsViewer.xaml.cs">
-      <DependentUpon>ReportsViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Popups\SearchDialog.xaml.cs">
-      <DependentUpon>SearchDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Popups\SettingsDialog.xaml.cs">
-      <DependentUpon>SettingsDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -189,6 +187,9 @@
     <Compile Include="UserControls\HighlightTextBox\HighlightTextBoxExtension.cs" />
     <Compile Include="UserControls\RecentSearchesList.xaml.cs">
       <DependentUpon>RecentSearchesList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Spinner.xaml.cs">
+      <DependentUpon>Spinner.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\SelectableTextBlock.cs" />
     <Compile Include="Utils\ThemeService.cs" />
@@ -224,6 +225,10 @@
       <Project>{4e4eff8b-a063-4826-9007-b005a53872b6}</Project>
       <Name>NotificationService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SliderControl\SliderControl.csproj">
+      <Project>{70736d5b-0990-41ef-85db-e6ed5c37caa5}</Project>
+      <Name>SliderControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ViewModels\MainLib.ViewModels.csproj">
       <Project>{4414eb2f-7ab3-46f4-92c3-c4ecbcbe7b35}</Project>
       <Name>MainLib.ViewModels</Name>
@@ -247,6 +252,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Main\Browse.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -326,18 +335,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Popups\ReportsViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Popups\SearchDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Popups\SettingsDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Register.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -347,6 +344,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Checkboxes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ComboBoxes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -379,6 +380,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\RecentSearchesList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Spinner.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

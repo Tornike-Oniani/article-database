@@ -125,7 +125,7 @@ namespace MainLib.ViewModels.Popups
                 CheckReferenceBoxes();
 
                 if (!duplicate_check)
-                    services.DialogService.OpenDialog(new DialogOkViewModel("This reference already exists.", "Warning", DialogType.Warning));
+                    services.ShowDialogWithOverlay(new DialogOkViewModel("This reference already exists.", "Warning", DialogType.Warning));
             }
             catch (Exception e)
             {

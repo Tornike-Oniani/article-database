@@ -21,7 +21,7 @@
     <!-- Removes button and leaves only TextBlock when clicked its Background is set to blue and Text to white -->
     <Style x:Key="NavigationButton" TargetType="{x:Type RadioButton}">
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="Foreground" Value="{DynamicResource shadcn_primary_brush}" />
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
         <Setter Property="Margin" Value="0 0 0 8" />
         <Setter Property="Template">
             <Setter.Value>
@@ -41,7 +41,7 @@
                             <TextBlock 
                                 x:Name="tbMain" 
                                 Text="{TemplateBinding Content}" 
-                                FontSize="16" 
+                                Style="{StaticResource DefaultText}"
                                 VerticalAlignment="Center" 
                                 />
                         </StackPanel>

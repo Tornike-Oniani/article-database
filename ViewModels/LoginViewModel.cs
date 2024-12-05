@@ -35,7 +35,7 @@ namespace MainLib.ViewModels
         private bool _isVisible;
         private bool _loginFocus;
         private bool _registerFocus;
-        private Shared services;
+        private readonly Shared services;
 
         public User CurrentUser { get; set; }
         public string Username
@@ -88,12 +88,15 @@ namespace MainLib.ViewModels
         {
             this.IsBusy = false;
             this.services = Shared.GetInstance();
-            services.SetServices(dialogService, windowService, browserService, themeService);
-            CurrentUser = new User();
-            LoginCommand = new RelayCommand(Login);
-            ShowRegisterCommand = new RelayCommand(ShowRegister);
-            RegisterCommand = new RelayCommand(Register);
-            CancelCommand = new RelayCommand(Cancel);
+            this.services.SetServices(dialogService, windowService, browserService, themeService);
+            this.services.ThemeService.ChangeTheme(Properties.Settings.Default.Theme);
+            this.services.ThemeService.ChangeFont(Properties.Settings.Default.UIFontFamily, FontTarget.UI);
+            this.services.ThemeService.ChangeFont(Properties.Settings.Default.ArticleFontFamily, FontTarget.Article);
+            this.CurrentUser = new User();
+            this.LoginCommand = new RelayCommand(Login);
+            this.ShowRegisterCommand = new RelayCommand(ShowRegister);
+            this.RegisterCommand = new RelayCommand(Register);
+            this.CancelCommand = new RelayCommand(Cancel);
         }
 
         public async void Login(object input)
@@ -102,10 +105,12 @@ namespace MainLib.ViewModels
 
             PasswordBox passwordBox = input as PasswordBox;
             bool login = false;
+
             await Task.Run(() =>
             {
                 login = new UserRepo().Login(CurrentUser, passwordBox.Password);
             });
+
             if (login)
             {
                 services.SetLoggedInUser(CurrentUser);

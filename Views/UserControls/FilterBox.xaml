@@ -9,13 +9,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBox x:Name="searchBox"
-                 Text="{Binding FilterText, 
-                        RelativeSource={RelativeSource FindAncestor, 
-                        AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}" 
-                 Style="{StaticResource WatermarkTextBox}"
-                 ap:TextBoxHelper.Watermark="Search"
-                 >
+        <TextBox 
+            x:Name="searchBox"
+            Text="{Binding FilterText, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}" 
+            ap:TextBoxHelper.Watermark="Search"
+            Style="{StaticResource ShadcnTextBox}"
+            >
             <TextBox.InputBindings>
                 <KeyBinding Key="Esc" Command="{Binding ClearCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
             </TextBox.InputBindings>

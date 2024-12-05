@@ -46,19 +46,16 @@ namespace MainLib.ViewModels
         }
 
         public ICommand UpdateViewCommand { get; set; }
-        public ICommand OpenSettingsCommand { get; set; }
 
         public NavigationViewModel()
         {
             this.services = Shared.GetInstance();
-            services.SetWorkingStatusAction(WorkStatus);
-            services.SetShowDialogAction(SetDialogOverlayStatus);
+            this.services.SetWorkingStatusAction(WorkStatus);
+            this.services.SetShowDialogAction(SetDialogOverlayStatus);
             this.User = services.User;
-            services.ThemeService.ChangeTheme(Properties.Settings.Default.Theme);
 
             UpdateViewCommand = new UpdateViewCommand(Navigate);
             UpdateViewCommand.Execute(ViewType.Home);
-            OpenSettingsCommand = new RelayCommand(OpenSettings);
             // Set admin/user status
             User.Admin = new UserRepo().IsAdmin(User);
             OnPropertyChanged("User");
@@ -68,10 +65,6 @@ namespace MainLib.ViewModels
         public void Navigate(BaseViewModel viewModel)
         {
             this.SelectedViewModel = viewModel;
-        }
-        public void OpenSettings(object input = null)
-        {
-            services.WindowService.OpenWindow(new SettingsViewModel(), passWindow: true);
         }
 
         public void WorkStatus(bool isWorking, string label = "Working...")

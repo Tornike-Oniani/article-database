@@ -54,11 +54,11 @@ namespace MainLib.ViewModels.Pages
         // Command actions
         public void CreateNewReference(object input = null)
         {
-            services.WindowService.OpenWindow(new AddNewReferenceViewModel(this));
+            this.services.ShowWindowWithOverlay(new AddNewReferenceViewModel(this));
         }
         public void EditReference(object input)
         {
-            services.WindowService.OpenWindow(new ReferenceEditorViewModel(input as Reference, this));
+            this.services.ShowWindowWithOverlay(new ReferenceEditorViewModel(input as Reference, this));
         }
         public void DeleteReference(object input)
         {
@@ -68,7 +68,7 @@ namespace MainLib.ViewModels.Pages
                 Reference selected_reference = input as Reference;
 
                 // 2. Ask user if they are sure
-                if (services.DialogService.OpenDialog(new DialogYesNoViewModel("Delete selected reference?", "Check", DialogType.Question)))
+                if (services.ShowDialogWithOverlay(new DialogYesNoViewModel("Delete selected reference?", "Check", DialogType.Question)))
                 {
                     // 3. Delete reference record from database
                     new ReferenceRepo().DeleteReference(selected_reference);
@@ -83,7 +83,7 @@ namespace MainLib.ViewModels.Pages
             catch (Exception e)
             {
                 new BugTracker().Track("Reference List", "Delete reference", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
 
@@ -105,7 +105,7 @@ namespace MainLib.ViewModels.Pages
             catch (Exception e)
             {
                 new BugTracker().Track("Reference List", "Populate references", e.Message, e.StackTrace);
-                services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {

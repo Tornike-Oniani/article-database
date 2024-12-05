@@ -19,52 +19,71 @@
         <Grid.RowDefinitions>
             <!-- Title column -->
             <RowDefinition Height="Auto" />
-            <!-- Separator column -->
+            <!-- Search column -->
             <RowDefinition Height="Auto" />
             <!-- Listview column -->
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <!-- Title column -->
-                <ColumnDefinition Width="Auto" />
-                <!-- Add column -->
-                <ColumnDefinition Width="Auto" />
-                <!-- Gap -->
-                <ColumnDefinition Width=".5*" />
-                <!-- Search column -->
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock 
-                Text="References:"
-                Style="{StaticResource Header}"
+        <Grid 
+            Margin="0 0 0 24"
+            Grid.Row="0"
+            >
+            <StackPanel 
+                Orientation="Horizontal"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Foreground="{StaticResource LabelColorBrush}" 
-                Grid.Column="0" 
-                />
+                >
+                <materialDesign:PackIcon
+                    Kind="ArrowCollapse"
+                    Width="24"
+                    Height="24"
+                    Foreground="{DynamicResource shadcn_foreground_brush}"
+                    VerticalAlignment="Center"
+                    Margin="0 0 12 0"
+                    />
+                <TextBlock 
+                    Text="References"
+                    Style="{StaticResource Header}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    />
+            </StackPanel>
 
             <!-- Add new reference-->
             <Button
-                Content="Create new"
+                Style="{StaticResource ShadcnButtonPrimary}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
                 Command="{Binding CreateNewReferenceCommand}"
-                Margin="10 0 0 0"
-                Grid.Column="1"
-                />
-
-            <!-- Filter box -->
-            <usercontrols:FilterBox 
-                ItemsSource="{Binding _referencesCollection}"
-                Margin="0 0 0 5"
-                Grid.Column="3" 
-                />
+                >
+                <Button.Content>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        >
+                        <materialDesign:PackIcon
+                            Kind="AddCircleOutline"
+                            Width="16"
+                            Height="16"
+                            Foreground="{DynamicResource shadcn_primary_foreground_brush}"
+                            VerticalAlignment="Center"
+                            Margin="0 0 8 0"
+                            />
+                        <TextBlock
+                            Text="Create Reference"
+                            Style="{StaticResource DefaultText}"
+                            Foreground="{DynamicResource shadcn_primary_foreground_brush}"
+                            VerticalAlignment="Center"
+                            />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
         </Grid>
 
-        <Separator 
-            Margin="0 5 0 5"
+        <!-- Filter box -->
+        <usercontrols:FilterBox            
+            ItemsSource="{Binding _referencesCollection}"
+            Margin="0 0 0 24"
             Grid.Row="1" 
             />
 
@@ -73,7 +92,7 @@
             ItemsSource="{Binding ReferencesCollection}"
             ItemContainerStyle="{StaticResource CleanItem}"
             HorizontalContentAlignment="Stretch"
-            AlternationCount="2"
+            AlternationCount="0"
             Grid.Row="2"
             >
             <!-- Item template on how to show bound data-->
@@ -82,14 +101,15 @@
                     <!-- Wrapper -->
                     <Border 
                         x:Name="wrapper" 
-                        Padding="10" 
-                        Background="Transparent" 
+                        Padding="12 12 12 12" 
+                        Background="{DynamicResource shadcn_background_brush}" 
                         BorderThickness="0 0 0 1" 
-                        BorderBrush="{DynamicResource GrayColorBrush}"
+                        BorderBrush="{DynamicResource shadcn_border_brush}"
+                        Cursor="Hand"
                         >
                         <!-- Command binding to mouse double click -->
                         <Border.InputBindings>
-                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.OpenReferenceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}" CommandParameter="{Binding}" />
+                            <MouseBinding Gesture="LeftClick" Command="{Binding DataContext.OpenReferenceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}" CommandParameter="{Binding}" />
                         </Border.InputBindings>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -110,10 +130,9 @@
                                     Grid.Column="0" 
                                     />
                                 <TextBlock 
-                                    x:Name="articlesCount" Text="{Binding ArticlesCount, StringFormat='Number of articles: {0}'}"
+                                    x:Name="articlesCount" 
+                                    Text="{Binding ArticlesCount, StringFormat='{}{0} articles'}"
                                     Style="{StaticResource SmallText}"
-                                    Visibility="Collapsed"
-                                    Opacity="0.0" 
                                     />
                             </StackPanel>
                             <!-- Buttons -->
@@ -125,122 +144,23 @@
                                 <!-- Edit button-->
                                 <Button 
                                     x:Name="EditButton"
-                                    Style="{x:Null}"
+                                    Tag="{x:Static materialDesign:PackIconKind.Edit}"
+                                    Style="{StaticResource ItemActionButton}"
                                     Visibility="Hidden"
-                                    Opacity="0.0"
-                                    Cursor="Hand"
-                                    Margin="0 0 10 0"
+                                    Margin="0 0 12 0"
                                     Command="{Binding DataContext.EditReferenceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
                                     CommandParameter="{Binding}"
-                                    >
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <Border
-                                                x:Name="outline"
-                                                Padding="6 6 6 6"
-                                                BorderThickness="1 1 1 1"
-                                                BorderBrush="{StaticResource LabelColorBrush}"
-                                                CornerRadius="4"
-                                                Background="{StaticResource WhiteColorBrush}"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                >
-                                                <Border.BitmapEffect>
-                                                    <DropShadowBitmapEffect 
-                                                        Color="Black"
-                                                        Direction="-60"
-                                                        ShadowDepth="5"
-                                                        Softness="10"
-                                                        Opacity="0.1"                        
-                                                        />
-                                                </Border.BitmapEffect>
-                                                <materialDesign:PackIcon 
-                                                    x:Name="Icon" 
-                                                    Kind="Edit"
-                                                    Height="20"
-                                                    Width="20"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{StaticResource LabelColorBrush}" 
-                                                    />
-                                            </Border>
-
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="outline" Property="BitmapEffect">
-                                                        <Setter.Value>
-                                                            <DropShadowBitmapEffect 
-                                                                Color="Black"
-                                                                Direction="-60"
-                                                                ShadowDepth="5"
-                                                                Softness="10"
-                                                                Opacity="0.2" 
-                                                                />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
+                                    />
                                 <!-- Delete button -->
                                 <Button 
                                     x:Name="DeleteButton"
-                                    Style="{x:Null}"
-                                    Visibility="Hidden" 
-                                    Opacity="0.0"
+                                    Tag="{x:Static materialDesign:PackIconKind.MinusCircleOutline}"
+                                    Style="{StaticResource ItemActionButton}"
+                                    Visibility="Hidden"
                                     Cursor="Hand"
                                     Command="{Binding DataContext.DeleteReferenceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Page}}"
                                     CommandParameter="{Binding}"
-                                    >
-                                    <Button.Template>
-                                        <ControlTemplate>
-                                            <Border
-                                                x:Name="outline"
-                                                Padding="6 6 6 6"
-                                                BorderThickness="1 1 1 1"
-                                                BorderBrush="{StaticResource LabelColorBrush}"
-                                                CornerRadius="4"
-                                                Background="{StaticResource WhiteColorBrush}"
-                                                VerticalAlignment="Center"
-                                                HorizontalAlignment="Center"
-                                                >
-                                                <Border.BitmapEffect>
-                                                    <DropShadowBitmapEffect 
-                                                        Color="Black"
-                                                        Direction="-60"
-                                                        ShadowDepth="5"
-                                                        Softness="10"
-                                                        Opacity="0.1"                        
-                                                        />
-                                                </Border.BitmapEffect>                                                
-                                                <materialDesign:PackIcon 
-                                                    x:Name="DeleteIcon" 
-                                                    Kind="MinusCircleOutline"
-                                                    Height="20"
-                                                    Width="20"
-                                                    VerticalAlignment="Center"
-                                                    Foreground="{StaticResource LabelColorBrush}" 
-                                                    />
-                                            </Border>
-
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="outline" Property="BitmapEffect">
-                                                        <Setter.Value>
-                                                            <DropShadowBitmapEffect 
-                                                                Color="Black"
-                                                                Direction="-60"
-                                                                ShadowDepth="5"
-                                                                Softness="10"
-                                                                Opacity="0.2" 
-                                                                />
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
+                                    />
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -249,67 +169,6 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="DeleteButton" Property="Visibility" Value="Visible" />
                             <Setter TargetName="EditButton" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="articlesCount" Property="Visibility" Value="Visible" />
-                            <Trigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ThicknessAnimation 
-                                            Storyboard.TargetName="articlesCount"
-                                            Storyboard.TargetProperty="Margin"
-                                            To="0 5 10 5"
-                                            Duration="0:0:0.3" 
-                                            />
-                                        <DoubleAnimation 
-                                            Storyboard.TargetName="EditButton"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="1.0"
-                                            Duration="0:0:0.3" 
-                                            />
-                                        <DoubleAnimation 
-                                            Storyboard.TargetName="DeleteButton"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="1.0"
-                                            Duration="0:0:0.3" 
-                                            />
-                                        <DoubleAnimation 
-                                            Storyboard.TargetName="articlesCount"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="1.0"
-                                            Duration="0:0:0.3" 
-                                            />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ThicknessAnimation 
-                                            Storyboard.TargetName="articlesCount"
-                                            Storyboard.TargetProperty="Margin"
-                                            To="0"
-                                            Duration="0:0:0" 
-                                            />
-                                        <DoubleAnimation 
-                                            Storyboard.TargetName="articlesCount"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="0.0"
-                                            Duration="0:0:0" 
-                                            />
-                                        <DoubleAnimation 
-                                            Storyboard.TargetName="EditButton"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="0.0"
-                                            Duration="0:0:0" 
-                                            />
-                                        <DoubleAnimation 
-                                            Storyboard.TargetName="DeleteButton"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="0.0"
-                                            Duration="0:0:0" 
-                                            />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.ExitActions>
                         </Trigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>

@@ -69,7 +69,7 @@ namespace MainLib.ViewModels.Popups
             catch(Exception e)
             {
                 new BugTracker().Track("Data View (sub window)", "Add Personal", e.Message, e.StackTrace);
-                Shared.GetInstance().DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                Shared.GetInstance().ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
         }
     }

@@ -263,7 +263,7 @@
             Grid.Row="0"
             >
             <Border 
-                Background="White"
+                Background="{DynamicResource shadcn_background_brush}"
                 CornerRadius="6 6 6 6"
                 >
                 <Border.Effect>
@@ -279,7 +279,7 @@
             <StackPanel>
                 <Border
                     Padding="12 8 12 8"
-                    Background="{DynamicResource shadcn_secondary_brush}"
+                    Background="{DynamicResource shadcn_muted_brush}"
                     CornerRadius="6 6 0 0"
                     >
                     <StackPanel 
@@ -287,7 +287,7 @@
                         >
                         <materialDesign:PackIcon 
                             Kind="FavoriteOutline"
-                            Foreground="{StaticResource shadcn_muted_foreground_brush}"
+                            Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                             VerticalAlignment="Center"
                             Height="18"
                             Width="18"
@@ -313,12 +313,12 @@
             Grid.Row="1"
             >
             <Border 
-                Background="{StaticResource shadcn_background_brush}"
+                Background="{DynamicResource shadcn_background_brush}"
                 CornerRadius="6 6 6 6"
                 >
                 <Border.Effect>
                     <DropShadowEffect
-                        Color="Black"
+                        Color="{DynamicResource shadcn_foreground}"
                         Direction="0"
                         ShadowDepth="1"
                         Opacity="0.2"
@@ -333,7 +333,7 @@
                 </Grid.RowDefinitions>
                 <Border
                     Padding="12 8 12 8"
-                    Background="{DynamicResource shadcn_secondary_brush}"
+                    Background="{DynamicResource shadcn_muted_brush}"
                     CornerRadius="6 6 0 0"
                     Grid.Row="0"
                     >
@@ -343,7 +343,7 @@
                             >
                             <materialDesign:PackIcon 
                                 Kind="ClockOutline"
-                                Foreground="{StaticResource shadcn_muted_foreground_brush}"
+                                Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                                 VerticalAlignment="Center"
                                 Height="18"
                                 Width="18"

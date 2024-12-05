@@ -21,7 +21,9 @@
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
           <GradientStop Color="{Binding ElementName=control, Path=Color1}" Offset=".0" />
           <GradientStop Color="{Binding ElementName=control, Path=Color1}" Offset=".25" />
-          <GradientStop Color="{Binding ElementName=control, Path=Color2}" Offset="1" />
+                    <GradientStop Color="{Binding ElementName=control, Path=Color1}" Offset=".25" />
+                    <GradientStop Color="{Binding ElementName=control, Path=Color2}" Offset=".25" />
+                    <GradientStop Color="{Binding ElementName=control, Path=Color2}" Offset="1" />
         </LinearGradientBrush>
       </Path.Fill>
       <Path.RenderTransform>

@@ -27,61 +27,81 @@
         </Grid.RowDefinitions>
 
         <!-- Filter box column -->
-        <usercontrols:FilterBox ItemsSource="{Binding _referenceBoxesCollection}"
-                                Margin="6 6 6 6" />
+        <usercontrols:FilterBox 
+            ItemsSource="{Binding _referenceBoxesCollection}"
+            Margin="6 6 6 6" 
+            />
 
         <!-- References list -->
-        <ListView ItemsSource="{Binding ReferenceBoxesCollection}" 
-                  Style="{StaticResource ReferenceManagerList}"
-                  Grid.Row="1">
+        <ListView 
+            ItemsSource="{Binding ReferenceBoxesCollection}" 
+            Style="{StaticResource ReferenceManagerList}"
+            Grid.Row="1"
+            >
         </ListView>
 
         <!-- Add bookmark -->
-        <Button Style="{x:Null}"
-                Cursor="Hand"
-                Command="{Binding CreateNewReferenceCommand}"
-                Grid.Row="2">
+        <Button 
+            Style="{x:Null}"
+            Cursor="Hand"
+            Command="{Binding CreateNewReferenceCommand}"
+            Grid.Row="2"
+            >
             <Button.Template>
                 <ControlTemplate>
                     <Grid>
                         <StackPanel Visibility="{Binding NewReferenceVisibility}">
                             <Separator Margin="0 0 0 1" />
-                            <StackPanel Orientation="Horizontal" Margin="8">
-                                <materialDesign:PackIcon Kind="Plus" 
-                                             Margin="0 0 5 0"
-                                             Foreground="{StaticResource GrayColorDarkBrush}"
-                                             VerticalAlignment="Center" 
-                                             Width="23"
-                                             Height="23"/>
-                                <TextBlock Text="Create new reference" 
-                               Foreground="{StaticResource GrayColorDarkBrush}"
-                               FontSize="18"
-                               VerticalAlignment="Center"/>
+                            <StackPanel 
+                                Orientation="Horizontal" 
+                                Margin="8 8 8 8"
+                                >
+                                <materialDesign:PackIcon 
+                                    Kind="Plus" 
+                                    Margin="0 0 5 0"
+                                    Foreground="{DynamicResource shadcn_foreground_brush}"
+                                    VerticalAlignment="Center" 
+                                    Width="20"
+                                    Height="20"
+                                    />
+                                <TextBlock 
+                                    Text="Create new reference" 
+                                    Style="{StaticResource DefaultText}"
+                                    VerticalAlignment="Center" 
+                                    />
                             </StackPanel>
                             <Separator />
                         </StackPanel>
-                        <StackPanel Visibility="{Binding CreateVisibility}">
-                            <StackPanel Margin="12">
+                        <StackPanel 
+                            Visibility="{Binding CreateVisibility}">
+                            <StackPanel 
+                                Margin="12 12 12 12"
+                                >
                                 <TextBox 
                                     x:Name="txbReferenceName"
                                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                    Style="{StaticResource WatermarkTextBox}"
                                     ap:TextBoxHelper.Watermark="Reference name"
-                                    IsVisibleChanged="txbReferenceName_IsVisibleChanged"                                     
+                                    Style="{StaticResource ShadcnTextBox}"
+                                    IsVisibleChanged="txbReferenceName_IsVisibleChanged"
                                     />
                                 <StackPanel 
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right"
                                     Margin="0 12 0 0"
                                     >
-                                    <Button Content="Create"                                         
+                                    <Button 
+                                        Content="Create"
+                                        Style="{StaticResource ShadcnButtonPrimary}"
+                                        Command="{Binding CreateCommand}" 
                                         Margin="0 0 6 0"
-                                        Command="{Binding CreateCommand}"/>
-                                    <Button Content="Cancel" 
+                                        />
+                                    <Button 
+                                        Content="Cancel"
+                                        Style="{StaticResource ShadcnButtonSecondary}"
+                                        Command="{Binding CancelCommand}" 
                                         Margin="0 0 6 0"
-                                        Command="{Binding CancelCommand}"/>
+                                        />
                                 </StackPanel>
-                                
                             </StackPanel>
                         </StackPanel>
                     </Grid>
@@ -90,12 +110,15 @@
         </Button>
 
         <!-- Ok button -->
-        <Button Content="Ok"
-                Width="80"
-                HorizontalAlignment="Left" 
-                IsCancel="True"
-                Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                Margin="10 10 0 10" 
-                Grid.Row="3" />
+        <Button 
+            Content="Ok"
+            IsCancel="True"
+            Style="{StaticResource ShadcnButtonPrimary}"
+            Width="80"
+            HorizontalAlignment="Left" 
+            Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+            Margin="12 12 0 0" 
+            Grid.Row="3" 
+            />
     </Grid>
 </UserControl>

@@ -359,7 +359,7 @@ namespace MainLib.ViewModels.Pages
 
                     Services.IsWorking(false);
 
-                    Services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
+                    Services.ShowDialogWithOverlay(new DialogOkViewModel("Done", "Result", DialogType.Success));
                 }
             }
             catch (Exception e)

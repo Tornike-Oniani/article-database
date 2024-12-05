@@ -1,4 +1,5 @@
 ﻿using Lib.DataAccessLayer.Models;
+using Lib.ViewModels.Base;
 using Lib.ViewModels.Services.Browser;
 using Lib.ViewModels.Services.Dialogs;
 using Lib.ViewModels.Services.Windows;
@@ -94,6 +95,13 @@ namespace MainLib.ViewModels.Utils
             bool result = this.DialogService.OpenDialog(vm);
             this.IsShowingDialog(false);
             return result;
+        }
+
+        public void ShowWindowWithOverlay(BaseViewModel vm, WindowType type = WindowType.Generic, bool mainExists = true, bool dialog = true, bool passWindow = false)
+        {
+            this.IsShowingDialog(true);
+            this.WindowService.OpenWindow(vm, type, mainExists, dialog, passWindow);
+            this.IsShowingDialog(false);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

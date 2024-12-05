@@ -25,18 +25,6 @@ namespace MainLib.ViewModels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int FontSize {
-            get {
-                return ((int)(this["FontSize"]));
-            }
-            set {
-                this["FontSize"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Default")]
         public string SyncName {
             get {
@@ -73,19 +61,43 @@ namespace MainLib.ViewModels.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("16")]
-        public int ButtonFontSize {
+        [global::System.Configuration.DefaultSettingValueAttribute("Verdana")]
+        public string UIFontFamily {
             get {
-                return ((int)(this["ButtonFontSize"]));
+                return ((string)(this["UIFontFamily"]));
             }
             set {
-                this["ButtonFontSize"] = value;
+                this["UIFontFamily"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Verdana")]
+        public string ArticleFontFamily {
+            get {
+                return ((string)(this["ArticleFontFamily"]));
+            }
+            set {
+                this["ArticleFontFamily"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int BigHeaderFontSize {
+            get {
+                return ((int)(this["BigHeaderFontSize"]));
+            }
+            set {
+                this["BigHeaderFontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("18")]
         public int HeaderFontSize {
             get {
                 return ((int)(this["HeaderFontSize"]));
@@ -122,24 +134,24 @@ namespace MainLib.ViewModels.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("16")]
-        public int InputTextFontSize {
+        public int ArticleHeaderFontSize {
             get {
-                return ((int)(this["InputTextFontSize"]));
+                return ((int)(this["ArticleHeaderFontSize"]));
             }
             set {
-                this["InputTextFontSize"] = value;
+                this["ArticleHeaderFontSize"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("16")]
-        public int AbstractBoxFontSize {
+        [global::System.Configuration.DefaultSettingValueAttribute("14")]
+        public int ArticleTextFontSize {
             get {
-                return ((int)(this["AbstractBoxFontSize"]));
+                return ((int)(this["ArticleTextFontSize"]));
             }
             set {
-                this["AbstractBoxFontSize"] = value;
+                this["ArticleTextFontSize"] = value;
             }
         }
     }

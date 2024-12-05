@@ -33,8 +33,10 @@
             DataContext="{Binding}"
             />
 
+        <!-- Tooltip style -->
         <Style TargetType="{x:Type ToolTip}">
-            <Setter Property="Background" Value="WhiteSmoke" />
+            <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
         </Style>
 
         <Style x:Key="HoverBorder" TargetType="{x:Type Border}">
@@ -56,9 +58,10 @@
             </Style.Triggers>
         </Style>
         
+        <!-- Sort radio button style -->
         <Style x:Key="SortRadio" TargetType="{x:Type RadioButton}">
             <Setter Property="FontSize" Value="16" />
-            <Setter Property="Foreground" Value="{StaticResource shadcn_primary_brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
@@ -71,6 +74,7 @@
                             >
                             <TextBlock
                                 Text="{TemplateBinding Content}"
+                                Style="{StaticResource DefaultText}"
                                 Foreground="{TemplateBinding Foreground}"
                                 />
                         </Border>
@@ -80,15 +84,16 @@
 
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="{StaticResource ShadcnBlackColorBrush}" />
-                    <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource shadcn_primary_brush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource shadcn_primary_foreground_brush}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!-- Items per page radio style -->
         <Style x:Key="ItemsPerPageRadio" TargetType="{x:Type RadioButton}">
-            <Setter Property="Foreground" Value="{StaticResource BlueColorBrush}" />
+            <Setter Property="Foreground" Value="#2563eb" />
             <Setter Property="BorderThickness" Value="0 0 0 0" />
-            <Setter Property="BorderBrush" Value="{StaticResource BlackColorAltBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource shadcn_foreground_brush}" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -109,12 +114,13 @@
 
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
                     <Setter Property="BorderThickness" Value="0 0 0 1" />
                 </Trigger>
             </Style.Triggers>
         </Style>
 
+        <!-- Print pending label style-->
         <Style x:Key="PendingLabel" TargetType="{x:Type Label}">
             <Setter Property="Foreground" Value="{StaticResource ShadcnTextColorBrush}" />
             <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
@@ -153,7 +159,9 @@
             Margin="0 25 0 0" 
             Grid.Column="0"
             >
-            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+            <ScrollViewer 
+                HorizontalScrollBarVisibility="Auto"
+                >
                 <Border 
                 Padding="12 12 12 12"
                 HorizontalAlignment="Stretch"                
@@ -166,7 +174,7 @@
                         Margin="0 0 0 12"
                         />
                     <Border
-                        Background="{StaticResource shadcn_secondary_brush}"
+                        Background="{DynamicResource shadcn_secondary_brush}"
                         CornerRadius="4 4 4 4"
                         Padding="12 6 12 6"
                         HorizontalAlignment="Left"
@@ -199,7 +207,7 @@
                         </StackPanel>
                     </Border>
                     <Border                        
-                        Background="{StaticResource shadcn_secondary_brush}"
+                        Background="{DynamicResource shadcn_secondary_brush}"
                         CornerRadius="4 4 4 4"
                         Padding="12 6 12 6"
                         HorizontalAlignment="Left"
@@ -231,7 +239,7 @@
                         </StackPanel>
                     </Border>
                     <Border                        
-                        Background="{StaticResource shadcn_secondary_brush}"
+                        Background="{DynamicResource shadcn_secondary_brush}"
                         CornerRadius="4 4 4 4"
                         Padding="12 6 12 6"
                         HorizontalAlignment="Left"
@@ -407,7 +415,7 @@
 
         <!-- Filters, results and pagination -->
         <Grid 
-            Margin="22 0 0 0"
+            Margin="24 0 0 0"
             Grid.Column="1"
             >
             <Grid.RowDefinitions>
@@ -434,6 +442,7 @@
                 <TextBlock 
                     Text="Find articles with these terms" 
                     Style="{StaticResource DefaultText}"
+                    Margin="0 0 0 6"
                     />
                 <TextBox 
                     Text="{Binding Terms, UpdateSourceTrigger=PropertyChanged}"
@@ -466,7 +475,7 @@
                             <TextBlock 
                                 Text="{TemplateBinding Content}"
                                 Style="{StaticResource DefaultText}"
-                                Foreground="{StaticResource BlueColorBrush}"
+                                Foreground="#2563eb"
                                 TextDecorations="Underline"
                                 />
                         </DataTemplate>
@@ -487,6 +496,7 @@
                         <TextBlock
                             Text="Authors"
                             Style="{StaticResource DefaultText}"
+                            Margin="0 0 0 6"
                             />
                         <TextBox
                             Text="{Binding Authors, UpdateSourceTrigger=PropertyChanged}"
@@ -504,6 +514,7 @@
                         <TextBlock
                             Text="Year"
                             Style="{StaticResource DefaultText}"
+                            Margin="0 0 0 6"
                             />
                         <TextBox
                             Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}"
@@ -600,7 +611,7 @@
                                 Style="{StaticResource DefaultText}"
                                 TextDecorations="Underline"
                                 VerticalAlignment="Center"
-                                Margin="0 0 3 0"
+                                Margin="0 0 4 0"
                                 />
                             <materialDesign:PackIcon 
                                 Kind="HelpBox"
@@ -660,6 +671,7 @@
                     <Style TargetType="{x:Type ListView}">
                         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
                         <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel" />
+                        <!-- Panel styling -->
                         <Setter Property="ItemsPanel">
                             <Setter.Value>
                                 <ItemsPanelTemplate>
@@ -669,12 +681,15 @@
                                 </ItemsPanelTemplate>
                             </Setter.Value>
                         </Setter>
+                        <!-- List template -->
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListView}">
-                                    <ScrollViewer x:Name="PART_ScrollViewer">
+                                    <ScrollViewer 
+                                        x:Name="PART_ScrollViewer"
+                                        >
                                         <Grid 
-                                            Background="{DynamicResource WhiteColorBrush}"
+                                            Background="{DynamicResource shadcn_muted_brush}"
                                             >
                                             <Grid.ColumnDefinitions>
                                                 <!--<ColumnDefinition Width=".1*" />-->
@@ -692,9 +707,11 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
+                        <!-- List item style -->
                         <Setter Property="ItemContainerStyle">
                             <Setter.Value>
                                 <Style TargetType="{x:Type ListViewItem}">
+                                    <!-- Style resources -->
                                     <Style.Resources>
                                         <Style x:Key="ActionButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
                                             <Style.Resources>
@@ -722,14 +739,15 @@
                                         </Style>
                                     </Style.Resources>
                                     <Setter Property="Padding" Value="18 12 18 12" />
+                                    <!-- List item template -->
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListViewItem}">
                                                 <Grid Margin="0 0 0 12">
-                                                    <Border Background="White">
+                                                    <Border Background="{DynamicResource shadcn_background_brush}">
                                                         <Border.Effect>
                                                             <DropShadowEffect
-                                                                Color="Black"
+                                                                Color="{DynamicResource shadcn_primary}"
                                                                 Direction="0"
                                                                 ShadowDepth="1"
                                                                 Opacity="0.3"
@@ -738,7 +756,7 @@
                                                         </Border.Effect>
                                                     </Border>
                                                     <Border
-                                                        Background="{StaticResource WhiteColorBrush}"
+                                                        Background="{DynamicResource shadcn_background_brush}"
                                                         Padding="{TemplateBinding Padding}"
                                                         CornerRadius="3 3 3 3"
                                                         >
@@ -748,6 +766,7 @@
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>
+                                    <!-- List item data template -->
                                     <Setter Property="ContentTemplate">
                                         <Setter.Value>
                                             <DataTemplate>
@@ -776,15 +795,15 @@
                                                     <!-- Title -->
                                                     <TextBlock
                                                         Text="{Binding Title}"
-                                                        Style="{StaticResource Header}"
-                                                        Foreground="{StaticResource BlackColorAltBrush}"
+                                                        Style="{StaticResource ArticleHeader}"
+                                                        Foreground="{DynamicResource shadcn_foreground_brush}"
                                                         FontFamily="{StaticResource MotivaSansMedium}"
                                                         TextWrapping="Wrap"
                                                         LineHeight="28"
                                                         ap:RegexTextBlockHighlighter.WordSelection="{Binding DataContext.TermsWordsHighlight, Source={StaticResource ProxyElementForDataContext}}"
                                                         ap:RegexTextBlockHighlighter.PhraseSelection="{Binding DataContext.TermsPhrasesHighlight, Source={StaticResource ProxyElementForDataContext}}"
                                                         ap:RegexTextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                        ap:RegexTextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}"
+                                                        ap:RegexTextBlockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}"
                                                         Margin="0 0 0 8"
                                                         Grid.Row="0"
                                                         >
@@ -805,16 +824,16 @@
                                                                 Width="18"
                                                                 Height="18"
                                                                 VerticalAlignment="Center"
-                                                                Foreground="#6b7280"
+                                                                Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                                                                 Margin="0 0 8 0"
                                                                 />
                                                             <TextBlock
                                                                 Text="{Binding Year}"
                                                                 Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
-                                                                Style="{StaticResource DefaultText}"
+                                                                Style="{StaticResource ArticleText}"
                                                                 LineHeight="24"
                                                                 VerticalAlignment="Center"
-                                                                Foreground="#6b7280"
+                                                                Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                                                                 Margin="0 0 6 0"
                                                                 />
                                                         </StackPanel>
@@ -825,8 +844,8 @@
                                                             <TextBlock
                                                                 Text="{Binding FileName}"
                                                                 Visibility="{Binding DataContext.User.IsAdmin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource BoolToVisibility}}"
-                                                                Style="{StaticResource DefaultText}"
-                                                                Foreground="#6b7280"
+                                                                Style="{StaticResource ArticleText}"
+                                                                Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                                                                 />
                                                         </StackPanel>
                                                     </Grid>
@@ -873,8 +892,7 @@
                                                                     </Border.Style>
                                                                     <TextBlock                                                                        
                                                                       Text="{Binding Path=.}"
-                                                                      Style="{StaticResource DefaultText}"
-                                                                      Foreground="#374151"
+                                                                      Style="{StaticResource ArticleSmallText}"
                                                                       />
                                                                 </Border>
                                                             </DataTemplate>
@@ -884,12 +902,12 @@
                                                     <TextBlock
                                                         Text="{Binding Authors}"
                                                         Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
-                                                        Style="{StaticResource DefaultText}"
-                                                        Foreground="{StaticResource TextColorBrush}"
+                                                        Style="{StaticResource ArticleText}"
+                                                        Foreground="{DynamicResource shadcn_foreground_brush}"
                                                         ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
                                                         ap:TextBlockHighlighter.WordBreakMode="True"
                                                         ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                        ap:TextBlockHighlighter.Forecolor="{StaticResource BlackColorAltBrush}" 
+                                                        ap:TextBlockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}" 
                                                         Margin="0 0 0 12"
                                                         Grid.Row="3"
                                                         />
@@ -902,12 +920,12 @@
                                                     <TextBlock
                                                         Text="{Binding AbstractBody}"
                                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
-                                                        Style="{StaticResource DefaultText}"
-                                                        Foreground="{StaticResource BlackColorAltBrush}"
+                                                        Style="{StaticResource ArticleText}"
+                                                        Foreground="{DynamicResource shadcn_foreground_brush}"
                                                         ap:RegexTextBlockHighlighter.WordSelection="{Binding DataContext.TermsWordsHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
                                                         ap:RegexTextBlockHighlighter.PhraseSelection="{Binding DataContext.TermsPhrasesHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
                                                         ap:RegexTextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                        ap:RegexTextBlockHighlighter.Forecolor="{StaticResource TextColorBrush}"           
+                                                        ap:RegexTextBlockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}"           
                                                         TextWrapping="Wrap"
                                                         Margin="0 0 0 18"
                                                         Grid.Row="5"
@@ -919,7 +937,7 @@
                                                         >
                                                         <!-- Open file-->
                                                         <Button 
-                                                            Style="{StaticResource ActionButton}"
+                                                            Style="{StaticResource ShadcnButtonSecondary}"
                                                             Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                             CommandParameter="{Binding}"
                                                             Margin="0 0 12 0"
@@ -937,13 +955,14 @@
                                                                     />
                                                                 <TextBlock
                                                                     Text="View"
+                                                                    Style="{StaticResource DefaultText}"
                                                                     VerticalAlignment="Center"
                                                                     />
                                                             </StackPanel>
                                                         </Button>
                                                         <!-- Download file -->
                                                         <Button 
-                                                            Style="{StaticResource ActionButton}"
+                                                            Style="{StaticResource ShadcnButtonSecondary}"
                                                             Command="{Binding DataContext.DownloadFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                             CommandParameter="{Binding}"
                                                             Margin="0 0 12 0"
@@ -961,6 +980,7 @@
                                                                     />
                                                                 <TextBlock
                                                                     Text="Download"
+                                                                    Style="{StaticResource DefaultText}"
                                                                     VerticalAlignment="Center"
                                                                     />
                                                             </StackPanel>
@@ -1070,7 +1090,7 @@
                     <TextBlock
                         Text="Displays:"
                         Style="{StaticResource DefaultText}"
-                        Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                        Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                         Margin="0 0 8 0"
                         />
                     <RadioButton
@@ -1101,7 +1121,7 @@
                     <TextBlock
                         Text="results per page"
                         Style="{StaticResource DefaultText}"
-                        Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                        Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                         Margin="0 0 8 0"
                         />
                 </StackPanel>
@@ -1113,7 +1133,7 @@
                         Content="previous" 
                         Visibility="{Binding CanGoToPreviousPage, Converter={StaticResource BoolToVisibility}}"
                         Style="{x:Null}"
-                        Foreground="{StaticResource BlueColorBrush}"
+                        Foreground="#2563eb"
                         Cursor="Hand"
                         Command="{Binding PreviousPageCommand}"
                         >
@@ -1139,7 +1159,7 @@
                     </Button>
                     <TextBlock 
                         Style="{StaticResource DefaultText}"
-                        Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                        Foreground="{DynamicResource shadcn_muted_foreground_brush}"
                         VerticalAlignment="Center"
                         Margin="8 0 8 0"
                         >
@@ -1154,7 +1174,7 @@
                         Content="next"
                         Visibility="{Binding CanGoToNextPage, Converter={StaticResource BoolToVisibility}}"
                         Style="{x:Null}"
-                        Foreground="{StaticResource BlueColorBrush}"
+                        Foreground="#2563eb"
                         Cursor="Hand"
                         Command="{Binding NextPageCommand}"
                         >

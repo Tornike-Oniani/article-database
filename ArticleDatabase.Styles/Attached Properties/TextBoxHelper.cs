@@ -34,5 +34,14 @@ namespace Lib.Styles.Attached_Properties
 
         public static readonly DependencyProperty IsFloatingProperty =
             DependencyProperty.RegisterAttached("IsFloating", typeof(bool), typeof(TextBoxHelper), new UIPropertyMetadata(false));
+
+        public static void SetWatermarkVerticalAlignment(DependencyObject obj, VerticalAlignment value)
+        {
+            obj.SetValue(WatermarkVerticalAlignmentProperty, value);
+        }
+
+        public static readonly DependencyProperty WatermarkVerticalAlignmentProperty =
+            DependencyProperty.RegisterAttached("WatermarkVerticalAlignment", typeof(VerticalAlignment), typeof(TextBoxHelper), new UIPropertyMetadata(VerticalAlignment.Center));
+
     }
 }

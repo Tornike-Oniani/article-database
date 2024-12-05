@@ -385,7 +385,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Load Articles", e.Message, e.StackTrace);
-                Services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                Services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
@@ -507,7 +507,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Export", e.Message, e.StackTrace);
-                Services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                Services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {
@@ -768,7 +768,7 @@ namespace MainLib.ViewModels.Main
             catch (Exception e)
             {
                 new BugTracker().Track("Data View", "Move to page", e.Message, e.StackTrace);
-                Services.DialogService.OpenDialog(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+                Services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
             finally
             {

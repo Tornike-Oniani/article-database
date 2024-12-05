@@ -75,7 +75,7 @@ namespace MainLib.ViewModels.Popups
 
                 services.IsWorking(false);
 
-                services.DialogService.OpenDialog(new DialogOkViewModel("Done", "Result", DialogType.Success));
+                services.ShowDialogWithOverlay(new DialogOkViewModel("Done", "Result", DialogType.Success));
             }
             catch(Exception e)
             {

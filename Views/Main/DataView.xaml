@@ -82,7 +82,7 @@
         <Style x:Key="HoverBorder" TargetType="{x:Type Border}">
             <Setter Property="BorderBrush">
                 <Setter.Value>
-                    <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0" />
+                    <SolidColorBrush Color="{DynamicResource shadcn_primary}" Opacity="0" />
                 </Setter.Value>
             </Setter>
             <Setter Property="BorderThickness" Value="1" />
@@ -91,7 +91,7 @@
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="BorderBrush">
                         <Setter.Value>
-                            <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="1" />
+                            <SolidColorBrush Color="{DynamicResource shadcn_primary}" Opacity="1" />
                         </Setter.Value>
                     </Setter>
                 </Trigger>
@@ -141,7 +141,7 @@
                     >
                     <DataGrid.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
-                            <Setter Property="Padding" Value="10" />
+                            <Setter Property="Padding" Value="18 18 18 18" />
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -152,9 +152,11 @@
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
+
                             <Style.Triggers>
+                                <!-- We need this because on default it sets foreground to white -->
                                 <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -234,21 +236,21 @@
                                         <!-- Title -->
                                         <TextBlock 
                                             Text="{Binding Title}"
-                                            Style="{Binding AbstractShown, Converter={StaticResource BoolToTextHeaderStyle}}"
+                                            Style="{StaticResource ArticleText}"
                                             TextWrapping="Wrap"
                                             ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.TitleSearchWords, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                             ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.TitleSearchPhrases, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                             ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                            ap:AdvancedTextblockHighlighter.Forecolor="#000000"                                                 
+                                            ap:AdvancedTextblockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}"
                                             Grid.Column="0"
                                             Grid.Row="0"
                                             />
                                         <!-- File contains only abstract label -->
                                         <Border
                                             Visibility="{Binding AbstractOnly, Converter={StaticResource IntToVisibility}}"
-                                            Padding="6 3 6 3"
-                                            CornerRadius="6"
-                                            Background="{StaticResource PrimaryColorBrush}"
+                                            Padding="8 4 8 4"
+                                            CornerRadius="6 6 6 6"
+                                            Background="{DynamicResource shadcn_primary_brush}"
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Bottom"
                                             Margin="0 0 -7 -7"
@@ -257,7 +259,7 @@
                                             >
                                             <TextBlock
                                                 Text="AO"                                        
-                                                Foreground="{StaticResource WhiteColorBrush}"
+                                                Foreground="{DynamicResource shadcn_primary_foreground_brush}"
                                                 FontSize="12"
                                                 />
                                         </Border>
@@ -266,7 +268,8 @@
                                             IsChecked="{Binding AbstractShown, UpdateSourceTrigger=PropertyChanged}"
                                             Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"                                    
                                             Style="{x:Null}"
-                                            Foreground="{StaticResource PrimaryColorBrush}"
+                                            Foreground="{DynamicResource shadcn_primary_brush}"
+                                            BorderBrush="{DynamicResource shadcn_border_brush}"
                                             Cursor="Hand"
                                             VerticalAlignment="Top"
                                             Margin="6 0 0 0"
@@ -277,8 +280,8 @@
                                                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                                                     <Border
                                                         BorderThickness="1 1 1 1"
-                                                        BorderBrush="{StaticResource PrimaryColorBrush}"                                                
-                                                        CornerRadius="6"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"                                                
+                                                        CornerRadius="6 6 6 6"
                                                         Background="Transparent"
                                                         Padding="6 6 6 6"
                                                         >
@@ -327,12 +330,13 @@
                                             </Border.RenderTransform>
                                             <TextBlock
                                                 Text="{Binding AbstractBody}"
+                                                Style="{StaticResource ArticleText}"
                                                 TextWrapping="Wrap"
                                                 TextAlignment="Justify"
                                                 ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.AbstractSearchWords, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                 ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.AbstractSearchPhrases, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                 ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                ap:AdvancedTextblockHighlighter.Forecolor="#000000"                                                 
+                                                ap:AdvancedTextblockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}"                                                 
                                                 Grid.Row="1"
                                                 />
                                         </Border>
@@ -358,6 +362,7 @@
                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                         ScrollViewer.CanContentScroll="False"
+                                        Foreground="{DynamicResource shadcn_foreground_brush}"
                                         FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
                                         >
                                         <ListView.Template>
@@ -376,10 +381,11 @@
                                                     Content="{Binding}" 
                                                     ToolTip="Copy"
                                                     ToolTipService.InitialShowDelay="10"
+                                                    Style="{x:Null}" 
+                                                    Foreground="{DynamicResource shadcn_foreground_brush}"
                                                     Cursor="Hand"
                                                     Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                                     CommandParameter="{Binding}"
-                                                    Style="{x:Null}" 
                                                     >
                                                     <Button.Template>
                                                         <ControlTemplate TargetType="{x:Type Button}">
@@ -393,11 +399,12 @@
                                                                 >
                                                                 <TextBlock 
                                                                     Text="{Binding Path=.}"
+                                                                    Style="{StaticResource ArticleText}"
                                                                     TextWrapping="Wrap"
                                                                     ap:TextBlockHighlighterAuthors.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                                     ap:TextBlockHighlighterAuthors.WordBreakMode="True"
                                                                     ap:TextBlockHighlighterAuthors.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                                    ap:TextBlockHighlighterAuthors.Forecolor="#000000" 
+                                                                    ap:TextBlockHighlighterAuthors.Forecolor="{StaticResource ShadcnBlackColorBrush}" 
                                                                     />
                                                             </Border>
                                                         </DataTemplate>
@@ -446,6 +453,7 @@
                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                         ScrollViewer.CanContentScroll="False"
+                                        Foreground="{DynamicResource shadcn_foreground_brush}"
                                         FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
                                         >
                                         <ListView.Template>
@@ -464,10 +472,11 @@
                                                     Content="{Binding}" 
                                                     ToolTip="Copy"
                                                     ToolTipService.InitialShowDelay="10"
+                                                    Style="{x:Null}" 
+                                                    Foreground="{DynamicResource shadcn_foreground_brush}"
+                                                    Cursor="Hand"
                                                     Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                                     CommandParameter="{Binding}"
-                                                    Style="{x:Null}" 
-                                                    Cursor="Hand"
                                                     >
                                                     <Button.Template>
                                                         <ControlTemplate TargetType="{x:Type Button}">
@@ -481,11 +490,12 @@
                                                                 >
                                                                 <TextBlock 
                                                                     Text="{Binding Path=.}"
+                                                                    Style="{StaticResource ArticleText}"
                                                                     TextWrapping="Wrap"
                                                                     ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                                     ap:TextBlockHighlighter.WordBreakMode="True"
                                                                     ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                                    ap:TextBlockHighlighter.Forecolor="#000000" 
+                                                                    ap:TextBlockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}" 
                                                                     />
                                                             </Border>
                                                         </DataTemplate>
@@ -531,7 +541,11 @@
                             >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Year}" TextWrapping="Wrap" />
+                                    <TextBlock 
+                                        Text="{Binding Year}" 
+                                        Style="{StaticResource ArticleText}"
+                                        TextWrapping="Wrap" 
+                                        />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -550,7 +564,11 @@
                             >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" />
+                                    <TextBlock 
+                                        Text="{Binding FileName}" 
+                                        Style="{StaticResource ArticleText}"
+                                        TextWrapping="Wrap" 
+                                        />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -568,7 +586,11 @@
                             >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding PersonalComment}" TextWrapping="Wrap" />
+                                    <TextBlock 
+                                        Text="{Binding PersonalComment}" 
+                                        Style="{StaticResource ArticleText}"
+                                        TextWrapping="Wrap" 
+                                        />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -585,7 +607,11 @@
                             >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding SIC, Converter={StaticResource NumberToSIC}}" TextWrapping="Wrap" />
+                                    <TextBlock 
+                                        Text="{Binding SIC, Converter={StaticResource NumberToSIC}}" 
+                                        Style="{StaticResource ArticleText}"
+                                        TextWrapping="Wrap" 
+                                        />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -647,7 +673,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListView}">
-                                    <Grid Background="{DynamicResource GrayColorBrush}">
+                                    <Grid Background="{DynamicResource shadcn_muted_brush}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width=".3*" />
                                             <ColumnDefinition Width="*" />
@@ -668,9 +694,9 @@
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListViewItem}">
                                                 <Border
-                                                    Background="{StaticResource WhiteColorBrush}"
+                                                    Background="{DynamicResource shadcn_background_brush}"
                                                     Padding="{TemplateBinding Padding}"
-                                                    CornerRadius="3 3 3 3"
+                                                    CornerRadius="4 4 4 4"
                                                     Margin="0 0 0 12"
                                                     >
                                                     <ContentPresenter />
@@ -724,14 +750,12 @@
                                                     <!-- Title -->
                                                     <TextBlock
                                                         Text="{Binding Title}"
-                                                        Style="{StaticResource Header}"
-                                                        Foreground="{StaticResource BlackColorAltBrush}"
-                                                        FontFamily="Verdana"
+                                                        Style="{StaticResource ArticleHeader}"
                                                         TextWrapping="Wrap"
                                                         ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.TitleSearchWords, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.TitleSearchPhrases, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                        ap:AdvancedTextblockHighlighter.Forecolor="#000000"                                      
+                                                        ap:AdvancedTextblockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}"
                                                         Margin="0 0 0 6"
                                                         Grid.Row="0"
                                                         />
@@ -744,9 +768,8 @@
                                                         <TextBlock
                                                             Text="{Binding Year}"
                                                             Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
-                                                            Style="{StaticResource SmallText}"
+                                                            Style="{StaticResource ArticleSmallText}"
                                                             FontStyle="Italic"
-                                                            Foreground="{StaticResource BlackColorAltBrush}"
                                                             Margin="0 0 6 0"
                                                             />
                                                         <TextBlock
@@ -756,8 +779,7 @@
                                                                 RelativeSource={
                                                                 RelativeSource FindAncestor, 
                                                                 AncestorType={x:Type UserControl}}}"
-                                                            Style="{StaticResource SmallText}"
-                                                            Foreground="{StaticResource BlackColorAltBrush}"
+                                                            Style="{StaticResource ArticleSmallText}"
                                                             />
                                                     </StackPanel>
                                                     <!-- Keywords -->
@@ -788,10 +810,10 @@
                                                                     Content="{Binding}" 
                                                                     ToolTip="Copy"
                                                                     ToolTipService.InitialShowDelay="10"
-                                                                    Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                                                                    CommandParameter="{Binding}"
                                                                     Style="{x:Null}"
                                                                     Cursor="Hand"
+                                                                    Command="{Binding DataContext.CopyWordCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                                                    CommandParameter="{Binding}"
                                                                     >
                                                                     <Button.Template>
                                                                         <ControlTemplate TargetType="{x:Type Button}">
@@ -805,12 +827,11 @@
                                                                                 >
                                                                                 <TextBlock 
                                                                                     Text="{Binding Path=.}"
-                                                                                    Style="{StaticResource SmallText}"
-                                                                                    Foreground="{StaticResource LabelColorBrush}"
+                                                                                    Style="{StaticResource ArticleSmallText}"
                                                                                     ap:TextBlockHighlighter.Selection="{Binding DataContext.KeywordHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                                                     ap:TextBlockHighlighter.WordBreakMode="True"
                                                                                     ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                                                    ap:TextBlockHighlighter.Forecolor="#000000" 
+                                                                                    ap:TextBlockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}" 
                                                                                     />
                                                                             </Border>
                                                                         </DataTemplate>
@@ -887,12 +908,11 @@
                                                                                 >
                                                                                 <TextBlock 
                                                                                     Text="{Binding Path=.}"
-                                                                                    Style="{StaticResource SmallText}"
-                                                                                    Foreground="{StaticResource TextColorBrush}"
+                                                                                    Style="{StaticResource ArticleSmallText}"
                                                                                     ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                                                     ap:TextBlockHighlighter.WordBreakMode="True"
                                                                                     ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                                                    ap:TextBlockHighlighter.Forecolor="#000000" 
+                                                                                    ap:TextBlockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}" 
                                                                                     />
                                                                             </Border>
                                                                         </DataTemplate>
@@ -927,17 +947,18 @@
                                                     <!-- Seprator -->
                                                     <Separator 
                                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
+                                                        Margin="0 0 0 2"
                                                         Grid.Row="4" 
                                                         />
                                                     <!-- Abstract -->
                                                     <TextBlock
                                                         Text="{Binding AbstractBody}"
                                                         Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
-                                                        Style="{StaticResource DefaultText}"
+                                                        Style="{StaticResource ArticleText}"
                                                         ap:AdvancedTextblockHighlighter.WordSelection="{Binding DataContext.AbstractSearchWords, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:AdvancedTextblockHighlighter.PhraseSelection="{Binding DataContext.AbstractSearchPhrases, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         ap:AdvancedTextblockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                        ap:AdvancedTextblockHighlighter.Forecolor="#000000"           
+                                                        ap:AdvancedTextblockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}"           
                                                         TextWrapping="Wrap"
                                                         Margin="0 0 0 12"
                                                         Grid.Row="5"
@@ -945,55 +966,11 @@
                                                     <!-- Open file-->
                                                     <Button 
                                                         Content="View PDF"
+                                                        Style="{StaticResource ViewPDFButtonStyle}"
                                                         Command="{Binding DataContext.ArticleDataManager.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                         CommandParameter="{Binding}"
                                                         Grid.Row="6"
-                                                        >
-                                                        <Button.Style>
-                                                            <Style TargetType="{x:Type Button}" BasedOn="{x:Null}">
-                                                                <Setter Property="Foreground" Value="{StaticResource BlueColorBrush}" />
-                                                                <Setter Property="BorderThickness" Value="0 0 0 0" />
-                                                                <Setter Property="BorderBrush" Value="{StaticResource TextHighlightColorBrush}" />
-                                                                <Setter Property="Cursor" Value="Hand" />
-                                                                <Setter Property="Template">
-                                                                    <Setter.Value>
-                                                                        <ControlTemplate TargetType="{x:Type Button}">
-                                                                            <StackPanel 
-                                                                                Orientation="Horizontal" 
-                                                                                Background="Transparent"
-                                                                                >
-                                                                                <materialDesign:PackIcon
-                                                                                    Kind="FilePdf"
-                                                                                    Width="24"
-                                                                                    Height="24"
-                                                                                    Foreground="{StaticResource LabelColorBrush}"
-                                                                                    Margin="0 0 6 0"
-                                                                                    />
-                                                                                <Border
-                                                                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                                                    VerticalAlignment="Center"
-                                                                                    >
-                                                                                    <TextBlock
-                                                                                        Text="{TemplateBinding Content}"
-                                                                                        Style="{StaticResource DefaultText}"
-                                                                                        Foreground="{TemplateBinding Foreground}"
-                                                                                        />
-                                                                                </Border>
-                                                                            </StackPanel>
-                                                                        </ControlTemplate>
-                                                                    </Setter.Value>
-                                                                </Setter>
-
-                                                                <Style.Triggers>
-                                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter Property="Foreground" Value="{StaticResource BlackColorAltBrush}" />
-                                                                        <Setter Property="BorderThickness" Value="0 0 0 2" />
-                                                                    </Trigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Button.Style>
-                                                    </Button>
+                                                        />
                                                 </Grid>
                                             </DataTemplate>
                                         </Setter.Value>
@@ -1055,7 +1032,9 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Focusable="True">
+    <Grid 
+        Focusable="True"
+        >
         <Grid.RowDefinitions>
             <!-- Proxy column -->
             <RowDefinition Height="Auto" />
@@ -1071,6 +1050,7 @@
         <TabControl
             Style="{StaticResource Ribbon}"
             MinHeight="105"
+            Margin="0 0 0 12"
             Grid.Row="1"
             >
             <!-- Search menu -->
@@ -1098,7 +1078,7 @@
                         <!-- Title -->
                         <TextBox
                             Text="{Binding FilterTitle, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            Style="{StaticResource ShadcnTextBox}"
                             aps:TextBoxHelper.Watermark="Title"
                             AcceptsReturn="True"
                             VerticalAlignment="Center"
@@ -1117,7 +1097,7 @@
                             <!-- Authors -->
                             <TextBox
                                 Text="{Binding FilterAuthors, UpdateSourceTrigger=PropertyChanged}"
-                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                Style="{StaticResource ShadcnTextBox}"
                                 aps:TextBoxHelper.Watermark="Authors"
                                 Width="200"
                                 Margin="0 0 6 0"
@@ -1125,7 +1105,7 @@
                             <!-- Keywords -->
                             <TextBox
                                 Text="{Binding FilterKeywords, UpdateSourceTrigger=PropertyChanged}"
-                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                Style="{StaticResource ShadcnTextBox}"
                                 aps:TextBoxHelper.Watermark="Keywords"
                                 Width="200"
                                 Margin="0 0 6 0"
@@ -1140,16 +1120,17 @@
                             >
                             <!-- Search -->
                             <Button
-                                Command="{Binding LoadArticlesCommand}"
                                 Content="Search"
+                                Style="{StaticResource ShadcnButtonPrimary}"
                                 Width="80"
+                                Command="{Binding LoadArticlesCommand}"
                                 Margin="0 0 6 0"
                                 />
                             <!-- Clear -->
                             <Button
-                                Style="{StaticResource SecondaryButtonAlt}"
-                                Command="{Binding ClearCommand}"                                
                                 Content="Clear"
+                                Style="{StaticResource ShadcnButtonSecondary}"
+                                Command="{Binding ClearCommand}"
                                 Width="80"
                                 />
                         </StackPanel>
@@ -1285,7 +1266,7 @@
                             <!-- Year -->
                             <TextBox
                                 Text="{Binding FilterYear, UpdateSourceTrigger=PropertyChanged}"
-                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                Style="{StaticResource ShadcnTextBox}"
                                 aps:TextBoxHelper.Watermark="Year"
                                 Width="90"
                                 Margin="0 0 6 0"
@@ -1293,7 +1274,7 @@
                             <!-- Comment -->
                             <TextBox
                                 Text="{Binding FilterPersonalComment, UpdateSourceTrigger=PropertyChanged}"
-                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                Style="{StaticResource ShadcnTextBox}"
                                 aps:TextBoxHelper.Watermark="Comment"
                                 Width="100"
                                 Margin="0 0 6 0"
@@ -1301,7 +1282,7 @@
                             <!-- Id -->
                             <TextBox
                                 Text="{Binding IdFilter, UpdateSourceTrigger=PropertyChanged}"
-                                Style="{StaticResource WatermarkTextBoxSmall}"
+                                Style="{StaticResource ShadcnTextBox}"
                                 aps:TextBoxHelper.Watermark="Id"
                                 Width="90"
                                 Margin="0 0 6 0"
@@ -1312,7 +1293,7 @@
                         <TextBox
                             Visibility="{Binding ShowAdditionalFilters, Converter={StaticResource BoolToVisibility}}"
                             Text="{Binding FilterAbstract, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource WatermarkTextBoxSmall}"
+                            Style="{StaticResource ShadcnTextBox}"
                             aps:TextBoxHelper.Watermark="Abstract"
                             AcceptsReturn="True"
                             VerticalAlignment="Center"
@@ -1338,10 +1319,10 @@
                         Content="Compact&#x0a;View"                        
                         Tag="{x:Static materialDesign:PackIconKind.Text}"
                         GroupName="ViewType"
+                        Style="{StaticResource RibbonRadioButtonIcon}"
+                        IsChecked="True"
                         Command="{Binding SwitchDataViewCommand}"
                         CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
-                        IsChecked="True"
-                        Style="{StaticResource RibbonRadioButtonIcon}"
                         Margin="0 0 6 0"
                         />
                     <!-- Full view -->
@@ -1349,15 +1330,15 @@
                         Content="Full&#x0a;View"
                         Tag="{x:Static materialDesign:PackIconKind.TextBox}"
                         GroupName="ViewType"
+                        Style="{StaticResource RibbonRadioButtonIcon}"
                         Command="{Binding SwitchDataViewCommand}"
                         CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"
-                        Style="{StaticResource RibbonRadioButtonIcon}"
                         Width="54"
                         Margin="0 0 12 0"
                         />
                     <Rectangle
                         Width="3"
-                        Fill="{DynamicResource GrayColorBrush}"
+                        Fill="{DynamicResource shadcn_muted_brush}"
                         Margin="0 0 12 0"                        
                         />
                     <!-- Column selector for compact view -->
@@ -1413,32 +1394,34 @@
                     <!-- Sorting for full view -->
                     <StackPanel 
                         Orientation="Horizontal"
-                        Visibility="{
-                            Binding IsDataViewCompact, 
-                            Converter={StaticResource BoolToVisibilityInverse}}"
+                        Visibility="{Binding IsDataViewCompact, Converter={StaticResource BoolToVisibilityInverse}}"
                         >
                         <TextBlock 
                             Text="Sort by:"
-                            FontSize="12"
-                            Foreground="{StaticResource LabelColorBrush}" 
+                            Style="{StaticResource DefaultText}"
                             VerticalAlignment="Center"
                             Margin="0 0 6 0"
                             />
                         <ComboBox 
                             ItemsSource="{Binding SortableProperties}" 
                             SelectedItem="{Binding SelectedSortProperty}"
+                            Style="{StaticResource ShadcnSelectStyle}"
                             MinWidth="70"
+                            VerticalAlignment="Center"
                             Margin="0 0 6 0"
                             />
                         <ComboBox 
                             ItemsSource="{Binding SortDirections}" 
                             SelectedItem="{Binding SelectedSortDirection}"
-                            MinWidth="45"
+                            Style="{StaticResource ShadcnSelectStyle}"
+                            MinWidth="65"
+                            VerticalAlignment="Center"
                             Margin="0 0 6 0"
                             />
                         <Button 
-                            Style="{StaticResource MaterialDesignIconButton}"
-                            Command="{Binding SortFromRibbonCommand}"
+                            Style="{StaticResource ShadcnGhostButton}"
+                            VerticalAlignment="Center"
+                            Command="{Binding SortFromRibbonCommand}"                            
                             >
                             <Button.Content>
                                 <materialDesign:PackIcon Kind="Refresh" />
@@ -1477,23 +1460,28 @@
                     >
                     <Button 
                         Content="Get Duplicate Articles"
-                        Command="{Binding GetDuplicateArticlesCommand}"
+                        Style="{StaticResource ShadcnButtonPrimary}"
+                        VerticalAlignment="Center"
+                        Command="{Binding GetDuplicateArticlesCommand}"                        
                         Margin="0 0 6 0"
                         />
                     <TextBox
                         Text="{Binding LevensteinCoefficient}"
-                        Style="{StaticResource WatermarkTextBox}"
+                        Style="{StaticResource ShadcnTextBox}"
                         aps:TextBoxHelper.Watermark="LS"
                         Width="45"
+                        VerticalAlignment="Center"
                         Margin="0 0 12 0"
                         />
                     <Rectangle
                         Width="3"
-                        Fill="{DynamicResource GrayColorBrush}"
+                        Fill="{DynamicResource shadcn_muted_brush}"
                         Margin="0 0 12 0"                        
                         />
                     <Button
                         Content="Get Unbookmarked Articles"
+                        Style="{StaticResource ShadcnButtonPrimary}"
+                        VerticalAlignment="Center"
                         Command="{Binding GetUnbookmarkedArticlesCommand}"
                         />
                 </StackPanel>
@@ -1505,7 +1493,7 @@
             Content="{Binding SelectedViewType}" 
             Grid.Row="2"
             />
-
+        
         <notifications:NotificationArea 
             x:Name="DataViewNotificationArea" 
             Position="BottomRight" 
@@ -1518,8 +1506,8 @@
         <!-- Bottom menu -->
         <Border
             BorderThickness="0 1 0 0"
-            BorderBrush="{StaticResource GrayColorBrush}"
-            Padding="12 6 12 6"
+            BorderBrush="{DynamicResource shadcn_background_brush}"
+            Padding="12 12 12 6"
             Grid.Row="3"
             >
             <Grid>
@@ -1541,20 +1529,56 @@
                     Grid.Column="0"
                     >
                     <Button 
-                        Content="Previous" 
                         Command="{Binding PreviousPageCommand}"
-                        Style="{StaticResource PaginationButton__Left}"
-                        />
+                        Style="{StaticResource ShadcnGhostButton}"
+                        >
+                        <Button.Content>
+                            <StackPanel
+                                Orientation="Horizontal"
+                                >
+                                <materialDesign:PackIcon
+                                    Kind="KeyboardArrowLeft"
+                                    Width="16"
+                                    Height="16"
+                                    VerticalAlignment="Center"
+                                    Margin="0 0 6 0"
+                                    />
+                                <TextBlock
+                                    Text="Previous"
+                                    Style="{StaticResource DefaultText}"
+                                    VerticalAlignment="Center"
+                                    />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
                     <ListBox
                         ItemsSource="{Binding PageButtons}"
                         SelectedItem="{Binding SelectedPage}"
                         Style="{StaticResource PaginationWrapper}"
                         />
-                    <Button 
-                        Content="Next" 
+                    <Button  
                         Command="{Binding NextPageCommand}"
-                        Style="{StaticResource PaginationButton__Right}"
-                        />
+                        Style="{StaticResource ShadcnGhostButton}"
+                        >
+                        <Button.Content>
+                            <StackPanel
+                                Orientation="Horizontal"
+                                >
+                                <TextBlock
+                                    Text="Next"
+                                    Style="{StaticResource DefaultText}"
+                                    VerticalAlignment="Center"
+                                    Margin="0 0 6 0"
+                                    />
+                                <materialDesign:PackIcon
+                                    Kind="KeyboardArrowRight"
+                                    Width="16"
+                                    Height="16"
+                                    VerticalAlignment="Center"
+                                    />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
                 </StackPanel>
                 <!-- Items per page -->
                 <StackPanel
@@ -1581,6 +1605,7 @@
                         />
                     <TextBox
                         Text="{Binding ItemsPerPage}"
+                        Style="{StaticResource ShadcnTextBox}"
                         MinWidth="50"
                         MaxWidth="100"
                         VerticalAlignment="Center"

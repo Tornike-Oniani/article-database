@@ -91,6 +91,13 @@
     <Resource Include="fonts\MotivaSansMedium.woff.ttf" />
     <Resource Include="fonts\MotivaSansThin.ttf" />
     <Resource Include="fonts\MotivaSansRegular.woff.ttf" />
+    <Resource Include="fonts\YujiMai-Regular.ttf" />
+    <Resource Include="fonts\Helvetica-Bold.ttf" />
+    <Resource Include="fonts\Helvetica.ttf" />
+    <Resource Include="fonts\Figtree-Bold.ttf" />
+    <Resource Include="fonts\Figtree-Regular.ttf" />
+    <Resource Include="fonts\Lexend-Bold.ttf" />
+    <Resource Include="fonts\Lexend-Regular.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -98,6 +105,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ColorsContrast.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ColorsDark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

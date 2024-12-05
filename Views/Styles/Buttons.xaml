@@ -9,7 +9,7 @@
 
     <!-- General button -->
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedButton}">
-        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ButtonFontSize}" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="Foreground" Value="{StaticResource WhiteColorBrush}" />
     </Style>
 
@@ -19,7 +19,7 @@
         <Setter Property="BorderThickness" Value="0 0 0 0" />
         <Setter Property="Foreground" Value="#ffffff" />
         <Setter Property="Padding" Value="12 6 12 6" />
-        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ButtonFontSize}" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -46,11 +46,11 @@
 
     <!-- Pagination buttons -->
     <Style x:Key="PaginationButton__Left" TargetType="{x:Type Button}" BasedOn="{x:Null}">
-        <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
-        <Setter Property="BorderThickness" Value="1 1 0 1" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
         <Setter Property="BorderBrush" Value="{DynamicResource GrayColorBrush}" />
         <Setter Property="Padding" Value="12 6 12 6" />
-        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ButtonFontSize}" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="Foreground" Value="{StaticResource PrimaryColorBrush}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
@@ -102,9 +102,9 @@
     <Style x:Key="ItemActionButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
         <Setter Property="Padding" Value="6 6 6 6" />
         <Setter Property="BorderThickness" Value="1 1 1 1" />
-        <Setter Property="BorderBrush" Value="{StaticResource LabelColorBrush}" />
-        <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource LabelColorBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource shadcn_border_brush}" />
+        <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Cursor" Value="Hand" />
@@ -115,23 +115,13 @@
                     <Border
                         x:Name="outline"
                         Padding="{TemplateBinding Padding}"
-                        CornerRadius="4"
+                        CornerRadius="4 4 4 4"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         Background="{TemplateBinding Background}"
                         VerticalAlignment="{TemplateBinding VerticalAlignment}"
                         HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                         >
-                        <!-- Shadow -->
-                        <Border.BitmapEffect>
-                            <DropShadowBitmapEffect 
-                                Color="Black"
-                                Direction="-60"
-                                ShadowDepth="5"
-                                Softness="10"
-                                Opacity="0.1"                        
-                                />
-                        </Border.BitmapEffect>
                         <!-- Icon -->
                         <materialDesign:PackIcon
                             Kind="{TemplateBinding Tag}"
@@ -141,24 +131,6 @@
                             Foreground="{TemplateBinding Foreground}" 
                             />
                     </Border>
-
-                    <!-- Control template triggers -->
-                    <ControlTemplate.Triggers>
-                        <!-- Mouse over darker shadow -->
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="outline" Property="BitmapEffect">
-                                <Setter.Value>
-                                    <DropShadowBitmapEffect 
-                                        Color="Black"
-                                        Direction="-60"
-                                        ShadowDepth="5"
-                                        Softness="10"
-                                        Opacity="0.2" 
-                                        />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -166,7 +138,7 @@
     <!-- Text button -->
     <Style x:Key="TextButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
         <Setter Property="Padding" Value="6 0 6 0" />
-        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ButtonFontSize}" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
@@ -194,7 +166,7 @@
     </Style>
     <Style x:Key="TextToggleButton" TargetType="{x:Type ToggleButton}" BasedOn="{x:Null}">
         <Setter Property="Padding" Value="6 0 6 0" />
-        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ButtonFontSize}" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
@@ -222,23 +194,27 @@
     </Style>
     <Style x:Key="RibbonRadioButtonIcon" TargetType="{x:Type RadioButton}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="3 3 3 3" />
+        <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+        <Setter Property="Padding" Value="4 4 4 4" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RadioButton}">
                     <Border
                         Background="{TemplateBinding Background}"
                         Padding="{TemplateBinding Padding}"
+                        CornerRadius="4 4 4 4"
                         >
                         <StackPanel>
                             <materialDesign:PackIcon
                                 Kind="{TemplateBinding Tag}"
+                                Foreground="{TemplateBinding Foreground}"
                                 Width="24"
                                 Height="24"
                                 HorizontalAlignment="Center"
                                 />
                             <TextBlock
                                 Text="{TemplateBinding Content}"
+                                Foreground="{TemplateBinding Foreground}"
                                 TextWrapping="Wrap"
                                 TextAlignment="Center"
                                 />
@@ -250,10 +226,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource GrayColorBrush}" />
+                <Setter Property="Background" Value="{DynamicResource shadcn_accent_brush}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="{DynamicResource GrayColorBrush}" />
+                <Setter Property="Background" Value="{DynamicResource shadcn_accent_brush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -264,7 +240,7 @@
         <Setter Property="BorderThickness" Value="0 0 0 0" />
         <Setter Property="Foreground" Value="#ffffff" />
         <Setter Property="Padding" Value="12 6 12 6" />
-        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ButtonFontSize}" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
