@@ -25,7 +25,8 @@
         <converters:BoolToTextHeaderStyleConverter x:Key="BoolToTextHeaderStyle" />
         <converters:AbstractToVisibilityConverter x:Key="AbstractToVisibility" />
         <converters:SortConverter x:Key="SortConverter" />
-        
+        <converters:BoolToInverseConverter x:Key="BoolToInverse" />
+
         <!-- Animation -->
         <Storyboard x:Key="ShowAbstract">
             <!-- Show Abstract -->
@@ -91,7 +92,7 @@
                     SelectedItem="{Binding ArticleDataManager.SelectedArticle}"
                     CanUserSortColumns="False"
                     Style="{StaticResource ArticleGrid}"
-                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}"
                     Grid.Row="1"
                     >
                 <DataGrid.Resources>
@@ -145,35 +146,39 @@
                 </DataGrid.CellStyle>
                 <DataGrid.ContextMenu>
                     <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                        <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
-                            <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
-                            <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
-                            <!-- Remove article -->
-                            <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.RemoveArticleFromReferenceCommand}" CommandParameter="{Binding Reference}">
-                            <MenuItem.Header>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Remove" Grid.Column="0" />
-                                    <TextBlock Text="Del" Grid.Column="2" />
-                                </Grid>
-                            </MenuItem.Header>
-                         </MenuItem>
-                        <!-- Copy -->
-                        <MenuItem Command="{Binding ArticleDataManager.CopyTitleCommand}">
+                        <MenuItem 
+                            Header="Add comment/SIC" 
+                            IsEnabled="{Binding User.IsGuest, Converter={StaticResource BoolToInverse}}"
+                            Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" 
+                            />
+                        <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
+                        <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
+                        <!-- Remove article -->
+                        <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.RemoveArticleFromReferenceCommand}" CommandParameter="{Binding Reference}">
                         <MenuItem.Header>
-                            <Grid Width="130">
-                                <Grid.ColumnDefinitions>
+                            <Grid>
+                               <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Copy Title" Grid.Column="0" />
-                                <TextBlock Text="Ctrl+C" Grid.Column="2" />
+                                <TextBlock Text="Remove" Grid.Column="0" />
+                                <TextBlock Text="Del" Grid.Column="2" />
                             </Grid>
+                        </MenuItem.Header>
+                     </MenuItem>
+                    <!-- Copy -->
+                    <MenuItem Command="{Binding ArticleDataManager.CopyTitleCommand}">
+                    <MenuItem.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Copy Title" Grid.Column="0" />
+                            <TextBlock Text="Ctrl+C" Grid.Column="2" />
+                        </Grid>
                         </MenuItem.Header>
                     </MenuItem>
                     </ContextMenu>
@@ -665,7 +670,11 @@
                 </ListView.Style>
                 <ListView.ContextMenu>
                     <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                        <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
+                        <MenuItem 
+                            Header="Add comment/SIC" 
+                            IsEnabled="{Binding User.IsGuest, Converter={StaticResource BoolToInverse}}"
+                            Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" 
+                            />
                         <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
                         <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
                         <MenuItem Header="Remove" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.RemoveArticleFromReferenceCommand}" CommandParameter="{Binding Reference}" />

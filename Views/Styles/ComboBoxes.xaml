@@ -16,7 +16,7 @@
                         <ScrollBar 
                             Grid.Row="1" 
                             Orientation="Horizontal" 
-                            Visibility="Hidden" 
+                            Visibility="Collapsed" 
                             />
                     </Grid>
                 </ControlTemplate>
@@ -42,7 +42,7 @@
         <Setter Property="BorderThickness" Value="0 0 0 0" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
-        <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+        <Setter Property="FontSize" Value="14" />
         <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
         <Setter Property="Template">
             <Setter.Value>

@@ -18,7 +18,8 @@ namespace MainLib.ViewModels.Pages
     public class BookmarkListViewModel : BaseViewModel
     {
         // Private members
-        private Shared services;
+        private readonly Shared services;
+        private string _searchString;
 
         /**
          * Public properties
@@ -32,17 +33,29 @@ namespace MainLib.ViewModels.Pages
         // Container of global bookmarks
         public ObservableCollection<Bookmark> GlobalBookmarks { get; set; }
         public ICollectionView GlobalBookmarksCollection { get { return _globalBookmarksCollection.View; } }
+        public string SearchString
+        {
+            get { return _searchString; }
+            set 
+            { 
+                _searchString = value;
+                _bookmarksCollection.View.Refresh();
+                _globalBookmarksCollection.View.Refresh();
+                OnPropertyChanged("SearchString"); 
+            }
+        }
 
         /**
          * Commands:
-         *  - Open bookmark
          *  [The action of this command is in code behind of BookmarkList view because we use NavigationService which is not accessible from view model]
+         *  - Open bookmark
          *  - Delete bookmark
          */
         public RelayCommand OpenBookmarkCommand { get; set; }
         public ICommand AddNewBookmarkCommand { get; set; }
         public RelayCommand EditBookmarkCommand { get; set; }
         public RelayCommand DeleteBookmarkCommand { get; set; }
+        public ICommand ClearSearchCommand { get; set; }
 
         // Constructor
         public BookmarkListViewModel()
@@ -61,6 +74,10 @@ namespace MainLib.ViewModels.Pages
             this.AddNewBookmarkCommand = new RelayCommand(AddNewBookmark);
             EditBookmarkCommand = new RelayCommand(EditBookmark);
             DeleteBookmarkCommand = new RelayCommand(DeleteBookmark);
+            this.ClearSearchCommand = new RelayCommand(ClearSearch);
+
+            this._bookmarksCollection.Filter += FilterBookmarks;
+            this._globalBookmarksCollection.Filter += FilterBookmarks;
         }
 
         /**
@@ -99,6 +116,10 @@ namespace MainLib.ViewModels.Pages
                 new BugTracker().Track("Bookmark List", "Delete bookmark", e.Message, e.StackTrace);
                 services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
             }
+        }
+        public void ClearSearch(object input = null)
+        {
+            this.SearchString = String.Empty;
         }
 
         /**
@@ -170,6 +191,27 @@ namespace MainLib.ViewModels.Pages
 
                 foreach (Bookmark bookmark in bookmarks)
                     Bookmarks.Add(bookmark);
+            }
+        }
+
+        /**
+         * Private helpers
+         */
+        private void FilterBookmarks(object sender, FilterEventArgs e)
+        {
+            // Edge case: filter text is empty
+            if (String.IsNullOrWhiteSpace(SearchString))
+            {
+                e.Accepted = true;
+                return;
+            }
+
+            e.Accepted = false;
+
+            Bookmark current = e.Item as Bookmark;
+            if (current.Name.ToLower().Contains(SearchString.ToLower()))
+            {
+                e.Accepted = true;
             }
         }
     }

@@ -241,9 +241,9 @@ namespace MainLib.ViewModels.Main
             this.AbstractSearchPhrases = new List<string>();
             this.LevensteinCoefficient = 0.7;
             OnPropertyChanged("Articles");
-            CurrentPage = 1;
-            ItemsPerPage = 35;
-            SelectedPage = "1";
+            this.CurrentPage = 1;
+            this.ItemsPerPage = 35;
+            this.SelectedPage = "1";
             GenerateButtons();
 
             // Get the index of the logged in user and set it as selected index for combobox
@@ -257,22 +257,22 @@ namespace MainLib.ViewModels.Main
             UserIndex = index;
 
             // Set up commands
-            SwitchDataViewCommand = new RelayCommand(SwitchDataView);
-            NextPageCommand = new RelayCommand(NextPage, CanNextPage);
-            PreviousPageCommand = new RelayCommand(PreviousPage, CanPreviousPage);
-            LoadArticlesCommand = new RelayCommand(LoadArticles);
-            EnableExportCommand = new RelayCommand(EnableExport);
-            ExportCommand = new RelayCommand(Export, CanExport);
-            SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
-            SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
-            UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
-            CopyWordCommand = new RelayCommand(CopyWord);
-            GetDuplicateArticlesCommand = new RelayCommand(GetDuplicateArticles);
-            GetUnbookmarkedArticlesCommand = new RelayCommand(GetUnbookmarkedArticles);
+            this.SwitchDataViewCommand = new RelayCommand(SwitchDataView);
+            this.NextPageCommand = new RelayCommand(NextPage, CanNextPage);
+            this.PreviousPageCommand = new RelayCommand(PreviousPage, CanPreviousPage);
+            this.LoadArticlesCommand = new RelayCommand(LoadArticles);
+            this.EnableExportCommand = new RelayCommand(EnableExport);
+            this.ExportCommand = new RelayCommand(Export, CanExport);
+            this.SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
+            this.SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
+            this.UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
+            this.CopyWordCommand = new RelayCommand(CopyWord);
+            this.GetDuplicateArticlesCommand = new RelayCommand(GetDuplicateArticles);
+            this.GetUnbookmarkedArticlesCommand = new RelayCommand(GetUnbookmarkedArticles);
 
             InitializeSearchOptions();
             this.SelectedViewType = new CompactViewTemplate();
-            IsDataViewCompact = true;
+            this.IsDataViewCompact = true;
             this.ArticleDataManager = new ArticleDataManager(LoadArticlesCommand);
         }
 
@@ -360,7 +360,7 @@ namespace MainLib.ViewModels.Main
                 await Task.Run(() =>
                 {
                     // 2. Calculate total pages
-                    int record_count = new ArticleRepo().GetRecordCount(Users[UserIndex], filter);
+                    int record_count = new ArticleRepo().GetRecordCount(User, filter);
                     this.TotalItems = record_count;
                     if ((record_count % ItemsPerPage) == 0)
                         TotalPages = record_count / ItemsPerPage;
@@ -606,12 +606,12 @@ namespace MainLib.ViewModels.Main
             await Task.Run(() =>
             {
                 // 2. Fetch all artilces from database
-                articles = FindDuplicateArticles(new ArticleRepo().GetAllArticles(Users[UserIndex], ""));
+                articles = FindDuplicateArticles(new ArticleRepo().GetAllArticles(User, ""));
 
                 Services.IsWorking(true, "Adding articles to bookmark");
                 BookmarkRepo bookmarkRepo = new BookmarkRepo();
-                bookmarkRepo.AddBookmark("Duplicates_" + LevensteinCoefficient.ToString(), 0, Users[UserIndex]);
-                Bookmark duplicatesBookmark = bookmarkRepo.GetBookmark("Duplicates_" + LevensteinCoefficient.ToString(), Users[UserIndex]);
+                bookmarkRepo.AddBookmark("Duplicates_" + LevensteinCoefficient.ToString(), 0, User);
+                Bookmark duplicatesBookmark = bookmarkRepo.GetBookmark("Duplicates_" + LevensteinCoefficient.ToString(), User);
                 bookmarkRepo.AddListOfArticlesToBookmark(duplicatesBookmark, articles);
             });
 
@@ -631,7 +631,7 @@ namespace MainLib.ViewModels.Main
             await Task.Run(() =>
             {
                 // 2. Calculate total pages
-                int record_count = new BookmarkRepo().GetUnbookmarkedArticlesRecordCount(Users[UserIndex]);
+                int record_count = new BookmarkRepo().GetUnbookmarkedArticlesRecordCount(User);
                 this.TotalItems = record_count;
                 if ((record_count % ItemsPerPage) == 0)
                     TotalPages = record_count / ItemsPerPage;
@@ -685,7 +685,7 @@ namespace MainLib.ViewModels.Main
                     _filterTitle = _filterTitle.Replace("'", "''");
 
                 // 2. Fetch artilces from database
-                articles = new ArticleRepo().LoadArticles(Users[UserIndex], filter);
+                articles = new ArticleRepo().LoadArticles(User, filter);
             });
 
             foreach (Article article in articles)
@@ -711,7 +711,7 @@ namespace MainLib.ViewModels.Main
             List<Article> articles = new List<Article>();
             await Task.Run(() =>
             {
-                articles = new BookmarkRepo().LoadUnbookmarkedArticles(Users[UserIndex], filter.GetFilterString());
+                articles = new BookmarkRepo().LoadUnbookmarkedArticles(User, filter.GetFilterString());
             });
 
             foreach (Article article in articles)

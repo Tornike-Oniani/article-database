@@ -34,6 +34,15 @@ namespace MainLib.Views.UserControls
             set { SetValue(ItemsSourceProperty, value); }
         }
 
+        private static readonly DependencyProperty WatermarkProperty =
+    DependencyProperty.Register("Watermark", typeof(string), typeof(FilterBox), new PropertyMetadata("Search"));
+
+        public string Watermark
+        {
+            get { return (string)GetValue(WatermarkProperty); }
+            set { SetValue(WatermarkProperty, value); }
+        }
+
         // Private members
         private string _filterText;
 

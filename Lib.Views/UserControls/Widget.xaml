@@ -31,11 +31,15 @@
             CornerRadius="6 6 6 6"
             >
             <!-- Stackpanel consisting of icon and content -->
-            <StackPanel 
+            <Grid 
                 Width="180" 
-                Height="Auto" 
                 Background="{DynamicResource shadcn_background_brush}"
                 >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <materialDesign:PackIcon 
                     Kind="{Binding Icon, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                     Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
@@ -44,16 +48,19 @@
                     Width="42"
                     Height="42"
                     Margin="0 12 0 6"
+                    Grid.Row="0"
                     />
                 <TextBlock 
                     Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=Lorem}" 
                     Style="{StaticResource MediumHeader}"
                     FontWeight="Bold"
                     TextAlignment="Center" 
+                    Grid.Row="1"
                     />
                 <!-- Title and description -->
                 <Border 
                     Padding="12 12 12 12"
+                    Grid.Row="3"
                     >
                     <Grid>
                         <Grid.RowDefinitions>
@@ -73,13 +80,12 @@
                             Style="{StaticResource ShadcnButtonOutline}"
                             Command="{Binding Command, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
                             Click="widget_click"
-                            VerticalAlignment="Bottom"
+                            VerticalAlignment="Bottom"                            
                             Grid.Row="1"
-                            >
-                        </Button>
+                            />
                     </Grid>
                 </Border>
-            </StackPanel>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

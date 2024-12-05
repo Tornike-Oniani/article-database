@@ -76,9 +76,19 @@
                                     />
                             </Grid>
                         </Border>
+                        <Border
+                            x:Name="DisabledOverlay"
+                            Background="{DynamicResource shadcn_background_brush}"
+                            CornerRadius="6 6 6 6"
+                            Opacity="0.5"
+                            Visibility="Collapsed"
+                            />
                     </Grid>
 
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="DisabledOverlay" Property="Visibility" Value="Visible" />
+                        </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="ring" Property="Visibility" Value="Visible" />
                         </Trigger>
@@ -134,20 +144,20 @@
                 <ControlTemplate TargetType="{x:Type PasswordBox}">
                     <Grid>
                         <Border
-                        x:Name="ring"
-                        BorderThickness="2 2 2 2"
-                        BorderBrush="{DynamicResource shadcn_ring_brush}"
-                        Padding="{TemplateBinding Padding}"
-                        CornerRadius="8 8 8 8"
-                        Margin="-4 -4 -4 -4"
-                        />
+                            x:Name="ring"
+                            BorderThickness="2 2 2 2"
+                            BorderBrush="{DynamicResource shadcn_ring_brush}"
+                            Padding="{TemplateBinding Padding}"
+                            CornerRadius="8 8 8 8"
+                            Margin="-4 -4 -4 -4"
+                            />
                         <Border
-                        Padding="{TemplateBinding Padding}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="6 6 6 6"
-                        >
+                            Padding="{TemplateBinding Padding}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6 6 6 6"
+                            >
                             <Grid>
                                 <ScrollViewer 
                                 x:Name="PART_ContentHost"

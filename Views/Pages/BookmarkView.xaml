@@ -28,6 +28,7 @@
         <converters:BoolToTextHeaderStyleConverter x:Key="BoolToTextHeaderStyle" />
         <converters:AbstractToVisibilityConverter x:Key="AbstractToVisibility" />
         <converters:SortConverter x:Key="SortConverter" />
+        <converters:BoolToInverseConverter x:Key="BoolToInverse" />
 
         <!-- Show abstract -->
         <Storyboard x:Key="ShowAbstract">
@@ -148,12 +149,19 @@
                     </DataGrid.CellStyle>
                     <DataGrid.ContextMenu>
                         <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                            <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
+                            <MenuItem 
+                                Header="Add comment/SIC" 
+                                IsEnabled="{Binding User.IsGuest, Converter={StaticResource BoolToInverse}}"
+                                Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}"                                 
+                                />
                             <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
                             <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
                             <!-- Delete article -->
                             <MenuItem Header="Delete article" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.DeleteArticleCommand}" />
-                            <MenuItem Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}">
+                            <MenuItem 
+                                IsEnabled="{Binding User.IsGuest, Converter={StaticResource BoolToInverse}}"
+                                Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}"
+                                >
                                 <MenuItem.Header>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -183,7 +191,7 @@
                             <!-- Copy -->
                             <MenuItem Command="{Binding ArticleDataManager.CopyTitleCommand}">
                                 <MenuItem.Header>
-                                    <Grid Width="130">
+                                    <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
@@ -688,7 +696,11 @@
                 <ListView.ContextMenu>
                     <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                         <!-- We set these items' commands from code behind -->
-                        <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
+                        <MenuItem 
+                            Header="Add comment/SIC" 
+                            IsEnabled="{Binding User.IsGuest, Converter={StaticResource BoolToInverse}}"
+                            Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}"                             
+                            />
                         <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
                         <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
                         <!-- Delete article -->

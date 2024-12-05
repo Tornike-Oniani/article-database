@@ -13,6 +13,9 @@
       Title="BookmarkList">
     <Page.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:BoolToVisibilityInverseConverter x:Key="BoolToVisibilityInverse" />
+        <converters:BoolToNumberConverter x:Key="BoolToNumber" />
+        <converters:BoolToInverseConverter x:Key="BoolToInverse" />
     </Page.Resources>
 
     <Grid>
@@ -48,6 +51,7 @@
                     />
             </StackPanel>
             <Button
+                IsEnabled="{Binding User.IsGuest, Converter={StaticResource BoolToInverse}}"
                 Style="{StaticResource ShadcnButtonPrimary}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
@@ -75,14 +79,20 @@
                 </Button.Content>
             </Button>
         </Grid>
+        
         <!-- Search -->
         <TextBox
-            Text="{Binding SearchString}"
+            Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"
             aps:TextBoxHelper.Watermark="Search bookmarks..."
             Style="{StaticResource ShadcnTextBox}"
             Margin="0 0 0 24"
             Grid.Row="1"
-            />
+            >
+            <TextBox.InputBindings>
+                <KeyBinding Key="Esc" Command="{Binding ClearSearchCommand}" />
+            </TextBox.InputBindings>
+        </TextBox>
+
         <!-- Bookmarks -->
         <Grid 
             Grid.Row="2"
@@ -99,6 +109,7 @@
             <!-- MY BOOKMARKS -->
             <Grid
                 Grid.Column="0"
+                Visibility="{Binding User.IsGuest, Converter={StaticResource BoolToVisibilityInverse}}"
                 >
                 <Border
                     Background="{DynamicResource shadcn_background_brush}"
@@ -142,7 +153,8 @@
 
             <!-- GLOBAL BOOKMARKS -->
             <Grid
-                Grid.Column="2"
+                Grid.Column="{Binding User.IsGuest, Converter={StaticResource BoolToNumber}, ConverterParameter='0,2'}"
+                Grid.ColumnSpan="{Binding User.IsGuest, Converter={StaticResource BoolToNumber}, ConverterParameter='3,1'}"
                 >
                 <Border
                     Background="{DynamicResource shadcn_background_brush}"

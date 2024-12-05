@@ -67,12 +67,13 @@
             />
     </WindowChrome.WindowChrome>
 
-    <Grid
-        Background="{DynamicResource shadcn_background_brush}"
-        >
+    <Grid Background="{DynamicResource shadcn_background_brush}">
+
         <!-- Working overlay -->
-        <Grid Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}, FallbackValue=Visible}"
-              Panel.ZIndex="1">
+        <Grid 
+            Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}, FallbackValue=Hidden}"
+            Panel.ZIndex="1"
+              >
             <Rectangle Fill="{DynamicResource shadcn_background_brush}"
                        Opacity="0.7" />
             <Border BorderThickness="0 0 0 3"
@@ -123,7 +124,7 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        
+
                         <usercontrols:Badge 
                             Icon="{x:Static materialDesign:PackIconKind.Account}"
                             Background="{DynamicResource shadcn_muted_brush}"
@@ -167,7 +168,9 @@
                     </Grid>
 
                     <!-- Buttons -->
-                    <Grid Margin="0 24 0 0">
+                    <Grid 
+                        Margin="0 24 0 12"
+                        >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
@@ -187,9 +190,52 @@
                                 Margin="6 0 0 0" 
                                 Grid.Column="2" />
                     </Grid>
+
+                    <Grid
+                        Margin="0 0 0 12"
+                        >
+                        <Separator />
+                        <Border
+                            Padding="4 0 4 0"
+                            Background="{DynamicResource shadcn_background_brush}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            >
+                            <TextBlock
+                                Text="Or"
+                                Style="{StaticResource SmallText}"                                
+                                />
+                        </Border>
+                    </Grid>
+                    
+                    <Button
+                        Style="{StaticResource ShadcnButtonSecondary}"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding LoginAsGuestCommand}"
+                        Margin="0 0 0 12"
+                        >
+                        <Button.Content>
+                            <StackPanel 
+                                Orientation="Horizontal"
+                                >
+                                <materialDesign:PackIcon
+                                    Kind="Person"
+                                    Width="16"
+                                    Height="16"
+                                    VerticalAlignment="Center"
+                                    Margin="0 0 12 0"
+                                    />
+                                <TextBlock
+                                    Text="Login as Guest"
+                                    Style="{StaticResource DefaultText}"
+                                    FontSize="14"
+                                    VerticalAlignment="Center"
+                                    />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
                 </StackPanel>
             </Border>
-
         </Grid>
         
         <!-- Register-->

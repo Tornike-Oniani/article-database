@@ -12,7 +12,7 @@
         <TextBox 
             x:Name="searchBox"
             Text="{Binding FilterText, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}" 
-            ap:TextBoxHelper.Watermark="Search"
+            ap:TextBoxHelper.Watermark="{Binding Watermark, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, FallbackValue=Search}"
             Style="{StaticResource ShadcnTextBox}"
             >
             <TextBox.InputBindings>

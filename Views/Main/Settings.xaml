@@ -319,6 +319,7 @@
                     <TextBox
                         Style="{StaticResource ShadcnTextBox}"
                         Text="{Binding SyncName}"
+                        IsEnabled="{Binding User.IsAdmin}"
                         Width="250"
                         HorizontalAlignment="Left"
                         Grid.Column="1"
@@ -349,6 +350,7 @@
                     <TextBox
                         Style="{StaticResource ShadcnTextBox}"
                         Text="{Binding AllowedCharacters}"
+                        IsEnabled="{Binding User.IsAdmin}"
                         Grid.Column="1"
                         />
                 </Grid>

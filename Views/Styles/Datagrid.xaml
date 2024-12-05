@@ -41,7 +41,7 @@
                 <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
+                <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
             </Trigger>
         </Style.Triggers>
     </Style>

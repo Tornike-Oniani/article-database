@@ -17,7 +17,7 @@
     <Color x:Key="shadcn_accent_foreground">#0f172a</Color>
     <Color x:Key="shadcn_destructive">#ff0000</Color>
     <Color x:Key="shadcn_destructive_foreground">#f8fafc</Color>
-    <Color x:Key="shadcn_border">#e2e8f0</Color>
+    <Color x:Key="shadcn_border">#e4e4e7</Color>
     <Color x:Key="shadcn_ring">#2563eb</Color>
 
     <SolidColorBrush x:Key="shadcn_background_brush" Color="{DynamicResource shadcn_background}" />

@@ -31,6 +31,7 @@
         <converters:AbstractToVisibilityConverter x:Key="AbstractToVisibility" />
         <converters:SortConverter x:Key="SortConverter" />
         <converters:StringToWords x:Key="StringToWords" />
+        <converters:BoolToInverseConverter x:Key="BoolToInverse" />
 
         <Style TargetType="{x:Type ToolTip}">
             <Setter Property="Background" Value="WhiteSmoke" />
@@ -135,7 +136,7 @@
                     SelectedItem="{Binding ArticleDataManager.SelectedArticle}"
                     Style="{StaticResource ArticleGrid}"
                     ColumnHeaderStyle="{StaticResource DefaultColumnHeader}"
-                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}"
                     CanUserSortColumns="{Binding CanSortColumns}"
                     Grid.Row="1"
                     >
@@ -163,12 +164,23 @@
                     </DataGrid.CellStyle>
                     <DataGrid.ContextMenu>
                         <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
-                            <!-- We set these items' commands from code behind -->
-                            <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
+                            <!-- Personal comment and SIC -->
+                            <MenuItem 
+                                Header="Add comment/SIC" 
+                                IsEnabled="{Binding User.IsGuest, Converter={StaticResource BoolToInverse}}"
+                                Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}"
+                                />
+                            <!-- Edit -->
                             <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
+                            <!-- Edit abstract -->
                             <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
+                            <!-- Delete -->
                             <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.DeleteArticleCommand}" />
-                            <MenuItem Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}">
+                            <!-- Bookmark -->
+                            <MenuItem 
+                                IsEnabled="{Binding User.IsGuest, Converter={StaticResource BoolToInverse}}"
+                                Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}"
+                                >
                                 <MenuItem.Header>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -181,6 +193,7 @@
                                     </Grid>
                                 </MenuItem.Header>
                             </MenuItem>
+                            <!-- Reference -->
                             <MenuItem IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenReferenceManagerCommand}">
                                 <MenuItem.Header>
                                     <Grid>
@@ -194,6 +207,7 @@
                                     </Grid>
                                 </MenuItem.Header>
                             </MenuItem>
+                            <!-- Copy -->
                             <MenuItem Command="{Binding ArticleDataManager.CopyTitleCommand}">
                                 <MenuItem.Header>
                                     <Grid>
@@ -346,7 +360,7 @@
                         </DataGridTemplateColumn>
                         <!-- Authors column -->
                         <DataGridTemplateColumn 
-                            Header="Authors" 
+                            Header="Authors"
                             Width="0.5*" 
                             Visibility="{
                                 Binding DataContext.Columns, 
@@ -363,7 +377,7 @@
                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                         ScrollViewer.CanContentScroll="False"
                                         Foreground="{DynamicResource shadcn_foreground_brush}"
-                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}"
                                         >
                                         <ListView.Template>
                                             <ControlTemplate TargetType="{x:Type ListView}">
@@ -454,7 +468,7 @@
                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                         ScrollViewer.CanContentScroll="False"
                                         Foreground="{DynamicResource shadcn_foreground_brush}"
-                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}"
                                         >
                                         <ListView.Template>
                                             <ControlTemplate TargetType="{x:Type ListView}">
@@ -790,7 +804,7 @@
                                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                                         ScrollViewer.CanContentScroll="False"
-                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}"
                                                         Margin="6 0 0 6"
                                                         Grid.Row="2"
                                                         >
@@ -871,7 +885,7 @@
                                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                                         ScrollViewer.CanContentScroll="False"
-                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}"
                                                         Margin="0 0 0 12"
                                                         Grid.Row="3"
                                                         >
@@ -983,11 +997,18 @@
                 <ListView.ContextMenu>
                     <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                         <!-- We set these items' commands from code behind -->
-                        <MenuItem Header="Add comment/SIC" Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}" />
+                        <MenuItem 
+                            Header="Add comment/SIC" 
+                            IsEnabled="{Binding User.IsGuest, Converter={StaticResource BoolToInverse}}"
+                            Command="{Binding ArticleDataManager.OpenAddPersonalEditorCommand}"                             
+                            />
                         <MenuItem Header="Edit record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenEditorCommand}" />
                         <MenuItem Header="Edit abstract" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.OpenAbstractEditorCommand}" />
                         <MenuItem Header="Delete record" IsEnabled="{Binding User.IsAdmin}" Command="{Binding ArticleDataManager.DeleteArticleCommand}" />
-                        <MenuItem Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}">
+                        <MenuItem 
+                            IsEnabled="{Binding User.IsGuest, Converter={StaticResource BoolToInverse}}"
+                            Command="{Binding ArticleDataManager.OpenBookmarkManagerCommand}"
+                            >
                             <MenuItem.Header>
                                 <Grid>
                                     <Grid.ColumnDefinitions>

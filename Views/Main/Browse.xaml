@@ -856,7 +856,7 @@
                                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                                         ScrollViewer.CanContentScroll="False"
-                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=FontSize}"
+                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}"
                                                         Margin="0 0 0 8"
                                                         Grid.Row="2"
                                                         >

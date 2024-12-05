@@ -186,22 +186,42 @@ namespace MainLib.ViewModels.Utils
         // Dialog command actions
         public void OpenAddPersonalEditor(object input)
         {
+            if (this._user.IsGuest)
+            {
+                return;
+            }
             _services.ShowWindowWithOverlay(new MainLib.ViewModels.Popups.AddPersonalDialogViewModel(SelectedArticle));
         }
         public void OpenBookmarkManager(object input = null)
         {
+            if (this._user.IsGuest)
+            {
+                return;
+            }
             _services.ShowWindowWithOverlay(new BookmarkManagerViewModel(ViewType.DataView, SelectedArticle));
         }
         public void OpenEditorDialog(object input = null)
         {
+            if (this._user.IsGuest || !this._user.IsAdmin)
+            {
+                return;
+            }
             _services.ShowWindowWithOverlay(new ArticleEditorViewModel(SelectedArticle, LoadArticlesCommand));
         }
         public void OpenAbstractEditor(object input)
         {
+            if (this._user.IsGuest || !this._user.IsAdmin)
+            {
+                return;
+            }
             _services.ShowWindowWithOverlay(new AbstractEditorViewModel(SelectedArticle), passWindow: true);
         }
         public void OpenReferenceManager(object input)
         {
+            if (this._user.IsGuest || !this._user.IsAdmin)
+            {
+                return;
+            }
             _services.ShowWindowWithOverlay(new ReferenceManagerViewModel(ViewType.DataView, SelectedArticle));
         }
         // Command validators

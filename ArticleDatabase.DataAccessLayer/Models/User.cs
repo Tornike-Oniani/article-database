@@ -18,26 +18,23 @@ namespace Lib.DataAccessLayer.Models
             get { return _id; }
             set { _id = value; OnPropertyChanged("ID"); }
         }
-
         public string Username
         {
             get { return _username; }
             set { _username = value; OnPropertyChanged("Username"); }
         }
-
         public string Password
         {
             get { return _password; }
             set { _password = value; OnPropertyChanged("Password"); }
         }
-
         public int Admin
         {
             get { return _admin; }
             set { _admin = value; OnPropertyChanged("Admin"); }
         }
-
         public bool IsAdmin { get { return Admin == 1; } }
+        public bool IsGuest { get; set; } = false;
 
     }
 }

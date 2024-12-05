@@ -83,6 +83,7 @@ namespace MainLib.ViewModels
         public RelayCommand ShowRegisterCommand { get; set; }
         public RelayCommand RegisterCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
+        public ICommand LoginAsGuestCommand { get; set; }
 
         public LoginViewModel(IDialogService dialogService, IWindowService windowService, IBrowserService browserService, IThemeService themeService)
         {
@@ -97,6 +98,7 @@ namespace MainLib.ViewModels
             this.ShowRegisterCommand = new RelayCommand(ShowRegister);
             this.RegisterCommand = new RelayCommand(Register);
             this.CancelCommand = new RelayCommand(Cancel);
+            this.LoginAsGuestCommand = new RelayCommand(LoginAsGuest);
         }
 
         public async void Login(object input)
@@ -193,6 +195,17 @@ namespace MainLib.ViewModels
             this.CurrentPage = CurrentPage.Login;
             this.RegisterFocus = false;
             this.LoginFocus = true;
+        }
+        public void LoginAsGuest(object input = null)
+        {
+            this.CurrentUser.ID = -1;
+            this.CurrentUser.Username = "Guest";
+            this.CurrentUser.Admin = -1;
+            this.CurrentUser.IsGuest = true;
+
+            services.SetLoggedInUser(CurrentUser);
+            services.WindowService.OpenWindow(new NavigationViewModel(), WindowType.MainWindow, false, false);
+            Window.Close();
         }
     }
 }
