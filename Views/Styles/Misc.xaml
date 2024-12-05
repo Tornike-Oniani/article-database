@@ -7,7 +7,7 @@
     <Style x:Key="InfoBox" TargetType="{x:Type Border}">
         <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
         <Setter Property="Padding" Value="12 12 12 12" />
-        <Setter Property="CornerRadius" Value="7" />
+        <Setter Property="CornerRadius" Value="6 6 6 6" />
 
         <Style.Resources>
             <!-- Textblock -->

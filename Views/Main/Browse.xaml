@@ -796,8 +796,6 @@
                                                     <TextBlock
                                                         Text="{Binding Title}"
                                                         Style="{StaticResource ArticleHeader}"
-                                                        Foreground="{DynamicResource shadcn_foreground_brush}"
-                                                        FontFamily="{StaticResource MotivaSansMedium}"
                                                         TextWrapping="Wrap"
                                                         LineHeight="28"
                                                         ap:RegexTextBlockHighlighter.WordSelection="{Binding DataContext.TermsWordsHighlight, Source={StaticResource ProxyElementForDataContext}}"

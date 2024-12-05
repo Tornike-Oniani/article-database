@@ -145,7 +145,7 @@
             >
             <StackPanel
                 HorizontalAlignment="Left"
-                Width="400"
+                MinWidth="400"
                 >
                 <!-- Last exported sync -->
                 <Border 
