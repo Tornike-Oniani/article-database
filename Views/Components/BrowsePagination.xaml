@@ -1,0 +1,169 @@
+﻿<UserControl x:Class="MainLib.Views.Components.BrowsePagination"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:MainLib.Views.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <!-- Items per page radio style -->
+        <Style x:Key="ItemsPerPageRadio" TargetType="{x:Type RadioButton}">
+            <Setter Property="Foreground" Value="#2563eb" />
+            <Setter Property="BorderThickness" Value="0 0 0 0" />
+            <Setter Property="BorderBrush" Value="{DynamicResource shadcn_foreground_brush}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Border
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    >
+                            <TextBlock
+                        Text="{TemplateBinding Content}"
+                        Style="{StaticResource DefaultText}"
+                        Foreground="{TemplateBinding Foreground}"
+                        />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                    <Setter Property="BorderThickness" Value="0 0 0 1" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid>
+        <!-- Total results -->
+        <TextBlock
+            Text="{Binding ResultsCount, FallbackValue=0}"
+            Style="{StaticResource DefaultText}"
+            HorizontalAlignment="Left"
+            Visibility="Collapsed"
+            />
+        <!-- Items per page-->
+        <StackPanel
+            Orientation="Horizontal"
+            HorizontalAlignment="Left"
+            >
+            <TextBlock
+                Text="Displays:"
+                Style="{StaticResource DefaultText}"
+                Foreground="{DynamicResource shadcn_muted_foreground_brush}"
+                Margin="0 0 8 0"
+                />
+            <RadioButton
+                GroupName="ItemsPerPage"
+                Content="25"
+                IsChecked="True"
+                Style="{StaticResource ItemsPerPageRadio}"
+                Margin="0 0 8 0"
+                Command="{Binding ChangeItemsPerPageCommand}"
+                CommandParameter="25"
+                />
+            <RadioButton
+                GroupName="ItemsPerPage"
+                Content="50"
+                Style="{StaticResource ItemsPerPageRadio}"
+                Command="{Binding ChangeItemsPerPageCommand}"
+                CommandParameter="50"
+                Margin="0 0 8 0"
+                />
+            <RadioButton
+                GroupName="ItemsPerPage"
+                Content="100"
+                Style="{StaticResource ItemsPerPageRadio}"
+                Command="{Binding ChangeItemsPerPageCommand}"
+                CommandParameter="100"
+                Margin="0 0 8 0"
+                />
+            <TextBlock
+                Text="results per page"
+                Style="{StaticResource DefaultText}"
+                Foreground="{DynamicResource shadcn_muted_foreground_brush}"
+                Margin="0 0 8 0"
+                />
+        </StackPanel>
+        <StackPanel 
+            Orientation="Horizontal" 
+            HorizontalAlignment="Right"
+            >
+            <Button 
+                Content="previous" 
+                Visibility="{Binding CanGoToPreviousPage, Converter={StaticResource BoolToVisibility}}"
+                Style="{x:Null}"
+                Foreground="#2563eb"
+                Cursor="Hand"
+                Command="{Binding PreviousPageCommand}"
+                >
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Kind="ArrowLeft"
+                                Width="16"
+                                Height="16"
+                                VerticalAlignment="Center"
+                                Margin="0 4 2 0"
+                                />
+                            <TextBlock 
+                                Text="{TemplateBinding Content}"
+                                Style="{StaticResource DefaultText}"
+                                Foreground="{TemplateBinding Foreground}"
+                                VerticalAlignment="Center"
+                                />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <TextBlock 
+                Style="{StaticResource DefaultText}"
+                Foreground="{DynamicResource shadcn_muted_foreground_brush}"
+                VerticalAlignment="Center"
+                Margin="8 0 8 0"
+                >
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="Page {0} of {1}">
+                        <Binding Path="CurrentPage"/>
+                        <Binding Path="TotalPages"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <Button 
+                Content="next"
+                Visibility="{Binding CanGoToNextPage, Converter={StaticResource BoolToVisibility}}"
+                Style="{x:Null}"
+                Foreground="#2563eb"
+                Cursor="Hand"
+                Command="{Binding NextPageCommand}"
+                >
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock 
+                            Text="{TemplateBinding Content}" 
+                            Style="{StaticResource DefaultText}"
+                            Foreground="{TemplateBinding Foreground}"
+                            VerticalAlignment="Center"
+                            />
+                            <materialDesign:PackIcon
+                                Kind="ArrowRight"
+                                Width="16"
+                                Height="16"
+                                VerticalAlignment="Center"
+                                Margin="2 2 0 0"
+                                />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -82,6 +82,10 @@
                                                 />
                                         </Border.InputBindings>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <!--<TextBlock
+                                                Text="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                                Style="{StaticResource DefaultText}"
+                                                />-->
                                             <Button 
                                                 Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}" 
                                                 Style="{StaticResource WindowControlButton}" 

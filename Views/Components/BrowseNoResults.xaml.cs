@@ -1,8 +1,6 @@
-﻿using MainLib.ViewModels.Main;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MainLib.Views.Main
+namespace MainLib.Views.Components
 {
     /// <summary>
-    /// Interaction logic for Browse.xaml
+    /// Interaction logic for BrowseNoResults.xaml
     /// </summary>
-    public partial class Browse : UserControl
+    public partial class BrowseNoResults : UserControl
     {
-        public Browse()
+        public BrowseNoResults()
         {
             InitializeComponent();
         }

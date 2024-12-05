@@ -1,0 +1,417 @@
+﻿<UserControl x:Class="MainLib.Views.Components.BrowseResults"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:MainLib.Views.Components"
+             xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
+             xmlns:ap="clr-namespace:Lib.Views.Attached_Properties;assembly=Lib.Views"
+             xmlns:converters="clr-namespace:MainLib.Views.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibility" />
+        <converters:AbstractToVisibilityConverter x:Key="AbstractToVisibility" />
+        <converters:StringToWords x:Key="StringToWords" />
+        <converters:KeywordMatchColorConverter x:Key="KeywordHighlight" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:BoolToVisibilityInverseConverter x:Key="BoolToVisibilityInverse" />
+        <converters:ArticleExistsInListToBoolConverter x:Key="ArticleExistsInListToBool" x:Shared="False" />
+
+        <FrameworkElement 
+            x:Key="ProxyElementForDataContext"
+            DataContext="{Binding}"
+            />
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <!-- We have to do this because otherwise ProxyElementForDataContext will be loaded lazily and bindings that depend on it won't work, this forces the proxy to be fully realized and initialized -->
+        <ContentControl
+            Visibility="Collapsed"
+            Content="{StaticResource ProxyElementForDataContext}"
+            Grid.Row="0"
+            />
+
+        <ListView
+            x:Name="ResultsList"
+            ItemsSource="{Binding Articles}"
+            Visibility="{Binding ShowResults, Converter={StaticResource BooleanToVisibilityConverter}}"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.VirtualizationMode="Standard"
+            Grid.Row="1"
+            >
+            <ListView.Style>
+                <Style TargetType="{x:Type ListView}">
+                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+                    <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel" />
+                    <!-- Panel styling -->
+                    <Setter Property="ItemsPanel">
+                        <Setter.Value>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel>
+
+                                </VirtualizingStackPanel>
+                            </ItemsPanelTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <!-- List template -->
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListView}">
+                                <ScrollViewer 
+                                    x:Name="PART_ScrollViewer"
+                                    >
+                                    <Grid 
+                                        Background="{DynamicResource shadcn_muted_brush}"
+                                        >
+                                        <Grid.ColumnDefinitions>
+                                            <!--<ColumnDefinition Width=".1*" />-->
+                                            <ColumnDefinition Width="*" />
+                                            <!--<ColumnDefinition Width=".2*" />-->
+                                        </Grid.ColumnDefinitions>
+                                        <Border 
+                                            Padding="12 0 12 0"
+                                            Grid.Column="0"
+                                            >
+                                            <ItemsPresenter />
+                                        </Border>
+                                    </Grid>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <!-- List item style -->
+                    <Setter Property="ItemContainerStyle">
+                        <Setter.Value>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <!-- Style resources -->
+                                <Style.Resources>
+                                    <Style x:Key="ActionButton" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+                                        <Style.Resources>
+                                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultText}">
+
+                                            </Style>
+                                        </Style.Resources>
+                                        <Setter Property="Foreground" Value="#4b5563" />
+                                        <Setter Property="Background" Value="#e5e7eb" />
+                                        <Setter Property="BorderThickness" Value="0 0 0 0" />
+                                        <Setter Property="Cursor" Value="Hand" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <Border
+                                                        Background="{TemplateBinding Background}"
+                                                        Padding="16 8 16 8"
+                                                        CornerRadius="4 4 4 4"                                                                                    
+                                                        >
+                                                        <ContentPresenter />
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Style.Resources>
+                                <Setter Property="Padding" Value="18 12 18 12" />
+                                <!-- List item template -->
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                            <Grid Margin="0 0 0 12">
+                                                <!--<Border Background="{DynamicResource shadcn_background_brush}">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect
+                                                            Color="{DynamicResource shadcn_primary}"
+                                                            Direction="0"
+                                                            ShadowDepth="1"
+                                                            Opacity="0.3"
+                                                            BlurRadius="6" 
+                                                            />
+                                                    </Border.Effect>
+                                                </Border>-->
+                                                <Border
+                                                    Background="{DynamicResource shadcn_background_brush}"
+                                                    Padding="{TemplateBinding Padding}"
+                                                    CornerRadius="3 3 3 3"
+                                                    >
+                                                    <ContentPresenter />
+                                                </Border>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <!-- List item data template -->
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <!-- Title -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Year -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Keywords -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Authors -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Seprator -->
+                                                    <RowDefinition Height="Auto" />
+                                                    <!-- Abstract -->
+                                                    <RowDefinition Height="*" />
+                                                    <!-- Open file -->
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <!-- Title -->
+                                                <TextBlock
+                                                    Text="{Binding Title}"
+                                                    Style="{StaticResource ArticleHeader}"
+                                                    TextWrapping="Wrap"
+                                                    LineHeight="28"
+                                                    ap:RegexTextBlockHighlighter.WordSelection="{Binding DataContext.TermsWordsHighlight, Source={StaticResource ProxyElementForDataContext}}"
+                                                    ap:RegexTextBlockHighlighter.PhraseSelection="{Binding DataContext.TermsPhrasesHighlight, Source={StaticResource ProxyElementForDataContext}}"
+                                                    ap:RegexTextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                    ap:RegexTextBlockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}"
+                                                    Margin="0 0 0 8"
+                                                    Grid.Row="0"
+                                                    >
+                                                </TextBlock>
+                                                <!-- Year -->
+                                                <Grid 
+                                                    VerticalAlignment="Center"
+                                                    Margin="0 0 0 12"
+                                                    Grid.Row="1"
+                                                    >
+                                                    <StackPanel
+                                                        Orientation="Horizontal"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Left"
+                                                        >
+                                                        <materialDesign:PackIcon 
+                                                            Kind="Calendar"
+                                                            Width="18"
+                                                            Height="18"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource shadcn_muted_foreground_brush}"
+                                                            Margin="0 0 8 0"
+                                                            />
+                                                        <TextBlock
+                                                            Text="{Binding Year}"
+                                                            Visibility="{Binding Year, Converter={StaticResource EmptyStringToVisibility}}"
+                                                            Style="{StaticResource ArticleText}"
+                                                            LineHeight="24"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource shadcn_muted_foreground_brush}"
+                                                            Margin="0 0 6 0"
+                                                            />
+                                                    </StackPanel>
+                                                    <StackPanel
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Right"
+                                                        >
+                                                        <TextBlock
+                                                            Text="{Binding FileName}"
+                                                            Visibility="{Binding DataContext.User.IsAdmin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource BoolToVisibility}}"
+                                                            Style="{StaticResource ArticleText}"
+                                                            Foreground="{DynamicResource shadcn_muted_foreground_brush}"
+                                                            />
+                                                    </StackPanel>
+                                                </Grid>
+                                                <!-- Keywords -->
+                                                <ItemsControl
+                                                        ItemsSource="{Binding Keywords, Converter={StaticResource StringToWords}, ConverterParameter=NoSeparator}"
+                                                        Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
+                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                                        ScrollViewer.CanContentScroll="False"
+                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}"
+                                                        Margin="0 0 0 8"
+                                                        Grid.Row="2"
+                                                        >
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border
+                                                              Padding="12 4 12 4"
+                                                              CornerRadius="12 12 12 12"
+                                                              Margin="0 0 8 8"
+                                                              >
+                                                                <Border.Style>
+                                                                    <Style TargetType="{x:Type Border}">
+                                                                        <Setter Property="Padding" Value="12 4 12 4" />
+                                                                        <Setter Property="CornerRadius" Value="12 12 12 12" />
+                                                                        <Setter Property="Margin" Value="0 0 8 8" />
+                                                                        <Setter Property="Background">
+                                                                            <Setter.Value>
+                                                                                <MultiBinding Converter="{StaticResource KeywordHighlight}">
+                                                                                    <Binding 
+                                                                                      Path="DataContext.Terms" 
+                                                                                      Source="{StaticResource ProxyElementForDataContext}"
+                                                                                      />
+                                                                                    <Binding Path="." />
+                                                                                </MultiBinding>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </Style>
+                                                                </Border.Style>
+                                                                <TextBlock                                                                        
+                                                                  Text="{Binding Path=.}"
+                                                                  Style="{StaticResource ArticleSmallText}"
+                                                                  />
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                                <!-- Authors -->
+                                                <TextBlock
+                                                    Text="{Binding Authors}"
+                                                    Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
+                                                    Style="{StaticResource ArticleText}"
+                                                    Foreground="{DynamicResource shadcn_foreground_brush}"
+                                                    ap:TextBlockHighlighterAuthors.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
+                                                    ap:TextBlockHighlighterAuthors.WordBreakMode="True"
+                                                    ap:TextBlockHighlighterAuthors.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                    ap:TextBlockHighlighterAuthors.Forecolor="{StaticResource ShadcnBlackColorBrush}" 
+                                                    Margin="0 0 0 12"
+                                                    Grid.Row="3"
+                                                    />
+                                                <!-- Seprator -->
+                                                <!--<Separator 
+                                                    Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
+                                                    Grid.Row="4" 
+                                                    />-->
+                                                <!-- Abstract -->
+                                                <TextBlock
+                                                    Text="{Binding AbstractBody}"
+                                                    Visibility="{Binding AbstractBody, Converter={StaticResource AbstractToVisibility}}"
+                                                    Style="{StaticResource ArticleText}"
+                                                    Foreground="{DynamicResource shadcn_foreground_brush}"
+                                                    ap:RegexTextBlockHighlighter.WordSelection="{Binding DataContext.TermsWordsHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
+                                                    ap:RegexTextBlockHighlighter.PhraseSelection="{Binding DataContext.TermsPhrasesHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
+                                                    ap:RegexTextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                    ap:RegexTextBlockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}"           
+                                                    TextWrapping="Wrap"
+                                                    Margin="0 0 0 18"
+                                                    Grid.Row="5"
+                                                    />
+                                                <!-- Action buttons -->
+                                                <StackPanel 
+                                                    Orientation="Horizontal"
+                                                    Grid.Row="6"
+                                                    >
+                                                    <!-- Open file-->
+                                                    <Button 
+                                                        Style="{StaticResource ShadcnButtonSecondary}"
+                                                        Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        CommandParameter="{Binding}"
+                                                        Margin="0 0 12 0"
+                                                        >
+                                                        <StackPanel 
+                                                            Orientation="Horizontal" 
+                                                            Background="Transparent"
+                                                            >
+                                                            <materialDesign:PackIcon
+                                                                Kind="Eye"
+                                                                Width="18"
+                                                                Height="18"
+                                                                VerticalAlignment="Center"
+                                                                Margin="0 0 6 0"
+                                                                />
+                                                            <TextBlock
+                                                                Text="View"
+                                                                Style="{StaticResource DefaultText}"
+                                                                VerticalAlignment="Center"
+                                                                />
+                                                        </StackPanel>
+                                                    </Button>
+                                                    <!-- Download file -->
+                                                    <Button 
+                                                        Style="{StaticResource ShadcnButtonSecondary}"
+                                                        Command="{Binding DataContext.DownloadFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                        CommandParameter="{Binding}"
+                                                        Margin="0 0 12 0"
+                                                        >
+                                                        <StackPanel 
+                                                            Orientation="Horizontal" 
+                                                            Background="Transparent"
+                                                            >
+                                                            <materialDesign:PackIcon
+                                                                Kind="Download"
+                                                                Width="18"
+                                                                Height="18"
+                                                                VerticalAlignment="Center"
+                                                                Margin="0 0 6 0"
+                                                                />
+                                                            <TextBlock
+                                                                Text="Download"
+                                                                Style="{StaticResource DefaultText}"
+                                                                VerticalAlignment="Center"
+                                                                />
+                                                        </StackPanel>
+                                                    </Button>
+                                                    <!-- Export check -->
+                                                    <CheckBox
+                                                        Content="Select for export"
+                                                        Visibility="{Binding DataContext.IsBatchExporting, Source={StaticResource ProxyElementForDataContext}, Converter={StaticResource BoolToVisibility}}"
+                                                        Margin="0 0 12 0"
+                                                        Command="{Binding DataContext.MarkArticleForBatchExportCommand, Source={StaticResource ProxyElementForDataContext}}"
+                                                        CommandParameter="{Binding}"
+                                                        >
+                                                        <CheckBox.Style>
+                                                            <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource OutlineFlatCheckbox}">
+                                                                <Setter Property="IsChecked">
+                                                                    <Setter.Value>
+                                                                        <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}">
+                                                                            <Binding Path="DataContext.ArticlesToBeExported" Source="{StaticResource ProxyElementForDataContext}" />
+                                                                            <Binding Path="." />
+                                                                        </MultiBinding>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </CheckBox.Style>
+                                                    </CheckBox>
+                                                    <!-- Print check -->
+                                                    <CheckBox
+                                                        Content="Select for printing"
+                                                        Visibility="{Binding DataContext.IsSelectingArticlesForPrinting, Source={StaticResource ProxyElementForDataContext}, Converter={StaticResource BoolToVisibility}}"
+                                                        Command="{Binding DataContext.MarkArticleForPrintCommand, Source={StaticResource ProxyElementForDataContext}}"
+                                                        CommandParameter="{Binding}"
+                                                        >
+                                                        <CheckBox.Style>
+                                                            <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource OutlineFlatCheckbox}">
+                                                                <Setter Property="IsChecked">
+                                                                    <Setter.Value>
+                                                                        <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}">
+                                                                            <Binding Path="DataContext.ArticlesToBePrinted" Source="{StaticResource ProxyElementForDataContext}" />
+                                                                            <Binding Path="." />
+                                                                        </MultiBinding>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </CheckBox.Style>
+                                                    </CheckBox>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.Style>
+        </ListView>
+    </Grid>
+</UserControl>

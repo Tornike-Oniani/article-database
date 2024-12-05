@@ -65,6 +65,21 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\BrowseFilters.xaml.cs">
+      <DependentUpon>BrowseFilters.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Components\BrowseNoResults.xaml.cs">
+      <DependentUpon>BrowseNoResults.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Components\BrowsePagination.xaml.cs">
+      <DependentUpon>BrowsePagination.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Components\BrowseResults.xaml.cs">
+      <DependentUpon>BrowseResults.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Components\BrowseSideBar.xaml.cs">
+      <DependentUpon>BrowseSideBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\AbstractToVisibilityConverter.cs" />
     <Compile Include="Converters\ActiveStatusToStyleConverter.cs" />
     <Compile Include="Converters\ArticleExistsInListToBoolConverter.cs" />
@@ -84,6 +99,7 @@
     <Compile Include="Converters\ListCountToBoolConverter.cs" />
     <Compile Include="Converters\ListCountToVisibilityConverter.cs" />
     <Compile Include="Converters\RecentSearchToLabelConverter.cs" />
+    <Compile Include="Converters\ResponsiveConverters.cs" />
     <Compile Include="Converters\SliderToValueConverter.cs" />
     <Compile Include="Converters\SortConverter.cs" />
     <Compile Include="Converters\SortStringToBoolConverter.cs" />
@@ -238,6 +254,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Components\BrowseFilters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\BrowseNoResults.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\BrowsePagination.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\BrowseResults.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\BrowseSideBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

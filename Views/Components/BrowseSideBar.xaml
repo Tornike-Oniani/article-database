@@ -1,0 +1,330 @@
+﻿<UserControl x:Class="MainLib.Views.Components.BrowseSideBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:MainLib.Views.Components"
+             xmlns:properties="clr-namespace:MainLib.ViewModels.Properties;assembly=MainLib.ViewModels"
+             xmlns:converters="clr-namespace:MainLib.Views.Converters"
+             xmlns:usercontrols="clr-namespace:MainLib.Views.UserControls"
+             xmlns:commonusercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:SortStringToBoolConverter x:Key="SortStringToBool" />
+        
+        <!-- Sort radio button style -->
+        <Style x:Key="SortRadio" TargetType="{x:Type RadioButton}">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Border
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="4 4 4 4"
+                    Padding="6 3 6 3"
+                    >
+                            <TextBlock
+                        Text="{TemplateBinding Content}"
+                        Style="{StaticResource DefaultText}"
+                        Foreground="{TemplateBinding Foreground}"
+                        />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource shadcn_primary_brush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource shadcn_primary_foreground_brush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Print pending label style-->
+        <Style x:Key="PendingLabel" TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="{StaticResource ShadcnTextColorBrush}" />
+            <Setter Property="Background" Value="{StaticResource WhiteColorBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ShadcnBlackColorBrush}" />
+            <Setter Property="BorderThickness" Value="1 1 1 1" />
+            <Setter Property="FontSize" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}" />
+            <Setter Property="Padding" Value="12 6 12 6" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border
+                    Background="{TemplateBinding Background}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    Padding="{TemplateBinding Padding}"
+                    CornerRadius="4 4 4 4"
+                    >
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    
+    <ScrollViewer 
+        HorizontalScrollBarVisibility="Auto"
+        >
+        <Border 
+            Padding="12 12 12 12"
+            HorizontalAlignment="Stretch"                
+            >
+            <StackPanel>
+                <TextBlock
+                    Text="Sort by"
+                    Style="{StaticResource Header}"
+                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
+                    Margin="0 0 0 12"
+                    />
+                <Border
+                    Background="{DynamicResource shadcn_secondary_brush}"
+                    CornerRadius="4 4 4 4"
+                    Padding="12 6 12 6"
+                    HorizontalAlignment="Left"
+                    Margin="0 0 0 12"
+                    >
+                    <StackPanel 
+                    Orientation="Horizontal"                             
+                    >
+                        <TextBlock 
+                            Text="Title"
+                            Style="{StaticResource DefaultText}"
+                            VerticalAlignment="Center"
+                            Margin="0 0 12 0"
+                            />
+                        <RadioButton 
+                            GroupName="Sorting" 
+                            Content="ASC" 
+                            IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Title ASC', Mode=OneWay}"
+                            Style="{StaticResource SortRadio}"
+                            Command="{Binding SortCommand}"
+                            CommandParameter="Title ASC"
+                            />
+                        <RadioButton 
+                            GroupName="Sorting" 
+                            Content="DESC" 
+                            IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Title DESC', Mode=OneWay}"
+                            Style="{StaticResource SortRadio}"
+                            Command="{Binding SortCommand}"
+                            CommandParameter="Title DESC"
+                            />
+                    </StackPanel>
+                </Border>
+                <Border                        
+                    Background="{DynamicResource shadcn_secondary_brush}"
+                    CornerRadius="4 4 4 4"
+                    Padding="12 6 12 6"
+                    HorizontalAlignment="Left"
+                    Margin="0 0 0 12"
+                    >
+                    <StackPanel 
+                        Orientation="Horizontal"                            
+                        >
+                        <TextBlock 
+                            Text="Year" 
+                            Style="{StaticResource DefaultText}"
+                            VerticalAlignment="Center"
+                            Margin="0 0 12 0"
+                            />
+                        <RadioButton 
+                            GroupName="Sorting" 
+                            Content="ASC" 
+                            IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Year ASC', Mode=OneWay}"
+                            Style="{StaticResource SortRadio}"
+                            Command="{Binding SortCommand}"
+                            CommandParameter="Year ASC"
+                            />
+                        <RadioButton 
+                            GroupName="Sorting" 
+                            Content="DESC"
+                            IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Year DESC', Mode=OneWay}"
+                            Style="{StaticResource SortRadio}"
+                            Command="{Binding SortCommand}"
+                            CommandParameter="Year DESC"
+                            />
+                    </StackPanel>
+                </Border>
+                <Border                        
+                    Background="{DynamicResource shadcn_secondary_brush}"
+                    CornerRadius="4 4 4 4"
+                    Padding="12 6 12 6"
+                    HorizontalAlignment="Left"
+                    >
+                    <StackPanel 
+                        Orientation="Horizontal"                            
+                        >
+                        <TextBlock                                
+                            Text="Entry date" 
+                            Style="{StaticResource DefaultText}"
+                            VerticalAlignment="Center"
+                            Margin="0 0 12 0"
+                            />
+                        <RadioButton 
+                            GroupName="Sorting" 
+                            Content="ASC" 
+                            IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Date ASC', Mode=OneWay}"
+                            Style="{StaticResource SortRadio}"
+                            Command="{Binding SortCommand}"
+                            CommandParameter="Date ASC"
+                            />
+                        <RadioButton 
+                            GroupName="Sorting" 
+                            Content="DESC" 
+                            IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Date DESC', Mode=OneWay}"
+                            Style="{StaticResource SortRadio}"
+                            Command="{Binding SortCommand}"
+                            CommandParameter="Date DESC"
+                            />
+                    </StackPanel>
+                </Border>
+                <!-- Batch export -->
+                <TextBlock
+                    Text="Export"
+                    Style="{StaticResource Header}"
+                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
+                    Margin="0 24 0 12"
+                    />
+                <commonusercontrols:PendingButton
+                    StartText="Export articles"
+                    PendingText="Check articles you want to export..."
+                    ActionText="Export selected"
+                    IsPending="{Binding IsBatchExporting}"
+                    CanRunAction="{Binding CanBatchExport}"
+                    InitialCommand="{Binding StartBatchExportCommand}"
+                    ActionCommand="{Binding BatchExportCommand}"
+                    CancelCommand="{Binding CancelBatchExportCommand}"
+                    />
+                <!-- Reports -->
+                <TextBlock
+                    Text="Reports"
+                    Style="{StaticResource Header}"
+                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
+                    Margin="0 24 0 12"
+                    />
+                <commonusercontrols:Accordion
+                    Header="Generate report"
+                    >
+                    <commonusercontrols:Accordion.DropdownContent>
+                        <Grid>
+                            <StackPanel>
+                                <Button
+                                    Style="{StaticResource ShadcnGhostButton}"
+                                    Command="{Binding PrintCurrentPageCommand}"
+                                    >
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon
+                                            Kind="KeyboardArrowRight"
+                                            Width="20"
+                                            Height="20"
+                                            VerticalAlignment="Center"
+                                            Margin="0 0 12 0"
+                                            />
+                                        <TextBlock
+                                            Text="Print current page"
+                                            Style="{StaticResource DefaultText}"
+                                            />
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Style="{StaticResource ShadcnGhostButton}"
+                                    Command="{Binding PrintAllResultsCommand}"
+                                    >
+                                    <StackPanel 
+                                        Orientation="Horizontal"
+                                        >
+                                        <materialDesign:PackIcon
+                                            Kind="KeyboardArrowRight"
+                                            Width="20"
+                                            Height="20"
+                                            VerticalAlignment="Center"
+                                            Margin="0 0 12 0"
+                                            />
+                                        <TextBlock
+                                            Text="Print all results"
+                                            Style="{StaticResource DefaultText}"
+                                            />
+                                    </StackPanel>
+                                </Button>
+                                <Grid>
+                                    <Button
+                                        Style="{StaticResource ShadcnGhostButton}"
+                                        Command="{Binding SelectArticlesToPrintCommand}"
+                                        Visibility="{Binding IsSelectingArticlesForPrinting, Converter={StaticResource BoolToVisibilityInverse}}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon
+                                                Kind="KeyboardArrowRight"
+                                                Width="20"
+                                                Height="20"
+                                                VerticalAlignment="Center"
+                                                Margin="0 0 12 0"
+                                                />
+                                            <TextBlock
+                                                Text="Select articles to print"
+                                                Style="{StaticResource DefaultText}"
+                                                />
+                                        </StackPanel>
+                                    </Button>
+                                    <Border
+                                        Visibility="{Binding IsSelectingArticlesForPrinting, Converter={StaticResource BoolToVisibility}}"
+                                        Padding="12 0 0 0"
+                                        >
+                                        <StackPanel
+                                            Orientation="Horizontal"
+                                            >
+                                            <materialDesign:PackIcon
+                                                Kind="KeyboardArrowRight"
+                                                Foreground="{DynamicResource shadcn_foreground_brush}"
+                                                Width="20"
+                                                Height="20"
+                                                VerticalAlignment="Center"
+                                                Padding="0 0 12 0"
+                                                Margin="0 0 12 0"
+                                                />
+                                            <commonusercontrols:PendingButton
+                                                StartText="Select articles to print"
+                                                PendingText="Check articles you want to print..."
+                                                ActionText="Print selected"
+                                                IsPending="{Binding IsSelectingArticlesForPrinting}"
+                                                CanRunAction="{Binding CanPrintSelectedArticles}"
+                                                InitialCommand="{Binding SelectArticlesToPrintCommand}"
+                                                ActionCommand="{Binding PrintSelectedArticlesCommand}"
+                                                CancelCommand="{Binding CancelSelectingArticlesToPrintCommand}"
+                                                />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </commonusercontrols:Accordion.DropdownContent>
+                </commonusercontrols:Accordion>
+                <!-- Recent Searches sidebar -->
+                <TextBlock
+                    Text="Searches"
+                    Style="{StaticResource Header}"
+                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=TextFontSize}"
+                    Margin="0 24 0 12"
+                    />
+                <Grid>
+                    <usercontrols:RecentSearchesList
+                        RecentSearchesItemSource="{Binding RecentSearches}"
+                        FavoriteSearchesItemSource="{Binding FavoriteSearches}"
+                        ApplyRecentSearchCommand="{Binding ApplyRecentSearchCommand}"
+                        ToggleFavoriteSearchCommand="{Binding ToggleFavoriteSearchCommand}"
+                        DeleteRecentSearchCommand="{Binding DeleteRecentSearchCommand}"
+                        ClearRecentSearchesCommand="{Binding ClearRecentSearchesCommand}"
+                        />
+                </Grid>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>
