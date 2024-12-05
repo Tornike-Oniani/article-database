@@ -366,6 +366,7 @@ namespace MainLib.ViewModels.Main
             this.TermsPhrasesHighlight.Clear();
             this.CurrentPage = 1;
             this.ShowResults = false;
+            this.SortString = "Title ASC";
             this.articles.Clear();
         }
         public void OpenFile(object input)
@@ -628,11 +629,6 @@ namespace MainLib.ViewModels.Main
         }
         public async void PrintAllResults(object input = null)
         {
-            //if (this.services.DialogService.OpenDialog(new DialogYesNoViewModel($"Are you sure you want to print {this.articles.Count} articles?", "Print all articles", DialogType.Warning)))
-            //{
-            //    await this.pdfCreator.Print(this.articles);
-            //    this.services.ShowNotification("Print saved as Pdf", "Printing", NotificationType.Success, NotificationAreaTypes.Default, new TimeSpan(0, 0, 2));
-            //}
             if (this.services.ShowDialogWithOverlay(new DialogYesNoViewModel($"Are you sure you want to print {this.articles.Count} articles?", "Print all articles", DialogType.Warning)))
             {
                 await this.pdfCreator.Print(this.articles);
@@ -711,35 +707,40 @@ namespace MainLib.ViewModels.Main
             OnPropertyChanged("ResultsCount");
             OnScrollTopRequested();
         }
-        private void SortArticles()
+        private async void SortArticles()
         {
-            if (SortString == "Title ASC")
+            this.services.IsWorking(true);
+            await Task.Run(() =>
             {
-                this.articles = this.articles.OrderBy(o => o.Title).ToList();
-            }
-            else if (SortString == "Title DESC")
-            {
-                this.articles = this.articles.OrderByDescending(o => o.Title).ToList();
-            }
-            else if (SortString == "Year ASC")
-            {
-                this.articles = this.articles.OrderBy(o => o.Year).ToList();
-            }
-            else if (SortString == "Year DESC")
-            {
-                this.articles = this.articles.OrderByDescending(o => o.Year).ToList();
-            }
-            else if (SortString == "Date ASC")
-            {
-                this.articles = this.articles.OrderBy(o => o.ID).ToList();
-            }
-            else if (SortString == "Date DESC")
-            {
-                this.articles = this.articles.OrderByDescending(o => o.ID).ToList();
-            }
-            // We want to reset the page back to 1 when we change sort
-            this.CurrentPage = 1;
+                if (SortString == "Title ASC")
+                {
+                    this.articles = this.articles.OrderBy(o => o.Title).ToList();
+                }
+                else if (SortString == "Title DESC")
+                {
+                    this.articles = this.articles.OrderByDescending(o => o.Title).ToList();
+                }
+                else if (SortString == "Year ASC")
+                {
+                    this.articles = this.articles.OrderBy(o => o.Year).ToList();
+                }
+                else if (SortString == "Year DESC")
+                {
+                    this.articles = this.articles.OrderByDescending(o => o.Year).ToList();
+                }
+                else if (SortString == "Date ASC")
+                {
+                    this.articles = this.articles.OrderBy(o => o.ID).ToList();
+                }
+                else if (SortString == "Date DESC")
+                {
+                    this.articles = this.articles.OrderByDescending(o => o.ID).ToList();
+                }
+                // We want to reset the page back to 1 when we change sort
+                this.CurrentPage = 1;
+            });
             PopulateArticles();
+            this.services.IsWorking(false);
         }
         private static string FormatText(string input)
         {

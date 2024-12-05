@@ -27,6 +27,7 @@
         <converters:BoolToRenderTransofrmConverter x:Key="BoolToRenderTransform" />
         <converters:RecentSearchToLabelConverter x:Key="RecentSearchToLabel" />
         <converters:ArticleExistsInListToBoolConverter x:Key="ArticleExistsInListToBool" x:Shared="False" />
+        <converters:SortStringToBoolConverter x:Key="SortStringToBool" />
 
         <FrameworkElement 
             x:Key="ProxyElementForDataContext"
@@ -192,7 +193,7 @@
                             <RadioButton 
                                 GroupName="Sorting" 
                                 Content="ASC" 
-                                IsChecked="true"
+                                IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Title ASC', Mode=OneWay}"
                                 Style="{StaticResource SortRadio}"
                                 Command="{Binding SortCommand}"
                                 CommandParameter="Title ASC"
@@ -200,6 +201,7 @@
                             <RadioButton 
                                 GroupName="Sorting" 
                                 Content="DESC" 
+                                IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Title DESC', Mode=OneWay}"
                                 Style="{StaticResource SortRadio}"
                                 Command="{Binding SortCommand}"
                                 CommandParameter="Title DESC"
@@ -225,13 +227,15 @@
                             <RadioButton 
                                 GroupName="Sorting" 
                                 Content="ASC" 
+                                IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Year ASC', Mode=OneWay}"
                                 Style="{StaticResource SortRadio}"
                                 Command="{Binding SortCommand}"
                                 CommandParameter="Year ASC"
                                 />
                             <RadioButton 
                                 GroupName="Sorting" 
-                                Content="DESC" 
+                                Content="DESC"
+                                IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Year DESC', Mode=OneWay}"
                                 Style="{StaticResource SortRadio}"
                                 Command="{Binding SortCommand}"
                                 CommandParameter="Year DESC"
@@ -256,6 +260,7 @@
                             <RadioButton 
                                 GroupName="Sorting" 
                                 Content="ASC" 
+                                IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Date ASC', Mode=OneWay}"
                                 Style="{StaticResource SortRadio}"
                                 Command="{Binding SortCommand}"
                                 CommandParameter="Date ASC"
@@ -263,6 +268,7 @@
                             <RadioButton 
                                 GroupName="Sorting" 
                                 Content="DESC" 
+                                IsChecked="{Binding SortString, Converter={StaticResource SortStringToBool}, ConverterParameter='Date DESC', Mode=OneWay}"
                                 Style="{StaticResource SortRadio}"
                                 Command="{Binding SortCommand}"
                                 CommandParameter="Date DESC"
@@ -463,7 +469,7 @@
                     BorderThickness="0"
                     Background="Transparent"
                     Cursor="Hand"
-                    Margin="0 0 0 8"
+                    Margin="0 8 0 8"
                     >
                     <ToggleButton.Template>
                         <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -475,7 +481,7 @@
                             <TextBlock 
                                 Text="{TemplateBinding Content}"
                                 Style="{StaticResource DefaultText}"
-                                Foreground="#2563eb"
+                                Foreground="{DynamicResource shadcn_foreground_brush}"
                                 TextDecorations="Underline"
                                 />
                         </DataTemplate>
@@ -902,10 +908,10 @@
                                                         Visibility="{Binding Authors, Converter={StaticResource EmptyStringToVisibility}}"
                                                         Style="{StaticResource ArticleText}"
                                                         Foreground="{DynamicResource shadcn_foreground_brush}"
-                                                        ap:TextBlockHighlighter.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
-                                                        ap:TextBlockHighlighter.WordBreakMode="True"
-                                                        ap:TextBlockHighlighter.HighlightColor="{StaticResource TextHighlightColorBrush}"
-                                                        ap:TextBlockHighlighter.Forecolor="{StaticResource ShadcnBlackColorBrush}" 
+                                                        ap:TextBlockHighlighterAuthors.Selection="{Binding DataContext.AuthorHighlight, Mode=OneWay, Source={StaticResource ProxyElementForDataContext}}"
+                                                        ap:TextBlockHighlighterAuthors.WordBreakMode="True"
+                                                        ap:TextBlockHighlighterAuthors.HighlightColor="{StaticResource TextHighlightColorBrush}"
+                                                        ap:TextBlockHighlighterAuthors.Forecolor="{StaticResource ShadcnBlackColorBrush}" 
                                                         Margin="0 0 0 12"
                                                         Grid.Row="3"
                                                         />

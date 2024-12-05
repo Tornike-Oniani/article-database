@@ -58,6 +58,8 @@ namespace MainLib.ViewModels.Classes
                 documentRenderer.Save(path);
             });
 
+            InitializeDocument();
+
             services.IsWorking(false);
         }
 

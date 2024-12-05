@@ -117,7 +117,7 @@
                         <ScrollViewer>
                             <Border 
                                 BorderThickness="1 1 1 1"
-                                BorderBrush="{StaticResource shadcn_border_brush}"
+                                BorderBrush="{DynamicResource shadcn_border_brush}"
                                 CornerRadius="6"
                                 >
                                 <Grid>
@@ -128,6 +128,7 @@
                                     <!-- Textbox for insert -->
                                     <TextBox 
                                         Text="{Binding Item, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                        Foreground="{DynamicResource shadcn_foreground_brush}"
                                         Style="{x:Null}"
                                         Width="150"
                                         FontSize="16"
@@ -152,7 +153,7 @@
                                                             x:Name="watermark"
                                                             Visibility="Collapsed"
                                                             Text="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                                                            Foreground="{StaticResource shadcn_foreground_brush}"
+                                                            Foreground="{DynamicResource shadcn_foreground_brush}"
                                                             Margin="7 9 0 0"
                                                             />
                                                     </Grid>

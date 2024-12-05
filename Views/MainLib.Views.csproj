@@ -86,6 +86,7 @@
     <Compile Include="Converters\RecentSearchToLabelConverter.cs" />
     <Compile Include="Converters\SliderToValueConverter.cs" />
     <Compile Include="Converters\SortConverter.cs" />
+    <Compile Include="Converters\SortStringToBoolConverter.cs" />
     <Compile Include="Converters\StringToWords.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>

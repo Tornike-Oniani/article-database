@@ -1,6 +1,7 @@
 ﻿using Lib.DataAccessLayer.Models;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
+using MainLib.ViewModels.Classes;
 using MainLib.ViewModels.Utils;
 using System;
 using System.Collections.Generic;
@@ -167,6 +168,7 @@ namespace MainLib.ViewModels.Main
             _themeService.ChangeFont(this.SelectedUIFont, FontTarget.UI);
             _themeService.ChangeFont(this.SelectedArticleFont, FontTarget.Article);
             Shared.GetInstance().SelectedTheme = _selectedTheme;
+            Shared.GetInstance().ShowNotification("Settings saved", "Settings", NotificationService.NotificationType.Success, NotificationAreaTypes.Default, TimeSpan.FromSeconds(2));
         }
         #endregion
     }
