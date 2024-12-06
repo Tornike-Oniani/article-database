@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Attached Properties\AdvancedTextblockHighlighter.cs" />
     <Compile Include="Attached Properties\RegexTextBlockHighlighter.cs" />
+    <Compile Include="Attached Properties\SidebarExpandedExtension.cs" />
     <Compile Include="Attached Properties\TextBlockHighlihgetAuthors.cs" />
     <Compile Include="Attached Properties\TextBlockHighlighter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />

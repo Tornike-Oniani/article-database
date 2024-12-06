@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="MainLib.Views.Components.BrowsePagination"
+﻿<UserControl x:Class="MainLib.Views.Main.Components.Browse.BrowsePagination"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:local="clr-namespace:MainLib.Views.Components"
+             xmlns:local="clr-namespace:MainLib.Views.Main.Components.Browse"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -52,6 +52,7 @@
         <StackPanel
             Orientation="Horizontal"
             HorizontalAlignment="Left"
+            VerticalAlignment="Center"
             >
             <TextBlock
                 Text="Displays:"
@@ -91,6 +92,7 @@
                 Margin="0 0 8 0"
                 />
         </StackPanel>
+        <!-- Pagination -->
         <StackPanel 
             Orientation="Horizontal" 
             HorizontalAlignment="Right"
@@ -123,6 +125,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
+            <!-- Current page -->
             <TextBlock 
                 Style="{StaticResource DefaultText}"
                 Foreground="{DynamicResource shadcn_muted_foreground_brush}"

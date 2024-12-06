@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MainLib.Views.Components
+namespace MainLib.Views.Main.Components.Browse
 {
     /// <summary>
-    /// Interaction logic for BrowseNoResults.xaml
+    /// Interaction logic for BrowsePagination.xaml
     /// </summary>
-    public partial class BrowseNoResults : UserControl
+    public partial class BrowsePagination : UserControl
     {
-        public BrowseNoResults()
+        public BrowsePagination()
         {
             InitializeComponent();
         }

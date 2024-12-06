@@ -3,19 +3,37 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:MainLib.Views"
              xmlns:converters="clr-namespace:Lib.Views.Converters;assembly=Lib.Views"
-             xmlns:type="clr-namespace:MainLib.ViewModels.Main;assembly=MainLib.ViewModels"
-             xmlns:usercontrols="clr-namespace:Lib.Views.UserControls;assembly=Lib.Views"
+             xmlns:mainConverters="clr-namespace:MainLib.Views.Converters"
+             xmlns:components="clr-namespace:MainLib.Views.Components.Navigation"
              xmlns:localUsercontrols="clr-namespace:MainLib.Views.UserControls"
              xmlns:notifications="clr-namespace:NotificationService.Controls;assembly=NotificationService"
+             xmlns:utils="clr-namespace:MainLib.Views.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+        <mainConverters:IsLessThanConverter x:Key="IsLessThan" />
+
+        <DataTemplate
+            x:Key="Desktop_Layout"
+            >
+            <components:NavigationBar 
+                Grid.Column="0"
+                />
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="Laptop_Layout"
+            >
+            <components:NavigationBarCompact
+                Grid.Column="0"
+                />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
+        <!-- Dialog overlay -->
         <Grid
             Visibility="{Binding IsShowingDialog, Converter={StaticResource BoolToVisibility}, FallbackValue=Hidden}"
             Panel.ZIndex="2"
@@ -61,149 +79,47 @@
                 <!-- Content column -->
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
 
-            <Border 
-                Padding="12 12 12 12"
-                BorderThickness="0 0 1 0"
-                BorderBrush="{DynamicResource shadcn_border_brush}"
-                Background="{DynamicResource shadcn_background_brush}"
+            <!-- Navigation bar -->
+            <ContentControl
+                Content="{Binding}"
                 Grid.Column="0"
-                Grid.Row="0"
-                Grid.RowSpan="2">
-                <!--<Border.Background>
-                    <LinearGradientBrush StartPoint="0 1" EndPoint="0 0">
-                        <LinearGradientBrush.GradientStops>
-                            <GradientStop Offset="0" Color="#3a0647" />
-                            <GradientStop Offset="0.3" Color="#3a0647" />
-                            <GradientStop Offset="1" Color="#052767" />
-                        </LinearGradientBrush.GradientStops>
-                    </LinearGradientBrush>
-                </Border.Background>-->
-
-                <Grid 
-                    Width="176"
-                    Grid.Column="0"
-                    >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50px" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <!-- Navigation -->
-                    <StackPanel 
-                        Grid.Row="1"
-                        >
-                        <TextBlock
-                            Text="Application"
-                            Style="{StaticResource SmallText}"
-                            Margin="0 0 0 6"
-                            />
-                        <!-- Home -->
-                        <RadioButton 
-                            Style="{StaticResource NavigationButton}"
-                            Content="Home" 
-                            Tag="{x:Static materialDesign:PackIconKind.HomeOutline}" 
-                            GroupName="Navigation" 
-                            IsChecked="True" 
-                            Command="{Binding UpdateViewCommand}" 
-                            CommandParameter="{x:Static type:ViewType.Home}"
-                            />
-                        <!-- Browse -->
-                        <RadioButton 
-                            Style="{StaticResource NavigationButton}" 
-                            Content="Browse"
-                            Tag="{x:Static materialDesign:PackIconKind.EyeOutline}" 
-                            GroupName="Navigation" 
-                            Command="{Binding UpdateViewCommand}" 
-                            CommandParameter="{x:Static type:ViewType.Browse}" 
-                            />                        
-                        <!-- Data entry -->
-                        <RadioButton 
-                            Style="{StaticResource NavigationButton}" 
-                            IsEnabled="{Binding User.IsAdmin}"
-                            Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Content="Data Entry" 
-                            Tag="{x:Static materialDesign:PackIconKind.FilePlusOutline}" 
-                            GroupName="Navigation" 
-                            Command="{Binding UpdateViewCommand}" 
-                            CommandParameter="{x:Static type:ViewType.DataEntry}" 
-                            />
-                        <!-- Data search -->
-                        <RadioButton 
-                            Style="{StaticResource NavigationButton}" 
-                            Content="Data Search" 
-                            Tag="{x:Static materialDesign:PackIconKind.Search}" 
-                            GroupName="Navigation" 
-                            Command="{Binding UpdateViewCommand}" 
-                            CommandParameter="{x:Static type:ViewType.DataView}" 
-                            Click="RadioButton_Click" 
-                            />
-                        <!-- Bookmarks -->
-                        <RadioButton 
-                            Style="{StaticResource NavigationButton}"
-                            Content="Bookmarks"
-                            Tag="{x:Static materialDesign:PackIconKind.BookmarkOutline}"
-                            GroupName="Navigation"
-                            Command="{Binding UpdateViewCommand}" 
-                            CommandParameter="{x:Static type:ViewType.Bookmarks}" 
-                            />
-                        <!-- References -->
-                        <RadioButton 
-                            Style="{StaticResource NavigationButton}"
-                            Content="References"
-                            Tag="{x:Static materialDesign:PackIconKind.ArrowCollapse}"
-                            GroupName="Navigation"
-                            Command="{Binding UpdateViewCommand}" 
-                            CommandParameter="{x:Static type:ViewType.References}" 
-                            />
-                    </StackPanel>
-
-                    <Border 
-                        Margin="0 24 0 0"
-                        Grid.Row="2"
-                        >
-                        <StackPanel>
-                            <TextBlock
-                                Text="Miscellaneous"
-                                Style="{StaticResource SmallText}"
-                                Margin="0 0 0 6"
-                                />
-                            <!-- SQL -->
-                            <RadioButton 
-                                Style="{StaticResource NavigationButton}"
-                                IsEnabled="{Binding User.IsAdmin}"
-                                Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                Content="SQL"
-                                Tag="{x:Static materialDesign:PackIconKind.SqlQuery}"
-                                GroupName="Navigation"
-                                Command="{Binding UpdateViewCommand}" 
-                                CommandParameter="{x:Static type:ViewType.SQL}" 
-                                />
-                            <RadioButton 
-                                Style="{StaticResource NavigationButton}"
-                                Content="Settings"
-                                Tag="{x:Static materialDesign:PackIconKind.Gear}"
-                                GroupName="Navigation"
-                                Command="{Binding UpdateViewCommand}" 
-                                CommandParameter="{x:Static type:ViewType.Settings}" 
-                                />
-                        </StackPanel>
-                    </Border>
-                </Grid>
-            </Border>
+                >
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Setter Property="ContentTemplate" Value="{StaticResource Desktop_Layout}" />
+                         <!--Responsive triggers--> 
+                        <Style.Triggers>
+                            <DataTrigger 
+                                Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter={x:Static utils:Viewports.Laptop}}"
+                                Value="True"
+                                >
+                                <Setter Property="ContentTemplate" Value="{StaticResource Laptop_Layout}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
 
             <!-- Content -->
             <Border
-                Padding="24 24 24 24"
                 Background="{DynamicResource shadcn_muted_brush}"
                 Grid.Column="1" 
-                Grid.Row="0" 
-                Grid.RowSpan="2" 
                 >
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="Padding" Value="24 24 24 24" />
+                        <!-- Responsive triggers -->
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter={x:Static utils:Viewports.Laptop}}"
+                                Value="True"
+                                >
+                                <Setter Property="Padding" Value="12 12 12 12" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
                 <Grid>
                     <Border
                         CornerRadius="8 8 8 8"
@@ -219,12 +135,25 @@
                         </Border.Effect>
                     </Border>
                     <Border
-                        Padding="24 24 24 24"
                         Background="{DynamicResource shadcn_background_brush}"
                         BorderThickness="1 1 1 1"
                         BorderBrush="{DynamicResource shadcn_border_brush}"
                         CornerRadius="8 8 8 8"
                         >
+                        <Border.Style>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="Padding" Value="24 24 24 24" />
+                                <!-- Responsive triggers -->
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter={x:Static utils:Viewports.Laptop}}"
+                                        Value="True"
+                                        >
+                                        <Setter Property="Padding" Value="18 18 18 18" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
                         <ContentControl 
                             Content="{Binding SelectedViewModel}"                         
                             />

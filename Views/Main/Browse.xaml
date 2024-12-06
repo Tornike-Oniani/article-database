@@ -4,15 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MainLib.Views.Main"
+             xmlns:utils="clr-namespace:MainLib.Views.Utils"
              xmlns:converters="clr-namespace:MainLib.Views.Converters"
-             xmlns:components="clr-namespace:MainLib.Views.Components"
+             xmlns:components="clr-namespace:MainLib.Views.Main.Components.Browse"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             >
+             d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
         <converters:BoolToRenderTransofrmConverter x:Key="BoolToRenderTransform" />
-        <converters:IsGreaterThanConverter x:Key="IsGreaterThan" />
         <converters:IsLessThanConverter x:Key="IsLessThan" />
     </UserControl.Resources>
 
@@ -21,15 +20,42 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="0.35*" />
+                <ColumnDefinition>
+                    <ColumnDefinition.Style>
+                        <Style TargetType="{x:Type ColumnDefinition}">
+                            <Setter Property="Width" Value="0.35*" />
+                            <!-- Responsive triggers -->
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter=1650}"
+                                    Value="True"
+                                    >
+                                    <Setter Property="Width" Value="0.1*" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <!-- Sidebar -->
             <Grid 
-                Visibility="{Binding ShowResults, Converter={StaticResource BoolToVisibility}, ConverterParameter=Soft}"
-                Margin="0 25 0 0" 
+                Margin="0 24 0 0" 
                 Grid.Column="0"
                 >
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Setter Property="Visibility" Value="{Binding ShowResults, Converter={StaticResource BoolToVisibility}, ConverterParameter=Soft}" />
+                        <!-- Responsive triggers -->
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter={x:Static utils:Viewports.Laptop}}"
+                                Value="True">
+                                <Setter Property="Visibility" Value="{Binding ShowResults, Converter={StaticResource BoolToVisibility}}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <components:BrowseSideBar />
             </Grid>
 
@@ -40,9 +66,10 @@
                 >
                 <Grid.Style>
                     <Style TargetType="{x:Type Grid}">
+                        <!-- Responsive triggers -->
                         <Style.Triggers>
                             <DataTrigger
-                                Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter=1441}"
+                                Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter={x:Static utils:Viewports.Laptop}}"
                                 Value="True">
                                 <Setter Property="Grid.ColumnSpan" Value="2" />
                             </DataTrigger>
@@ -80,7 +107,7 @@
                 <!-- Pagination -->
                 <components:BrowsePagination
                     Visibility="{Binding ShowResults, Converter={StaticResource BoolToVisibility}}"
-                    Margin="0 24 0 24"
+                    Margin="0 24 0 0"
                     Grid.Row="2"
                     />
             </Grid>

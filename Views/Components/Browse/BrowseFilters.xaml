@@ -1,0 +1,259 @@
+﻿<UserControl x:Class="MainLib.Views.Main.Components.Browse.BrowseFilters"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:MainLib.Views.Main.Components.Browse"
+             xmlns:utils="clr-namespace:MainLib.Views.Utils"
+             xmlns:converters="clr-namespace:MainLib.Views.Converters"
+             xmlns:usercontrols="clr-namespace:MainLib.Views.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:IsLessThanConverter x:Key="IsLessThan" />
+        
+        <!-- Tooltip style -->
+        <Style TargetType="{x:Type ToolTip}">
+            <Setter Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource shadcn_muted_foreground_brush}" />
+        </Style>
+    </UserControl.Resources>
+
+    <Border>
+        <Border.Style>
+            <Style TargetType="{x:Type Border}">
+                <Setter Property="Padding" Value="0 0 0 0" />
+                <!-- Responsive triggers -->
+                <Style.Triggers>
+                    <DataTrigger
+                        Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter={x:Static utils:Viewports.Laptop}}"
+                        Value="True"
+                        >
+                        <Setter Property="Padding" Value="24 24 24 24" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+        <StackPanel>
+            <!-- Terms -->
+            <TextBlock 
+                Text="Find articles with these terms" 
+                Style="{StaticResource DefaultText}"
+                Margin="0 0 0 6"
+                />
+            <TextBox 
+                Text="{Binding Terms, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource ShadcnTextBox}" 
+                AcceptsReturn="True"
+                Margin="0 0 0 6"
+                >
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <!-- Additional filter toggler -->
+            <ToggleButton
+                Content="Additional filters"
+                IsChecked="{Binding ShowAdditionalFilters}"
+                Style="{x:Null}"
+                Focusable="False"
+                BorderThickness="0"
+                Background="Transparent"
+                Cursor="Hand"
+                Margin="0 8 0 8"
+                >
+                <ToggleButton.Template>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </ToggleButton.Template>
+                <ToggleButton.ContentTemplate>
+                    <DataTemplate>
+                        <TextBlock 
+                            Text="{TemplateBinding Content}"
+                            Style="{StaticResource DefaultText}"
+                            Foreground="{DynamicResource shadcn_foreground_brush}"
+                            TextDecorations="Underline"
+                            />
+                    </DataTemplate>
+                </ToggleButton.ContentTemplate>
+            </ToggleButton>
+            <!-- Additional filters -->
+            <Grid
+                Visibility="{Binding ShowAdditionalFilters, Converter={StaticResource BoolToVisibility}}"
+                >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width=".5*" />
+                </Grid.ColumnDefinitions>
+                <!-- Authors -->
+                <StackPanel
+                    Margin="0 0 12 0"
+                    >
+                    <TextBlock
+                        Text="Authors"
+                        Style="{StaticResource DefaultText}"
+                        Margin="0 0 0 6"
+                        />
+                    <TextBox
+                        Text="{Binding Authors, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource ShadcnTextBox}"
+                        >
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </StackPanel>
+                <!-- Year -->
+                <StackPanel
+                    Grid.Column="1"
+                    >
+                    <TextBlock
+                        Text="Year"
+                        Style="{StaticResource DefaultText}"
+                        Margin="0 0 0 6"
+                        />
+                    <TextBox
+                        Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource ShadcnTextBox}"
+                        >
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </StackPanel>
+            </Grid>
+            <!-- Action buttons-->
+            <Grid                    
+                Margin="0 6 0 0"
+                >
+                <!-- Help -->
+                <Border 
+                    Background="Transparent"
+                    Padding="3 3 3 3"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    ToolTipService.InitialShowDelay="0"
+                    ToolTipService.ShowDuration="120000"
+                    >
+                    <Border.ToolTip>
+                        <ScrollViewer>
+                            <StackPanel
+                                MaxWidth="950"
+                                >
+                                <TextBlock
+                                    Text="სათაური და აბსტრაქტი"
+                                    Style="{StaticResource MediumHeader}"
+                                    />
+                                <TextBlock
+                                    Style="{StaticResource DefaultText}"
+                                    TextWrapping="Wrap"
+                                    >
+                                ძებნის დროს პროგრამას გამოაქვს სტატიები, რომლების სათაური ან აბსტრაქტი შეიცავს ყველა ჩაწერილ სიტყვას <Bold>მათი მიმდევრობის მიუხედავად</Bold>
+                                <LineBreak />
+                                მაგალითად, ვთქვათ ბაზაში გვაქვს შემდეგი 5 სტატია:
+                                <LineBreak />
+                                <LineBreak />
+                                1. Effect of <Bold>Sleep Dperivation</Bold> in Albino <Bold>Rats</Bold>
+                                <LineBreak />
+                                2. REM <Bold>Sleep Deprivation</Bold> on Retention of Avoidance Learning in <Bold>Rats</Bold>
+                                <LineBreak />
+                                3. Unlearning has a stabilizing effect in collective memories
+                                <LineBreak />
+                                4. Effects of Paradoxical <Bold>Sleep Deprivation</Bold> on Visual Evoked Potentails in <Bold>Rats</Bold>
+                                <LineBreak />
+                                5. Physiological Correlates of Prolonged <Bold>Sleep Deprivation in Rats</Bold>
+                                <LineBreak />
+                                6. 48-Hour Sleep-Wake Cycles in Manic-Depressive Illness
+                                <LineBreak />
+                                7. Behavioral Effects Promoted by <Bold>Sleep Deprivation in Rats</Bold> Submitted to Epilepticus
+                                <LineBreak />
+                                <LineBreak />
+                                თუ ძებნის ველში ჩაწერ <Italic>Sleep deprivation in rats</Italic> მაშინ პროგრამა გამოივანს სტატიებს: 1, 2, 4, 5 და 7 რადგან ყველა მათგანი შეიცავს სიტყვებს <Italic>Sleep, deprivation</Italic> და <Italic>rats</Italic>.
+                                იმ შემთხვევაში, თუ გინდა, რომ ძებნა უფრო ზუსტი იყოს შეგიძლია საძიებო სიტყვები ჩასვა კვადრატულ ფრჩხილებში, როგორც ესე: <Italic>[Sleep deprivation in rats]</Italic>.
+                                ამგვარი ძებნა გამოიყვანს მხოლოდ მე-5 და მე-7 სტატიებს რადგან პროგრამა ამჟამად ეძებს სტატიებს, რომლებიც შეცავენ ჩაწერილ სიტყვებს მათი ზუსტი <Bold>მიმდევრობით</Bold>.
+                                <LineBreak />
+                                შესაძლებელია ამ ორი ძიების რეჟიმის ერთდროულად გამოყენება. მაგალითად, ამგვარი ძიებისას "[Sleep deptivation in rats] active avoidance" პროგრამა გამოიყვანს სტატიებს რომლებიც შეიცავენ სიტყვებს <Italic>active</Italic> და <Italic>avoidance</Italic> ნებისმიერ ადგილას, და ამავდროულად ზუსტად შეიცავენ კვადრატულ ფრჩხილებში მოთავსებულ ფრაზას.
+                                </TextBlock>
+                                <Separator Margin="0 6 0 6" />
+                                <TextBlock
+                                    Text="ავტორები"
+                                    Style="{StaticResource MediumHeader}"
+                                    />
+                                <TextBlock
+                                    Style="{StaticResource DefaultText}"
+                                    TextWrapping="Wrap"
+                                    >
+                                თუ გინდა მოძებნო კონკრეტული ავტორის მიერ დაწერილი სტატიები, მაშინ შეგიძლია სასურველი ავტორის სახელი ან გვარი ჩაჭერო Authors ველში, რომელიც შეგიძლია გამოაჩინო <Bold>Additional filters</Bold>-ზე დაჭერით.
+                                იმ შემთხვევაში, თუ გინდა მოძებნო კონკრეტულად 2 ან მეტი ავტორის მიერ დაწერილი სტატიები, მაშინ ჩაწერე სასურველი ავტორები მძიმე ადგილის გამოტოვებით.
+                                მაგალითად <Italic>Kamin, Gaioni</Italic> მოძებნის სტატიებს სადაც Kamin და Gaioni არიან თანაავტორები.
+                                </TextBlock>
+                                <Separator Margin="0 6 0 6" />
+                                <TextBlock
+                                    Text="გამოქვეყნების წელი"
+                                    Style="{StaticResource MediumHeader}"
+                                    />
+                                <TextBlock
+                                    Style="{StaticResource DefaultText}"
+                                    TextWrapping="Wrap"
+                                    >
+                                შეგიძლია ასევე მოძებნო სტატიები, რომლებიც გამოქვეყნებულია კონკრეტულ წელს და ამისათვის უბრალოდ უნდა ჩაწერო სასურველი წელი Year ველში, რომელიც შეგიძლია გამოაჩინო <Bold>Additional filters</Bold>-ზე დაჭერით. მაგალითად <Italic>2000</Italic>-ის ჩაწერა ველში დააბრუნებს მხოლოდ 2000 წელს გამოქვეყნებულ სტატიებს. ასევე შესაძლებელია წლების დიაპაზონის ჩაწერა, მაგალითად <Italic>2000-2005</Italic>-ის ჩაწერა დააბრუნებს სტატიებს, რომლებიც გამოქვეყნებულია 2000-იდან 2005 წლის ჩათვლით.
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border.ToolTip>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            Text="როგორ დავძებნო"
+                            Style="{StaticResource DefaultText}"
+                            TextDecorations="Underline"
+                            VerticalAlignment="Center"
+                            Margin="0 0 4 0"
+                            />
+                        <materialDesign:PackIcon 
+                            Kind="HelpBox"
+                            Width="32"
+                            Height="32"
+                            Foreground="{StaticResource Gray-BlueColorDarkBrush}"
+                            />
+                    </StackPanel>
+                </Border>
+                <!-- Buttons -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    >
+                    <Button                         
+                        Style="{StaticResource ShadcnButtonPrimary}"
+                        Content="Search"
+                        Width="100"
+                        Command="{Binding SearchCommand}"                    
+                        Margin="0 0 12 0"
+                        />
+                    <Button                         
+                        Style="{StaticResource ShadcnButtonSecondary}" 
+                        Content="Clear"
+                        Width="100"
+                        Command="{Binding ClearCommand}"
+                        />
+                </StackPanel>
+            </Grid>
+            <!-- Recent searches -->
+            <Grid
+                Margin="0 18 0 0"
+                Visibility="Collapsed"
+                >
+                <usercontrols:RecentSearchesList
+                    Visibility="{Binding ShowResults, Converter={StaticResource BoolToVisibilityInverse}}"
+                    RecentSearchesItemSource="{Binding RecentSearches}"
+                    FavoriteSearchesItemSource="{Binding FavoriteSearches}"
+                    ApplyRecentSearchCommand="{Binding ApplyRecentSearchCommand}"
+                    ToggleFavoriteSearchCommand="{Binding ToggleFavoriteSearchCommand}"
+                    DeleteRecentSearchCommand="{Binding DeleteRecentSearchCommand}"
+                    ClearRecentSearchesCommand="{Binding ClearRecentSearchesCommand}"
+                    />
+            </Grid>
+        </StackPanel>
+    </Border>
+</UserControl>

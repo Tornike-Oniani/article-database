@@ -85,6 +85,7 @@
                                             <!--<TextBlock
                                                 Text="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
                                                 Style="{StaticResource DefaultText}"
+                                                VerticalAlignment="Center"
                                                 />-->
                                             <Button 
                                                 Tag="{x:Static materialDesign:PackIconKind.WindowMinimize}" 

@@ -65,20 +65,26 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\BrowseFilters.xaml.cs">
+    <Compile Include="Components\Browse\BrowseFilters.xaml.cs">
       <DependentUpon>BrowseFilters.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Components\BrowseNoResults.xaml.cs">
+    <Compile Include="Components\Browse\BrowseNoResults.xaml.cs">
       <DependentUpon>BrowseNoResults.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Components\BrowsePagination.xaml.cs">
+    <Compile Include="Components\Browse\BrowsePagination.xaml.cs">
       <DependentUpon>BrowsePagination.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Components\BrowseResults.xaml.cs">
+    <Compile Include="Components\Browse\BrowseResults.xaml.cs">
       <DependentUpon>BrowseResults.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Components\BrowseSideBar.xaml.cs">
+    <Compile Include="Components\Browse\BrowseSideBar.xaml.cs">
       <DependentUpon>BrowseSideBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Navigation\NavigationBar.xaml.cs">
+      <DependentUpon>NavigationBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Navigation\NavigationBarCompact.xaml.cs">
+      <DependentUpon>NavigationBarCompact.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\AbstractToVisibilityConverter.cs" />
     <Compile Include="Converters\ActiveStatusToStyleConverter.cs" />
@@ -98,6 +104,7 @@
     <Compile Include="Converters\KeywordMatchColorConverter.cs" />
     <Compile Include="Converters\ListCountToBoolConverter.cs" />
     <Compile Include="Converters\ListCountToVisibilityConverter.cs" />
+    <Compile Include="Converters\MainViewModelToBoolConverter.cs" />
     <Compile Include="Converters\RecentSearchToLabelConverter.cs" />
     <Compile Include="Converters\ResponsiveConverters.cs" />
     <Compile Include="Converters\SliderToValueConverter.cs" />
@@ -210,8 +217,10 @@
     <Compile Include="UserControls\Spinner.xaml.cs">
       <DependentUpon>Spinner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\ObservableObject.cs" />
     <Compile Include="Utils\SelectableTextBlock.cs" />
     <Compile Include="Utils\ThemeService.cs" />
+    <Compile Include="Utils\Viewports.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -254,23 +263,31 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Components\BrowseFilters.xaml">
+    <Page Include="Components\Browse\BrowseFilters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Components\BrowseNoResults.xaml">
+    <Page Include="Components\Browse\BrowseNoResults.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Components\BrowsePagination.xaml">
+    <Page Include="Components\Browse\BrowsePagination.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Components\BrowseResults.xaml">
+    <Page Include="Components\Browse\BrowseResults.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Components\BrowseSideBar.xaml">
+    <Page Include="Components\Browse\BrowseSideBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\Navigation\NavigationBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\Navigation\NavigationBarCompact.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

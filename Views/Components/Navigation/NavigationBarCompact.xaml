@@ -1,0 +1,246 @@
+﻿<UserControl x:Class="MainLib.Views.Components.Navigation.NavigationBarCompact"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:MainLib.Views.Components.Navigation"
+             xmlns:converters="clr-namespace:MainLib.Views.Converters"
+             xmlns:ap="clr-namespace:Lib.Views.Attached_Properties;assembly=Lib.Views"
+             xmlns:type="clr-namespace:MainLib.ViewModels.Main;assembly=MainLib.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+        <converters:MainViewModelToBoolConverter x:Key="ViewModelToBool" />
+
+        <Style x:Key="NavigationButtonCompact" TargetType="{x:Type RadioButton}">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+            <Setter Property="Margin" Value="0 0 0 8" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <!-- Body -->
+                        <Border 
+                            x:Name="wrapper" 
+                            Padding="8 8 8 8"
+                            CornerRadius="4 4 4 4"
+                            >
+                            <StackPanel x:Name="spMain" Orientation="Horizontal" Background="Transparent">
+                                <materialDesign:PackIcon 
+                                    x:Name="icon"
+                                    Kind="{TemplateBinding Tag}"
+                                    Height="20"
+                                    Width="20"
+                                    VerticalAlignment="Center" 
+                                    />
+                                <TextBlock 
+                                    x:Name="tbMain" 
+                                    Text="{TemplateBinding Content}" 
+                                    Visibility="{TemplateBinding ap:SidebarExpandedExtension.IsExpanded, Converter={StaticResource BoolToVisibility}}"
+                                    Style="{StaticResource DefaultText}"
+                                    VerticalAlignment="Center" 
+                                    Margin="6 0 0 0" 
+                                    />
+                            </StackPanel>
+                        </Border>
+                        <!-- Triggers -->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="wrapper" Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
+                                <Setter TargetName="tbMain" Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                                <Setter TargetName="tbMain" Property="Margin" Value="8 0 0 0" />
+                                <Setter TargetName="icon" Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="wrapper" Property="Background" Value="{DynamicResource shadcn_muted_brush}" />
+                                <Setter TargetName="tbMain" Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                                <Setter TargetName="tbMain" Property="Margin" Value="8 0 0 0" />
+                                <Setter TargetName="icon" Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    
+    <Border
+        Padding="12 12 12 12"
+        BorderThickness="0 0 1 0"
+        BorderBrush="{DynamicResource shadcn_border_brush}"
+        Background="{DynamicResource shadcn_background_brush}"
+        >
+        <Grid
+            x:Name="Sidebar"
+            >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50px" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Expand button -->
+            <Button
+                Style="{StaticResource ShadcnGhostButton}"
+                Command="{Binding ExpandCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                Margin="0 0 0 0"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Grid.Row="0"
+                >
+                <materialDesign:PackIcon
+                    Kind="HamburgerMenu"
+                    Width="20"
+                    Height="20"
+                    />
+            </Button>
+
+            <!-- Navigation -->
+            <StackPanel
+                Margin="0 0 0 24"
+                Grid.Row="1"
+                >
+                <TextBlock
+                    Text="Application"
+                    Visibility="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource BoolToVisibility}, ConverterParameter=Soft}"
+                    Margin="0 0 0 6"
+                    >
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource SmallText}">
+                            <Setter Property="Width" Value="Auto" />
+                            <!-- Responsive triggers -->
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                    Value="False">
+                                    <Setter Property="Width" Value="0" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <!-- Home -->
+                <RadioButton 
+                    Content="Home" 
+                    Tag="{x:Static materialDesign:PackIconKind.HomeOutline}" 
+                    GroupName="Navigation" 
+                    IsChecked="{Binding SelectedViewModel, Converter={StaticResource ViewModelToBool}, ConverterParameter={x:Static type:ViewType.Home}, Mode=OneWay}" 
+                    ap:SidebarExpandedExtension.IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Style="{StaticResource NavigationButtonCompact}"
+                    Command="{Binding UpdateViewCommand}" 
+                    CommandParameter="{x:Static type:ViewType.Home}"
+                    />
+                <!-- Browse -->
+                <RadioButton 
+                    Content="Browse"
+                    Tag="{x:Static materialDesign:PackIconKind.EyeOutline}" 
+                    GroupName="Navigation" 
+                    IsChecked="{Binding SelectedViewModel, Converter={StaticResource ViewModelToBool}, ConverterParameter={x:Static type:ViewType.Browse}, Mode=OneWay}" 
+                    ap:SidebarExpandedExtension.IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Style="{StaticResource NavigationButtonCompact}" 
+                    Command="{Binding UpdateViewCommand}" 
+                    CommandParameter="{x:Static type:ViewType.Browse}" 
+                    />
+                <!-- Data entry -->
+                <RadioButton 
+                    Content="Data Entry" 
+                    Tag="{x:Static materialDesign:PackIconKind.FilePlusOutline}" 
+                    IsEnabled="{Binding User.IsAdmin}"
+                    Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    GroupName="Navigation" 
+                    IsChecked="{Binding SelectedViewModel, Converter={StaticResource ViewModelToBool}, ConverterParameter={x:Static type:ViewType.DataEntry}, Mode=OneWay}" 
+                    Style="{StaticResource NavigationButtonCompact}" 
+                    ap:SidebarExpandedExtension.IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Command="{Binding UpdateViewCommand}" 
+                    CommandParameter="{x:Static type:ViewType.DataEntry}" 
+                    />
+                <!-- Data search -->
+                <RadioButton 
+                    Content="Data Search" 
+                    Tag="{x:Static materialDesign:PackIconKind.Search}" 
+                    GroupName="Navigation" 
+                    IsChecked="{Binding SelectedViewModel, Converter={StaticResource ViewModelToBool}, ConverterParameter={x:Static type:ViewType.DataView}, Mode=OneWay}" 
+                    ap:SidebarExpandedExtension.IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Style="{StaticResource NavigationButtonCompact}" 
+                    Command="{Binding UpdateViewCommand}" 
+                    CommandParameter="{x:Static type:ViewType.DataView}" 
+                    Click="RadioButton_Click" 
+                    />
+                <!-- Bookmarks -->
+                <RadioButton 
+                    Content="Bookmarks"
+                    Tag="{x:Static materialDesign:PackIconKind.BookmarkOutline}"
+                    GroupName="Navigation"
+                    IsChecked="{Binding SelectedViewModel, Converter={StaticResource ViewModelToBool}, ConverterParameter={x:Static type:ViewType.Bookmarks}, Mode=OneWay}" 
+                    ap:SidebarExpandedExtension.IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Style="{StaticResource NavigationButtonCompact}"
+                    Command="{Binding UpdateViewCommand}" 
+                    CommandParameter="{x:Static type:ViewType.Bookmarks}" 
+                    />
+                <!-- References -->
+                <RadioButton 
+                    Content="References"
+                    Tag="{x:Static materialDesign:PackIconKind.ArrowCollapse}"
+                    GroupName="Navigation"
+                    IsChecked="{Binding SelectedViewModel, Converter={StaticResource ViewModelToBool}, ConverterParameter={x:Static type:ViewType.References}, Mode=OneWay}" 
+                    ap:SidebarExpandedExtension.IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Style="{StaticResource NavigationButtonCompact}"
+                    Command="{Binding UpdateViewCommand}" 
+                    CommandParameter="{x:Static type:ViewType.References}" 
+                    />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="2"
+                >
+                <TextBlock
+                    Text="Miscellaneous"
+                    Visibility="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource BoolToVisibility}, ConverterParameter=Soft}"
+                    Margin="0 0 0 6"
+                    >
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource SmallText}">
+                            <Setter Property="Width" Value="Auto" />
+                            <!-- Responsive triggers -->
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                    Value="False">
+                                    <Setter Property="Width" Value="0" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <RadioButton 
+                    Content="SQL"
+                    Tag="{x:Static materialDesign:PackIconKind.SqlQuery}"
+                    IsEnabled="{Binding User.IsAdmin}"
+                    Visibility="{Binding User.IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    GroupName="Navigation"
+                    IsChecked="{Binding SelectedViewModel, Converter={StaticResource ViewModelToBool}, ConverterParameter={x:Static type:ViewType.SQL}, Mode=OneWay}" 
+                    ap:SidebarExpandedExtension.IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Style="{StaticResource NavigationButtonCompact}"
+                    Command="{Binding UpdateViewCommand}" 
+                    CommandParameter="{x:Static type:ViewType.SQL}" 
+                    />
+                <!-- Settings -->
+                <RadioButton 
+                    Content="Settings"
+                    Tag="{x:Static materialDesign:PackIconKind.Gear}"
+                    GroupName="Navigation"
+                    IsChecked="{Binding SelectedViewModel, Converter={StaticResource ViewModelToBool}, ConverterParameter={x:Static type:ViewType.Settings}, Mode=OneWay}" 
+                    ap:SidebarExpandedExtension.IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                    Style="{StaticResource NavigationButtonCompact}"
+                    Command="{Binding UpdateViewCommand}" 
+                    CommandParameter="{x:Static type:ViewType.Settings}" 
+                    />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
