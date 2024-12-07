@@ -4,6 +4,7 @@ using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Classes;
 using MainLib.ViewModels.Main;
 using MainLib.ViewModels.Popups;
 using MainLib.ViewModels.Utils;
@@ -25,6 +26,9 @@ namespace MainLib.ViewModels.Pages
 {
     public class ReferenceViewViewModel : BaseViewModel
     {
+        // Private members
+        private readonly PdfCreator pdfCreator = new PdfCreator();
+
         // Property fields
         private ViewTemplate _selectedDataViewType;
         private bool _isViewCompact;
@@ -89,6 +93,7 @@ namespace MainLib.ViewModels.Pages
         }
         public string SelectedSort { get { return SelectedSortProperty + " " + SelectedSortDirection; } }
         public Shared Services { get; set; }
+        public PrintHelper PrintHelper { get; private set; } = new PrintHelper();
 
         public CollectionViewSource _articlesCollection { get; set; }
         public ICollectionView ArticlesCollection { get { return _articlesCollection.View; } }
@@ -103,6 +108,7 @@ namespace MainLib.ViewModels.Pages
         public ICommand UpdateExportStatusCommand { get; set; }
         public ICommand SortFromRibbonCommand { get; set; }
         public ICommand SortFromDataGridCommand { get; set; }
+        public ICommand PrintWholeReferenceCommand { get; set; }
 
         // Constructor
         public ReferenceViewViewModel(Reference reference)
@@ -162,6 +168,7 @@ namespace MainLib.ViewModels.Pages
             this.UpdateExportStatusCommand = new RelayCommand(UpdateExportStatus);
             this.SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
             this.SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
+            this.PrintWholeReferenceCommand = new RelayCommand(PrintWholeReference);
 
             this.ArticleDataManager = new ArticleDataManager(LoadArticlesCommand);
             this.SelectedViewType = new CompactViewTemplate();
@@ -418,6 +425,12 @@ namespace MainLib.ViewModels.Pages
             OnPropertyChanged("SelectedSort");
             SortFromRibbonCommand.Execute(null);
         }
+        public async void PrintWholeReference(object input = null)
+        {
+            await this.pdfCreator.Print(this.Articles.ToList());
+            this.Services.ShowNotification("Print saved as Pdf", "Printing", NotificationType.Success, NotificationAreaTypes.Default, new TimeSpan(0, 0, 2));
+        }
+
         // Command validators
         public bool CanExport(object input = null)
         {

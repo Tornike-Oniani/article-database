@@ -43,7 +43,6 @@ namespace MainLib.ViewModels.Main
         private int _currentPage;
         private string _sortString;
         private bool _isBatchExporting;
-        private bool _isSelectingArticlesForPrinting;
         #endregion
 
         #region Public properties
@@ -168,20 +167,7 @@ namespace MainLib.ViewModels.Main
                 return ArticlesToBeExported.Count > 0;
             }
         }
-        public bool CanPrintSelectedArticles
-        {
-            get
-            {
-                return ArticlesToBePrinted.Count > 0;
-            }
-        }
-
-        public bool IsSelectingArticlesForPrinting
-        {
-            get { return _isSelectingArticlesForPrinting; }
-            set { _isSelectingArticlesForPrinting = value; OnPropertyChanged("IsSelectingArticlesForPrinting"); }
-        }
-
+        public PrintHelper PrintHelper { get; set; } = new PrintHelper();
         #endregion
 
         #region Commands
@@ -203,10 +189,6 @@ namespace MainLib.ViewModels.Main
         public ICommand MarkArticleForBatchExportCommand { get; set; }
         public ICommand PrintCurrentPageCommand { get; set; }
         public ICommand PrintAllResultsCommand { get; set; }
-        public ICommand SelectArticlesToPrintCommand { get; set; }
-        public ICommand CancelSelectingArticlesToPrintCommand { get; set; }
-        public ICommand MarkArticleForPrintCommand { get; set; }
-        public ICommand PrintSelectedArticlesCommand { get; set; }
         #endregion
 
         #region Events
@@ -267,10 +249,6 @@ namespace MainLib.ViewModels.Main
             this.MarkArticleForBatchExportCommand = new RelayCommand(MarkArticleForBatchExport);
             this.PrintCurrentPageCommand = new RelayCommand(PrintCurrentPage);
             this.PrintAllResultsCommand = new RelayCommand(PrintAllResults);
-            this.SelectArticlesToPrintCommand = new RelayCommand(SelectArticlesToPrint);
-            this.PrintSelectedArticlesCommand = new RelayCommand(PrintSelectedArticles);
-            this.MarkArticleForPrintCommand = new RelayCommand(MarkArticleForPrint);
-            this.CancelSelectingArticlesToPrintCommand = new RelayCommand(CancelSelectingArticlesToPrint);
         }
         #endregion
 
@@ -357,7 +335,7 @@ namespace MainLib.ViewModels.Main
         public void Clear(object input = null)
         {
             this.CancelBatchExport();
-            this.CancelSelectingArticlesToPrint();
+            this.PrintHelper.CancelSelectingArticlesToPrint();
             this.Articles.Clear();
             this.Terms = String.Empty;
             this.Authors = String.Empty;
@@ -634,38 +612,6 @@ namespace MainLib.ViewModels.Main
                 await this.pdfCreator.Print(this.articles);
                 this.services.ShowNotification("Print saved as Pdf", "Printing", NotificationType.Success, NotificationAreaTypes.Default, new TimeSpan(0, 0, 2));
             }
-        }
-        public void SelectArticlesToPrint(object input = null)
-        {
-            this.IsSelectingArticlesForPrinting = true;
-        }
-        public void CancelSelectingArticlesToPrint(object input = null)
-        {
-            this.ArticlesToBePrinted.Clear();
-            this.IsSelectingArticlesForPrinting = false;
-            OnPropertyChanged("ArticlesToBePrinted");
-            OnPropertyChanged("CanPrintSelectedArticles");
-        }
-        public void MarkArticleForPrint(object input)
-        {
-            Article article = input as Article;
-            if (ArticlesToBePrinted.Exists(a => a.ID == article.ID))
-            {
-                Article articleToRemove = ArticlesToBePrinted.SingleOrDefault(a => a.ID == article.ID);
-                ArticlesToBePrinted.Remove(articleToRemove);
-            }
-            else
-            {
-                ArticlesToBePrinted.Add(article);
-            }
-            OnPropertyChanged("ArticlesToBePrinted");
-            OnPropertyChanged("CanPrintSelectedArticles");
-        }
-        public async void PrintSelectedArticles(object input = null)
-        {
-            await this.pdfCreator.Print(this.ArticlesToBePrinted);
-            CancelSelectingArticlesToPrint();
-            this.services.ShowNotification("Print saved as Pdf", "Printing", NotificationType.Success, NotificationAreaTypes.Default, new TimeSpan(0, 0, 2));
         }
         #endregion
 

@@ -3,6 +3,7 @@ using Lib.DataAccessLayer.Repositories;
 using Lib.ViewModels.Base;
 using Lib.ViewModels.Commands;
 using Lib.ViewModels.Services.Dialogs;
+using MainLib.ViewModels.Classes;
 using MainLib.ViewModels.Utils;
 using NotificationService;
 using System;
@@ -28,6 +29,7 @@ namespace MainLib.ViewModels.Pages
         private string _selectedSortDirection;
         private bool _isExportEnabled;
         private ViewTemplate _selectedViewType;
+        private readonly PdfCreator pdfCreator = new PdfCreator();
 
         // Public properties
         public Bookmark Bookmark { get; set; }
@@ -85,6 +87,7 @@ namespace MainLib.ViewModels.Pages
         }
         public Shared Services { get; set; }
         public User User { get; set; }
+        public PrintHelper PrintHelper { get; private set; } = new PrintHelper();
 
         public CollectionViewSource _articlesCollection { get; set; }
         public ICollectionView ArticlesCollection { get { return _articlesCollection.View; } }
@@ -99,6 +102,7 @@ namespace MainLib.ViewModels.Pages
         public ICommand SortFromRibbonCommand { get; set; }
         public ICommand SortFromDataGridCommand { get; set; }
         public ICommand RemoveSortCommand { get; set; }
+        public ICommand PrintWholeBookmarkCommand { get; set; }
 
         // Constructor
         public BookmarkViewViewModel(Bookmark bookmark, bool modifyRights = true)
@@ -157,6 +161,7 @@ namespace MainLib.ViewModels.Pages
             this.SortFromRibbonCommand = new RelayCommand(SortFromRibbon);
             this.SortFromDataGridCommand = new RelayCommand(SortFromDataGrid);
             this.RemoveSortCommand = new RelayCommand(RemoveSort);
+            this.PrintWholeBookmarkCommand = new RelayCommand(PrintWholeBookmark);
 
             this.ArticleDataManager = new ArticleDataManager(LoadArticlesCommand);
             this.SelectedViewType = new CompactViewTemplate();
@@ -393,6 +398,12 @@ namespace MainLib.ViewModels.Pages
             OnPropertyChanged("SelectedSort");
             SortFromRibbonCommand.Execute(null);
         }
+        public async void PrintWholeBookmark(object input = null)
+        {
+            await this.pdfCreator.Print(this.Articles.ToList());
+            this.Services.ShowNotification("Print saved as Pdf", "Printing", NotificationType.Success, NotificationAreaTypes.Default, new TimeSpan(0, 0, 2));
+        }
+
         public bool CanExport(object input = null)
         {
             List<Article> checked_articles = Articles.Where(article => article.Checked == true).ToList();

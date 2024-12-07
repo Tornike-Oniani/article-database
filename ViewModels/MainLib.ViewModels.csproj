@@ -184,6 +184,7 @@
     <Compile Include="Utils\LogConverter.cs" />
     <Compile Include="Utils\LogReader.cs" />
     <Compile Include="UIStructs\PageButtonModel.cs" />
+    <Compile Include="Utils\PrintHelper.cs" />
     <Compile Include="Utils\RandomDataGenerator.cs" />
     <Compile Include="Utils\Shared.cs" />
     <Compile Include="Utils\SyncInformationManager.cs" />

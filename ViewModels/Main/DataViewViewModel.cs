@@ -21,6 +21,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using SimMetricsUtilities;
 using SimMetricsMetricUtilities;
+using MainLib.ViewModels.Classes;
 
 namespace MainLib.ViewModels.Main
 {
@@ -49,6 +50,7 @@ namespace MainLib.ViewModels.Main
         private int _startPageIndex = 1;
         private int _endPageIndex = 1;
         private bool loadUnbookmarked = true;
+        private readonly PdfCreator pdfCreator = new PdfCreator();
 
         public ArticleDataManager ArticleDataManager { get; set; }
         public User User { get; set; }
@@ -177,6 +179,7 @@ namespace MainLib.ViewModels.Main
         public string SelectedSort { get { return SelectedSortProperty + " " + SelectedSortDirection; } }
         public double LevensteinCoefficient { get; set; }
         public Shared Services { get; set; }
+        public PrintHelper PrintHelper { get; private set; } = new PrintHelper();
 
         public ICommand SwitchDataViewCommand { get; set; }
         public ICommand LoadArticlesCommand { get; set; }
@@ -190,6 +193,7 @@ namespace MainLib.ViewModels.Main
         public ICommand CopyWordCommand { get; set; }
         public ICommand GetDuplicateArticlesCommand { get; set; }
         public ICommand GetUnbookmarkedArticlesCommand { get; set; }
+        public ICommand PrintCurrentPageCommand { get; set; }
 
         // Constructor
         public DataViewViewModel()
@@ -269,6 +273,7 @@ namespace MainLib.ViewModels.Main
             this.CopyWordCommand = new RelayCommand(CopyWord);
             this.GetDuplicateArticlesCommand = new RelayCommand(GetDuplicateArticles);
             this.GetUnbookmarkedArticlesCommand = new RelayCommand(GetUnbookmarkedArticles);
+            this.PrintCurrentPageCommand = new RelayCommand(PrintCurrentPage);
 
             InitializeSearchOptions();
             this.SelectedViewType = new CompactViewTemplate();
@@ -650,6 +655,12 @@ namespace MainLib.ViewModels.Main
             GenerateButtons();
 
             Services.IsWorking(false);
+        }
+        // Printing
+        public async void PrintCurrentPage(object input = null)
+        {
+            await this.pdfCreator.Print(this.Articles.ToList());
+            this.Services.ShowNotification("Print saved as Pdf", "Printing", NotificationType.Success, NotificationAreaTypes.Default, new TimeSpan(0, 0, 2));
         }
 
         // Private helpers

@@ -17,7 +17,7 @@
         <converters:KeywordMatchColorConverter x:Key="KeywordHighlight" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" />
         <converters:BoolToVisibilityInverseConverter x:Key="BoolToVisibilityInverse" />
-        <converters:ArticleExistsInListToBoolConverter x:Key="ArticleExistsInListToBool" x:Shared="False" />
+        <converters:ArticleExistsInListToBoolConverter x:Key="ArticleExistsInListToBool" />
 
         <FrameworkElement 
             x:Key="ProxyElementForDataContext"
@@ -210,15 +210,15 @@
                                                 </Grid>
                                                 <!-- Keywords -->
                                                 <ItemsControl
-                                                        ItemsSource="{Binding Keywords, Converter={StaticResource StringToWords}, ConverterParameter=NoSeparator}"
-                                                        Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
-                                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                                        ScrollViewer.CanContentScroll="False"
-                                                        FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}"
-                                                        Margin="0 0 0 8"
-                                                        Grid.Row="2"
-                                                        >
+                                                    ItemsSource="{Binding Keywords, Converter={StaticResource StringToWords}, ConverterParameter=NoSeparator}"
+                                                    Visibility="{Binding Keywords, Converter={StaticResource EmptyStringToVisibility}}"
+                                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                                    ScrollViewer.CanContentScroll="False"
+                                                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=ArticleTextFontSize}"
+                                                    Margin="0 0 0 8"
+                                                    Grid.Row="2"
+                                                    >
                                                     <ItemsControl.ItemsPanel>
                                                         <ItemsPanelTemplate>
                                                             <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
@@ -356,7 +356,7 @@
                                                             <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource OutlineFlatCheckbox}">
                                                                 <Setter Property="IsChecked">
                                                                     <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}">
+                                                                        <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}" Mode="OneWay">
                                                                             <Binding Path="DataContext.ArticlesToBeExported" Source="{StaticResource ProxyElementForDataContext}" />
                                                                             <Binding Path="." />
                                                                         </MultiBinding>
@@ -368,16 +368,16 @@
                                                     <!-- Print check -->
                                                     <CheckBox
                                                         Content="Select for printing"
-                                                        Visibility="{Binding DataContext.IsSelectingArticlesForPrinting, Source={StaticResource ProxyElementForDataContext}, Converter={StaticResource BoolToVisibility}}"
-                                                        Command="{Binding DataContext.MarkArticleForPrintCommand, Source={StaticResource ProxyElementForDataContext}}"
+                                                        Visibility="{Binding DataContext.PrintHelper.IsSelectingArticlesForPrinting, Source={StaticResource ProxyElementForDataContext}, Converter={StaticResource BoolToVisibility}}"
+                                                        Command="{Binding DataContext.PrintHelper.MarkArticleForPrintCommand, Source={StaticResource ProxyElementForDataContext}}"
                                                         CommandParameter="{Binding}"
                                                         >
                                                         <CheckBox.Style>
                                                             <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource OutlineFlatCheckbox}">
                                                                 <Setter Property="IsChecked">
                                                                     <Setter.Value>
-                                                                        <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}">
-                                                                            <Binding Path="DataContext.ArticlesToBePrinted" Source="{StaticResource ProxyElementForDataContext}" />
+                                                                        <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}" Mode="OneWay">
+                                                                            <Binding Path="DataContext.PrintHelper.ArticlesToBePrinted" Source="{StaticResource ProxyElementForDataContext}" />
                                                                             <Binding Path="." />
                                                                         </MultiBinding>
                                                                     </Setter.Value>

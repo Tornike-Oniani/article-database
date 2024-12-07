@@ -29,6 +29,7 @@
         <converters:AbstractToVisibilityConverter x:Key="AbstractToVisibility" />
         <converters:SortConverter x:Key="SortConverter" />
         <converters:BoolToInverseConverter x:Key="BoolToInverse" />
+        <converters:ArticleExistsInListToBoolConverter x:Key="ArticleExistsInListToBool" />
 
         <!-- Show abstract -->
         <Storyboard x:Key="ShowAbstract">
@@ -479,7 +480,6 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
                         <!-- Export column -->
                         <DataGridTemplateColumn 
                             Header="Export" 
@@ -514,6 +514,60 @@
                                             RelativeSource={RelativeSource FindAncestor, 
                                             AncestorType={x:Type Page}}}" 
                                         />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!-- Print column -->
+                        <DataGridTemplateColumn 
+                            Header="Print"
+                            MinWidth="78"
+                            Width="Auto"
+                            Visibility="{
+                                Binding DataContext.PrintHelper.IsSelectingArticlesForPrinting, 
+                                Source={StaticResource ProxyElement}, 
+                                Converter={StaticResource BoolToVisibility}}"
+                            >
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                                <Border 
+                                                    Background="{TemplateBinding Background}" 
+                                                    Padding="{TemplateBinding Padding}"
+                                                    >
+                                                    <ContentPresenter 
+                                                        Margin="12 0 0 0" 
+                                                        VerticalAlignment="Stretch" 
+                                                        />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        Command="{
+                                            Binding DataContext.PrintHelper.MarkArticleForPrintCommand,
+                                            Source={StaticResource ProxyElement}}"
+                                        CommandParameter="{Binding}"
+                                        >
+                                        <CheckBox.Style>
+                                            <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource FlatCheckbox}">
+                                                <Setter Property="IsChecked">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}" Mode="OneWay">
+                                                            <Binding Path="DataContext.PrintHelper.ArticlesToBePrinted" Source="{StaticResource ProxyElement}" />
+                                                            <Binding Path="." />
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </CheckBox.Style>
+                                    </CheckBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -676,14 +730,42 @@
                                                         Margin="0 0 0 12"
                                                         Grid.Row="5"
                                                         />
-                                                    <!-- Open file-->
-                                                    <Button 
-                                                        Content="View PDF"
-                                                        Style="{StaticResource ViewPDFButtonStyle}"
-                                                        Command="{Binding DataContext.ArticleDataManager.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"
-                                                        CommandParameter="{Binding}"
+                                                    <!-- Actions -->
+                                                    <StackPanel
+                                                        Orientation="Horizontal"
                                                         Grid.Row="6"
-                                                        />
+                                                        >
+                                                        <!-- Open file-->
+                                                        <Button 
+                                                            Content="View PDF"
+                                                            Style="{StaticResource ViewPDFButtonStyle}"
+                                                            VerticalAlignment="Center"
+                                                            Command="{Binding DataContext.ArticleDataManager.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}"
+                                                            CommandParameter="{Binding}"
+                                                            Margin="0 0 12 0"
+                                                            />
+                                                        <!-- Print check -->
+                                                        <CheckBox
+                                                            Content="Select for printing"
+                                                            Visibility="{Binding DataContext.PrintHelper.IsSelectingArticlesForPrinting, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}}, Converter={StaticResource BoolToVisibility}}"
+                                                            VerticalAlignment="Center"
+                                                            Command="{Binding DataContext.PrintHelper.MarkArticleForPrintCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}}}"
+                                                            CommandParameter="{Binding}"
+                                                            >
+                                                            <CheckBox.Style>
+                                                                <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource OutlineFlatCheckbox}">
+                                                                    <Setter Property="IsChecked">
+                                                                        <Setter.Value>
+                                                                            <MultiBinding Converter="{StaticResource ArticleExistsInListToBool}" Mode="OneWay">
+                                                                                <Binding Path="DataContext.PrintHelper.ArticlesToBePrinted" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}}" />
+                                                                                <Binding Path="." />
+                                                                            </MultiBinding>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </CheckBox.Style>
+                                                        </CheckBox>
+                                                    </StackPanel>
                                                 </Grid>
                                             </DataTemplate>
                                         </Setter.Value>
@@ -879,6 +961,32 @@
                             VerticalAlignment="Center"
                             />
 
+                    </StackPanel>
+                </TabItem>
+                <!-- Print -->
+                <TabItem
+                    Header="Print"
+                    >
+                    <StackPanel
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        >
+                        <usercontrols:PendingButton
+                            StartText="Select articles to print"
+                            PendingText="Check articles you want to print..."
+                            ActionText="Print selected"
+                            IsPending="{Binding PrintHelper.IsSelectingArticlesForPrinting}"
+                            CanRunAction="{Binding PrintHelper.CanPrintSelectedArticles}"
+                            InitialCommand="{Binding PrintHelper.SelectArticlesToPrintCommand}"
+                            ActionCommand="{Binding PrintHelper.PrintSelectedArticlesCommand}"
+                            CancelCommand="{Binding PrintHelper.CancelSelectingArticlesToPrintCommand}"
+                            Margin="0 0 12 0"
+                            />
+                        <Button
+                            Content="Print whole bookmark"
+                            Style="{StaticResource ShadcnButtonPrimary}"
+                            Command="{Binding PrintWholeBookmarkCommand}"
+                            />
                     </StackPanel>
                 </TabItem>
                 <!-- Miscellaneous -->

@@ -53,6 +53,7 @@
             <!-- Add new reference-->
             <Button
                 Style="{StaticResource ShadcnButtonPrimary}"
+                IsEnabled="{Binding User.IsAdmin}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Command="{Binding CreateNewReferenceCommand}"

@@ -257,8 +257,8 @@
                                 <Grid>
                                     <Button
                                         Style="{StaticResource ShadcnGhostButton}"
-                                        Command="{Binding SelectArticlesToPrintCommand}"
-                                        Visibility="{Binding IsSelectingArticlesForPrinting, Converter={StaticResource BoolToVisibilityInverse}}"
+                                        Command="{Binding PrintHelper.SelectArticlesToPrintCommand}"
+                                        Visibility="{Binding PrintHelper.IsSelectingArticlesForPrinting, Converter={StaticResource BoolToVisibilityInverse}}"
                                         >
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon
@@ -275,7 +275,7 @@
                                         </StackPanel>
                                     </Button>
                                     <Border
-                                        Visibility="{Binding IsSelectingArticlesForPrinting, Converter={StaticResource BoolToVisibility}}"
+                                        Visibility="{Binding PrintHelper.IsSelectingArticlesForPrinting, Converter={StaticResource BoolToVisibility}}"
                                         Padding="12 0 0 0"
                                         >
                                         <StackPanel
@@ -294,11 +294,11 @@
                                                 StartText="Select articles to print"
                                                 PendingText="Check articles you want to print..."
                                                 ActionText="Print selected"
-                                                IsPending="{Binding IsSelectingArticlesForPrinting}"
-                                                CanRunAction="{Binding CanPrintSelectedArticles}"
-                                                InitialCommand="{Binding SelectArticlesToPrintCommand}"
-                                                ActionCommand="{Binding PrintSelectedArticlesCommand}"
-                                                CancelCommand="{Binding CancelSelectingArticlesToPrintCommand}"
+                                                IsPending="{Binding PrintHelper.IsSelectingArticlesForPrinting}"
+                                                CanRunAction="{Binding PrintHelper.CanPrintSelectedArticles}"
+                                                InitialCommand="{Binding PrintHelper.SelectArticlesToPrintCommand}"
+                                                ActionCommand="{Binding PrintHelper.PrintSelectedArticlesCommand}"
+                                                CancelCommand="{Binding PrintHelper.CancelSelectingArticlesToPrintCommand}"
                                                 />
                                         </StackPanel>
                                     </Border>
