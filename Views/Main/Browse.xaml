@@ -18,7 +18,31 @@
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="350" />
+                <ColumnDefinition>
+                    <ColumnDefinition.Style>
+                        <Style TargetType="{x:Type ColumnDefinition}">
+                            <Setter Property="Width" Value="325" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowResults}" Value="False">
+                                    <Setter Property="Width" Value="0.35*" />
+                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter=1650}"
+                                            Value="True"
+                                            />
+                                        <Condition
+                                            Binding="{Binding ShowResults}"
+                                            Value="False"
+                                            />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Width" Value="0.1*" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition>
                     <ColumnDefinition.Style>
@@ -68,11 +92,24 @@
                     <Style TargetType="{x:Type Grid}">
                         <!-- Responsive triggers -->
                         <Style.Triggers>
-                            <DataTrigger
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition 
+                                        Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter={x:Static utils:Viewports.Laptop}}"
+                                        Value="True"
+                                        />
+                                    <Condition
+                                        Binding="{Binding ShowResults}" 
+                                        Value="True"
+                                        />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Grid.ColumnSpan" Value="2" />
+                            </MultiDataTrigger>
+                            <!--<DataTrigger
                                 Binding="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Converter={StaticResource IsLessThan}, ConverterParameter={x:Static utils:Viewports.Laptop}}"
                                 Value="True">
                                 <Setter Property="Grid.ColumnSpan" Value="2" />
-                            </DataTrigger>
+                            </DataTrigger>-->
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>

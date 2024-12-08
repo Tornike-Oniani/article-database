@@ -72,7 +72,7 @@
     </UserControl.Resources>
     
     <ScrollViewer 
-        HorizontalScrollBarVisibility="Auto"
+        HorizontalScrollBarVisibility="Hidden"
         >
         <Border 
             Padding="12 12 12 12"
@@ -283,6 +283,7 @@
                                             >
                                             <materialDesign:PackIcon
                                                 Kind="KeyboardArrowRight"
+                                                Visibility="{Binding PrintHelper.IsSelectingArticlesForPrinting, Converter={StaticResource BoolToVisibilityInverse}}"
                                                 Foreground="{DynamicResource shadcn_foreground_brush}"
                                                 Width="20"
                                                 Height="20"
