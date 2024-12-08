@@ -101,7 +101,7 @@
                                 x:Name="txbTitle"
                                 Text="{Binding ArticleForm.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
                                 HighlightWords="{Binding ArticleForm.UnusualCharactersInTitle}"
-                                HighlightColor="{StaticResource RedColorBrush}"
+                                HighlightColor="{DynamicResource RedColorBrush}"
                                 Style="{StaticResource ShadcnTextBox}"
                                 TextWrapping="Wrap" 
                                 AcceptsReturn="True"
@@ -411,7 +411,7 @@
             </Grid>
         </ScrollViewer>
         <Grid 
-            Visibility="{Binding IsAbstractFieldVisible, Converter={StaticResource BoolToVisibility}, FallbackValue=Hidden}"
+            Visibility="{Binding IsAbstractFieldVisible, Converter={StaticResource BoolToVisibility}, FallbackValue=Visible}"
             Focusable="True"
             >
             <Grid.InputBindings>
@@ -428,7 +428,7 @@
                 <RowDefinition Height="0.1*" />
             </Grid.RowDefinitions>
             <Border
-                Background="{StaticResource shadcn_background_brush}"
+                Background="{DynamicResource shadcn_background_brush}"
                 CornerRadius="6 6 6 6"
                 Height="{Binding ActualHeight, ElementName=abstract_window}"
                 Width="{Binding ActualWidth, ElementName=abstract_window}"
@@ -448,8 +448,8 @@
             <Border
                 x:Name="abstract_window"
                 BorderThickness="1 1 1 1"
-                BorderBrush="{StaticResource shadcn_border_brush}"
-                Background="{StaticResource WhiteColorBrush}"
+                BorderBrush="{DynamicResource shadcn_border_brush}"
+                Background="{DynamicResource shadcn_background_brush}"
                 CornerRadius="6 6 6 6"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Center"
@@ -463,7 +463,7 @@
                     </Grid.RowDefinitions>
 
                     <Border 
-                        Background="{StaticResource shadcn_background_brush}"
+                        Background="{DynamicResource shadcn_background_brush}"
                         Grid.Row="0"
                         >
                         <Button 
@@ -501,7 +501,7 @@
                                         x:Name="txbAbstract"
                                         Text="{Binding ArticleForm.Abstract, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
                                         HighlightWords="{Binding ArticleForm.UnusualCharactersInAbstract}"
-                                        HighlightColor="{StaticResource RedColorBrush}"
+                                        HighlightColor="{DynamicResource RedColorBrush}"
                                         Style="{StaticResource ShadcnTextBox}"
                                         TextWrapping="Wrap" 
                                         AcceptsReturn="True"

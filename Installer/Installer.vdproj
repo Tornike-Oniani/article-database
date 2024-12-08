@@ -2144,7 +2144,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MainLib.Views, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MainLib.Views, Version=7.5.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_716FD84E5297BB5868758D20E3C72275"
@@ -2319,7 +2319,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:MainLib.ViewModels, Version=7.2.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:MainLib.ViewModels, Version=7.5.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_93AA54526238EED0B98758223B19F349"
@@ -2773,7 +2773,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Lib.Styles, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Lib.Styles, Version=7.5.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_E25D8C5297AAD4CEBF4148E9636BA330"
@@ -3027,15 +3027,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Article Database"
-        "ProductCode" = "8:{BBA09017-ED7B-46C4-B1C4-7AC70E462D6D}"
-        "PackageCode" = "8:{3297BA42-3BBD-4583-9805-8438532C9D84}"
+        "ProductCode" = "8:{BC323DFF-6225-42D6-99F0-8C251FAA2FC4}"
+        "PackageCode" = "8:{249C8773-250C-411A-BA9C-CE83F8E01CF9}"
         "UpgradeCode" = "8:{D9CF4364-FEF5-43C0-86F5-FD264AB82DF8}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:7.5.0"
+        "ProductVersion" = "8:7.5.1"
         "Manufacturer" = "8:NikasLab"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

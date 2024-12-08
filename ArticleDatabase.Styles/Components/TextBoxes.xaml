@@ -115,7 +115,7 @@
                                 Text="{
                                     Binding ElementName=placeholder, 
                                     Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
-                                Foreground="{StaticResource RedColorBrush}"
+                                Foreground="{DynamicResource RedColorBrush}"
                                 FontSize="14"
                                 />
                         </Border>
@@ -127,7 +127,7 @@
         <!-- Style triggers -->
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource RedColorBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource RedColorBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>

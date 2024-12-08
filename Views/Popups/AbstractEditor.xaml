@@ -30,7 +30,7 @@
                 <highlighter:HighlightTextBox
                     Text="{Binding ArticleForm.Abstract, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                     HighlightWords="{Binding ArticleForm.UnusualCharactersInAbstract}"
-                    HighlightColor="{StaticResource RedColorBrush}"
+                    HighlightColor="{DynamicResource RedColorBrush}"
                     Style="{StaticResource ShadcnTextBox}"
                     FontSize="16"
                     MinHeight="200"

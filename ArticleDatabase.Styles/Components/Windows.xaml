@@ -270,7 +270,7 @@
                         <Grid>
                             <!-- Window with border and drop shadow -->
                             <Border 
-                                Background="{StaticResource shadcn_background_brush}"
+                                Background="{DynamicResource shadcn_background_brush}"
                                 >
                                 <Border.Effect>
                                     <DropShadowEffect ShadowDepth="0" Opacity="1" />

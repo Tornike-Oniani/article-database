@@ -25,7 +25,7 @@
                     x:Name="txbTitle" 
                     Text="{Binding ArticleForm.Title, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
                     HighlightWords="{Binding ArticleForm.UnusualCharactersInTitle}"
-                    HighlightColor="{StaticResource RedColorBrush}"
+                    HighlightColor="{DynamicResource RedColorBrush}"
                     ap:TextBoxHelper.Watermark="Title"
                     Style="{StaticResource ShadcnTextBox}" 
                     AcceptsReturn="True" 

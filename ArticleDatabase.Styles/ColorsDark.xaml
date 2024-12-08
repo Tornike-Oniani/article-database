@@ -154,7 +154,7 @@
     <Color x:Key="BlueColorLightBM">#deebfd</Color>
     <SolidColorBrush x:Key="BlueColorLightBrush" Color="{DynamicResource BlueColorLight}" />
     <!-- Red color -->
-    <Color x:Key="RedColor">#FFB94A69</Color>
+    <Color x:Key="RedColor">#c2000d</Color>
     <SolidColorBrush x:Key="RedColorBrush" Color="{StaticResource RedColor}" />
     <!-- Red color light -->
     <Color x:Key="RedColorLight">#d96586</Color>
