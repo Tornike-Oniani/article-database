@@ -43,6 +43,7 @@ namespace Lib.DataAccessLayer.Utils
                 //(?i)(?<!\w)(?:\w?{words[i].Replace("(", "\\(").Replace(")", "\\)")}|{words[i].Replace("(", "\\(").Replace(")", "\\)")}\w?)(?!\w)
                 //(?i)(?<=^|[^a-z]|\b[a-z])({words[i].Replace("(", "\\(").Replace(")", "\\)")})(?=$|[^a-z]|[a-z]\b)
                 string escapeWord = Regex.Escape(words[i]);
+                escapeWord = escapeWord.Replace("'", "''");
                 filter.FilterQuery.Append("final.Title REGEXP " + wordRegex.Replace("{word}", escapeWord));
 
                 if (i < words.Length - 1 || phrases.Length > 0)
@@ -54,7 +55,9 @@ namespace Lib.DataAccessLayer.Utils
             // Append each phrase as wildcard
             for (int i = 0; i < phrases.Length; i++)
             {
-                filter.FilterQuery.Append("final.Title LIKE " + ToWildCard(phrases[i]));
+                string escapePhrase = Regex.Escape(phrases[i]);
+                escapePhrase = escapePhrase.Replace("'", "''");
+                filter.FilterQuery.Append("final.Title LIKE " + ToWildCard(escapePhrase));
 
                 if (i < phrases.Length - 1)
                 {
@@ -112,9 +115,12 @@ namespace Lib.DataAccessLayer.Utils
 
             filter.FilterQuery.Append("(");
 
+            filter.FilterQuery.Append("final.Keywords IS NOT NULL AND ");
+
             foreach (string keyword in keywords)
             {
-                filter.FilterQuery.Append("final.Keywords LIKE " + ToWildCard(keyword));
+                string escapeKeyword = keyword.Replace("'", "''");
+                filter.FilterQuery.Append("final.Keywords LIKE " + ToWildCard(escapeKeyword));
 
                 // If its not the last iteration add "AND"
                 if (keyword != keywords.Last())
@@ -203,6 +209,7 @@ namespace Lib.DataAccessLayer.Utils
                 //(?i)(?<!\w)(?:\w?{words[i]}|{words[i]}\w?)(?!\w)
                 //(?i)(?<=^|[^a-z]|\b[a-z])({words[i]})(?=$|[^a-z]|[a-z]\b)
                 string escapeWord = Regex.Escape(words[i]);
+                escapeWord = escapeWord.Replace("'", "''");
                 filter.FilterQuery.Append("abst.Body REGEXP " + wordRegex.Replace("{word}", escapeWord));
 
                 if (i < words.Length - 1 || phrases.Length > 0)

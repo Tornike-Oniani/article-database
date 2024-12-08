@@ -9,6 +9,7 @@ using MainLib.ViewModels.Popups;
 using MainLib.ViewModels.Utils;
 using NotificationService;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -255,67 +256,79 @@ namespace MainLib.ViewModels.Main
         #region Command actions
         public async void Search(object input)
         {
-            // Extract words and phrases from terms (they are distinguished by if they are inside brackets or not)
-            List<string> termWords = new List<string>();
-            List<string> termPhrases = new List<string>();
-            if (!String.IsNullOrWhiteSpace(Terms))
+            try
             {
-                //termWords = Regex.Matches(Terms, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
-                //termPhrases = Regex.Replace(Terms, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords, StringComparer.OrdinalIgnoreCase).ToList();
-                termWords = Regex.Replace(Terms, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords, StringComparer.OrdinalIgnoreCase).ToList();
-                termPhrases = Regex.Matches(Terms, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
-            }
-
-            // Set up words to be highlighted
-            this.TermsWordsHighlight = termWords;
-            this.TermsPhrasesHighlight = termPhrases;
-
-            // Authors
-            List<string> filterAuthorsFromString = String.IsNullOrEmpty(Authors) ? new List<string>() : Authors.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
-
-            // Build a filter
-            FilterExstension.SetGlobalPairing(isLoose: true);
-            Filter filter = new Filter();
-            filter
-                .FilterTitle(termWords.ToArray(), termPhrases.ToArray())
-                .FilterAbstract(termWords.ToArray(), termPhrases.ToArray())
-                .FilterAuthors(filterAuthorsFromString, "AND")
-                .FilterKeywords(termWords, "AND")
-                .FilterYear(Year);
-
-            // Fetch articles from database
-            services.IsWorking(true);
-            await Task.Run(() =>
-            {
-                ExtraFilter extraFilter = new ExtraFilter();
-                this.articles = new ArticleRepo().LoadArticles(User, filter);
-                this.articles = extraFilter.FilterArticlesWithTerms(articles, termWords, termPhrases);
-            });
-            services.IsWorking(false);
-
-            PopulateArticles();
-            this.CurrentPage = 1;
-            this.ShowResults = true;
-            OnPropertyChanged("TotalPages");
-            OnPropertyChanged("ShowNoResultsLabel");
-            SortArticles();
-
-            // If search contains authors or years make the additional filters visible (usually required when applying recent search)
-            if (!String.IsNullOrEmpty(Authors) || !String.IsNullOrEmpty(Year))
-            {
-                this.ShowAdditionalFilters = true;
-            }
-
-            // Add search to history
-            if ((!String.IsNullOrEmpty(this.Terms) || !String.IsNullOrEmpty(this.Authors) || !String.IsNullOrEmpty(this.Year)) && (string)input != "RecentSearch")
-            {
-                SearchEntry newSearchEntry = new SearchEntry() { Terms = this.Terms, Authors = this.Authors, Year = this.Year };
-                SearchHistoryManager.AddSearchToHistory(newSearchEntry);
-                if (!RecentSearches.Contains(newSearchEntry, new SearchEntryComparer()))
+                // Extract words and phrases from terms (they are distinguished by if they are inside brackets or not)
+                List<string> termWords = new List<string>();
+                List<string> termPhrases = new List<string>();                
+                if (!String.IsNullOrWhiteSpace(this.Terms))
                 {
-                    RecentSearches.Insert(0, newSearchEntry);
+                    //termWords = Regex.Matches(Terms, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
+                    //termPhrases = Regex.Replace(Terms, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords, StringComparer.OrdinalIgnoreCase).ToList();
+                    termWords = Regex.Replace(this.Terms, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords, StringComparer.OrdinalIgnoreCase).ToList();
+                    termPhrases = Regex.Matches(this.Terms, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
+                }
+
+                // Set up words to be highlighted
+                this.TermsWordsHighlight = termWords;
+                this.TermsPhrasesHighlight = termPhrases;
+
+                // Authors
+                List<string> filterAuthorsFromString = String.IsNullOrEmpty(Authors) ? new List<string>() : Authors.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
+
+                // Build a filter
+                FilterExstension.SetGlobalPairing(isLoose: true);
+                Filter filter = new Filter();
+                filter
+                    .FilterTitle(termWords.ToArray(), termPhrases.ToArray())
+                    .FilterAbstract(termWords.ToArray(), termPhrases.ToArray())
+                    .FilterAuthors(filterAuthorsFromString, "AND")
+                    .FilterKeywords(termWords, "AND")
+                    .FilterYear(Year);
+
+                // Fetch articles from database
+                services.IsWorking(true);
+                await Task.Run(() =>
+                {
+                    ExtraFilter extraFilter = new ExtraFilter();
+                    this.articles = new ArticleRepo().LoadArticles(User, filter);
+                    this.articles = extraFilter.FilterArticlesWithTerms(articles, termWords, termPhrases);
+                });
+                services.IsWorking(false);
+
+                PopulateArticles();
+                this.CurrentPage = 1;
+                this.ShowResults = true;
+                OnPropertyChanged("TotalPages");
+                OnPropertyChanged("ShowNoResultsLabel");
+                SortArticles();
+
+                // If search contains authors or years make the additional filters visible (usually required when applying recent search)
+                if (!String.IsNullOrEmpty(Authors) || !String.IsNullOrEmpty(Year))
+                {
+                    this.ShowAdditionalFilters = true;
+                }
+
+                // Add search to history
+                if ((!String.IsNullOrEmpty(this.Terms) || !String.IsNullOrEmpty(this.Authors) || !String.IsNullOrEmpty(this.Year)) && (string)input != "RecentSearch")
+                {
+                    SearchEntry newSearchEntry = new SearchEntry() { Terms = this.Terms, Authors = this.Authors, Year = this.Year };
+                    SearchHistoryManager.AddSearchToHistory(newSearchEntry);
+                    if (!RecentSearches.Contains(newSearchEntry, new SearchEntryComparer()))
+                    {
+                        RecentSearches.Insert(0, newSearchEntry);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                new BugTracker().Track("Browse", "Search", e.Message, e.StackTrace);
+                this.services.ShowDialogWithOverlay(new DialogOkViewModel("Something went wrong.", "Error", DialogType.Error));
+            }
+            finally
+            {
+                this.services.IsWorking(false);
+            }            
         }
         public void NextPage(object input = null)
         {

@@ -308,7 +308,7 @@ namespace MainLib.ViewModels.Main
                 // causes search options accordion to collapse on UI
                 SearchOptionsIsChecked = false;
 
-                string _filterTitle = FilterTitle;
+                string _filterTitle = this.FilterTitle;                
                 if (!String.IsNullOrEmpty(FilterTitle))
                 {
                     FilterTitle = FilterTitle.Trim();
@@ -321,6 +321,7 @@ namespace MainLib.ViewModels.Main
                 {
                     FilterKeywords = FilterKeywords.Trim();
                 }
+                                        
                 List<string> filterAuthorsFromString = String.IsNullOrEmpty(FilterAuthors) ? new List<string>() : FilterAuthors.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
                 List<string> filterKeywordsFromString = String.IsNullOrEmpty(FilterKeywords) ? new List<string>() : FilterKeywords.Split(new string[] { ", " }, StringSplitOptions.None).ToList();
 
@@ -331,8 +332,8 @@ namespace MainLib.ViewModels.Main
                 }
                 else
                 {
-                    this.TitleSearchPhrases = Regex.Matches(FilterTitle, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
-                    this.TitleSearchWords = Regex.Replace(FilterTitle, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords).ToList();
+                    this.TitleSearchPhrases = Regex.Matches(this.FilterTitle, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
+                    this.TitleSearchWords = Regex.Replace(this.FilterTitle, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords).ToList();
                 }
                 if (String.IsNullOrWhiteSpace(FilterAbstract))
                 {
@@ -341,8 +342,8 @@ namespace MainLib.ViewModels.Main
                 }
                 else
                 {
-                    this.AbstractSearchPhrases = Regex.Matches(FilterAbstract, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
-                    this.AbstractSearchWords = Regex.Replace(FilterAbstract, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords).ToList();
+                    this.AbstractSearchPhrases = Regex.Matches(this.FilterAbstract, @"\[(.*?)\]").Cast<Match>().Select(m => m.Value.Substring(1, m.Value.Length - 2)).ToList();
+                    this.AbstractSearchWords = Regex.Replace(this.FilterAbstract, @"\[(.*?)\]", "").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Except(dudWords).ToList();
                 }
 
                 OnPropertyChanged("AbstractWordsHighlight");
