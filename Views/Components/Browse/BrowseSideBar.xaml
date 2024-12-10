@@ -308,7 +308,7 @@
                         </Grid>
                     </commonusercontrols:Accordion.DropdownContent>
                 </commonusercontrols:Accordion>
-                <!-- Recent Searches sidebar -->
+                <!-- Recent Searches sidebar --><!--
                 <TextBlock
                     Text="Searches"
                     Style="{StaticResource Header}"
@@ -324,7 +324,7 @@
                         DeleteRecentSearchCommand="{Binding DeleteRecentSearchCommand}"
                         ClearRecentSearchesCommand="{Binding ClearRecentSearchesCommand}"
                         />
-                </Grid>
+                </Grid>-->
             </StackPanel>
         </Border>
     </ScrollViewer>
