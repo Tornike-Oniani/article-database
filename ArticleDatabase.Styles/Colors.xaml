@@ -15,7 +15,7 @@
     <Color x:Key="shadcn_popover_foreground">#0f172a</Color>
     <Color x:Key="shadcn_primary">#0f172a</Color>
     <Color x:Key="shadcn_primary_foreground">#f8fafc</Color>
-    <Color x:Key="shadcn_secondary">#f1f5f9</Color>
+    <Color x:Key="shadcn_secondary">#ecf1f6</Color>
     <Color x:Key="shadcn_secondary_foreground">#0f172a</Color>
     <Color x:Key="shadcn_accent">#f4f4f5</Color>
     <Color x:Key="shadcn_accent_foreground">#0f172a</Color>

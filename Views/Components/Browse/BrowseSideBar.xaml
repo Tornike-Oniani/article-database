@@ -73,6 +73,7 @@
     
     <ScrollViewer 
         HorizontalScrollBarVisibility="Hidden"
+        VerticalScrollBarVisibility="Auto"
         >
         <Border 
             Padding="12 12 12 12"

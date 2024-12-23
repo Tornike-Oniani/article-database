@@ -78,7 +78,7 @@
                 <Border 
                     x:Name="Border"
                     Padding="24 12 24 12"
-                    CornerRadius="6 6 6 6"
+                    CornerRadius="4 4 4 4"
                     MinHeight="80"
                     >
                     <Grid>
@@ -238,7 +238,7 @@
         <Setter Property="Background" Value="#ffffff"/>
         <Setter Property="Foreground" Value="#09090b"/>
         <Setter Property="BorderThickness" Value="1 1 1 1" />
-        <Setter Property="BorderBrush" Value="#e4e4e7" />
+        <Setter Property="BorderBrush" Value="#cdcdd4" />
         <Setter Property="Template" Value="{StaticResource NotificationTemplate}"/>
         <Setter Property="ContentTemplateSelector" Value="{StaticResource NotificationTemplateSelector}"/>
         <Setter Property="Margin" Value="0 0 18 18" />
@@ -250,10 +250,10 @@
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect 
-                    BlurRadius="2" 
+                    BlurRadius="10" 
                     Direction="0" 
                     ShadowDepth="0" 
-                    Opacity=".25" 
+                    Opacity="0.15" 
                     />
             </Setter.Value>
         </Setter>

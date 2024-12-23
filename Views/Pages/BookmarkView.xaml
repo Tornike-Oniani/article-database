@@ -108,7 +108,7 @@
                             <Setter Property="FontFamily" Value="{DynamicResource UIFont}" />
                             <Setter Property="BorderThickness" Value="0 0 0 1" />
                             <Setter Property="BorderBrush" Value="{DynamicResource shadcn_border_brush}" />
-                            <Setter Property="Command" Value="{Binding DataContext.SortFromDataGridCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+                            <Setter Property="Command" Value="{Binding DataContext.SortFromDataGridCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" />
                             <Setter Property="CommandParameter" Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
                             <Setter Property="Cursor" Value="Hand" />
                             <Style.Triggers>
@@ -669,7 +669,6 @@
                                                     <TextBlock
                                                         Text="{Binding Title}"
                                                         Style="{StaticResource ArticleHeader}"
-                                                        FontFamily="Verdana"
                                                         TextWrapping="Wrap"
                                                         Margin="0 0 0 6"
                                                         Grid.Row="0"
