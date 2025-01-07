@@ -102,11 +102,42 @@ namespace MainLib.ViewModels.Classes
             spaceStyle.ParagraphFormat.SpaceAfter = this.spaceAfterParagraph;
         }
 
-        private static void WriteArticle(Article article, Section section)
+        private void WriteArticle(Article article, Section section)
         {
             section.AddParagraph(article.Title, "Heading1");
             string year = article.Year.ToString();
-            if (!String.IsNullOrEmpty(year))
+            if (services.User.IsAdmin)
+            {
+                Console.WriteLine("Yo");
+                // Create a table with two columns
+                var table = section.AddTable();
+                table.Borders.Visible = false; // Hide table borders
+                table.Style = "Year";
+
+                // Add two columns
+                var column1 = table.AddColumn(Unit.FromCentimeter(8)); // Dynamically stretch column widths as needed
+                var column2 = table.AddColumn(Unit.FromCentimeter(8));
+
+                // Align the columns
+                column1.Format.Alignment = ParagraphAlignment.Left;  // Left-align the first column
+                column2.Format.Alignment = ParagraphAlignment.Right; // Right-align the second column
+
+                // Add a row
+                var row = table.AddRow();
+
+                if (!String.IsNullOrEmpty(year))
+                {
+                    row.Cells[0].AddParagraph(year); // Add text to the left column
+                }
+                else
+                {
+                    row.Cells[0].AddParagraph(String.Empty); // Add text to the left column
+                }
+                row.Cells[1].AddParagraph(article.FileName); // Add text to the right column
+
+                //section.AddParagraph(year, "Year");
+            }
+            else if (!String.IsNullOrEmpty(year))
             {
                 section.AddParagraph(year, "Year");
             }
