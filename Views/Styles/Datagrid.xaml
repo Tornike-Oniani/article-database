@@ -67,7 +67,6 @@
     <Style x:Key="ArticleGrid" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource MaterialDesignDataGrid}">
         <Setter Property="Background" Value="{DynamicResource shadcn_background_brush}" />
         <Setter Property="Foreground" Value="{DynamicResource shadcn_foreground_brush}" />
-        <Setter Property="FontFamily" Value="Verdana" />
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="RowHeaderWidth" Value="0" />
